@@ -1,0 +1,41 @@
+{
+  "info" : 
+  {
+    "name" : "app",
+
+    "summary" : "Hirschberg App Frontend",
+    "description" : "This is the frontend of the Hirschberg App.",
+    
+    "homepage" : "http://www.hirschberg-sauerland.de/",
+
+    "license" : "MIT",
+    "authors" : 
+    [
+      {
+        "name" : "Tobias Bräutigam (peuter)",
+        "email" : "tbraeutigam@gmail.com"
+      }
+    ],
+
+    "version" : "master",
+    "qooxdoo-versions": ["5.1"]
+  },
+  
+  "provides" : 
+  {
+    "namespace"   : "app",
+    "encoding"    : "utf-8",
+    "class"       : "source/class",
+    "resource"    : "source/resource",
+    "translation" : "source/translation",
+    "type"        : "application"
+  },
+
+  "externalResources" :
+  {
+    "script": [
+      "js/socketcluster.js"
+    ]
+  }
+}
+
