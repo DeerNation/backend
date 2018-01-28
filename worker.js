@@ -14,7 +14,7 @@ const logger = require('./backend/logger')(__filename)
 
 class Worker extends SCWorker {
   run() {
-    console.log('   >> Worker PID:', process.pid);
+    logger.info('   >> Worker PID: %d', process.pid);
     let environment = this.options.environment;
 
     let app = express();
@@ -35,7 +35,7 @@ class Worker extends SCWorker {
     if (environment === 'dev') {
       // Log every HTTP request. See https://github.com/expressjs/morgan for other
       // available formats.
-      app.use(morgan('dev'));
+      // app.use(morgan('dev'));
       app.use(serveStatic(path.resolve(__dirname, 'frontend/app/source-output')));
     } else {
       app.use(serveStatic(path.resolve(__dirname, 'frontend/app/build-output/app')));
