@@ -5,6 +5,8 @@
  * @since 2018
  */
 const scCrudRethink = require('sc-crud-rethink');
+const shajs = require('sha.js')
+const logger = require('../logger')
 
 module.exports.create = function(scServer) {
   const thinky = scCrudRethink.thinky;
@@ -18,6 +20,7 @@ module.exports.create = function(scServer) {
           id: type.string(),
           name: type.string().min(3),
           type: type.string().enum('Person', 'Server', 'Bot'),
+          role: type.string(),
           desc: type.string().optional(),
           email: type.string().email(),
           username: type.string(),
@@ -120,7 +123,6 @@ module.exports.create = function(scServer) {
 
   // create relations
 
-
   // n-n: An Activity can have many Attachments, an Attachment can belong to many Activities (e.g. shared attachments)
   m.Event.hasAndBelongsToMany(m.Attachment, "attachments", "id", "attachmentId")
   m.Attachment.hasAndBelongsToMany(m.Event, "event", "attachmentId", "id")
@@ -128,6 +130,29 @@ module.exports.create = function(scServer) {
   // 1-n: An Activity can have only one creator (of type Actor), an Actor can be the creator of many Activities
   m.Actor.hasMany(m.Event, "createdEvents", "id", "creatorId")
   m.Event.belongsTo(m.Actor, "creator", "creatorId", "id")
+
+  // default Data
+  let defaultData = {
+    Actor: [{
+      id: '0e4a6f6f-cc0c-4aa5-951a-fcfc480dd05a',
+      type: 'Person',
+      username: 'admin',
+      role: 'admin',
+      name: 'Tobias Bräutigam',
+      email: 'tbraeutigam@gmail.com',
+      password: shajs('sha512').update('tester').digest('hex')
+    }]
+  }
+
+  logger.debug('initializing database with default data')
+  Object.keys(defaultData).forEach(key => {
+    m[key].save(defaultData[key], {conflict: 'update'}).then(result => {
+      logger.debug(key, 'default data applied')
+    }).error(error => {
+      logger.error('Error applying default data to ', key, ':', error)
+    })
+  })
+
 
   return crud
 }

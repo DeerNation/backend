@@ -8,6 +8,7 @@ const healthChecker = require('sc-framework-health-check');
 const iCal = require('ical');
 const schema = require('./backend/model/schema')
 const auth = require('./backend/auth')
+const i18n = require("i18n")
 
 class Worker extends SCWorker {
   run() {
@@ -15,6 +16,13 @@ class Worker extends SCWorker {
     let environment = this.options.environment;
 
     let app = express();
+
+    i18n.configure({
+      locales:['en', 'de'],
+      directory: __dirname + '/locales'
+    });
+    // default: using 'accept-language' header to guess language settings
+    app.use(i18n.init);
 
     let httpServer = this.httpServer;
     let scServer = this.scServer;

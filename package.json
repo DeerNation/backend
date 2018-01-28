@@ -11,6 +11,7 @@
   "dependencies": {
     "connect": "3.0.1",
     "express": "4.14.0",
+    "i18n": "^0.8.3",
     "ical": "^0.5.0",
     "minimist": "1.1.0",
     "morgan": "1.7.0",
@@ -22,7 +23,8 @@
     "serve-static": "1.11.2",
     "sha.js": "^2.4.10",
     "socketcluster": "~9.3.1",
-    "socketcluster-client": "~9.0.2"
+    "socketcluster-client": "~9.0.2",
+    "winston": "^3.0.0-rc1"
   },
   "keywords": [
     "websocket",
@@ -34,6 +36,9 @@
   "readmeFilename": "README.md",
   "scripts": {
     "start": "node server.js",
+    "predev": "cd frontend/app && qx compile --watch &",
+    "dev": "node server.js",
+    "postdev": "killall -9 qx",
     "start:docker": "node dockerwait.js && node ${SOCKETCLUSTER_MASTER_CONTROLLER:-server.js}"
   }
 }

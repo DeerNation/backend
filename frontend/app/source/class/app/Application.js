@@ -54,6 +54,7 @@ qx.Class.define("app.Application",
       -------------------------------------------------------------------------
       */
 
+
       const socket = app.io.Socket.getInstance()
 
       let activities = new qx.data.Array();
@@ -94,7 +95,6 @@ qx.Class.define("app.Application",
 
       // Document is the application root
       let doc = this.getRoot();
-
       doc.add(list, {edge: 0})
     }
   }

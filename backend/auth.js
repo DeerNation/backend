@@ -5,34 +5,29 @@
  * @since 2018
  */
 const shajs = require('sha.js')
+const logger = require('./logger')
 
 module.exports = function(socket, scServer) {
   socket.on('login', function (credentials, respond) {
-    console.log(credentials)
-    if (credentials.username === 'admin' && credentials.password === 'tester') {
-      // TODO remove this later
-      respond()
-      socket.setAuthToken({user: 'admin'});
-    } else {
-      const passwordHash = shajs('sha512').update(credentials.password).digest('hex');
+    const passwordHash = shajs('sha512').update(credentials.password).digest('hex');
+    logger.debug('login request for actor {{name}} received', {name: credentials.username})
 
-      scServer.thinky.r.table('User').filter({username: credentials.username}).run((err, results) => {
-        const userRow = results[0];
-        let isValidLogin = userRow && userRow.password === passwordHash;
+    scServer.thinky.r.table('Actor').filter({username: credentials.username}).run((err, results) => {
+      const userRow = results[0];
+      let isValidLogin = userRow && userRow.password === passwordHash;
 
-        if (isValidLogin) {
-          respond();
+      if (isValidLogin) {
+        respond();
 
-          // This will give the client a token so that they won't
-          // have to login again if they lose their connection
-          // or revisit the app at a later time.
-          socket.setAuthToken({user: userRow.id});
-        } else {
-          // Passing string as first argument indicates error
-          respond('Login failed');
-        }
-      });
-    }
+        // This will give the client a token so that they won't
+        // have to login again if they lose their connection
+        // or revisit the app at a later time.
+        socket.setAuthToken({user: userRow.id});
+      } else {
+        // Passing string as first argument indicates error
+        respond('Login failed');
+      }
+    });
   });
 
   scServer.addMiddleware(scServer.MIDDLEWARE_SUBSCRIBE, function (req, next) {
@@ -41,7 +36,7 @@ module.exports = function(socket, scServer) {
     if (authToken && authToken.user) {
       next();
     } else {
-      next('You are not authorized to subscribe to ' + req.channel);
+      next(req.__('You are not authorized to subscribe to {{channel}}', {channel: req.channel}));
     }
   });
 }
