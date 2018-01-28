@@ -37,7 +37,8 @@
   ],
   "readmeFilename": "README.md",
   "scripts": {
-    "start": "node server.js",
+    "prestart": "cd frontend/app && qx compile --target=build",
+    "start": "ENV=production node server.js",
     "predev": "cd frontend/app && qx compile --watch &",
     "dev": "ENV=dev node server.js",
     "postdev": "killall -9 qx",
