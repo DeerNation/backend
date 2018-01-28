@@ -29,29 +29,23 @@ qx.Class.define('app.io.Socket', {
     this.__socket.on('connect', function () {
       this.info('CONNECTED, logging in');
 
-      (new dialog.Login({
-        checkCredentials: function(username, password, callback) {
-          this.__socket.emit('login', {username: username, password: password}, (err) => {
-            if (err) {
-              this.error(err)
-            } else {
-              this.info('LOGGED IN')
-              this.setAuthenticated(true)
-            }
-            callback(err)
-          })
-        }.bind(this),
-        text: qx.locale.Manager.tr('Please login')
-      })).show()
-      //
-      // this.__socket.emit('login', {username: 'admin', password: 'tester'}, (err) => {
-      //   if (err) {
-      //     this.error(err)
-      //   } else {
-      //     this.info('LOGGED IN')
-      //     this.setAuthenticated(true)
-      //   }
-      // })
+      if (!this.__loginDialog) {
+        this.__loginDialog = new dialog.Login({
+          checkCredentials: function (username, password, callback) {
+            this.__socket.emit('login', {username: username, password: password}, (err) => {
+              if (err) {
+                this.error(err)
+              } else {
+                this.info('LOGGED IN')
+                this.setAuthenticated(true)
+              }
+              callback(err)
+            })
+          }.bind(this),
+          text: qx.locale.Manager.tr('Please login')
+        })
+      }
+      this.__loginDialog.show()
     }.bind(this));
 
     this.__socket.on('rand', function (data) {
@@ -82,6 +76,7 @@ qx.Class.define('app.io.Socket', {
     __socket: null,
     __channels: null,
     __queuedSubscriptions: null,
+    __loginDialog: null,
 
     subscribe: function(channelId) {
       return new qx.Promise((resolve, reject) => {

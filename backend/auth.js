@@ -5,7 +5,8 @@
  * @since 2018
  */
 const shajs = require('sha.js')
-const logger = require('./logger')
+const logger = require('./logger')(__filename)
+const i18n = require("i18n")
 
 module.exports = function(socket, scServer) {
   socket.on('login', function (credentials, respond) {
@@ -36,7 +37,7 @@ module.exports = function(socket, scServer) {
     if (authToken && authToken.user) {
       next();
     } else {
-      next(req.__('You are not authorized to subscribe to {{channel}}', {channel: req.channel}));
+      next(i18n.__('You are not authorized to subscribe to #{{channel}}', {channel: req.channel}));
     }
   });
 }

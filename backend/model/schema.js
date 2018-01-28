@@ -6,7 +6,8 @@
  */
 const scCrudRethink = require('sc-crud-rethink');
 const shajs = require('sha.js')
-const logger = require('../logger')
+const logger = require('../logger')(__filename)
+const {botUUID} = require('../util')
 
 module.exports.create = function(scServer) {
   const thinky = scCrudRethink.thinky;
@@ -141,15 +142,23 @@ module.exports.create = function(scServer) {
       name: 'Tobias Bräutigam',
       email: 'tbraeutigam@gmail.com',
       password: shajs('sha512').update('tester').digest('hex')
+    },{
+      id: '135dd849-9cb6-466a-9a2b-688ae21b6cdf',
+      type: 'Bot',
+      username: 'hirschberg',
+      role: 'bot',
+      name: 'Hirschberg',
+      email: 'tbraeutigam@gmail.com',
+      password: shajs('sha512').update(botUUID).digest('hex')
     }]
   }
 
   logger.debug('initializing database with default data')
   Object.keys(defaultData).forEach(key => {
     m[key].save(defaultData[key], {conflict: 'update'}).then(result => {
-      logger.debug(key, 'default data applied')
+      logger.debug('%s default data applied', key)
     }).error(error => {
-      logger.error('Error applying default data to ', key, ':', error)
+      logger.error('Error applying default data to %s:%s', key, error)
     })
   })
 

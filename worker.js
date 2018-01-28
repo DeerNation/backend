@@ -5,10 +5,12 @@ const serveStatic = require('serve-static');
 const path = require('path');
 const morgan = require('morgan');
 const healthChecker = require('sc-framework-health-check');
-const iCal = require('ical');
 const schema = require('./backend/model/schema')
 const auth = require('./backend/auth')
 const i18n = require("i18n")
+const ICal = require('./backend/crawler/iCal')
+const cron = require('node-cron');
+const logger = require('./backend/logger')(__filename)
 
 class Worker extends SCWorker {
   run() {
@@ -49,57 +51,14 @@ class Worker extends SCWorker {
       In here we handle our incoming realtime connections and listen for events.
     */
     scServer.on('connection', function (socket) {
-      // sctivate authentification
+      // activate authentification
       auth(socket, scServer)
 
-      let data = iCal.parseFile('index.ics')
-// ical.fromURL('https://www.hirschberg-sauerland.de/index.php?id=373&type=150&L=0&tx_cal_controller%5Bcalendar%5D=1&tx_cal_controller%5Bview%5D=ics&cHash=b1aa5a58b6552eaba4eae2551f8d6d75', {}, function(err, data) {
-      let now = new Date()
+      let iCal = new ICal('index.ics', crud.models)
+      // let iCal = new ICal('https://www.hirschberg-sauerland.de/index.php?id=373&type=150&L=0&tx_cal_controller%5Bcalendar%5D=1&tx_cal_controller%5Bview%5D=ics&cHash=b1aa5a58b6552eaba4eae2551f8d6d75', {}, function(err, data) {
 
-      for (let k in data) {
-        if (data.hasOwnProperty(k)) {
-          let ev = data[k]
-          if (ev.type === 'VEVENT' && ev.start >= now) {
-            // console.log(ev)
-            let event = {
-              id: ev.uid,
-              start: ev.start,
-              end: ev.end,
-              location: ev.location,
-              title: ev.summary,
-              content: ev.description,
-              categories: ev.categories
-            }
-            if (ev.hasOwnProperty('organizer')) {
-              let orga = ev.organizer.params.CN.trim()
-              if (ev.organizer.val) {
-                orga += " "+ev.organizer.val.trim()
-              }
-              if (orga.endsWith(":")) {
-                orga = orga.substring(0, orga.length-1)
-              }
-              orga = orga.substring(1, orga.length-1)
-              event.organizer = orga
-            }
-
-            scServer.thinky.r.table('Event').filter({id: ev.uid}).run((err, results) => {
-              if (results.length === 0) {
-                // create
-                crud.create({
-                  type: 'Event',
-                  value: event
-                });
-              } else {
-                crud.update({
-                  type: 'Event',
-                  id: ev.uid,
-                  value: event
-                });
-              }
-            })
-          }
-        }
-      }
+      logger.debug('Installing iCal importer cronjob')
+      cron.schedule('0 0 * * * *', iCal.update.bind(iCal), true)
 
       // Some sample logic to show how to handle client events,
       // replace this with your own logic

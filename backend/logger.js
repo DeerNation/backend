@@ -5,30 +5,58 @@
  * @since 2018
  */
 
-const { createLogger, format, transports } = require('winston');
-const { combine, timestamp, label, printf } = format;
+const { format, transports, loggers } = require('winston');
+const { combine, timestamp, label, printf, colorize, align, splat } = format;
 
 const myFormat = printf(info => {
-  return `${info.timestamp} [${info.label}] ${info.level}: ${info.message}`;
+  return `${info.timestamp} [${info.label}] ${info.level.toUpperCase()}: ${info.message}`;
 });
 
-const logger = createLogger({
-  format: combine(
-    label({ label: 'right meow!' }),
-    timestamp(),
-    myFormat
-  )
-});
-
-//
-// If we're not in production then log to the `console` with the format:
-// `${info.level}: ${info.message} JSON.stringify({ ...rest }) `
-//
-if (process.env.ENV === 'dev') {
-  logger.add(new transports.Console());
-} else {
-  logger.add(new transports.File({ filename: 'error.log', level: 'error' }));
-  logger.add(new transports.File({ filename: 'combined.log' }));
+const defaultLoggerConfig = {
+  transports: []
 }
 
-module.exports = logger
+if (process.env.ENV === 'dev') {
+  defaultLoggerConfig.transports.push(new transports.Console())
+} else {
+  defaultLoggerConfig.transports.push(new transports.File({ filename: 'combined.log' }))
+  defaultLoggerConfig.transports.push(new transports.File({
+    filename: 'error.log',
+    level: 'error'
+  }))
+}
+
+module.exports = function(fileName) {
+  if (!loggers.has(fileName)) {
+    // create new logger
+    let config = Object.assign({}, defaultLoggerConfig)
+
+    // normalize filename
+    let parts = fileName.replace(/[\/]/g, '.').split(".")
+    parts.pop()
+    // remove filetype
+    let module = parts.slice(parts.indexOf('backend')).join(".")
+    if (process.env.ENV === 'dev') {
+      config.format = combine(
+        colorize(),
+        format.padLevels(),
+        label({label: module}),
+        splat(),
+        timestamp(),
+        align(),
+        myFormat
+      )
+    } else {
+      config.format = combine(
+        format.padLevels(),
+        label({label: module}),
+        splat(),
+        timestamp(),
+        align(),
+        myFormat
+      )
+    }
+    return loggers.add(fileName, config)
+  }
+  return loggers.get(fileName)
+}
