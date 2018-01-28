@@ -10,21 +10,7 @@ const { combine, timestamp, label, printf, colorize, align, splat } = format;
 const maxModuleLength = 20
 
 const myFormat = printf(info => {
-  let label = info.label
-  if (label.length > maxModuleLength) {
-    let gain = label.length - maxModuleLength
-    let parts = label.split(".")
-    for (let i=0; i < parts.length; i++) {
-      gain -= parts[i].length-1
-      parts[i] = parts[i].substr(0, 1)
-      if (gain <= 0) {
-        break
-      }
-    }
-    label = parts.join(".")
-  }
-  label = `${label}`.padStart(maxModuleLength, '.')
-  return `${info.timestamp.replace(/[T|Z]/g, ' ')} [${label}] ${info.level}: ${info.message}`;
+  return `${info.timestamp.replace(/[T|Z]/g, ' ')} [${info.label}] ${info.level}: ${info.message}`;
 });
 
 const defaultLoggerConfig = {
@@ -56,11 +42,27 @@ module.exports = function(fileName) {
     // remove filetype
     const start = Math.max(parts.indexOf('hirschberg')+1, 0)
     let module = parts.slice(start).join(".")
+
+    let labelString = module
+    if (labelString.length > maxModuleLength) {
+      let gain = labelString.length - maxModuleLength
+      let parts = labelString.split(".")
+      for (let i=0; i < parts.length; i++) {
+        gain -= parts[i].length-1
+        parts[i] = parts[i].substr(0, 1)
+        if (gain <= 0) {
+          break
+        }
+      }
+      labelString = parts.join(".")
+    }
+    labelString = `${labelString}`.padStart(maxModuleLength, '.')
+
     if (process.env.ENV === 'dev') {
       // console.log(module, config)
       config.format = combine(
         colorize({all: true}),
-        label({label: module}),
+        label({label: labelString}),
         splat(),
         timestamp(),
         myFormat
@@ -68,7 +70,7 @@ module.exports = function(fileName) {
     } else {
       config.format = combine(
         format.padLevels(),
-        label({label: module}),
+        label({label: labelString}),
         splat(),
         timestamp(),
         align(),
