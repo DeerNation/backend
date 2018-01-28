@@ -4,6 +4,7 @@
 /test/
 /source/script/
 /source-output/
+/build-output/
 
 # node-related files
 /node_modules

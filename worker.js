@@ -36,9 +36,11 @@ class Worker extends SCWorker {
       // Log every HTTP request. See https://github.com/expressjs/morgan for other
       // available formats.
       // app.use(morgan('dev'));
+      logger.debug("serving static frontend/app/source-output")
       app.use(serveStatic(path.resolve(__dirname, 'frontend/app/source-output')));
     } else {
-      app.use(serveStatic(path.resolve(__dirname, 'frontend/app/build-output/app')));
+      logger.debug("serving static frontend/app/build-output")
+      app.use(serveStatic(path.resolve(__dirname, 'frontend/app/build-output')));
     }
 
 
@@ -67,6 +69,7 @@ class Worker extends SCWorker {
       //   scServer.exchange.publish('hbg.channel.news', events.slice(0, 10));
       // });
       let interval
+
 
       const r = scServer.thinky.r
       r.table('Event').orderBy(r.desc('start')).run().then((events) => {
