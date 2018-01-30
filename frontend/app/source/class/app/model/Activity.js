@@ -55,6 +55,16 @@ qx.Class.define('app.model.Activity', {
       nullable: true,
       event: "changePublished",
       transform: "_transformDate"
+    },
+
+    actorId: {
+      check: "String",
+      init: null
+    },
+
+    hash: {
+      check: "String",
+      init: null
     }
   },
 

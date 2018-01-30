@@ -20862,7 +20862,8 @@
         "width": 32,
         "height": 32
       },
-      "js/socketcluster.js": {}
+      "js/socketcluster.js": {},
+      "js/WAMPClient.bundle.min.js": {}
     },
     "dialog": {
       "dialog/logo.gif": {

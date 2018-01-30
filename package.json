@@ -9,6 +9,8 @@
     }
   ],
   "dependencies": {
+    "bcrypt": "^1.0.3",
+    "body-parser": "^1.18.2",
     "connect": "3.0.1",
     "express": "4.14.0",
     "i18n": "^0.8.3",
@@ -22,11 +24,12 @@
     "sc-hot-reboot": "~1.0.0",
     "scc-broker-client": "~2.1.2",
     "serve-static": "1.11.2",
-    "sha.js": "^2.4.10",
     "socketcluster": "~9.3.1",
     "socketcluster-client": "~9.0.2",
     "uuid": "^3.2.1",
-    "winston": "^3.0.0-rc1"
+    "wamp-socket-cluster": "^1.0.7",
+    "winston": "^3.0.0-rc1",
+    "xxhash": "^0.2.4"
   },
   "keywords": [
     "websocket",

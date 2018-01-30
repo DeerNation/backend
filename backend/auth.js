@@ -4,18 +4,17 @@
  * @author tobiasb
  * @since 2018
  */
-const shajs = require('sha.js')
+const bcrypt = require('bcrypt')
 const logger = require('./logger')(__filename)
 const i18n = require("i18n")
 
 module.exports = function(socket, scServer) {
   socket.on('login', function (credentials, respond) {
-    const passwordHash = shajs('sha512').update(credentials.password).digest('hex');
-    logger.debug('login request for actor {{name}} received', {name: credentials.username})
+    logger.debug('login request for actor %s received', credentials.username)
 
     scServer.thinky.r.table('Actor').filter({username: credentials.username}).run((err, results) => {
       const userRow = results[0];
-      let isValidLogin = userRow && userRow.password === passwordHash;
+      let isValidLogin = userRow && bcrypt.compareSync(credentials.password, userRow.password);
 
       if (isValidLogin) {
         respond();
@@ -37,7 +36,7 @@ module.exports = function(socket, scServer) {
     if (authToken && authToken.user) {
       next();
     } else {
-      next(i18n.__('You are not authorized to subscribe to #{{channel}}', {channel: req.channel}));
+      next(i18n.__('You are not authorized to subscribe to #%s', req.channel));
     }
   });
 }

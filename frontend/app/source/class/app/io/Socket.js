@@ -3,7 +3,7 @@
  *
  * @author tobiasb
  * @since 2018
- * @ignore(socketcluster)
+ * @ignore(socketcluster,wampSocketCluster)
  */
 
 qx.Class.define('app.io.Socket', {
@@ -22,30 +22,22 @@ qx.Class.define('app.io.Socket', {
     // Initiate the connection to the server
     this.__socket = socketCluster.connect();
 
+    this.__wampClient = new wampSocketCluster();
+    this.__wampClient.upgradeToWAMP(this.__socket);
+
+    app.io.Rpc.getInstance().setSocket(this.__socket);
+
     this.__socket.on('error', function (err) {
       this.error('Socket error - ' + err);
     }.bind(this));
 
-    this.__socket.on('connect', function () {
-      this.info('CONNECTED, logging in');
+    this.__socket.on('authStateChanged', function(states) {
+      this.setAuthenticated(states.newState === this.__socket.AUTHENTICATED)
+    }.bind(this))
 
-      if (!this.__loginDialog) {
-        this.__loginDialog = new dialog.Login({
-          checkCredentials: function (username, password, callback) {
-            this.__socket.emit('login', {username: username, password: password}, (err) => {
-              if (err) {
-                this.error(err)
-              } else {
-                this.info('LOGGED IN')
-                this.setAuthenticated(true)
-              }
-              callback(err)
-            })
-          }.bind(this),
-          text: qx.locale.Manager.tr('Please login')
-        })
-      }
-      this.__loginDialog.show()
+    this.__socket.on('connect', function () {
+      this.info('CONNECTED', this.__socket.authState === this.__socket.AUTHENTICATED);
+      this.setAuthenticated(this.__socket.authState === this.__socket.AUTHENTICATED)
     }.bind(this));
 
     this.__socket.on('rand', function (data) {
@@ -62,7 +54,8 @@ qx.Class.define('app.io.Socket', {
     authenticated: {
       check: "Boolean",
       init: false,
-      event: "changeAuthenticated"
+      event: "changeAuthenticated",
+      apply: "_applyAuthenticated"
     }
   },
 
@@ -77,6 +70,33 @@ qx.Class.define('app.io.Socket', {
     __channels: null,
     __queuedSubscriptions: null,
     __loginDialog: null,
+    __wampClient: null,
+
+    // property apply
+    _applyAuthenticated: function(value, old) {
+      console.log(this.toHashCode(), "authenticated: ", value)
+      if (!value) {
+        if (!this.__loginDialog) {
+          this.__loginDialog = new dialog.Login({
+            checkCredentials: function (username, password, callback) {
+              this.__socket.emit('login', {username: username, password: password}, (err) => {
+                if (err) {
+                  this.error(err)
+                } else {
+                  this.info('LOGGED IN')
+                  this.setAuthenticated(true)
+                }
+                callback(err)
+              })
+            }.bind(this),
+            text: qx.locale.Manager.tr('Please login')
+          })
+        }
+        this.__loginDialog.show()
+      } else if (this.__loginDialog) {
+        this.__loginDialog.hide()
+      }
+    },
 
     subscribe: function(channelId) {
       return new qx.Promise((resolve, reject) => {
@@ -116,5 +136,7 @@ qx.Class.define('app.io.Socket', {
       channel.unsubscribe()
     })
     this.__channels = []
+    this.__wampClient = null
+    this.__socket = null
   }
 });

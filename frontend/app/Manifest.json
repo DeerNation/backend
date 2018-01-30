@@ -34,7 +34,8 @@
   "externalResources" :
   {
     "script": [
-      "js/socketcluster.js"
+      "js/socketcluster.js",
+      "js/WAMPClient.bundle.min.js"
     ]
   }
 }
