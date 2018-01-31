@@ -1,7 +1,7 @@
 {
   "classInfo": {
     "app.Application": {
-      "mtime": "2018-01-30T21:10:54.077Z",
+      "mtime": "2018-01-31T18:15:28.820Z",
       "libraryName": "app",
       "dependsOn": {
         "app.model.Event": {
@@ -10937,7 +10937,7 @@
       "implement": []
     },
     "app.io.Socket": {
-      "mtime": "2018-01-30T21:12:06.404Z",
+      "mtime": "2018-01-31T18:20:32.277Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -15190,28 +15190,17 @@
       "implement": []
     },
     "app.io.Rpc": {
-      "mtime": "2018-01-30T20:01:08.569Z",
+      "mtime": "2018-01-31T18:29:52.725Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
           "load": true,
           "usage": "dynamic"
         },
-        "qx.core.Object": {
-          "load": true
-        },
         "qx.lang.Array": {},
-        "qx.core.ObjectRegistry": {
-          "load": true
-        },
-        "qx.core.Environment": {
-          "load": true
-        },
-        "qx.core.IDisposable": {
-          "load": true
-        }
+        "qx.log.Logger": {}
       },
-      "extends": "qx.core.Object",
+      "extends": null,
       "include": [],
       "implement": []
     }

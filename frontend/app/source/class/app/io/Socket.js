@@ -25,7 +25,7 @@ qx.Class.define('app.io.Socket', {
     this.__wampClient = new wampSocketCluster();
     this.__wampClient.upgradeToWAMP(this.__socket);
 
-    app.io.Rpc.getInstance().setSocket(this.__socket);
+    app.io.Rpc.setSocket(this.__socket);
 
     this.__socket.on('error', function (err) {
       this.error('Socket error - ' + err);

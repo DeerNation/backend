@@ -1,13 +1,12 @@
 /**
- * Rpc
+ * Provides a proxy object for RPC calls to the backend.
  *
  * @author tobiasb
  * @since 2018
  */
 
 qx.Class.define('app.io.Rpc', {
-  extend: qx.core.Object,
-  type: 'singleton',
+  type: 'static',
 
   /*
   ******************************************************
@@ -15,34 +14,35 @@ qx.Class.define('app.io.Rpc', {
   ******************************************************
   */
   statics: {
-    send: function() {
-      var self = app.io.Rpc.getInstance();
-      return self.send.apply(self, qx.lang.Array.fromArguments(arguments))
-    }
-  },
+    __proxy: null,
+    __socket: null,
 
+    /**
+     * RPCs need a socket to work, so before the first RPC the socket must be provided
+     * @param socket
+     */
+    setSocket: function(socket) {
+      this.__socket = socket
+    },
 
-  /*
-  ******************************************************
-    PROPERTIES
-  ******************************************************
-  */
-  properties: {
-    socket: {
-      init: null
-    }
-  },
-
-
-  /*
-  ******************************************************
-    MEMBERS
-  ******************************************************
-  */
-  members: {
-    send: function() {
-      var args = qx.lang.Array.fromArguments(arguments);
-      return this.getSocket().wampSend.apply(this.getSocket(), args)
+    /**
+     * Returns the proxy object for RPC calls, which can be used to trigger an RPC.
+     * @returns {Proxy}
+     */
+    getProxy: function() {
+      if (!this.__proxy) {
+        this.__proxy = new Proxy({}, {
+          get: function(rcvr, name) {
+            return function() {
+              const args = qx.lang.Array.fromArguments(arguments);
+              qx.log.Logger.debug(this, "invoking RPC: "+name+"("+args+")")
+              args.unshift(name)
+              return this.__socket.wampSend.apply(this.__socket, args)
+            }.bind(this)
+          }.bind(this)
+        })
+      }
+      return this.__proxy
     }
   }
 })

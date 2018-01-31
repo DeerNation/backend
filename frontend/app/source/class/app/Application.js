@@ -65,11 +65,11 @@ qx.Class.define("app.Application",
       // RPC test
       this.debug(this.__socket.toHashCode(), this.__socket.isAuthenticated())
       if (this.__socket.isAuthenticated()) {
-        app.io.Rpc.send('getChannels').then(this._initSubscriptions.bind(this)).catch(this.error.bind(this))
+        app.io.Rpc.getProxy().getChannels().then(this._initSubscriptions.bind(this)).catch(this.error.bind(this))
       } else {
         const lid = this.__socket.addListener("changeAuthenticated", function(ev) {
           if (ev.getData() === true) {
-            app.io.Rpc.send('getChannels').then(this._initSubscriptions.bind(this)).catch(this.error.bind(this))
+            app.io.Rpc.getProxy().getChannels().then(this._initSubscriptions.bind(this)).catch(this.error.bind(this))
             this.__socket.removeListenerById(lid)
           }
         }, this)
