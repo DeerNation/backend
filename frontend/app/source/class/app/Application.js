@@ -50,6 +50,10 @@ qx.Class.define("app.Application",
         qx.log.appender.Console;
       }
 
+      // install service worker
+      const workerHandler = app.io.ServiceWorkerHandler.getInstance()
+      workerHandler.init(qx.util.ResourceManager.getInstance().toUri('app/sw.js'))
+
       /*
       -------------------------------------------------------------------------
         Init socketcluster connection
@@ -60,7 +64,25 @@ qx.Class.define("app.Application",
       this.__activities = new qx.data.Array();
 
       let list = new qx.ui.list.List(this.__activities);
-      list.setLabelPath("title");
+      list.setDelegate({
+        createItem: function() {
+          return new app.ui.form.ActivityItem()
+        },
+
+        bindItem: function(controller, item, index) {
+          controller.bindProperty("", "model", null, item, index)
+          controller.bindProperty("title", "message", null, item, index)
+        },
+
+        group: function(model) {
+          const date = model.getPublished() || model.getCreated()
+          return date ? date.getFullYear() : null
+        },
+
+        sorter: function(a, b) {
+          return a.getPublished() <= b.getPublished()
+        }
+      })
 
       // RPC test
       this.debug(this.__socket.toHashCode(), this.__socket.isAuthenticated())

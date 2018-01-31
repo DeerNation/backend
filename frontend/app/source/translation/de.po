@@ -1,0 +1,3 @@
+#: app.io.Socket:92
+msgid "Please login"
+msgstr "Bitte melden Sie sich an"

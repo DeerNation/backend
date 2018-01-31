@@ -1,7 +1,7 @@
 {
   "classInfo": {
     "app.Application": {
-      "mtime": "2018-01-31T18:15:28.820Z",
+      "mtime": "2018-01-31T21:32:13.861Z",
       "libraryName": "app",
       "dependsOn": {
         "app.model.Event": {
@@ -17,9 +17,12 @@
         "qx.core.Environment": {},
         "qx.log.appender.Native": {},
         "qx.log.appender.Console": {},
+        "app.io.ServiceWorkerHandler": {},
+        "qx.util.ResourceManager": {},
         "app.io.Socket": {},
         "qx.data.Array": {},
         "qx.ui.list.List": {},
+        "app.ui.form.ActivityItem": {},
         "app.io.Rpc": {},
         "qx.lang.Type": {},
         "app.model.Activity": {}
@@ -63,7 +66,14 @@
       },
       "extends": null,
       "include": [],
-      "implement": []
+      "implement": [],
+      "themeMeta": {
+        "color": "app.theme.Color",
+        "decoration": "app.theme.Decoration",
+        "font": "app.theme.Font",
+        "icon": "qx.theme.icon.Tango",
+        "appearance": "app.theme.Appearance"
+      }
     },
     "qx.Class": {
       "mtime": "2018-01-27T22:11:00.317Z",
@@ -132,87 +142,7 @@
           "module.events": {}
         }
       },
-      "hasDefer": true,
-      "unresolved": [
-        {
-          "name": "_wrapper.$$original",
-          "locations": [
-            {
-              "start": {
-                "line": 1803,
-                "column": 8
-              },
-              "end": {
-                "line": 1803,
-                "column": 26
-              }
-            },
-            {
-              "start": {
-                "line": 1809,
-                "column": 6
-              },
-              "end": {
-                "line": 1809,
-                "column": 24
-              }
-            }
-          ]
-        },
-        {
-          "name": "_wrapper.constructor",
-          "locations": [
-            {
-              "start": {
-                "line": 1804,
-                "column": 8
-              },
-              "end": {
-                "line": 1804,
-                "column": 27
-              }
-            }
-          ]
-        }
-      ],
-      "markers": [
-        {
-          "msgId": "symbol.unresolved",
-          "pos": {
-            "start": {
-              "line": 1803,
-              "column": 8
-            }
-          },
-          "args": [
-            "_wrapper.$$original"
-          ]
-        },
-        {
-          "msgId": "symbol.unresolved",
-          "pos": {
-            "start": {
-              "line": 1809,
-              "column": 6
-            }
-          },
-          "args": [
-            "_wrapper.$$original"
-          ]
-        },
-        {
-          "msgId": "symbol.unresolved",
-          "pos": {
-            "start": {
-              "line": 1804,
-              "column": 8
-            }
-          },
-          "args": [
-            "_wrapper.constructor"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.application.Standalone": {
       "mtime": "2018-01-27T22:11:00.321Z",
@@ -278,25 +208,7 @@
           }
         }
       },
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 74,
-              "column": 4
-            },
-            "end": {
-              "line": 74,
-              "column": 35
-            }
-          },
-          "args": [
-            "qx.log.Logger"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.log.appender.Console": {
       "mtime": "2018-01-27T22:11:00.361Z",
@@ -329,41 +241,7 @@
       "extends": null,
       "include": [],
       "implement": [],
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 369,
-              "column": 4
-            },
-            "end": {
-              "line": 369,
-              "column": 106
-            }
-          },
-          "args": [
-            "qx.event.Registration"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 370,
-              "column": 4
-            },
-            "end": {
-              "line": 370,
-              "column": 105
-            }
-          },
-          "args": [
-            "qx.event.Registration"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.ui.form.Button": {
       "mtime": "2018-01-27T22:11:00.453Z",
@@ -501,7 +379,10 @@
       },
       "extends": null,
       "include": [],
-      "implement": []
+      "implement": [],
+      "aliases": {
+        "icon": "qx/icon/Tango"
+      }
     },
     "app.theme.Appearance": {
       "mtime": "2018-01-26T17:39:00.084Z",
@@ -633,41 +514,7 @@
           }
         }
       },
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 107,
-              "column": 9
-            },
-            "end": {
-              "line": 107,
-              "column": 55
-            }
-          },
-          "args": [
-            "qx.bom.client.EcmaScript"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 111,
-              "column": 9
-            },
-            "end": {
-              "line": 111,
-              "column": 57
-            }
-          },
-          "args": [
-            "qx.bom.client.EcmaScript"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.lang.normalize.Error": {
       "mtime": "2018-01-27T22:11:00.361Z",
@@ -696,25 +543,7 @@
           }
         }
       },
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 57,
-              "column": 9
-            },
-            "end": {
-              "line": 57,
-              "column": 61
-            }
-          },
-          "args": [
-            "qx.bom.client.EcmaScript"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.lang.normalize.Function": {
       "mtime": "2018-01-27T22:11:00.361Z",
@@ -743,25 +572,7 @@
           }
         }
       },
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 195,
-              "column": 9
-            },
-            "end": {
-              "line": 195,
-              "column": 60
-            }
-          },
-          "args": [
-            "qx.bom.client.EcmaScript"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.lang.normalize.String": {
       "mtime": "2018-01-27T22:11:00.361Z",
@@ -798,57 +609,7 @@
           }
         }
       },
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 90,
-              "column": 9
-            },
-            "end": {
-              "line": 90,
-              "column": 58
-            }
-          },
-          "args": [
-            "qx.bom.client.EcmaScript"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 94,
-              "column": 9
-            },
-            "end": {
-              "line": 94,
-              "column": 64
-            }
-          },
-          "args": [
-            "qx.bom.client.EcmaScript"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 98,
-              "column": 9
-            },
-            "end": {
-              "line": 98,
-              "column": 62
-            }
-          },
-          "args": [
-            "qx.bom.client.EcmaScript"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.lang.normalize.Object": {
       "mtime": "2018-01-27T22:11:00.361Z",
@@ -877,25 +638,7 @@
           }
         }
       },
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 45,
-              "column": 9
-            },
-            "end": {
-              "line": 45,
-              "column": 58
-            }
-          },
-          "args": [
-            "qx.bom.client.EcmaScript"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.Bootstrap": {
       "mtime": "2018-01-27T22:11:00.317Z",
@@ -1011,57 +754,7 @@
       "extends": null,
       "include": [],
       "implement": [],
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 93,
-              "column": 4
-            },
-            "end": {
-              "line": 93,
-              "column": 78
-            }
-          },
-          "args": [
-            "qx.event.Registration"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 94,
-              "column": 4
-            },
-            "end": {
-              "line": 94,
-              "column": 86
-            }
-          },
-          "args": [
-            "qx.event.Registration"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 95,
-              "column": 4
-            },
-            "end": {
-              "line": 95,
-              "column": 87
-            }
-          },
-          "args": [
-            "qx.event.Registration"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.application.AbstractGui": {
       "mtime": "2018-01-27T22:11:00.321Z",
@@ -1149,8 +842,6 @@
         },
         "qx.bom.client.Engine": {},
         "qx.html.Root": {},
-        "qx.ui.popup.Manager": {},
-        "qx.ui.menu.Manager": {},
         "qx.bom.Viewport": {},
         "qx.bom.element.Style": {},
         "qx.dom.Element": {},
@@ -1340,25 +1031,7 @@
           }
         }
       },
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 253,
-              "column": 4
-            },
-            "end": {
-              "line": 253,
-              "column": 45
-            }
-          },
-          "args": [
-            "qx.event.Registration"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.event.handler.Keyboard": {
       "mtime": "2018-01-27T22:11:00.349Z",
@@ -1432,57 +1105,7 @@
           }
         }
       },
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 635,
-              "column": 4
-            },
-            "end": {
-              "line": 635,
-              "column": 45
-            }
-          },
-          "args": [
-            "qx.event.Registration"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 637,
-              "column": 9
-            },
-            "end": {
-              "line": 637,
-              "column": 47
-            }
-          },
-          "args": [
-            "qx.bom.client.Engine"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 638,
-              "column": 6
-            },
-            "end": {
-              "line": 638,
-              "column": 44
-            }
-          },
-          "args": [
-            "qx.bom.client.Engine"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.event.handler.Gesture": {
       "mtime": "2018-01-27T22:11:00.349Z",
@@ -1553,41 +1176,7 @@
           }
         }
       },
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 231,
-              "column": 4
-            },
-            "end": {
-              "line": 231,
-              "column": 45
-            }
-          },
-          "args": [
-            "qx.event.Registration"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 232,
-              "column": 4
-            },
-            "end": {
-              "line": 232,
-              "column": 46
-            }
-          },
-          "args": [
-            "qx.event.Registration"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.bom.Stylesheet": {
       "mtime": "2018-01-27T22:11:00.325Z",
@@ -1848,11 +1437,7 @@
           "usage": "dynamic"
         },
         "qx.core.Environment": {},
-        "qx.bom.client.EcmaScript": {
-          "defer": "runtime"
-        },
         "qx.lang.Array": {},
-        "qx.Class": {},
         "qx.lang.Function": {},
         "qx.core.ObjectRegistry": {},
         "qx.lang.Type": {}
@@ -1869,25 +1454,7 @@
           "qx.debug": {}
         }
       },
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 395,
-              "column": 6
-            },
-            "end": {
-              "line": 395,
-              "column": 30
-            }
-          },
-          "args": [
-            "qx.bom.client.EcmaScript"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.theme.indigo.Color": {
       "mtime": "2018-01-27T22:11:00.437Z",
@@ -1932,7 +1499,10 @@
       },
       "extends": "qx.theme.simple.Decoration",
       "include": [],
-      "implement": []
+      "implement": [],
+      "aliases": {
+        "decoration": "qx/decoration/Simple"
+      }
     },
     "qx.theme.indigo.Font": {
       "mtime": "2018-01-27T22:11:00.437Z",
@@ -2034,7 +1604,6 @@
           "load": true,
           "usage": "dynamic"
         },
-        "qx.Class": {},
         "qx.core.AssertionError": {},
         "qx.lang.Json": {},
         "qx.lang.String": {}
@@ -2114,25 +1683,7 @@
           "qx.promise": {}
         }
       },
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 155,
-              "column": 4
-            },
-            "end": {
-              "line": 155,
-              "column": 48
-            }
-          },
-          "args": [
-            "qx.event.Registration"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.Promise": {
       "mtime": "2018-01-27T22:11:00.321Z",
@@ -2325,64 +1876,7 @@
           }
         }
       },
-      "hasDefer": true,
-      "unresolved": [
-        {
-          "name": "qx.$$domReady",
-          "locations": [
-            {
-              "start": {
-                "line": 220,
-                "column": 10
-              },
-              "end": {
-                "line": 220,
-                "column": 23
-              }
-            },
-            {
-              "start": {
-                "line": 220,
-                "column": 10
-              },
-              "end": {
-                "line": 220,
-                "column": 23
-              }
-            }
-          ]
-        }
-      ],
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 373,
-              "column": 4
-            },
-            "end": {
-              "line": 373,
-              "column": 45
-            }
-          },
-          "args": [
-            "qx.event.Registration"
-          ]
-        },
-        {
-          "msgId": "symbol.unresolved",
-          "pos": {
-            "start": {
-              "line": 220,
-              "column": 10
-            }
-          },
-          "args": [
-            "qx.$$domReady"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.core.BaseInit": {
       "mtime": "2018-01-27T22:11:00.333Z",
@@ -2588,57 +2082,7 @@
           }
         }
       },
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 297,
-              "column": 4
-            },
-            "end": {
-              "line": 297,
-              "column": 34
-            }
-          },
-          "args": [
-            "qx.html.Element._scheduleFlush"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 300,
-              "column": 4
-            },
-            "end": {
-              "line": 303,
-              "column": 5
-            }
-          },
-          "args": [
-            "qx.event.Registration"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 301,
-              "column": 6
-            },
-            "end": {
-              "line": 301,
-              "column": 44
-            }
-          },
-          "args": [
-            "qx.bom.client.Event"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.ui.root.Abstract": {
       "mtime": "2018-01-27T22:11:00.477Z",
@@ -2715,25 +2159,7 @@
           }
         }
       },
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 309,
-              "column": 4
-            },
-            "end": {
-              "line": 309,
-              "column": 47
-            }
-          },
-          "args": [
-            "qx.ui.core.MChildrenHandling"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.dom.Node": {
       "mtime": "2018-01-27T22:11:00.345Z",
@@ -3198,7 +2624,6 @@
           "load": true,
           "usage": "dynamic"
         },
-        "qx.Class": {},
         "qx.core.Environment": {},
         "qx.bom.client.Engine": {},
         "qx.data.Array": {},
@@ -3436,25 +2861,7 @@
       "implement": [
         "qx.event.IEventHandler"
       ],
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 140,
-              "column": 4
-            },
-            "end": {
-              "line": 140,
-              "column": 45
-            }
-          },
-          "args": [
-            "qx.event.Registration"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.event.type.KeyInput": {
       "mtime": "2018-01-27T22:11:00.353Z",
@@ -3600,25 +3007,7 @@
           }
         }
       },
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 1289,
-              "column": 4
-            },
-            "end": {
-              "line": 1289,
-              "column": 45
-            }
-          },
-          "args": [
-            "qx.event.Registration"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.event.handler.Pointer": {
       "mtime": "2018-01-27T22:11:00.349Z",
@@ -3682,41 +3071,7 @@
           }
         }
       },
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 197,
-              "column": 4
-            },
-            "end": {
-              "line": 197,
-              "column": 45
-            }
-          },
-          "args": [
-            "qx.event.Registration"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 198,
-              "column": 4
-            },
-            "end": {
-              "line": 198,
-              "column": 46
-            }
-          },
-          "args": [
-            "qx.event.Registration"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.event.handler.GestureCore": {
       "mtime": "2018-01-27T22:11:00.349Z",
@@ -4411,7 +3766,10 @@
       },
       "extends": null,
       "include": [],
-      "implement": []
+      "implement": [],
+      "aliases": {
+        "decoration": "qx/decoration/Simple"
+      }
     },
     "qx.theme.simple.Appearance": {
       "mtime": "2018-01-27T22:11:00.441Z",
@@ -5088,25 +4446,7 @@
           }
         }
       },
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 2853,
-              "column": 29
-            },
-            "end": {
-              "line": 2853,
-              "column": 77
-            }
-          },
-          "args": [
-            "qx.util.DeferredCall"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.ui.core.queue.Dispose": {
       "mtime": "2018-01-27T22:11:00.445Z",
@@ -5208,73 +4548,7 @@
           }
         }
       },
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 86,
-              "column": 8
-            },
-            "end": {
-              "line": 86,
-              "column": 46
-            }
-          },
-          "args": [
-            "qx.bom.client.Engine"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 87,
-              "column": 22
-            },
-            "end": {
-              "line": 87,
-              "column": 63
-            }
-          },
-          "args": [
-            "qx.bom.client.Engine"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 88,
-              "column": 10
-            },
-            "end": {
-              "line": 88,
-              "column": 57
-            }
-          },
-          "args": [
-            "qx.bom.client.Browser"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 89,
-              "column": 11
-            },
-            "end": {
-              "line": 89,
-              "column": 56
-            }
-          },
-          "args": [
-            "qx.bom.client.Browser"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.ui.layout.Abstract": {
       "mtime": "2018-01-27T22:11:00.457Z",
@@ -5400,25 +4674,7 @@
       "implement": [
         "qx.event.IEventHandler"
       ],
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 385,
-              "column": 4
-            },
-            "end": {
-              "line": 385,
-              "column": 45
-            }
-          },
-          "args": [
-            "qx.event.Registration"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.event.handler.DragDrop": {
       "mtime": "2018-01-27T22:11:00.349Z",
@@ -5470,25 +4726,7 @@
         "qx.event.IEventHandler",
         "qx.core.IDisposable"
       ],
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 822,
-              "column": 4
-            },
-            "end": {
-              "line": 822,
-              "column": 45
-            }
-          },
-          "args": [
-            "qx.event.Registration"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.ui.core.LayoutItem": {
       "mtime": "2018-01-27T22:11:00.445Z",
@@ -5644,25 +4882,7 @@
           }
         }
       },
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 264,
-              "column": 4
-            },
-            "end": {
-              "line": 264,
-              "column": 48
-            }
-          },
-          "args": [
-            "qx.event.Registration"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.locale.Manager": {
       "mtime": "2018-01-27T22:11:00.361Z",
@@ -5705,18 +4925,18 @@
       "environment": {
         "provided": [],
         "required": {
-          "locale.default": {
-            "load": true,
-            "className": "qx.bom.client.Locale"
-          },
-          "qx.debug": {},
-          "qx.dynlocale": {},
           "locale": {
             "className": "qx.bom.client.Locale"
           },
+          "locale.default": {
+            "className": "qx.bom.client.Locale",
+            "load": true
+          },
           "locale.variant": {
             "className": "qx.bom.client.Locale"
-          }
+          },
+          "qx.debug": {},
+          "qx.dynlocale": {}
         }
       }
     },
@@ -6362,25 +5582,7 @@
       "extends": "qx.event.dispatch.AbstractBubbling",
       "include": [],
       "implement": [],
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 51,
-              "column": 4
-            },
-            "end": {
-              "line": 51,
-              "column": 48
-            }
-          },
-          "args": [
-            "qx.event.Registration"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.bom.Selection": {
       "mtime": "2018-01-27T22:11:00.325Z",
@@ -6560,41 +5762,7 @@
           }
         }
       },
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 302,
-              "column": 8
-            },
-            "end": {
-              "line": 302,
-              "column": 46
-            }
-          },
-          "args": [
-            "qx.bom.client.Engine"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 305,
-              "column": 13
-            },
-            "end": {
-              "line": 305,
-              "column": 47
-            }
-          },
-          "args": [
-            "qx.bom.client.OperatingSystem"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.event.type.dom.Custom": {
       "mtime": "2018-01-27T22:11:00.353Z",
@@ -6959,89 +6127,7 @@
           }
         }
       },
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 263,
-              "column": 9
-            },
-            "end": {
-              "line": 263,
-              "column": 47
-            }
-          },
-          "args": [
-            "qx.bom.client.Engine"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 271,
-              "column": 10
-            },
-            "end": {
-              "line": 271,
-              "column": 43
-            }
-          },
-          "args": [
-            "qx.bom.client.Transport"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 276,
-              "column": 14
-            },
-            "end": {
-              "line": 276,
-              "column": 50
-            }
-          },
-          "args": [
-            "qx.util.LibraryManager"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 277,
-              "column": 26
-            },
-            "end": {
-              "line": 277,
-              "column": 62
-            }
-          },
-          "args": [
-            "qx.util.LibraryManager"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 288,
-              "column": 29
-            },
-            "end": {
-              "line": 288,
-              "column": 68
-            }
-          },
-          "args": [
-            "qx.bom.Selector"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.bom.element.Decoration": {
       "mtime": "2018-01-27T22:11:00.329Z",
@@ -7230,25 +6316,7 @@
       "implement": [
         "qx.event.IEventHandler"
       ],
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 101,
-              "column": 4
-            },
-            "end": {
-              "line": 101,
-              "column": 45
-            }
-          },
-          "args": [
-            "qx.event.Registration"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.util.ValueManager": {
       "mtime": "2018-01-27T22:11:00.501Z",
@@ -7453,41 +6521,7 @@
       "extends": null,
       "include": [],
       "implement": [],
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 290,
-              "column": 4
-            },
-            "end": {
-              "line": 290,
-              "column": 26
-            }
-          },
-          "args": [
-            "qxWeb"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 298,
-              "column": 8
-            },
-            "end": {
-              "line": 298,
-              "column": 37
-            }
-          },
-          "args": [
-            "qxWeb.env"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.bom.element.Scroll": {
       "mtime": "2018-01-27T22:11:00.329Z",
@@ -7565,25 +6599,7 @@
           }
         }
       },
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 230,
-              "column": 4
-            },
-            "end": {
-              "line": 230,
-              "column": 45
-            }
-          },
-          "args": [
-            "qx.event.Registration"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.ui.core.Blocker": {
       "mtime": "2018-01-27T22:11:00.441Z",
@@ -7665,25 +6681,7 @@
       "implement": [
         "qx.event.IEventHandler"
       ],
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 106,
-              "column": 4
-            },
-            "end": {
-              "line": 106,
-              "column": 45
-            }
-          },
-          "args": [
-            "qx.event.Registration"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.event.type.Drag": {
       "mtime": "2018-01-27T22:11:00.349Z",
@@ -7873,25 +6871,7 @@
           }
         }
       },
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 564,
-              "column": 4
-            },
-            "end": {
-              "line": 564,
-              "column": 45
-            }
-          },
-          "args": [
-            "qx.event.Registration"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.event.handler.Element": {
       "mtime": "2018-01-27T22:11:00.349Z",
@@ -7935,25 +6915,7 @@
         "qx.event.IEventHandler",
         "qx.core.IDisposable"
       ],
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 229,
-              "column": 4
-            },
-            "end": {
-              "line": 229,
-              "column": 45
-            }
-          },
-          "args": [
-            "qx.event.Registration"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.event.handler.Touch": {
       "mtime": "2018-01-27T22:11:00.349Z",
@@ -8026,57 +6988,7 @@
           }
         }
       },
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 223,
-              "column": 4
-            },
-            "end": {
-              "line": 223,
-              "column": 45
-            }
-          },
-          "args": [
-            "qx.event.Registration"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 226,
-              "column": 8
-            },
-            "end": {
-              "line": 226,
-              "column": 46
-            }
-          },
-          "args": [
-            "qx.bom.client.Event"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 228,
-              "column": 6
-            },
-            "end": {
-              "line": 228,
-              "column": 48
-            }
-          },
-          "args": [
-            "qx.event.Registration"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.event.handler.Offline": {
       "mtime": "2018-01-27T22:11:00.349Z",
@@ -8121,25 +7033,7 @@
         "qx.event.IEventHandler",
         "qx.core.IDisposable"
       ],
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 203,
-              "column": 4
-            },
-            "end": {
-              "line": 203,
-              "column": 45
-            }
-          },
-          "args": [
-            "qx.event.Registration"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.event.handler.Input": {
       "mtime": "2018-01-27T22:11:00.349Z",
@@ -8210,25 +7104,7 @@
           }
         }
       },
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 610,
-              "column": 4
-            },
-            "end": {
-              "line": 610,
-              "column": 45
-            }
-          },
-          "args": [
-            "qx.event.Registration"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.xml.Document": {
       "mtime": "2018-01-27T22:11:00.501Z",
@@ -8264,25 +7140,7 @@
           }
         }
       },
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 150,
-              "column": 8
-            },
-            "end": {
-              "line": 150,
-              "column": 49
-            }
-          },
-          "args": [
-            "qx.bom.client.Plugin"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.ui.container.Composite": {
       "mtime": "2018-01-27T22:11:00.441Z",
@@ -8330,41 +7188,7 @@
         "qx.ui.core.MLayoutHandling"
       ],
       "implement": [],
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 138,
-              "column": 4
-            },
-            "end": {
-              "line": 138,
-              "column": 47
-            }
-          },
-          "args": [
-            "qx.ui.core.MChildrenHandling"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 139,
-              "column": 4
-            },
-            "end": {
-              "line": 139,
-              "column": 45
-            }
-          },
-          "args": [
-            "qx.ui.core.MLayoutHandling"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.ui.core.MRemoteChildrenHandling": {
       "mtime": "2018-01-27T22:11:00.445Z",
@@ -9160,41 +7984,7 @@
       "extends": null,
       "include": [],
       "implement": [],
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 600,
-              "column": 4
-            },
-            "end": {
-              "line": 600,
-              "column": 26
-            }
-          },
-          "args": [
-            "qxWeb"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 602,
-              "column": 4
-            },
-            "end": {
-              "line": 607,
-              "column": 6
-            }
-          },
-          "args": [
-            "qxWeb"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.module.Event": {
       "mtime": "2018-01-27T22:11:00.365Z",
@@ -9222,41 +8012,7 @@
       "extends": null,
       "include": [],
       "implement": [],
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 717,
-              "column": 4
-            },
-            "end": {
-              "line": 717,
-              "column": 26
-            }
-          },
-          "args": [
-            "qxWeb"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 719,
-              "column": 4
-            },
-            "end": {
-              "line": 726,
-              "column": 6
-            }
-          },
-          "args": [
-            "qxWeb"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.module.Environment": {
       "mtime": "2018-01-27T22:11:00.365Z",
@@ -9333,185 +8089,7 @@
           }
         }
       },
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 71,
-              "column": 4
-            },
-            "end": {
-              "line": 71,
-              "column": 43
-            }
-          },
-          "args": [
-            "qx.bom.client.Browser"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 72,
-              "column": 4
-            },
-            "end": {
-              "line": 72,
-              "column": 46
-            }
-          },
-          "args": [
-            "qx.bom.client.Browser"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 73,
-              "column": 4
-            },
-            "end": {
-              "line": 73,
-              "column": 49
-            }
-          },
-          "args": [
-            "qx.bom.client.Browser"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 74,
-              "column": 4
-            },
-            "end": {
-              "line": 74,
-              "column": 51
-            }
-          },
-          "args": [
-            "qx.bom.client.Browser"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 76,
-              "column": 4
-            },
-            "end": {
-              "line": 76,
-              "column": 42
-            }
-          },
-          "args": [
-            "qx.bom.client.Engine"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 77,
-              "column": 4
-            },
-            "end": {
-              "line": 77,
-              "column": 45
-            }
-          },
-          "args": [
-            "qx.bom.client.Engine"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 79,
-              "column": 4
-            },
-            "end": {
-              "line": 79,
-              "column": 42
-            }
-          },
-          "args": [
-            "qx.bom.client.Device"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 80,
-              "column": 4
-            },
-            "end": {
-              "line": 80,
-              "column": 42
-            }
-          },
-          "args": [
-            "qx.bom.client.Device"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 82,
-              "column": 4
-            },
-            "end": {
-              "line": 82,
-              "column": 42
-            }
-          },
-          "args": [
-            "qx.bom.client.Event"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 83,
-              "column": 4
-            },
-            "end": {
-              "line": 83,
-              "column": 46
-            }
-          },
-          "args": [
-            "qx.bom.client.Event"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 85,
-              "column": 4
-            },
-            "end": {
-              "line": 85,
-              "column": 33
-            }
-          },
-          "args": [
-            "qxWeb"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.bom.element.Animation": {
       "mtime": "2018-01-27T22:11:00.329Z",
@@ -9647,25 +8225,7 @@
           }
         }
       },
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 370,
-              "column": 7
-            },
-            "end": {
-              "line": 370,
-              "column": 49
-            }
-          },
-          "args": [
-            "qx.Class"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.event.Idle": {
       "mtime": "2018-01-27T22:11:00.345Z",
@@ -9803,25 +8363,7 @@
           }
         }
       },
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 244,
-              "column": 4
-            },
-            "end": {
-              "line": 244,
-              "column": 45
-            }
-          },
-          "args": [
-            "qx.event.Registration"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.event.handler.TouchCore": {
       "mtime": "2018-01-27T22:11:00.349Z",
@@ -10362,25 +8904,7 @@
           }
         }
       },
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 100,
-              "column": 4
-            },
-            "end": {
-              "line": 100,
-              "column": 81
-            }
-          },
-          "args": [
-            "qxWeb"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.module.Polyfill": {
       "mtime": "2018-01-27T22:11:00.365Z",
@@ -10464,41 +8988,7 @@
           }
         }
       },
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 400,
-              "column": 8
-            },
-            "end": {
-              "line": 400,
-              "column": 42
-            }
-          },
-          "args": [
-            "qx.bom.client.OperatingSystem"
-          ]
-        },
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 401,
-              "column": 15
-            },
-            "end": {
-              "line": 401,
-              "column": 52
-            }
-          },
-          "args": [
-            "qx.bom.client.OperatingSystem"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.bom.element.AnimationJs": {
       "mtime": "2018-01-27T22:11:00.329Z",
@@ -10514,7 +9004,6 @@
         "qx.bom.element.Transform": {},
         "qx.util.ColorUtil": {},
         "qx.bom.AnimationFrame": {},
-        "qx.bom.element.Style": {},
         "qx.lang.String": {}
       },
       "extends": null,
@@ -10980,16 +9469,6 @@
                 "line": 23,
                 "column": 41
               }
-            },
-            {
-              "start": {
-                "line": 23,
-                "column": 20
-              },
-              "end": {
-                "line": 23,
-                "column": 41
-              }
             }
           ]
         }
@@ -10998,15 +9477,11 @@
         {
           "msgid": "Please login",
           "lineNo": 92
-        },
-        {
-          "msgid": "Please login",
-          "lineNo": 92
         }
       ],
       "markers": [
         {
-          "msgId": "symbol.unresolved",
+          "msgId": "qx.tool.compiler.symbol.unresolved",
           "pos": {
             "start": {
               "line": 23,
@@ -12525,22 +11000,6 @@
         {
           "msgid": "Forgot Password?",
           "lineNo": 280
-        },
-        {
-          "msgid": "Name",
-          "lineNo": 225
-        },
-        {
-          "msgid": "Password",
-          "lineNo": 225
-        },
-        {
-          "msgid": "Login",
-          "lineNo": 268
-        },
-        {
-          "msgid": "Forgot Password?",
-          "lineNo": 280
         }
       ]
     },
@@ -12613,14 +11072,6 @@
         "qx/icon/${qx.icontheme}/48/status/dialog-warning.png"
       ],
       "translations": [
-        {
-          "msgid": "OK",
-          "lineNo": 482
-        },
-        {
-          "msgid": "Cancel",
-          "lineNo": 499
-        },
         {
           "msgid": "OK",
           "lineNo": 482
@@ -12900,14 +11351,6 @@
       "include": [],
       "implement": [],
       "translations": [
-        {
-          "msgid": "yes",
-          "lineNo": 170
-        },
-        {
-          "msgid": "no",
-          "lineNo": 180
-        },
         {
           "msgid": "yes",
           "lineNo": 170
@@ -13240,25 +11683,7 @@
           }
         }
       },
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 1049,
-              "column": 4
-            },
-            "end": {
-              "line": 1049,
-              "column": 40
-            }
-          },
-          "args": [
-            "qx.ui.style.Stylesheet"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.html.Input": {
       "mtime": "2018-01-27T22:11:00.353Z",
@@ -13398,38 +11823,6 @@
       "include": [],
       "implement": [],
       "translations": [
-        {
-          "msgid": "%1 is not a number.",
-          "lineNo": 90
-        },
-        {
-          "msgid": "'%1' is not an email address.",
-          "lineNo": 129
-        },
-        {
-          "msgid": "%1 is not a string.",
-          "lineNo": 166
-        },
-        {
-          "msgid": "%1 is not an url.",
-          "lineNo": 202
-        },
-        {
-          "msgid": "%1 is not a color! %2",
-          "lineNo": 243
-        },
-        {
-          "msgid": "%1 is not in the range from [%2, %3].",
-          "lineNo": 267
-        },
-        {
-          "msgid": "%1 is not in %2",
-          "lineNo": 290
-        },
-        {
-          "msgid": "%1 does not fit %2.",
-          "lineNo": 314
-        },
         {
           "msgid": "%1 is not a number.",
           "lineNo": 90
@@ -14246,7 +12639,6 @@
         "qx.ui.form.IForm": {},
         "qx.ui.core.ISingleSelection": {},
         "qx.data.controller.ISelection": {},
-        "qx.ui.tooltip.Manager": {},
         "qx.core.ObjectRegistry": {
           "load": true
         },
@@ -14261,10 +12653,6 @@
       "include": [],
       "implement": [],
       "translations": [
-        {
-          "msgid": "This field is required",
-          "lineNo": 37
-        },
         {
           "msgid": "This field is required",
           "lineNo": 37
@@ -14481,22 +12869,6 @@
         }
       },
       "translations": [
-        {
-          "msgid": "Last year",
-          "lineNo": 259
-        },
-        {
-          "msgid": "Last month",
-          "lineNo": 271
-        },
-        {
-          "msgid": "Next month",
-          "lineNo": 283
-        },
-        {
-          "msgid": "Next year",
-          "lineNo": 295
-        },
         {
           "msgid": "Last year",
           "lineNo": 259
@@ -15010,25 +13382,7 @@
       "extends": null,
       "include": [],
       "implement": [],
-      "hasDefer": true,
-      "markers": [
-        {
-          "msgId": "defer.unsafe",
-          "pos": {
-            "start": {
-              "line": 447,
-              "column": 28
-            },
-            "end": {
-              "line": 447,
-              "column": 70
-            }
-          },
-          "args": [
-            "qx.lang.Object"
-          ]
-        }
-      ]
+      "hasDefer": true
     },
     "qx.ui.core.SingleSelectionManager": {
       "mtime": "2018-01-27T22:11:00.445Z",
@@ -15201,6 +13555,76 @@
         "qx.log.Logger": {}
       },
       "extends": null,
+      "include": [],
+      "implement": []
+    },
+    "app.io.ServiceWorkerHandler": {
+      "mtime": "2018-01-31T19:09:09.916Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.core.Object": {
+          "load": true
+        },
+        "qx.log.Logger": {},
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
+        }
+      },
+      "extends": "qx.core.Object",
+      "include": [],
+      "implement": []
+    },
+    "app.ui.form.ActivityItem": {
+      "mtime": "2018-01-31T21:30:52.568Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.ui.form.ListItem": {
+          "load": true,
+          "construct": true
+        },
+        "qx.ui.basic.Atom": {
+          "load": true
+        },
+        "qx.ui.core.Widget": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.ui.layout.Atom": {
+          "load": true
+        },
+        "qx.ui.core.LayoutItem": {
+          "load": true
+        },
+        "qx.core.Object": {
+          "load": true
+        },
+        "qx.theme.manager.Meta": {
+          "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
+        }
+      },
+      "extends": "qx.ui.form.ListItem",
       "include": [],
       "implement": []
     }

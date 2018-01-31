@@ -65,6 +65,9 @@ class Worker extends SCWorker {
     logger.debug('Installing iCal importer cronjob')
     cron.schedule('0 0 * * * *', iCal.update.bind(iCal), true)
 
+    // start listening on changes to Activities
+    channelHandler.start()
+
     /*
       In here we handle our incoming realtime connections and listen for events.
     */
@@ -82,9 +85,6 @@ class Worker extends SCWorker {
       //   scServer.exchange.publish('hbg.channel.news', events.slice(0, 10));
       // });
       let interval
-
-      // start listening on changes to Activities
-      channelHandler.start()
 
       // const r = scServer.thinky.r
       // r.table('Event').orderBy(r.desc('start')).run().then((events) => {

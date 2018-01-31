@@ -44,6 +44,9 @@ class ChannelHandler {
     if (!this.model) {
       this.model = schema.getModel('Activity')
     }
+    if (!message.hasOwnProperty('published') || !message.published) {
+      message.published = new Date()
+    }
     this.model.save(Object.assign({
       channel: channel,
       hash: hash(message)
