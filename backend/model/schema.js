@@ -39,7 +39,10 @@ class Schema {
             desc: type.string().optional(),
             email: type.string().email(),
             username: type.string(),
-            password: type.string()
+            password: type.string(),
+            defaultNotification: type.object(),
+            online: type.boolean(),
+            status: type.string()
           },
           views: {
             alphabeticalView: {
@@ -47,6 +50,15 @@ class Schema {
                 return fullTableQuery.orderBy(r.asc('name'));
               }
             }
+          },
+          filters: {
+            pre: mustBeLoggedIn
+          }
+        },
+        Config: {
+          fields: {
+            actorId: type.string(),
+            settings: type.object()
           },
           filters: {
             pre: mustBeLoggedIn
@@ -112,6 +124,29 @@ class Schema {
             actorId: type.string(),
             hash: type.string()
           }
+        },
+
+        Channel: {
+          fields: {
+            id: type.string(),
+            type: type.string().enum('PUBLIC', 'PRIVATE'),
+            title: type.string(),
+            description: type.string(),
+            created: type.date().default(new Date()),
+            ownerId: type.string()
+          }
+        },
+
+        Subscription: {
+          fields: {
+            id: type.string(),
+            actorId: type.string(),
+            channelId: type.string(),
+            viewedUntil: type.date().default(new Date()),
+            desktopNotification: type.object(),
+            mobileNotification: type.object(),
+            emailNotification: type.object()
+          }
         }
       },
 
@@ -172,8 +207,25 @@ class Schema {
     m.Actor.hasMany(m.Webhook, "webhooks", "id", "actorId")
     m.Webhook.belongsTo(m.Actor, "actor", "actorId", "id")
 
+    // 1-n: a Activity can only have one actor
     m.Actor.hasMany(m.Activity, "activities", "id", "actorId")
     m.Activity.belongsTo(m.Actor, "actor", "actorId", "id")
+
+    // 1-1: Actor<->Config relation
+    m.Actor.hasOne(m.Config, "config", "id", "actorId")
+    m.Config.belongsTo(m.Actor, "actor", "actorId", "id")
+
+    // 1-n: a Channel has exactly one owner
+    m.Actor.hasMany(m.Channel, "channels", "id", "ownerId")
+    m.Channel.belongsTo(m.Actor, "actor", "ownerId", "id")
+
+    // 1-n: a Subscription has exactly one actor, actors can have multiple subscriptions
+    m.Actor.hasMany(m.Subscription, "subscriptions", "id", "actorId")
+    m.Subscription.belongsTo(m.Actor, "actor", "actorId", "id")
+
+    // 1-n: a Subscription has exactly one Channel, Channels can have multiple subscriptions
+    m.Channel.hasMany(m.Subscription, "subscriptions", "id", "channeld")
+    m.Subscription.belongsTo(m.Channel, "actor", "channeld", "id")
 
     // default Data
     let defaultData = {
@@ -201,6 +253,21 @@ class Schema {
           secret: 'e802f7b0-224e-4437-a2dd-ac27933bc9a7',
           name: 'News',
           actorId: '135dd849-9cb6-466a-9a2b-688ae21b6cdf'
+        }
+      ],
+      Channel: [
+        {
+          id: 'hbg.channel.news.public',
+          type: 'PUBLIC',
+          title: 'News',
+          description: 'Alle Neuigkeiten aus Hirschberg',
+          ownerId: '0e4a6f6f-cc0c-4aa5-951a-fcfc480dd05a'
+        }
+      ],
+      Subscription: [
+        {
+          actorId: '0e4a6f6f-cc0c-4aa5-951a-fcfc480dd05a',
+          channelId: 'hbg.channel.news.public'
         }
       ]
     }

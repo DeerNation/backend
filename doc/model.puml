@@ -1,0 +1,137 @@
+@startuml
+
+package Integrations <<Frame>> {
+    class Webhook {
+        id: String
+        name: String
+        secret: String
+        channel: String
+        actor: Actor
+    }
+}
+
+package Channels <<Frame>> {
+    enum ChannelType {
+       PUBLIC
+       PRIVATE
+    }
+
+    class Channel {
+        id: String
+        type: ChannelType
+        owner: Actor
+        created: Date
+    }
+    Webhook "1" *-- "n" Channel : belongs to
+
+    class Subscription {
+        actor: Actor
+        channel: Channel
+        viewedUntil: Date
+        desktopNotification: NotificationSetting
+        mobileNotification: NotificationSetting
+        emailNotification: NotificationSetting
+    }
+    Subscription "n" *-- "1" Channel
+}
+
+package Authentication <<Frame>> {
+    enum ActorType {
+        Person
+        Server
+        Bot
+        Group
+    }
+
+    enum ActorRole {
+        ADMIN
+        USER
+    }
+
+    class Actor {
+        id: String
+        type: ActorType
+        username: String
+        role: ActorRole
+        name: String
+        email: String
+        password: String
+    }
+
+    Subscription "n" *-- "1" Actor
+    Webhook "1" *-- "n" Actor : post for
+
+    class Group {
+        owner: Actor
+        members: Actor[]
+        channels: Channel[]
+    }
+    Actor <|-- Group
+    Group "0..1" *-- "n" Channel : belongs to
+    Group "0..1" *-- "n" Actor : is member of
+
+}
+
+package Authorization <<Frame>> {
+
+    class Role {
+        id: String
+        name: String
+        acls: Acl[]
+    }
+
+    class Acl {
+        id: String
+        actor: Actor
+        channel: Channel
+        scope: channel|message
+        actions: Bitmask [crudo]
+    }
+    note left of Acl
+     c=create channel/publish message
+     r=subscribe channel/read channel settings
+     u=update message/channel settings
+     d=delete message/channel
+     o=apply acl only to channel owner
+     g=apply acl on behalf of group
+    end note
+
+    Acl "n" *-- "1" Actor : associated to
+    Acl "n" *-- "1" Channel : associated to
+}
+
+package Messages <<Frame>> {
+    class Activity {
+        id: String
+        title: String
+        content: String
+        created: Date
+        published: Date
+        channel: Channel
+        creator: Actor
+        hash: String
+    }
+
+    Activity "1" *-- "n" Channel : belongs to
+    Activity "1" *-- "n" Actor : created by
+
+    class Event {
+        start: Date
+        end: Date
+        location: String
+        categories: String[]
+        organizer: String
+    }
+
+    class Attachment {
+        id: String
+        type: String (Mime-type)
+        blob: Buffer
+    }
+
+    Activity "1..n" *-- "n" Attachment : has
+    Activity <|-- Event
+
+}
+
+@enduml
