@@ -225,7 +225,7 @@ class Schema {
 
     // 1-n: a Subscription has exactly one Channel, Channels can have multiple subscriptions
     m.Channel.hasMany(m.Subscription, "subscriptions", "id", "channeld")
-    m.Subscription.belongsTo(m.Channel, "actor", "channeld", "id")
+    m.Subscription.belongsTo(m.Channel, "channel", "channeld", "id")
 
     // default Data
     let defaultData = {
