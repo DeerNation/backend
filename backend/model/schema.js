@@ -266,6 +266,7 @@ class Schema {
       ],
       Subscription: [
         {
+          id: 'f2edfa36-c431-42f8-bc69-c0b060d941dc',
           actorId: '0e4a6f6f-cc0c-4aa5-951a-fcfc480dd05a',
           channelId: 'hbg.channel.news.public'
         }

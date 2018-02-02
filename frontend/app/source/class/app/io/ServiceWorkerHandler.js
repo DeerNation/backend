@@ -70,7 +70,7 @@ qx.Class.define('app.io.ServiceWorkerHandler', {
             this.error('Service Worker Error', error);
           });
       } else {
-        this.warning('Push messaging is not supported');
+        this.warn('Push messaging is not supported');
       }
     },
 
