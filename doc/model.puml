@@ -78,13 +78,14 @@ package Authorization <<Frame>> {
         id: String
         name: String
         acls: Acl[]
+        superuser: Boolean
     }
 
     class Acl {
         id: String
-        actor: Actor
-        channel: Channel
-        scope: channel|message
+        role: Role
+        entityType: [Channel|ChannelMessage|Webhook|Actor|?]
+        entityId: String,
         actions: Bitmask [crudo]
     }
     note left of Acl
@@ -92,7 +93,7 @@ package Authorization <<Frame>> {
      r=subscribe channel/read channel settings
      u=update message/channel settings
      d=delete message/channel
-     o=apply acl only to channel owner
+     o=apply acl only to owner
      g=apply acl on behalf of group
     end note
 
