@@ -1,3 +1,87 @@
 #: app.io.Socket:93
 msgid "Please login"
-msgstr "Bitte melden Sie sich an"
+msgstr ""
+
+#: dialog.Login:225
+msgid "Name"
+msgstr ""
+
+#: dialog.Login:225
+msgid "Password"
+msgstr ""
+
+#: dialog.Login:268
+msgid "Login"
+msgstr ""
+
+#: dialog.Login:280
+msgid "Forgot Password?"
+msgstr ""
+
+#: dialog.Dialog:482
+msgid "OK"
+msgstr ""
+
+#: dialog.Dialog:499
+msgid "Cancel"
+msgstr ""
+
+#: dialog.Confirm:170
+msgid "yes"
+msgstr ""
+
+#: dialog.Confirm:180
+msgid "no"
+msgstr ""
+
+#: qx.util.Validate:90
+msgid "%1 is not a number."
+msgstr ""
+
+#: qx.util.Validate:129
+msgid "'%1' is not an email address."
+msgstr ""
+
+#: qx.util.Validate:166
+msgid "%1 is not a string."
+msgstr ""
+
+#: qx.util.Validate:202
+msgid "%1 is not an url."
+msgstr ""
+
+#: qx.util.Validate:243
+msgid "%1 is not a color! %2"
+msgstr ""
+
+#: qx.util.Validate:267
+msgid "%1 is not in the range from [%2, %3]."
+msgstr ""
+
+#: qx.util.Validate:290
+msgid "%1 is not in %2"
+msgstr ""
+
+#: qx.util.Validate:314
+msgid "%1 does not fit %2."
+msgstr ""
+
+#: qx.ui.form.validation.Manager:37
+msgid "This field is required"
+msgstr ""
+
+#: qx.ui.control.DateChooser:259
+msgid "Last year"
+msgstr ""
+
+#: qx.ui.control.DateChooser:271
+msgid "Last month"
+msgstr ""
+
+#: qx.ui.control.DateChooser:283
+msgid "Next month"
+msgstr ""
+
+#: qx.ui.control.DateChooser:295
+msgid "Next year"
+msgstr ""

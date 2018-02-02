@@ -28,6 +28,7 @@ qx.Class.define('app.ui.form.ActivityItem', {
   properties: {
     message: {
       check: "String",
+      nullable: true,
       apply: "_applyMessage"
     },
 

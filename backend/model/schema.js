@@ -23,6 +23,10 @@ class Schema {
     return this.__crud.models[name]
   }
 
+  getR() {
+    return this.__crud.thinky.r
+  }
+
   create(worker) {
     const thinky = scCrudRethink.thinky;
     const type = thinky.type;
@@ -116,7 +120,7 @@ class Schema {
         Activity: {
           fields: {
             id: type.string(),
-            channel: type.string(),
+            channelId: type.string(),
             title: type.string(),
             content: type.string(),
             created: type.date().default(new Date()),
@@ -142,7 +146,7 @@ class Schema {
             id: type.string(),
             actorId: type.string(),
             channelId: type.string(),
-            viewedUntil: type.date().default(new Date()),
+            viewedUntil: type.date(),
             desktopNotification: type.object(),
             mobileNotification: type.object(),
             emailNotification: type.object()

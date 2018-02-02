@@ -14,5 +14,6 @@ qx.Theme.define("app.theme.Color",
 
   colors :
   {
+    "activity-group-line": "#eaeaea"
   }
 });

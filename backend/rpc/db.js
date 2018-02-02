@@ -7,12 +7,20 @@
 
 const schema = require('../model/schema')
 
-function getChannels(data, cb) {
-  cb(null, [{
-    name: 'hbg.channel.news.public'
-  }])
+function getChannels(authToken) {
+  return schema.getModel('Subscription').filter({actorId: authToken.user}).run()
+}
+
+function getChannelActivities(authToken, channel, from) {
+  const r = schema.getR()
+  let filter = r.row('channel').eq(channel)
+  if (from) {
+    filter.and(r.row('published').ge(from))
+  }
+  return schema.getModel('Activity').filter(filter).orderBy(r.asc('published')).run()
 }
 
 module.exports = {
-  getChannels: getChannels
+  getChannels: getChannels,
+  getChannelActivities: getChannelActivities
 }

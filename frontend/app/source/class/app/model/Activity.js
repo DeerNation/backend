@@ -65,6 +65,11 @@ qx.Class.define('app.model.Activity', {
     hash: {
       check: "String",
       init: null
+    },
+
+    channel: {
+      check: "String",
+      init: null
     }
   },
 

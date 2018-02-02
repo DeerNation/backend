@@ -63,7 +63,10 @@ qx.Class.define("app.Application",
 
       this.__activities = new qx.data.Array();
 
+      const dateFormat = new qx.util.format.DateFormat(qx.locale.Date.getDateFormat("long"))
+
       let list = new qx.ui.list.List(this.__activities);
+      list.setVariableItemHeight(true)
       list.setDelegate({
         createItem: function() {
           return new app.ui.form.ActivityItem()
@@ -76,11 +79,13 @@ qx.Class.define("app.Application",
 
         group: function(model) {
           const date = model.getPublished() || model.getCreated()
-          return date ? date.getFullYear() : null
+          return date ? dateFormat.format(date) : null
         },
 
         sorter: function(a, b) {
-          return a.getPublished() <= b.getPublished()
+          const adate = a.getPublished() || a.getCreated()
+          const bdate = b.getPublished() || b.getCreated()
+          return adate.getTime() - bdate.getTime()
         }
       })
 
@@ -104,11 +109,17 @@ qx.Class.define("app.Application",
 
     _initSubscriptions: function(channels) {
       channels.forEach(channelEntry => {
-        this.__socket.subscribe(channelEntry.name).then(sampleChannel => {
-          console.log(channelEntry.name, "subscribed")
+        this.__socket.subscribe(channelEntry.channelId).then(sampleChannel => {
+          // get all channel messages
 
-          sampleChannel.on('subscribeFail', function (err) {
-            console.log('Failed to subscribe to the '+channelEntry.name+' channel due to error: ' + err);
+          app.io.Rpc.getProxy().getChannelActivities(channelEntry.channelId, channelEntry.viewedUntil).then(messages => {
+            this.__activities.append(app.model.Factory.createAll(messages))
+          })
+
+          this.info(channelEntry.channelId, "subscribed")
+
+          sampleChannel.on('subscribeFail', err => {
+            this.error('Failed to subscribe to the '+channelEntry.channelId+' channel due to error: ' + err);
           });
 
           sampleChannel.watch(payload => {
@@ -116,19 +127,7 @@ qx.Class.define("app.Application",
               payload = [payload]
             }
             payload.forEach(data => {
-              let clazz = null
-              if (data.hasOwnProperty('__jsonclass__')) {
-                clazz = qx.Class.getByName(data['__jsonclass__'])
-                if (!clazz) {
-                  throw Error("Class "+clazz+" not found")
-                }
-                delete data['__jsonclass__']
-              }
-              if (!clazz) {
-                clazz = app.model.Activity
-              }
-              let activity = new clazz(data)
-              this.__activities.push(activity)
+              this.__activities.push(app.model.Factory.create(data))
             })
           });
         });

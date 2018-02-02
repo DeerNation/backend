@@ -78,28 +78,6 @@ class Worker extends SCWorker {
       rpcServer.upgradeToWAMP(socket);
       // let iCal = new ICal('https://www.hirschberg-sauerland.de/index.php?id=373&type=150&L=0&tx_cal_controller%5Bcalendar%5D=1&tx_cal_controller%5Bview%5D=ics&cHash=b1aa5a58b6552eaba4eae2551f8d6d75', {}, function(err, data) {
 
-      // Some sample logic to show how to handle client events,
-      // replace this with your own logic
-
-      // socket.on('hbg.rpc.getNews', function () {
-      //   scServer.exchange.publish('hbg.channel.news', events.slice(0, 10));
-      // });
-      let interval
-
-      // const r = scServer.thinky.r
-      // r.table('Event').orderBy(r.desc('start')).run().then((events) => {
-      //   let index = 0
-      //   interval = setInterval(function () {
-      //     if (index >= events.length) {
-      //       clearInterval(interval);
-      //     } else {
-      //       events[index]['__jsonclass__'] = 'app.model.Event'
-      //       scServer.exchange.publish('hbg.channel.news', events[index]);
-      //       index++;
-      //     }
-      //   }, 3000);
-      // })
-
       socket.on('disconnect', function () {
         if (interval) {
           clearInterval(interval);
