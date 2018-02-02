@@ -21,12 +21,7 @@ qx.Class.define('app.io.Socket', {
     this.__queuedSubscriptions = [];
     // Initiate the connection to the server
     // TODO use real settings
-    this.__socket = socketCluster.connect({
-      hostname: 'localhost',
-      secure: false,
-      port: 8000,
-      rejectUnauthorized: false // Only necessary during debug if using a self-signed certificate
-    });
+    this.__socket = socketCluster.connect(app.Config.socket);
 
     this.__wampClient = new wampSocketCluster();
     this.__wampClient.upgradeToWAMP(this.__socket);

@@ -19,6 +19,7 @@ let workerControllerPath = argv.wc || process.env.SOCKETCLUSTER_WORKER_CONTROLLE
 let brokerControllerPath = argv.bc || process.env.SOCKETCLUSTER_BROKER_CONTROLLER;
 let workerClusterControllerPath = argv.wcc || process.env.SOCKETCLUSTER_WORKERCLUSTER_CONTROLLER;
 let environment = process.env.ENV || 'dev';
+let logLevel = environment === 'dev' ? 3 : 2
 
 let options = {
   workers: Number(argv.w) || Number(process.env.SOCKETCLUSTER_WORKERS) || 1,
@@ -26,7 +27,7 @@ let options = {
   port: Number(argv.p) || Number(process.env.SOCKETCLUSTER_PORT) || 8000,
   // If your system doesn't support 'uws', you can switch to 'ws' (which is slower but works on older systems).
   wsEngine: process.env.SOCKETCLUSTER_WS_ENGINE || 'uws',
-  appName: argv.n || process.env.SOCKETCLUSTER_APP_NAME || null,
+  appName: 'DeerNation',
   workerController: workerControllerPath || __dirname + '/worker.js',
   brokerController: brokerControllerPath || __dirname + '/broker.js',
   workerClusterController: workerClusterControllerPath || null,
@@ -39,10 +40,12 @@ let options = {
   clusterStateServerConnectTimeout: Number(process.env.SCC_STATE_SERVER_CONNECT_TIMEOUT) || null,
   clusterStateServerAckTimeout: Number(process.env.SCC_STATE_SERVER_ACK_TIMEOUT) || null,
   clusterStateServerReconnectRandomness: Number(process.env.SCC_STATE_SERVER_RECONNECT_RANDOMNESS) || null,
-  crashWorkerOnError: argv['auto-reboot'] !== false,
+  crashWorkerOnError: true,
+  rebootWorkerOnCrash: true,
   // If using nodemon, set this to true, and make sure that environment is 'dev'.
   killMasterOnSignal: false,
-  environment: environment
+  environment: environment,
+  logLevel: logLevel
 };
 
 let bootTimeout = Number(process.env.SOCKETCLUSTER_CONTROLLER_BOOT_TIMEOUT) || 10000;

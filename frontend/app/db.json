@@ -9426,7 +9426,7 @@
       "implement": []
     },
     "app.io.Socket": {
-      "mtime": "2018-02-02T16:11:28.165Z",
+      "mtime": "2018-02-02T17:04:54.046Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -9435,6 +9435,9 @@
         },
         "qx.core.Object": {
           "load": true,
+          "construct": true
+        },
+        "app.Config": {
           "construct": true
         },
         "app.io.Rpc": {
@@ -9476,7 +9479,7 @@
       "translations": [
         {
           "msgid": "Please login",
-          "lineNo": 98
+          "lineNo": 93
         }
       ],
       "markers": [
@@ -13625,6 +13628,19 @@
         }
       },
       "extends": "qx.ui.form.ListItem",
+      "include": [],
+      "implement": []
+    },
+    "app.Config": {
+      "mtime": "2018-02-02T17:04:54.034Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        }
+      },
+      "extends": null,
       "include": [],
       "implement": []
     }
