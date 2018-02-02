@@ -1,0 +1,13 @@
+{
+  "name": "de.hirschbergsauerland.app",
+  "version": "1.0.0",
+  "displayName": "DeerNation",
+  "cordova": {
+    "platforms": [
+      "android"
+    ]
+  },
+  "dependencies": {
+    "cordova-android": "7.0.0"
+  }
+}
