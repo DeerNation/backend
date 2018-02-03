@@ -46,6 +46,34 @@
     "predev": "cd frontend/app && qx compile --watch &",
     "dev": "ENV=dev node server.js",
     "postdev": "killall -9 qx",
-    "start:docker": "node dockerwait.js && node ${SOCKETCLUSTER_MASTER_CONTROLLER:-server.js}"
+    "start:docker": "node dockerwait.js && node ${SOCKETCLUSTER_MASTER_CONTROLLER:-server.js}",
+    "test": "standard --verbose | snazzy"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.2.1",
+    "snazzy": "^7.0.0",
+    "standard": "^10.0.3"
+  },
+  "standard": {
+    "parser": "babel-eslint",
+    "env": {
+      "browser": true,
+      "node": true
+    },
+    "ignore": [
+      "app/**",
+      "frontend/qooxdoo/**",
+      "gen/**",
+      "node_modules/**",
+      "frontend/app/build-output/**",
+      "frontend/app/source-output/**",
+      "frontend/app/contrib/**",
+      "frontend/app/source/resource/js/**"
+    ],
+    "globals": [
+      "qx",
+      "socketCluster",
+      "wampSocketCluster"
+    ]
   }
 }

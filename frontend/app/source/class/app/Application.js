@@ -66,6 +66,12 @@ qx.Class.define("app.Application",
       const dateFormat = new qx.util.format.DateFormat(qx.locale.Date.getDateFormat("long"))
 
       let list = new qx.ui.list.List(this.__activities);
+      console.log(list)
+
+      const deferredScroll = qx.util.Function.debounce(() => {
+        list.scrollToY(1e99)
+      }, 100)
+      this.__activities.addListener("changeLength", deferredScroll, this)
       list.setVariableItemHeight(true)
       list.setDelegate({
         createItem: function() {
@@ -105,6 +111,11 @@ qx.Class.define("app.Application",
       // Document is the application root
       let doc = this.getRoot();
       doc.add(list, {edge: 0})
+    },
+
+    // interface method
+    terminate : function() {
+      this.__socket.close()
     },
 
     _initSubscriptions: function(channels) {

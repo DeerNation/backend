@@ -21,4 +21,4 @@ qx.Class.define('app.Config', {
       rejectUnauthorized: false // Only necessary during debug if using a self-signed certificate
     }
   }
-});
+})

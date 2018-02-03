@@ -7,11 +7,11 @@
 
 const schema = require('../model/schema')
 
-function getChannels(authToken) {
+function getChannels (authToken) {
   return schema.getModel('Subscription').filter({actorId: authToken.user}).run()
 }
 
-function getChannelActivities(authToken, channel, from) {
+function getChannelActivities (authToken, channel, from) {
   const r = schema.getR()
   let filter = r.row('channel').eq(channel)
   if (from) {

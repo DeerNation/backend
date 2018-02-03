@@ -28276,6 +28276,10 @@
         "height": 64,
         "doNotCopy": false,
         "resource": "resourcePath"
+      },
+      "qx/test/failing.json": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
       }
     },
     "app": {

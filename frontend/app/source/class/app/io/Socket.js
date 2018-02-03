@@ -124,6 +124,14 @@ qx.Class.define('app.io.Socket', {
 
     _onSubscribeError: function(err, channelName) {
       this.error("Error on subscribing channel", channelName, ":", err)
+    },
+
+    close: function() {
+      this.__channels.forEach((channel) => {
+        channel.unsubscribe()
+      })
+      this.__channels = []
+      socketCluster.destroy(app.Config.socket)
     }
   },
 
@@ -133,10 +141,7 @@ qx.Class.define('app.io.Socket', {
   ******************************************************
   */
   destruct: function() {
-    this.__channels.forEach((channel) => {
-      channel.unsubscribe()
-    })
-    this.__channels = []
+    this.close()
     this.__wampClient = null
     this.__socket = null
   }
