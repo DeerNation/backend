@@ -7,8 +7,17 @@
 
 const schema = require('../model/schema')
 
-function getChannels (authToken) {
+function getSubscriptions (authToken) {
   return schema.getModel('Subscription').filter({actorId: authToken.user}).run()
+}
+
+/**
+ * Return all channels the current user has read access to
+ * @param authToken
+ */
+function getChannels (authToken) {
+  // TODO: we need ACLs for a finer grained access level definition
+  return schema.getModel('Channel').filter({type: 'PUBLIC'}).run()
 }
 
 function getChannelActivities (authToken, channel, from) {
@@ -22,5 +31,6 @@ function getChannelActivities (authToken, channel, from) {
 
 module.exports = {
   getChannels: getChannels,
+  getSubscriptions: getSubscriptions,
   getChannelActivities: getChannelActivities
 }

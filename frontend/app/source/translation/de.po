@@ -1,4 +1,4 @@
-#: app.io.Socket:93
+#: app.io.Socket:96
 msgid "Please login"
 msgstr ""
 
@@ -70,18 +70,30 @@ msgstr ""
 msgid "This field is required"
 msgstr ""
 
-#: qx.ui.control.DateChooser:259
+#: qx.ui.control.DateChooser:258
 msgid "Last year"
 msgstr ""
 
-#: qx.ui.control.DateChooser:271
+#: qx.ui.control.DateChooser:270
 msgid "Last month"
 msgstr ""
 
-#: qx.ui.control.DateChooser:283
+#: qx.ui.control.DateChooser:282
 msgid "Next month"
 msgstr ""
 
-#: qx.ui.control.DateChooser:295
+#: qx.ui.control.DateChooser:294
 msgid "Next year"
 msgstr ""
+
+#: app.ui.Menu:91
+msgid "Channels"
+msgstr "Kanäle"
+
+#: app.ui.Menu:94
+msgid "Private channels"
+msgstr "Private Kanäle"
+
+#: app.ui.Menu:89
+msgid "Favorites"
+msgstr "Favoriten"

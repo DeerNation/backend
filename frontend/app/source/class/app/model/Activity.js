@@ -6,7 +6,7 @@
  */
 
 qx.Class.define('app.model.Activity', {
-  extend: qx.core.Object,
+  extend: app.model.AbstractModel,
 
   /*
   ******************************************************
@@ -14,9 +14,8 @@ qx.Class.define('app.model.Activity', {
   ******************************************************
   */
   construct: function (props) {
-    this.base(arguments)
+    this.base(arguments, props)
     this.initCreated(new Date())
-    this.set(props)
   },
 
   /*
@@ -71,20 +70,5 @@ qx.Class.define('app.model.Activity', {
       check: 'String',
       init: null
     }
-  },
-
-  /*
-  ******************************************************
-    MEMBERS
-  ******************************************************
-  */
-  members: {
-    _transformDate: function (value) {
-      if (qx.lang.Type.isString(value)) {
-        return new Date(value)
-      }
-      return value
-    }
   }
-
 })

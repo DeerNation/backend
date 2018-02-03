@@ -33,8 +33,12 @@ qx.Class.define('app.io.Socket', {
       this.error('Socket error - ' + err)
     }.bind(this))
 
-    this.__socket.on('authStateChanged', function (states) {
-      this.setAuthenticated(states.newState === this.__socket.AUTHENTICATED)
+    this.__socket.on('authenticate', function () {
+      this.setAuthenticated(true)
+    }.bind(this))
+
+    this.__socket.on('deauthenticate', function () {
+      this.setAuthenticated(false)
     }.bind(this))
 
     this.__socket.on('connect', function () {
@@ -84,8 +88,7 @@ qx.Class.define('app.io.Socket', {
                 if (err) {
                   this.error(err)
                 } else {
-                  this.info('LOGGED IN')
-                  this.setAuthenticated(true)
+                  this.debug('Login request successfully send')
                 }
                 callback(err)
               })
@@ -103,13 +106,13 @@ qx.Class.define('app.io.Socket', {
       return new qx.Promise((resolve, reject) => {
         if (this.isAuthenticated()) {
           let channel = this.__socket.subscribe(channelId)
-          channel.on('subscribeFail', this._onSubscribeError.bind(this))
+          channel.on('subscribeFail', this._onSubscribeError.bind(this, reject))
           resolve(channel)
         } else {
           let lid = this.addListener('changeAuthenticated', (ev) => {
             if (ev.getData() === true) {
               let channel = this.__socket.subscribe(channelId)
-              channel.on('subscribeFail', this._onSubscribeError.bind(this))
+              channel.on('subscribeFail', this._onSubscribeError.bind(this, reject))
               resolve(channel)
               this.removeListenerById(lid)
             }
@@ -118,12 +121,29 @@ qx.Class.define('app.io.Socket', {
       })
     },
 
+    /**
+     * Get the SCChannel object for the given channel name
+     * @param name {String} name of the channel to lookup
+     * @returns {SCChannel?}
+     */
+    getScChannel: function (name) {
+      if (qx.lang.Type.isString(name)) {
+        return this.__socket.channel(name)
+      }
+      return null
+    },
+
+    getAuthToken: function() {
+      return this.__socket.authToken
+    },
+
     emit: function (channel, payload) {
       return this.__socket.emit(channel, payload)
     },
 
-    _onSubscribeError: function (err, channelName) {
+    _onSubscribeError: function (promiseReject, err, channelName) {
       this.error('Error on subscribing channel', channelName, ':', err)
+      promiseReject && promiseReject(err)
     },
 
     close: function () {

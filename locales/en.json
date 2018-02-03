@@ -1,3 +1,4 @@
 {
-	"You are not authorized to subscribe to #%s": "You are not authorized to subscribe to #%s"
+	"You are not authorized to subscribe to #%s": "You are not authorized to subscribe to #%s",
+	"You are not permitted to request subscriptions from another user.": "You are not permitted to request subscriptions from another user."
 }

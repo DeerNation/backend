@@ -14,7 +14,9 @@ qx.Class.define('app.ui.Main', {
   ******************************************************
   */
   construct: function () {
-    this.base(arguments, 'vertical')
+    this.base(arguments, 'horizontal')
+    this._createChildControl('menu')
+    this._createChildControl('channel')
   },
 
   /*
@@ -28,8 +30,14 @@ qx.Class.define('app.ui.Main', {
       let control
       switch (id) {
         case 'menu':
-          control = new app.ui.Menu()
+          control = app.ui.Menu.getInstance()
+          this.add(control)
           break
+        case 'channel': {
+          control = new app.ui.Channel()
+          this.add(control, 1)
+          break
+        }
       }
       return control || this.base(arguments, id, hash)
     }

@@ -8,6 +8,7 @@ const scCrudRethink = require('sc-crud-rethink')
 const bcrypt = require('bcrypt')
 const logger = require('../logger')(__filename)
 const {botUUID} = require('../util')
+const i18n = require('i18n')
 
 class Schema {
   constructor () {
@@ -55,7 +56,20 @@ class Schema {
             }
           },
           filters: {
-            pre: mustBeLoggedIn
+            pre: mustBeLoggedIn,
+            post: function (req, next) {
+              if (Array.isArray(req.resource)) {
+                req.resource.forEach(actor => {
+                  // never send the password
+                  if (actor.password) {
+                    actor.password = '***'
+                  }
+                })
+              } else if (req.resource.password) {
+                req.resource.password = '***'
+              }
+              next()
+            }
           }
         },
         Config: {
@@ -64,7 +78,7 @@ class Schema {
             settings: type.object()
           },
           filters: {
-            pre: mustBeLoggedIn
+            pre: mustBeOwner
           }
         },
         Event: {
@@ -95,8 +109,7 @@ class Schema {
             }
           },
           filters: {
-            pre: mustBeLoggedIn,
-            post: postFilter
+            pre: mustBeLoggedIn
           }
         },
         Attachment: {
@@ -104,6 +117,9 @@ class Schema {
             id: type.string(),
             type: type.string(),
             blob: type.buffer()
+          },
+          filters: {
+            pre: mustBeLoggedIn
           }
         },
         Webhook: {
@@ -113,6 +129,9 @@ class Schema {
             secret: type.string(),
             channel: type.string(),
             actorId: type.string()
+          },
+          filters: {
+            pre: mustBeOwner
           }
         },
 
@@ -126,6 +145,16 @@ class Schema {
             published: type.date(),
             actorId: type.string(),
             hash: type.string()
+          },
+          filters: {
+            pre: mustBeLoggedIn
+          },
+          views: {
+            fromChannel: {
+              transform: function (fullTableQuery, r, options) {
+                return fullTableQuery.filter(r.row('channelId').eq(options.channelId)).orderBy(r.asc('published'))
+              }
+            }
           }
         },
 
@@ -137,6 +166,17 @@ class Schema {
             description: type.string(),
             created: type.date().default(new Date()),
             ownerId: type.string()
+          },
+          views: {
+            publicChannels: {
+              affectingFields: ['type'],
+              transform: function (fullTableQuery, r) {
+                return fullTableQuery.filter(r.row('type').eq('PUBLIC'))
+              }
+            }
+          },
+          filters: {
+            pre: mustBeLoggedIn
           }
         },
 
@@ -145,10 +185,23 @@ class Schema {
             id: type.string(),
             actorId: type.string(),
             channelId: type.string(),
+            favorite: type.boolean().default(false),
             viewedUntil: type.date(),
             desktopNotification: type.object(),
             mobileNotification: type.object(),
             emailNotification: type.object()
+          },
+          views: {
+            mySubscriptions: {
+              paramFields: ['actorId'],
+              affectingFields: ['actorId'],
+              transform: function (fullTableQuery, r, subscriptionFields) {
+                return fullTableQuery.filter(r.row('actorId').eq(subscriptionFields.actorId))
+              }
+            }
+          },
+          filters: {
+            pre: mustBeOwner
           }
         }
       },
@@ -156,6 +209,22 @@ class Schema {
       thinkyOptions: {
         host: process.env.DATABASE_HOST || '172.17.0.2',
         port: process.env.DATABASE_PORT || 28015
+      }
+    }
+
+    function mustBeOwner (req, next) {
+      if (!req.socket.getAuthToken()) {
+        next(true)
+      } else if (!req.query.viewParams ||
+        // only allow queries of own ID
+        !req.query.viewParams.actorId ||
+        req.query.viewParams.actorId !== req.socket.getAuthToken().user) {
+        let err = new Error(i18n.__('You are not permitted to request this data.'))
+        err.name = 'CRUDBlockedError'
+        err.type = 'pre'
+        next(err)
+      } else {
+        next()
       }
     }
 
