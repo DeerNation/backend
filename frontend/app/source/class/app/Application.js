@@ -40,9 +40,11 @@ qx.Class.define('app.Application',
 
       // Enable logging in debug variant
         if (qx.core.Environment.get('qx.debug')) {
-        // support native logging capabilities, e.g. Firebug for Firefox
+          // support native logging capabilities, e.g. Firebug for Firefox
+          // eslint-disable-next-line
           qx.log.appender.Native
-        // support additional cross-browser console. Press F7 to toggle visibility
+          // support additional cross-browser console. Press F7 to toggle visibility
+          // eslint-disable-next-line
           qx.log.appender.Console
         }
 

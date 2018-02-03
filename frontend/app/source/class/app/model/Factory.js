@@ -19,18 +19,18 @@ qx.Class.define('app.model.Factory', {
      * @param data
      */
     create: function (data) {
-      let clazz = null
+      let Clazz = null
       if (data.hasOwnProperty('__jsonclass__')) {
-        clazz = qx.Class.getByName(data['__jsonclass__'])
-        if (!clazz) {
-          throw Error('Class ' + clazz + ' not found')
+        Clazz = qx.Class.getByName(data['__jsonclass__'])
+        if (!Clazz) {
+          throw Error('Class ' + Clazz + ' not found')
         }
         delete data['__jsonclass__']
       }
-      if (!clazz) {
-        clazz = app.model.Activity
+      if (!Clazz) {
+        Clazz = app.model.Activity
       }
-      return new clazz(data)
+      return new Clazz(data)
     },
 
     /**

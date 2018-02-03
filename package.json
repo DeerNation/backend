@@ -71,7 +71,9 @@
       "frontend/app/source/resource/js/**"
     ],
     "globals": [
+      "app",
       "qx",
+      "dialog",
       "socketCluster",
       "wampSocketCluster",
       "showdown"

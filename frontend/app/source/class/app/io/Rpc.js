@@ -36,7 +36,7 @@ qx.Class.define('app.io.Rpc', {
             return function () {
               const args = qx.lang.Array.fromArguments(arguments)
               qx.log.Logger.debug(this, 'invoking RPC: ' + name + '(' + args + ')')
-              return this.__socket.wampSend.call(this.__socket, name, args)
+              return this.__socket.wampSend(name, args)
             }.bind(this)
           }.bind(this)
         })

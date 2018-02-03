@@ -13,6 +13,9 @@ module.exports = function (socket, scServer) {
     logger.debug('login request for actor %s received', credentials.username)
 
     scServer.thinky.r.table('Actor').filter({username: credentials.username}).run((err, results) => {
+      if (err) {
+        logger.error('Error searching Actor: ', err)
+      }
       const userRow = results[0]
       let isValidLogin = userRow && bcrypt.compareSync(credentials.password, userRow.password)
 

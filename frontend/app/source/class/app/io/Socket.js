@@ -23,6 +23,7 @@ qx.Class.define('app.io.Socket', {
     // TODO use real settings
     this.__socket = socketCluster.connect(app.Config.socket)
 
+    // eslint-disable-next-line
     this.__wampClient = new wampSocketCluster()
     this.__wampClient.upgradeToWAMP(this.__socket)
 

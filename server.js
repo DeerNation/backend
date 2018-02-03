@@ -7,12 +7,13 @@
   each one has a specific meaning within the SC ecosystem.
 */
 
-let argv = require('minimist')(process.argv.slice(2))
-let scHotReboot = require('sc-hot-reboot')
+const argv = require('minimist')(process.argv.slice(2))
+const scHotReboot = require('sc-hot-reboot')
 
-let fsUtil = require('socketcluster/fsutil')
-let waitForFile = fsUtil.waitForFile
-let SocketCluster = require('socketcluster')
+const fsUtil = require('socketcluster/fsutil')
+const waitForFile = fsUtil.waitForFile
+const SocketCluster = require('socketcluster')
+const path = require('path')
 const logger = require('./backend/logger')(__filename)
 
 let workerControllerPath = argv.wc || process.env.SOCKETCLUSTER_WORKER_CONTROLLER
@@ -28,8 +29,8 @@ let options = {
   // If your system doesn't support 'uws', you can switch to 'ws' (which is slower but works on older systems).
   wsEngine: process.env.SOCKETCLUSTER_WS_ENGINE || 'uws',
   appName: 'DeerNation',
-  workerController: workerControllerPath || __dirname + '/worker.js',
-  brokerController: brokerControllerPath || __dirname + '/broker.js',
+  workerController: workerControllerPath || path.join(__dirname, 'worker.js'),
+  brokerController: brokerControllerPath || path.join(__dirname, 'broker.js'),
   workerClusterController: workerClusterControllerPath || null,
   socketChannelLimit: Number(process.env.SOCKETCLUSTER_SOCKET_CHANNEL_LIMIT) || 1000,
   clusterStateServerHost: argv.cssh || process.env.SCC_STATE_SERVER_HOST || null,
@@ -73,14 +74,14 @@ let start = function () {
     logger.info('   >> WorkerCluster PID: %d', workerClusterInfo.pid)
   })
 
-  if (socketCluster.options.environment == 'dev') {
+  if (socketCluster.options.environment === 'dev') {
     // This will cause SC workers to reboot when code changes anywhere in the app directory.
     // The second options argument here is passed directly to chokidar.
     // See https://github.com/paulmillr/chokidar#api for details.
     logger.info(`   !! The sc-hot-reboot plugin is watching for code changes in the ${__dirname} directory`)
     scHotReboot.attach(socketCluster, {
       cwd: __dirname,
-      ignored: ['public', 'node_modules', 'README.md', 'Dockerfile', 'server.js', 'broker.js', /[\/\\]\./, '*.log', 'frontend']
+      ignored: ['public', 'node_modules', 'README.md', 'Dockerfile', 'server.js', 'broker.js', /[/\\]\./, '*.log', 'frontend']
     })
   }
 }

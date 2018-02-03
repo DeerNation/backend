@@ -1,10 +1,8 @@
 const SCWorker = require('socketcluster/scworker')
-const fs = require('fs')
 const express = require('express')
 const bodyParser = require('body-parser')
 const serveStatic = require('serve-static')
 const path = require('path')
-const morgan = require('morgan')
 const healthChecker = require('sc-framework-health-check')
 const schema = require('./backend/model/schema')
 const auth = require('./backend/auth')
@@ -25,7 +23,7 @@ class Worker extends SCWorker {
 
     i18n.configure({
       locales: ['en', 'de'],
-      directory: __dirname + '/locales'
+      directory: path.join(__dirname, 'locales')
     })
 
     // default: using 'accept-language' header to guess language settings
@@ -78,13 +76,12 @@ class Worker extends SCWorker {
       rpcServer.upgradeToWAMP(socket)
       // let iCal = new ICal('https://www.hirschberg-sauerland.de/index.php?id=373&type=150&L=0&tx_cal_controller%5Bcalendar%5D=1&tx_cal_controller%5Bview%5D=ics&cHash=b1aa5a58b6552eaba4eae2551f8d6d75', {}, function(err, data) {
 
-      socket.on('disconnect', function () {
-        if (interval) {
-          clearInterval(interval)
-        }
-      })
+      // socket.on('disconnect', function () {
+      //
+      // })
     })
   }
 }
 
+// eslint-disable-next-line
 new Worker()

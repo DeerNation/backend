@@ -37,7 +37,7 @@ module.exports = function (fileName) {
     let config = Object.assign({}, defaultLoggerConfig)
 
     // normalize filename
-    let parts = fileName.replace(/[\/]/g, '.').split('.')
+    let parts = fileName.replace(/[/]/g, '.').split('.')
     parts.pop()
     // remove filetype
     const start = Math.max(parts.indexOf('hirschberg') + 1, 0)

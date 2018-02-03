@@ -25,7 +25,7 @@ qx.Class.define('app.ui.Main', {
   members: {
      // overridden
     _createChildControlImpl: function (id, hash) {
-      var control
+      let control
       switch (id) {
         case 'menu':
           control = new app.ui.Menu()
