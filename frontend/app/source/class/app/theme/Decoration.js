@@ -20,6 +20,11 @@ qx.Theme.define('app.theme.Decoration',
           width: [2, 0, 0, 0],
           color: 'activity-group-line'
         }
+      },
+      'rounded': {
+        style: {
+          radius: 2
+        }
       }
     }
   })

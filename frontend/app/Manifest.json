@@ -37,6 +37,9 @@
       "js/socketcluster.js",
       "js/WAMPClient.bundle.min.js",
       "js/showdown.min.js"
+    ],
+    "css": [
+      "css/style.css"
     ]
   }
 }

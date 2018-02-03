@@ -28317,6 +28317,10 @@
       "js/showdown.min.js.map": {
         "doNotCopy": false,
         "resource": "resourcePath"
+      },
+      "css/style.css": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
       }
     },
     "dialog": {

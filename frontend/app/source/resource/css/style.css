@@ -1,0 +1,27 @@
+p { margin: 0 }
+
+.activity a {
+    color: rgb(19, 103, 154);
+    text-decoration: none;
+    font-weight: normal;
+}
+
+code {
+    color: #333333;
+    border: 1px solid #cccccc;
+    background-color: #f8f8f8;
+    display: inline;
+    margin: 0 0.1em;
+    padding: 0 0.5em;
+    line-height: 16px;
+    text-align: left;
+    vertical-align: middle;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    border-radius: 4px;
+    font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 13px;
+    font-weight: 600;
+    direction: ltr;
+    unicode-bidi: embed;
+}

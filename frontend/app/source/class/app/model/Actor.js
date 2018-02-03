@@ -29,7 +29,8 @@ qx.Class.define('app.model.Actor', {
     },
     role: {
       check: 'String',
-      nullable: true
+      nullable: true,
+      event: 'changedRole'
     },
     desc: {
       check: 'String',
@@ -42,7 +43,8 @@ qx.Class.define('app.model.Actor', {
     },
     username: {
       check: 'String',
-      init: null
+      init: null,
+      event: 'changedUsername'
     },
     password: {
       check: 'String',
@@ -59,7 +61,8 @@ qx.Class.define('app.model.Actor', {
     },
     status: {
       check: 'String',
-      init: null
+      init: null,
+      event: 'changedStatus'
     }
   }
 })

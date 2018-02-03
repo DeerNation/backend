@@ -237,26 +237,26 @@ class Schema {
       }
     }
 
-    function postFilter (req, next) {
-      // The post access control filters have access to the
-      // resource object from the DB.
-      // In case of read actions, you can even modify the
-      // resource's properties before it gets sent back to the user.
-      // console.log('r', !!req.r.table);
-      // console.log('action', req.action);
-      // console.log('socket', req.socket.id);
-      // console.log('authToken', req.authToken);
-      // console.log('query', req.query);
-      // console.log('resource', req.resource);
-      // console.log('-------');
-      // if (req.resource.name == 'Foo') {
-      //   var err = new Error('MAJOR FAIL');
-      //   err.name = 'MajorFailError';
-      //   next(err);
-      //   return;
-      // }
-      next()
-    }
+    // function postFilter (req, next) {
+    //   // The post access control filters have access to the
+    //   // resource object from the DB.
+    //   // In case of read actions, you can even modify the
+    //   // resource's properties before it gets sent back to the user.
+    //   // console.log('r', !!req.r.table);
+    //   // console.log('action', req.action);
+    //   // console.log('socket', req.socket.id);
+    //   // console.log('authToken', req.authToken);
+    //   // console.log('query', req.query);
+    //   // console.log('resource', req.resource);
+    //   // console.log('-------');
+    //   // if (req.resource.name == 'Foo') {
+    //   //   var err = new Error('MAJOR FAIL');
+    //   //   err.name = 'MajorFailError';
+    //   //   next(err);
+    //   //   return;
+    //   // }
+    //   next()
+    // }
 
     let crud = scCrudRethink.attach(worker, crudOptions)
     worker.scServer.thinky = crud.thinky
