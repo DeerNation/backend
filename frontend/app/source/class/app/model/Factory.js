@@ -34,12 +34,17 @@ qx.Class.define('app.model.Factory', {
      * Create model instances for a data array
      * @param dataArray {Array}
      * @param Clazz {qx.Class?} use this class to create the object instance
+     * @param delegate {Object} optional delegate with converter function for the data
      * @returns {qx.data.Array}
      */
-    createAll: function (dataArray, Clazz) {
+    createAll: function (dataArray, Clazz, delegate) {
       qx.core.Assert.assertArray(dataArray)
       let instances = new qx.data.Array()
+      delegate = delegate || {}
       dataArray.forEach(data => {
+        if (delegate.converter) {
+          delegate.converter(data)
+        }
         instances.push(this.create(data, Clazz))
       })
       return instances

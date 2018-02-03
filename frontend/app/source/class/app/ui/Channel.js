@@ -78,10 +78,16 @@ qx.Class.define('app.ui.Channel', {
         let activities = this.getActivities()
         activities.removeAll()
         app.io.Rpc.getProxy().getChannelActivities(subscription.getChannelId(), subscription.getViewedUntil()).then(messages => {
-          activities.append(app.model.Factory.createAll(messages, app.model.Activity))
+          activities.append(app.model.Factory.createAll(messages, app.model.Activity, {
+            converter: function (model) {
+              if (!model.published) {
+                model.published = model.created
+              }
+            }
+          }))
         })
 
-        this.__currentSCChannel.subscribe({waitForAuth: true})
+        this.__currentSCChannel.subscribe()
         this.__currentSCChannel.watch(this._onActivity.bind(this))
       }
     },
@@ -103,9 +109,14 @@ qx.Class.define('app.ui.Channel', {
       if (!qx.lang.Type.isArray(payload)) {
         payload = [payload]
       }
-
       // create Activity instances and add them to the model
-      this.getActivities().concat(app.model.Factory.createAll(payload, app.model.Activity))
+      this.getActivities().append(app.model.Factory.createAll(payload, app.model.Activity, {
+        converter: function (model) {
+          if (!model.published) {
+            model.published = model.created
+          }
+        }
+      }))
     },
 
     // overridden
@@ -141,7 +152,14 @@ qx.Class.define('app.ui.Channel', {
 
         bindItem: function (controller, item, index) {
           controller.bindProperty('', 'model', null, item, index)
-          controller.bindProperty('title', 'message', null, item, index)
+          controller.bindProperty('title', 'title', null, item, index)
+          controller.bindProperty('content', 'message', null, item, index)
+          controller.bindProperty('published', 'published', null, item, index)
+          controller.bindProperty('actorId', 'author', {
+            converter: function (value, model) {
+              return app.Model.lookup('actor', model.getActorId())
+            }
+          }, item, index)
         },
 
         group: function (model) {

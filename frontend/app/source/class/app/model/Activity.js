@@ -69,6 +69,12 @@ qx.Class.define('app.model.Activity', {
     channel: {
       check: 'String',
       init: null
+    },
+
+    actor: {
+      check: 'Object',
+      init: null,
+      event: 'changeActor'
     }
   }
 })

@@ -18,6 +18,18 @@ msgstr ""
 msgid "Forgot Password?"
 msgstr ""
 
+#: app.ui.Menu:89
+msgid "Favorites"
+msgstr ""
+
+#: app.ui.Menu:91
+msgid "Channels"
+msgstr ""
+
+#: app.ui.Menu:94
+msgid "Private channels"
+msgstr ""
+
 #: dialog.Dialog:482
 msgid "OK"
 msgstr ""
@@ -26,74 +38,14 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: dialog.Confirm:170
-msgid "yes"
+#: app.ui.form.ActivityItem:128
+msgid "Owner"
 msgstr ""
 
-#: dialog.Confirm:180
-msgid "no"
+#: app.ui.form.ActivityItem:131
+msgid "Bot"
 msgstr ""
 
-#: qx.util.Validate:90
-msgid "%1 is not a number."
+#: app.ui.form.ActivityItem:133
+msgid "Server"
 msgstr ""
-
-#: qx.util.Validate:129
-msgid "'%1' is not an email address."
-msgstr ""
-
-#: qx.util.Validate:166
-msgid "%1 is not a string."
-msgstr ""
-
-#: qx.util.Validate:202
-msgid "%1 is not an url."
-msgstr ""
-
-#: qx.util.Validate:243
-msgid "%1 is not a color! %2"
-msgstr ""
-
-#: qx.util.Validate:267
-msgid "%1 is not in the range from [%2, %3]."
-msgstr ""
-
-#: qx.util.Validate:290
-msgid "%1 is not in %2"
-msgstr ""
-
-#: qx.util.Validate:314
-msgid "%1 does not fit %2."
-msgstr ""
-
-#: qx.ui.form.validation.Manager:37
-msgid "This field is required"
-msgstr ""
-
-#: qx.ui.control.DateChooser:258
-msgid "Last year"
-msgstr ""
-
-#: qx.ui.control.DateChooser:270
-msgid "Last month"
-msgstr ""
-
-#: qx.ui.control.DateChooser:282
-msgid "Next month"
-msgstr ""
-
-#: qx.ui.control.DateChooser:294
-msgid "Next year"
-msgstr ""
-
-#: app.ui.Menu:91
-msgid "Channels"
-msgstr "Kanäle"
-
-#: app.ui.Menu:94
-msgid "Private channels"
-msgstr "Private Kanäle"
-
-#: app.ui.Menu:89
-msgid "Favorites"
-msgstr "Favoriten"

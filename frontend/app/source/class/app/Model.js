@@ -19,6 +19,9 @@ qx.Class.define('app.Model', {
     this.__subscribedChannels = {}
     this.setChannels(new qx.data.Array())
     this.setSubscriptions(new qx.data.Array())
+    this.setActors(new qx.data.Array())
+
+    this.__lookupCache = {}
   },
 
   /*
@@ -64,6 +67,11 @@ qx.Class.define('app.Model', {
     actor: {
       check: 'app.model.Actor',
       init: null
+    },
+
+    actors: {
+      check: 'qx.data.Array',
+      init: null
     }
   },
 
@@ -74,9 +82,14 @@ qx.Class.define('app.Model', {
   */
   members: {
     __subscribedChannels: null,
+    __lookupCache: null,
 
     init: function () {
       const socket = app.io.Socket.getInstance()
+
+      app.io.Rpc.getProxy().getActors().then(actors => {
+        this.getActors().append(app.model.Factory.createAll(actors, app.model.Actor))
+      })
 
       app.io.Rpc.getProxy().getChannels().then(channels => {
         this.getChannels().append(app.model.Factory.createAll(channels, app.model.Channel))
@@ -119,10 +132,16 @@ qx.Class.define('app.Model', {
     lookup: function (type, id) {
       let found = null
       const propertyName = type.endsWith('s') ? type : type + 's'
+      if (this.__lookupCache[propertyName] && this.__lookupCache[propertyName][id]) {
+        return this.__lookupCache[propertyName][id]
+      }
       if (qx.Class.hasProperty(this.constructor, propertyName)) {
         this['get' + qx.lang.String.firstUp(propertyName)]().some(entry => {
           if (entry.getId() === id) {
-            found = entry
+            if (!this.__lookupCache[propertyName]) {
+              this.__lookupCache[propertyName] = {}
+            }
+            found = this.__lookupCache[propertyName][id] = entry
             return true
           }
         })

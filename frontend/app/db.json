@@ -320,7 +320,7 @@
       }
     },
     "app.theme.Color": {
-      "mtime": "2018-02-03T16:22:03.119Z",
+      "mtime": "2018-02-03T21:25:52.096Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -336,7 +336,7 @@
       "implement": []
     },
     "app.theme.Decoration": {
-      "mtime": "2018-02-03T09:05:42.091Z",
+      "mtime": "2018-02-03T20:44:14.446Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -352,18 +352,15 @@
       "implement": []
     },
     "app.theme.Font": {
-      "mtime": "2018-02-03T15:42:11.598Z",
+      "mtime": "2018-02-03T21:03:37.430Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
           "load": true,
           "usage": "dynamic"
-        },
-        "qx.theme.indigo.Font": {
-          "load": true
         }
       },
-      "extends": "qx.theme.indigo.Font",
+      "extends": null,
       "include": [],
       "implement": []
     },
@@ -384,7 +381,7 @@
       }
     },
     "app.theme.Appearance": {
-      "mtime": "2018-02-03T16:24:19.298Z",
+      "mtime": "2018-02-03T21:21:59.198Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -4297,12 +4294,6 @@
           "load": true
         },
         "qx.theme.manager.Meta": {
-          "load": true
-        },
-        "qx.core.ObjectRegistry": {
-          "load": true
-        },
-        "qx.core.IDisposable": {
           "load": true
         }
       },
@@ -9637,7 +9628,7 @@
       ]
     },
     "app.model.Activity": {
-      "mtime": "2018-02-03T14:27:56.646Z",
+      "mtime": "2018-02-03T18:39:00.950Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13667,33 +13658,45 @@
       "implement": []
     },
     "app.ui.form.ActivityItem": {
-      "mtime": "2018-02-03T09:05:42.091Z",
+      "mtime": "2018-02-03T21:09:08.615Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
           "load": true,
           "usage": "dynamic"
         },
-        "qx.ui.form.ListItem": {
+        "qx.ui.core.Widget": {
           "load": true,
           "construct": true
         },
-        "qx.ui.basic.Atom": {
+        "qx.ui.form.IModel": {
           "load": true
         },
-        "qx.ui.core.Widget": {
+        "qx.ui.form.MModelProperty": {
           "load": true
         },
-        "qx.core.Environment": {
-          "load": true
+        "qx.ui.layout.VBox": {
+          "construct": true
         },
-        "qx.ui.layout.Atom": {
-          "load": true
+        "qx.util.format.DateFormat": {
+          "construct": true
         },
+        "qx.data.Array": {
+          "construct": true
+        },
+        "app.Model": {},
+        "qx.ui.layout.HBox": {},
+        "qx.ui.container.Composite": {},
+        "qx.ui.basic.Label": {},
+        "qx.ui.form.List": {},
+        "qx.data.controller.List": {},
         "qx.ui.core.LayoutItem": {
           "load": true
         },
         "qx.core.Object": {
+          "load": true
+        },
+        "qx.core.Environment": {
           "load": true
         },
         "qx.theme.manager.Meta": {
@@ -13706,9 +13709,27 @@
           "load": true
         }
       },
-      "extends": "qx.ui.form.ListItem",
-      "include": [],
-      "implement": []
+      "extends": "qx.ui.core.Widget",
+      "include": [
+        "qx.ui.form.MModelProperty"
+      ],
+      "implement": [
+        "qx.ui.form.IModel"
+      ],
+      "translations": [
+        {
+          "msgid": "Owner",
+          "lineNo": 128
+        },
+        {
+          "msgid": "Bot",
+          "lineNo": 131
+        },
+        {
+          "msgid": "Server",
+          "lineNo": 133
+        }
+      ]
     },
     "app.Config": {
       "mtime": "2018-02-03T09:05:42.091Z",
@@ -13724,7 +13745,7 @@
       "implement": []
     },
     "app.model.Factory": {
-      "mtime": "2018-02-03T12:10:36.068Z",
+      "mtime": "2018-02-03T19:38:04.096Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13920,7 +13941,7 @@
       ]
     },
     "app.ui.Channel": {
-      "mtime": "2018-02-03T16:19:16.817Z",
+      "mtime": "2018-02-03T19:53:38.394Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14218,7 +14239,7 @@
       "implement": []
     },
     "app.Model": {
-      "mtime": "2018-02-03T16:07:36.358Z",
+      "mtime": "2018-02-03T18:49:19.533Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14235,6 +14256,7 @@
         "app.io.Socket": {},
         "app.io.Rpc": {},
         "app.model.Factory": {},
+        "app.model.Actor": {},
         "app.model.Channel": {},
         "app.model.Subscription": {},
         "qx.lang.Json": {},
@@ -14250,6 +14272,38 @@
         }
       },
       "extends": "qx.core.Object",
+      "include": [],
+      "implement": []
+    },
+    "app.model.Actor": {
+      "mtime": "2018-02-03T19:58:48.111Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "app.model.AbstractModel": {
+          "load": true
+        },
+        "qx.util.Validate": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.core.Object": {
+          "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
+        }
+      },
+      "extends": "app.model.AbstractModel",
       "include": [],
       "implement": []
     }

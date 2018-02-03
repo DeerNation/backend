@@ -22,15 +22,20 @@ function getChannels (authToken) {
 
 function getChannelActivities (authToken, channel, from) {
   const r = schema.getR()
-  let filter = r.row('channel').eq(channel)
+  let filter = r.row('channel').eq(channel).and(r.row.hasFields('actorId'))
   if (from) {
     filter.and(r.row('published').ge(from))
   }
   return schema.getModel('Activity').filter(filter).orderBy(r.asc('published')).run()
 }
 
+function getActors (authToken) {
+  return schema.getModel('Actor').pluck('id', 'name', 'username', 'type', 'role', 'online', 'status').run()
+}
+
 module.exports = {
   getChannels: getChannels,
   getSubscriptions: getSubscriptions,
-  getChannelActivities: getChannelActivities
+  getChannelActivities: getChannelActivities,
+  getActors: getActors
 }
