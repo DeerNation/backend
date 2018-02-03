@@ -13,8 +13,8 @@ qx.Class.define('app.ui.Main', {
     CONSTRUCTOR
   ******************************************************
   */
-  construct: function() {
-    this.base(arguments, "vertical")
+  construct: function () {
+    this.base(arguments, 'vertical')
   },
 
   /*
@@ -24,16 +24,15 @@ qx.Class.define('app.ui.Main', {
   */
   members: {
      // overridden
-     _createChildControlImpl : function(id, hash) {
-       var control;
-       switch(id) {
-         case "menu":
-           control = new app.ui.Menu();
-           break;
-       }
-       return control || this.base(arguments, id, hash);
-     },
+    _createChildControlImpl: function (id, hash) {
+      var control
+      switch (id) {
+        case 'menu':
+          control = new app.ui.Menu()
+          break
+      }
+      return control || this.base(arguments, id, hash)
+    }
   }
 
-
-});
+})

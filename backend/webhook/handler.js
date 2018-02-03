@@ -9,18 +9,17 @@ const schema = require('../model/schema')
 const channelHandler = require('../ChannelHandler')
 
 class WebhookHandler {
-
-  constructor() {
+  constructor () {
     this.models = null
     this.scServer = null
   }
 
-  init(app, scServer) {
+  init (app, scServer) {
     app.post('/hooks/*', this._handlePost.bind(this))
     this.scServer = scServer
   }
 
-  _handlePost(req, res) {
+  _handlePost (req, res) {
     // send response immediately
     res.send()
 
@@ -41,7 +40,7 @@ class WebhookHandler {
     this.models.Webhook.filter({id: id}).run().then(result => {
       if (result.length === 1) {
         // TODO: add encryption to incoming messages and verification with signature
-        logger.debug("channel: %s, message: %o", result[0].channel, req.body)
+        logger.debug('channel: %s, message: %o', result[0].channel, req.body)
         let message = req.body
         message.actorId = result[0].actorId
         channelHandler.publish(result[0].channel, message)

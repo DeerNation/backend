@@ -7,18 +7,18 @@
   each one has a specific meaning within the SC ecosystem.
 */
 
-let argv = require('minimist')(process.argv.slice(2));
-let scHotReboot = require('sc-hot-reboot');
+let argv = require('minimist')(process.argv.slice(2))
+let scHotReboot = require('sc-hot-reboot')
 
-let fsUtil = require('socketcluster/fsutil');
-let waitForFile = fsUtil.waitForFile;
-let SocketCluster = require('socketcluster');
+let fsUtil = require('socketcluster/fsutil')
+let waitForFile = fsUtil.waitForFile
+let SocketCluster = require('socketcluster')
 const logger = require('./backend/logger')(__filename)
 
-let workerControllerPath = argv.wc || process.env.SOCKETCLUSTER_WORKER_CONTROLLER;
-let brokerControllerPath = argv.bc || process.env.SOCKETCLUSTER_BROKER_CONTROLLER;
-let workerClusterControllerPath = argv.wcc || process.env.SOCKETCLUSTER_WORKERCLUSTER_CONTROLLER;
-let environment = process.env.ENV || 'dev';
+let workerControllerPath = argv.wc || process.env.SOCKETCLUSTER_WORKER_CONTROLLER
+let brokerControllerPath = argv.bc || process.env.SOCKETCLUSTER_BROKER_CONTROLLER
+let workerClusterControllerPath = argv.wcc || process.env.SOCKETCLUSTER_WORKERCLUSTER_CONTROLLER
+let environment = process.env.ENV || 'dev'
 let logLevel = environment === 'dev' ? 3 : 2
 
 let options = {
@@ -46,66 +46,66 @@ let options = {
   killMasterOnSignal: false,
   environment: environment,
   logLevel: logLevel
-};
+}
 
-let bootTimeout = Number(process.env.SOCKETCLUSTER_CONTROLLER_BOOT_TIMEOUT) || 10000;
-let SOCKETCLUSTER_OPTIONS;
+let bootTimeout = Number(process.env.SOCKETCLUSTER_CONTROLLER_BOOT_TIMEOUT) || 10000
+let SOCKETCLUSTER_OPTIONS
 
 if (process.env.SOCKETCLUSTER_OPTIONS) {
-  SOCKETCLUSTER_OPTIONS = JSON.parse(process.env.SOCKETCLUSTER_OPTIONS);
+  SOCKETCLUSTER_OPTIONS = JSON.parse(process.env.SOCKETCLUSTER_OPTIONS)
 }
 
 for (let i in SOCKETCLUSTER_OPTIONS) {
   if (SOCKETCLUSTER_OPTIONS.hasOwnProperty(i)) {
-    options[i] = SOCKETCLUSTER_OPTIONS[i];
+    options[i] = SOCKETCLUSTER_OPTIONS[i]
   }
 }
 
 let start = function () {
   const clusterLogger = require('./backend/logger')('backend/SocketCluster.js')
   clusterLogger.info('starting SocketCluster')
-  SocketCluster.prototype.log = function(message, time) {
+  SocketCluster.prototype.log = function (message, time) {
     clusterLogger.info(message)
   }
-  const socketCluster = new SocketCluster(options);
+  const socketCluster = new SocketCluster(options)
 
   socketCluster.on(socketCluster.EVENT_WORKER_CLUSTER_START, function (workerClusterInfo) {
-    logger.info('   >> WorkerCluster PID: %d', workerClusterInfo.pid);
-  });
+    logger.info('   >> WorkerCluster PID: %d', workerClusterInfo.pid)
+  })
 
   if (socketCluster.options.environment == 'dev') {
     // This will cause SC workers to reboot when code changes anywhere in the app directory.
     // The second options argument here is passed directly to chokidar.
     // See https://github.com/paulmillr/chokidar#api for details.
-    logger.info(`   !! The sc-hot-reboot plugin is watching for code changes in the ${__dirname} directory`);
+    logger.info(`   !! The sc-hot-reboot plugin is watching for code changes in the ${__dirname} directory`)
     scHotReboot.attach(socketCluster, {
       cwd: __dirname,
       ignored: ['public', 'node_modules', 'README.md', 'Dockerfile', 'server.js', 'broker.js', /[\/\\]\./, '*.log', 'frontend']
-    });
+    })
   }
-};
+}
 
-let bootCheckInterval = Number(process.env.SOCKETCLUSTER_BOOT_CHECK_INTERVAL) || 200;
-let bootStartTime = Date.now();
+let bootCheckInterval = Number(process.env.SOCKETCLUSTER_BOOT_CHECK_INTERVAL) || 200
+let bootStartTime = Date.now()
 
 // Detect when Docker volumes are ready.
 let startWhenFileIsReady = (filePath) => {
   let errorMessage = `Failed to locate a controller file at path ${filePath} ` +
-  `before SOCKETCLUSTER_CONTROLLER_BOOT_TIMEOUT`;
+  `before SOCKETCLUSTER_CONTROLLER_BOOT_TIMEOUT`
 
-  return waitForFile(filePath, bootCheckInterval, bootStartTime, bootTimeout, errorMessage);
-};
+  return waitForFile(filePath, bootCheckInterval, bootStartTime, bootTimeout, errorMessage)
+}
 
 let filesReadyPromises = [
   startWhenFileIsReady(workerControllerPath),
   startWhenFileIsReady(brokerControllerPath),
   startWhenFileIsReady(workerClusterControllerPath)
-];
+]
 Promise.all(filesReadyPromises)
 .then(() => {
-  start();
+  start()
 })
 .catch((err) => {
-  logger.error(err.stack);
-  process.exit(1);
-});
+  logger.error(err.stack)
+  process.exit(1)
+})

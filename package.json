@@ -73,7 +73,8 @@
     "globals": [
       "qx",
       "socketCluster",
-      "wampSocketCluster"
+      "wampSocketCluster",
+      "showdown"
     ]
   }
 }

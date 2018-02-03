@@ -8,22 +8,21 @@ const iCal = require('ical')
 const logger = require('../logger')(__filename)
 
 class ICal {
-
-  constructor(file, model) {
+  constructor (file, model) {
     this.__uri = file
     this.__parsedData = null
     this.__model = model
   }
 
-  parse() {
-    if (this.__uri.startsWith("http")) {
+  parse () {
+    if (this.__uri.startsWith('http')) {
       this.__parsedData = iCal.fromURL(this.__uri)
     } else {
       this.__parsedData = iCal.parseFile(this.__uri)
     }
   }
 
-  update() {
+  update () {
     logger.info('update iCal events from %s', this.__uri)
     this.parse()
     let now = new Date()
@@ -45,12 +44,12 @@ class ICal {
           if (ev.hasOwnProperty('organizer')) {
             let orga = ev.organizer.params.CN.trim()
             if (ev.organizer.val) {
-              orga += " "+ev.organizer.val.trim()
+              orga += ' ' + ev.organizer.val.trim()
             }
-            if (orga.endsWith(":")) {
-              orga = orga.substring(0, orga.length-1)
+            if (orga.endsWith(':')) {
+              orga = orga.substring(0, orga.length - 1)
             }
-            orga = orga.substring(1, orga.length-1)
+            orga = orga.substring(1, orga.length - 1)
             event.organizer = orga
           }
 

@@ -9,23 +9,23 @@ const {hash} = require('./util')
 const logger = require('./logger')(__filename)
 
 class ChannelHandler {
-  constructor() {
+  constructor () {
     this.server = null
     this.model = null
   }
 
-  init(scServer) {
+  init (scServer) {
     this.server = scServer
   }
 
-  start() {
+  start () {
     if (!this.model) {
       this.model = schema.getModel('Activity')
     }
     this.model.changes().then(this._onChange.bind(this))
   }
 
-  _onChange(feed) {
+  _onChange (feed) {
     feed.each((err, message) => {
       if (err) {
         console.log(err)
@@ -40,7 +40,7 @@ class ChannelHandler {
     })
   }
 
-  publish(channel, message) {
+  publish (channel, message) {
     if (!this.model) {
       this.model = schema.getModel('Activity')
     }

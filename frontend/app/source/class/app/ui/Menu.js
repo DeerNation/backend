@@ -17,4 +17,4 @@ qx.Class.define('app.ui.Menu', {
   members: {
 
   }
-});
+})

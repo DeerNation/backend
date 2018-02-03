@@ -1,10 +1,10 @@
-const SCBroker = require('socketcluster/scbroker');
-const scClusterBrokerClient = require('scc-broker-client');
+const SCBroker = require('socketcluster/scbroker')
+const scClusterBrokerClient = require('scc-broker-client')
 const logger = require('./backend/logger')(__filename)
 
 class Broker extends SCBroker {
-  run() {
-    logger.info('   >> Broker PID: %d', process.pid);
+  run () {
+    logger.info('   >> Broker PID: %d', process.pid)
 
     // This is defined in server.js (taken from environment variable SC_CLUSTER_STATE_SERVER_HOST).
     // If this property is defined, the broker will try to attach itself to the SC cluster for
@@ -20,9 +20,9 @@ class Broker extends SCBroker {
         stateServerConnectTimeout: this.options.clusterStateServerConnectTimeout,
         stateServerAckTimeout: this.options.clusterStateServerAckTimeout,
         stateServerReconnectRandomness: this.options.clusterStateServerReconnectRandomness
-      });
+      })
     }
   }
 }
 
-new Broker();
+new Broker()

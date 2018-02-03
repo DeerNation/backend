@@ -8,12 +8,12 @@
 
 ************************************************************************ */
 
-qx.Theme.define("app.theme.Color",
-{
-  extend : qx.theme.indigo.Color,
-
-  colors :
+qx.Theme.define('app.theme.Color',
   {
-    "activity-group-line": "#eaeaea"
-  }
-});
+    extend: qx.theme.indigo.Color,
+
+    colors:
+    {
+      'activity-group-line': '#eaeaea'
+    }
+  })

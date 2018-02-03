@@ -14,11 +14,10 @@ qx.Class.define('app.ui.form.ActivityItem', {
     CONSTRUCTOR
   ******************************************************
   */
-  construct: function(label, icon, model) {
+  construct: function (label, icon, model) {
     this.base(arguments, label, icon, model)
     this.__converter = new showdown.Converter()
   },
-
 
   /*
   ******************************************************
@@ -27,9 +26,9 @@ qx.Class.define('app.ui.form.ActivityItem', {
   */
   properties: {
     message: {
-      check: "String",
+      check: 'String',
       nullable: true,
-      apply: "_applyMessage"
+      apply: '_applyMessage'
     },
 
     rich: {
@@ -37,7 +36,6 @@ qx.Class.define('app.ui.form.ActivityItem', {
       init: true
     }
   },
-
 
   /*
   ******************************************************
@@ -48,9 +46,9 @@ qx.Class.define('app.ui.form.ActivityItem', {
     __converter: null,
 
     // property apply
-    _applyMessage: function(value) {
+    _applyMessage: function (value) {
       this.setLabel(this.__converter.makeHtml(value))
     }
   }
 
-});
+})

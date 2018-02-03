@@ -18,12 +18,12 @@ qx.Class.define('app.model.Factory', {
      * Create an instance of a model class by its data
      * @param data
      */
-    create: function(data) {
+    create: function (data) {
       let clazz = null
       if (data.hasOwnProperty('__jsonclass__')) {
         clazz = qx.Class.getByName(data['__jsonclass__'])
         if (!clazz) {
-          throw Error("Class "+clazz+" not found")
+          throw Error('Class ' + clazz + ' not found')
         }
         delete data['__jsonclass__']
       }
@@ -38,7 +38,7 @@ qx.Class.define('app.model.Factory', {
      * @param dataArray {Array}
      * @returns {Array}
      */
-    createAll: function(dataArray) {
+    createAll: function (dataArray) {
       qx.core.Assert.assertArray(dataArray)
       let instances = []
       dataArray.forEach(data => {
@@ -47,4 +47,4 @@ qx.Class.define('app.model.Factory', {
       return instances
     }
   }
-});
+})

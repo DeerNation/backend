@@ -7,20 +7,19 @@
 const WAMPServer = require('wamp-socket-cluster/WAMPServer')
 const dbModule = require('./db')
 
-
 class RpcServer {
-  constructor() {
+  constructor () {
     this.rpcServer = new WAMPServer()
     this.registerRPCEndpoints(dbModule)
     this.socket = null
   }
 
-  upgradeToWAMP(socket) {
+  upgradeToWAMP (socket) {
     this.socket = socket
     this.rpcServer.upgradeToWAMP(socket)
   }
 
-  registerRPCEndpoints(endpoints) {
+  registerRPCEndpoints (endpoints) {
     let wrappedEndpoints = {}
     Object.keys(endpoints).forEach(methodName => {
       const entry = endpoints[methodName]
@@ -37,8 +36,7 @@ class RpcServer {
     this.rpcServer.registerRPCEndpoints(wrappedEndpoints)
   }
 
-
-  _wrapper(func, context, data, callback) {
+  _wrapper (func, context, data, callback) {
     try {
       if (data) {
         data.unshift(this.socket.getAuthToken())

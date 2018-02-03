@@ -22,23 +22,23 @@ qx.Class.define('app.model.Event', {
       check: 'Date',
       nullable: true,
       event: 'changeStart',
-      transform: "_transformDate"
+      transform: '_transformDate'
     },
     end: {
       check: 'Date',
       nullable: true,
       event: 'changeEnd',
-      transform: "_transformDate"
+      transform: '_transformDate'
     },
     categories: {
-      check: "Array",
+      check: 'Array',
       nullable: true,
       event: 'changeCategories'
     },
     organizer: {
-      check: "String",
+      check: 'String',
       nullable: true,
       event: 'changeOrganizer'
     }
   }
-});
+})

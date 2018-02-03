@@ -21,7 +21,7 @@ qx.Class.define('app.io.Rpc', {
      * RPCs need a socket to work, so before the first RPC the socket must be provided
      * @param socket
      */
-    setSocket: function(socket) {
+    setSocket: function (socket) {
       this.__socket = socket
     },
 
@@ -29,13 +29,13 @@ qx.Class.define('app.io.Rpc', {
      * Returns the proxy object for RPC calls, which can be used to trigger an RPC.
      * @returns {Proxy}
      */
-    getProxy: function() {
+    getProxy: function () {
       if (!this.__proxy) {
         this.__proxy = new Proxy({}, {
-          get: function(rcvr, name) {
-            return function() {
-              const args = qx.lang.Array.fromArguments(arguments);
-              qx.log.Logger.debug(this, "invoking RPC: "+name+"("+args+")")
+          get: function (rcvr, name) {
+            return function () {
+              const args = qx.lang.Array.fromArguments(arguments)
+              qx.log.Logger.debug(this, 'invoking RPC: ' + name + '(' + args + ')')
               return this.__socket.wampSend.call(this.__socket, name, args)
             }.bind(this)
           }.bind(this)

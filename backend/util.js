@@ -10,7 +10,7 @@ const XXHash = require('xxhash')
 const botUUID = uuidv4()
 module.exports.botUUID = botUUID
 
-function normalizeActivity(activity) {
+function normalizeActivity (activity) {
   let normalizedActivity = Object.assign({}, activity)
   delete normalizedActivity.channel
   if (normalizedActivity.hasOwnProperty('hash')) {
@@ -19,6 +19,6 @@ function normalizeActivity(activity) {
   return JSON.stringify(normalizedActivity)
 }
 
-module.exports.hash = function(activity) {
+module.exports.hash = function (activity) {
   return XXHash.hash64(Buffer.from(normalizeActivity(activity), 'utf-8'), 0xCAFEBABE, 'hex')
 }

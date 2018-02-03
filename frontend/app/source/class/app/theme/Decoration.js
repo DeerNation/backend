@@ -8,18 +8,18 @@
 
 ************************************************************************ */
 
-qx.Theme.define("app.theme.Decoration",
-{
-  extend : qx.theme.indigo.Decoration,
-
-  decorations :
+qx.Theme.define('app.theme.Decoration',
   {
-    "activity-group": {
-      style :
+    extend: qx.theme.indigo.Decoration,
+
+    decorations:
+    {
+      'activity-group': {
+        style:
         {
-          width : [2, 0, 0, 0],
-          color : "activity-group-line",
+          width: [2, 0, 0, 0],
+          color: 'activity-group-line'
         }
+      }
     }
-  }
-});
+  })

@@ -13,10 +13,10 @@ qx.Class.define('app.model.Activity', {
     CONSTRUCTOR
   ******************************************************
   */
-  construct: function(props) {
-    this.base(arguments);
-    this.initCreated(new Date());
-    this.set(props);
+  construct: function (props) {
+    this.base(arguments)
+    this.initCreated(new Date())
+    this.set(props)
   },
 
   /*
@@ -26,53 +26,52 @@ qx.Class.define('app.model.Activity', {
   */
   properties: {
     id: {
-      check: "String"
+      check: 'String'
     },
 
     title: {
-      check: "String",
+      check: 'String',
       nullable: true,
-      event: "changeTitle"
+      event: 'changeTitle'
     },
 
     content: {
-      check: "String",
+      check: 'String',
       nullable: true,
-      event: "changeContent"
+      event: 'changeContent'
     },
 
     /* Creation date of this Activity */
     created: {
-      check: "Date",
-      deferredInit : true,
-      event: "changeCreated",
-      transform: "_transformDate"
+      check: 'Date',
+      deferredInit: true,
+      event: 'changeCreated',
+      transform: '_transformDate'
     },
 
     /* Publication date of this Activity */
     published: {
-      check: "Date",
+      check: 'Date',
       nullable: true,
-      event: "changePublished",
-      transform: "_transformDate"
+      event: 'changePublished',
+      transform: '_transformDate'
     },
 
     actorId: {
-      check: "String",
+      check: 'String',
       init: null
     },
 
     hash: {
-      check: "String",
+      check: 'String',
       init: null
     },
 
     channel: {
-      check: "String",
+      check: 'String',
       init: null
     }
   },
-
 
   /*
   ******************************************************
@@ -80,7 +79,7 @@ qx.Class.define('app.model.Activity', {
   ******************************************************
   */
   members: {
-    _transformDate: function(value) {
+    _transformDate: function (value) {
       if (qx.lang.Type.isString(value)) {
         return new Date(value)
       }
@@ -88,4 +87,4 @@ qx.Class.define('app.model.Activity', {
     }
   }
 
-});
+})

@@ -5,13 +5,13 @@
  * @since 2018
  */
 
-const { format, transports, loggers } = require('winston');
-const { combine, timestamp, label, printf, colorize, align, splat } = format;
+const { format, transports, loggers } = require('winston')
+const { combine, timestamp, label, printf, colorize, align, splat } = format
 const maxModuleLength = 20
 
 const myFormat = printf(info => {
-  return `${info.timestamp.replace(/[T|Z]/g, ' ')} [${info.label}] ${info.level}: ${info.message}`;
-});
+  return `${info.timestamp.replace(/[T|Z]/g, ' ')} [${info.label}] ${info.level}: ${info.message}`
+})
 
 const defaultLoggerConfig = {
   transports: [],
@@ -31,30 +31,30 @@ if (process.env.ENV === 'dev') {
   }))
 }
 
-module.exports = function(fileName) {
+module.exports = function (fileName) {
   if (!loggers.has(fileName)) {
     // create new logger
     let config = Object.assign({}, defaultLoggerConfig)
 
     // normalize filename
-    let parts = fileName.replace(/[\/]/g, '.').split(".")
+    let parts = fileName.replace(/[\/]/g, '.').split('.')
     parts.pop()
     // remove filetype
-    const start = Math.max(parts.indexOf('hirschberg')+1, 0)
-    let module = parts.slice(start).join(".")
+    const start = Math.max(parts.indexOf('hirschberg') + 1, 0)
+    let module = parts.slice(start).join('.')
 
     let labelString = module
     if (labelString.length > maxModuleLength) {
       let gain = labelString.length - maxModuleLength
-      let parts = labelString.split(".")
-      for (let i=0; i < parts.length; i++) {
-        gain -= parts[i].length-1
+      let parts = labelString.split('.')
+      for (let i = 0; i < parts.length; i++) {
+        gain -= parts[i].length - 1
         parts[i] = parts[i].substr(0, 1)
         if (gain <= 0) {
           break
         }
       }
-      labelString = parts.join(".")
+      labelString = parts.join('.')
     }
     labelString = `${labelString}`.padStart(maxModuleLength, '.')
 

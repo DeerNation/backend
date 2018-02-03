@@ -4,32 +4,31 @@
  * @author tobiasb
  * @since 2018
  */
-const scCrudRethink = require('sc-crud-rethink');
+const scCrudRethink = require('sc-crud-rethink')
 const bcrypt = require('bcrypt')
 const logger = require('../logger')(__filename)
 const {botUUID} = require('../util')
 
 class Schema {
-
-  constructor() {
+  constructor () {
     this.__crud = null
   }
 
-  getModels() {
+  getModels () {
     return this.__crud.models
   }
 
-  getModel(name) {
+  getModel (name) {
     return this.__crud.models[name]
   }
 
-  getR() {
+  getR () {
     return this.__crud.thinky.r
   }
 
-  create(worker) {
-    const thinky = scCrudRethink.thinky;
-    const type = thinky.type;
+  create (worker) {
+    const thinky = scCrudRethink.thinky
+    const type = thinky.type
 
     let crudOptions = {
       defaultPageSize: 5,
@@ -51,7 +50,7 @@ class Schema {
           views: {
             alphabeticalView: {
               transform: function (fullTableQuery, r) {
-                return fullTableQuery.orderBy(r.asc('name'));
+                return fullTableQuery.orderBy(r.asc('name'))
               }
             }
           },
@@ -158,18 +157,18 @@ class Schema {
         host: process.env.DATABASE_HOST || '172.17.0.2',
         port: process.env.DATABASE_PORT || 28015
       }
-    };
+    }
 
-    function mustBeLoggedIn(req, next) {
+    function mustBeLoggedIn (req, next) {
       if (req.socket.getAuthToken()) {
-        next();
+        next()
       } else {
-        next(true);
-        req.socket.emit('logout');
+        next(true)
+        req.socket.emit('logout')
       }
     }
 
-    function postFilter(req, next) {
+    function postFilter (req, next) {
       // The post access control filters have access to the
       // resource object from the DB.
       // In case of read actions, you can even modify the
@@ -187,11 +186,11 @@ class Schema {
       //   next(err);
       //   return;
       // }
-      next();
+      next()
     }
 
-    let crud = scCrudRethink.attach(worker, crudOptions);
-    worker.scServer.thinky = crud.thinky;
+    let crud = scCrudRethink.attach(worker, crudOptions)
+    worker.scServer.thinky = crud.thinky
     const m = crudOptions.models
 
     // create indices
@@ -200,36 +199,36 @@ class Schema {
     // create relations
 
     // n-n: An Activity can have many Attachments, an Attachment can belong to many Activities (e.g. shared attachments)
-    m.Event.hasAndBelongsToMany(m.Attachment, "attachments", "id", "attachmentId")
-    m.Attachment.hasAndBelongsToMany(m.Event, "event", "attachmentId", "id")
+    m.Event.hasAndBelongsToMany(m.Attachment, 'attachments', 'id', 'attachmentId')
+    m.Attachment.hasAndBelongsToMany(m.Event, 'event', 'attachmentId', 'id')
 
     // 1-n: An Activity can have only one creator (of type Actor), an Actor can be the creator of many Activities
-    m.Actor.hasMany(m.Event, "createdEvents", "id", "creatorId")
-    m.Event.belongsTo(m.Actor, "creator", "creatorId", "id")
+    m.Actor.hasMany(m.Event, 'createdEvents', 'id', 'creatorId')
+    m.Event.belongsTo(m.Actor, 'creator', 'creatorId', 'id')
 
     // 1-n: An webhook can have only one actor
-    m.Actor.hasMany(m.Webhook, "webhooks", "id", "actorId")
-    m.Webhook.belongsTo(m.Actor, "actor", "actorId", "id")
+    m.Actor.hasMany(m.Webhook, 'webhooks', 'id', 'actorId')
+    m.Webhook.belongsTo(m.Actor, 'actor', 'actorId', 'id')
 
     // 1-n: a Activity can only have one actor
-    m.Actor.hasMany(m.Activity, "activities", "id", "actorId")
-    m.Activity.belongsTo(m.Actor, "actor", "actorId", "id")
+    m.Actor.hasMany(m.Activity, 'activities', 'id', 'actorId')
+    m.Activity.belongsTo(m.Actor, 'actor', 'actorId', 'id')
 
     // 1-1: Actor<->Config relation
-    m.Actor.hasOne(m.Config, "config", "id", "actorId")
-    m.Config.belongsTo(m.Actor, "actor", "actorId", "id")
+    m.Actor.hasOne(m.Config, 'config', 'id', 'actorId')
+    m.Config.belongsTo(m.Actor, 'actor', 'actorId', 'id')
 
     // 1-n: a Channel has exactly one owner
-    m.Actor.hasMany(m.Channel, "channels", "id", "ownerId")
-    m.Channel.belongsTo(m.Actor, "actor", "ownerId", "id")
+    m.Actor.hasMany(m.Channel, 'channels', 'id', 'ownerId')
+    m.Channel.belongsTo(m.Actor, 'actor', 'ownerId', 'id')
 
     // 1-n: a Subscription has exactly one actor, actors can have multiple subscriptions
-    m.Actor.hasMany(m.Subscription, "subscriptions", "id", "actorId")
-    m.Subscription.belongsTo(m.Actor, "actor", "actorId", "id")
+    m.Actor.hasMany(m.Subscription, 'subscriptions', 'id', 'actorId')
+    m.Subscription.belongsTo(m.Actor, 'actor', 'actorId', 'id')
 
     // 1-n: a Subscription has exactly one Channel, Channels can have multiple subscriptions
-    m.Channel.hasMany(m.Subscription, "subscriptions", "id", "channeld")
-    m.Subscription.belongsTo(m.Channel, "channel", "channeld", "id")
+    m.Channel.hasMany(m.Subscription, 'subscriptions', 'id', 'channeld')
+    m.Subscription.belongsTo(m.Channel, 'channel', 'channeld', 'id')
 
     // default Data
     let defaultData = {
@@ -241,7 +240,7 @@ class Schema {
         name: 'Tobias Bräutigam',
         email: 'tbraeutigam@gmail.com',
         password: bcrypt.hashSync('tester', 8)
-      },{
+      }, {
         id: '135dd849-9cb6-466a-9a2b-688ae21b6cdf',
         type: 'Bot',
         username: 'hirschberg',
