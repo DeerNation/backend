@@ -20,15 +20,41 @@
     "version" : "master",
     "qooxdoo-versions": ["5.1"]
   },
-  
-  "provides" : 
+
+  "provides" :
   {
     "namespace"   : "app",
     "encoding"    : "utf-8",
     "class"       : "source/class",
     "resource"    : "source/resource",
     "translation" : "source/translation",
-    "type"        : "application"
+    "type"        : "application",
+    "webfonts": [
+      {
+        "name": "FARegular",
+        "defaultSize": 40,
+        "mapping": "fa-regular.map",
+        "resources": [
+          "app/icons/fontawesome/fa-regular-400.ttf"
+        ]
+      },
+      {
+        "name": "FASolid",
+        "defaultSize": 40,
+        "mapping": "fa-solid.map",
+        "resources": [
+          "app/icons/fontawesome/fa-solid-900.ttf"
+        ]
+      },
+      {
+        "name": "FABrands",
+        "defaultSize": 40,
+        "mapping": "fa-brands.map",
+        "resources": [
+          "app/icons/fontawesome/fa-brands-400.ttf"
+        ]
+      }
+    ]
   },
 
   "externalResources" :

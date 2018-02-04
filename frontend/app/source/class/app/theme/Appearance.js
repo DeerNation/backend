@@ -108,6 +108,98 @@ qx.Theme.define('app.theme.Appearance',
         }
       },
 
+      /*
+     ---------------------------------------------------------------------------
+       SIDEBAR
+     ---------------------------------------------------------------------------
+     */
+      'splitpane/menu/actor-name': {
+        include: 'label',
+        alias: 'label',
+
+        style: function () {
+          return {
+            font: 'sidebar-headline',
+            textColor: 'white'
+          }
+        }
+      },
+
+      'splitpane/menu/actor-icon': {
+
+        style: function () {
+          return {
+            font: 'sidebar-actor-icon',
+            textColor: 'white',
+            width: 40,
+            height: 40,
+            maxWidth: 40,
+            maxHeight: 40,
+            allowGrowX: false,
+            allowGrowY: false,
+            margin: [0, 10],
+            center: true,
+            decorator: 'rounded'
+          }
+        }
+      },
+
+      'splitpane/menu/menu-button': {
+
+        style: function () {
+          return {
+            icon: '@FASolid/ellipsis-v/20',
+            show: 'icon',
+            textColor: 'white',
+            center: true
+          }
+        }
+      },
+      'splitpane/menu/searchbar-container': {
+        style: function () {
+          return {
+            padding: [4, 8]
+          }
+        }
+      },
+      'splitpane/menu/searchbox/textfield': {
+
+        style: function () {
+          return {
+            padding: [4, 8],
+            decorator: 'channel-bar-form-items'
+          }
+        }
+      },
+      'splitpane/menu/addchannel-button': {
+
+        style: function () {
+          return {
+            marginLeft: 8,
+            center: true,
+            width: 37,
+            height: 37,
+            maxWidth: 37,
+            maxHeight: 37,
+            font: 'sidebar-actor-icon',
+            decorator: 'channel-bar-form-items'
+          }
+        }
+      },
+
+      'splitpane/menu/actor-status': {
+        include: 'atom',
+        alias: 'atom',
+
+        style: function (states) {
+          return {
+            textColor: states.online ? 'user-online' : 'user-offline',
+            icon: states.online ? '@FASolid/circle/22' : '@FARegular/circle/22',
+            show: 'both'
+          }
+        }
+      },
+
       'channel-group-item': {
         include: 'label',
         alias: 'label',

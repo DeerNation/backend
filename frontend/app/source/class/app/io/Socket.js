@@ -20,7 +20,6 @@ qx.Class.define('app.io.Socket', {
     this.__channels = []
     this.__queuedSubscriptions = []
     // Initiate the connection to the server
-    // TODO use real settings
     this.__socket = socketCluster.connect(app.Config.socket)
 
     // eslint-disable-next-line
@@ -106,13 +105,13 @@ qx.Class.define('app.io.Socket', {
       return new qx.Promise((resolve, reject) => {
         if (this.isAuthenticated()) {
           let channel = this.__socket.subscribe(channelId)
-          channel.on('subscribeFail', this._onSubscribeError.bind(this, reject))
+          channel.on('subscribeFail', this._onSubscribeError.bind(this, reject, channel))
           resolve(channel)
         } else {
           let lid = this.addListener('changeAuthenticated', (ev) => {
             if (ev.getData() === true) {
               let channel = this.__socket.subscribe(channelId)
-              channel.on('subscribeFail', this._onSubscribeError.bind(this, reject))
+              channel.on('subscribeFail', this._onSubscribeError.bind(this, reject, channel))
               resolve(channel)
               this.removeListenerById(lid)
             }
@@ -133,7 +132,7 @@ qx.Class.define('app.io.Socket', {
       return null
     },
 
-    getAuthToken: function() {
+    getAuthToken: function () {
       return this.__socket.authToken
     },
 
@@ -141,7 +140,8 @@ qx.Class.define('app.io.Socket', {
       return this.__socket.emit(channel, payload)
     },
 
-    _onSubscribeError: function (promiseReject, err, channelName) {
+    _onSubscribeError: function (promiseReject, err, channel, channelName) {
+      channel.off('subscribeFail')
       this.error('Error on subscribing channel', channelName, ':', err)
       promiseReject && promiseReject(err)
     },

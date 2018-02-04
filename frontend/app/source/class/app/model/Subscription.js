@@ -73,7 +73,14 @@ qx.Class.define('app.model.Subscription', {
 
     // property apply
     _applyChannelId: function (value) {
-      this.setChannel(app.Model.lookup('channel', value))
+      let channel = app.Model.lookup('channel', value)
+      if (channel) {
+        this.setChannel(channel)
+      } else {
+        app.Model.asyncLookup('channel', value).then(channel => {
+          this.setChannel(channel)
+        })
+      }
     }
   }
 })

@@ -20,8 +20,16 @@ qx.Theme.define('app.theme.Color',
       'menu-text': 'rgb(158, 162, 168)',
       'background-selected': 'rgb(65, 72, 82)',
 
+      // channel-bar
+      'dark-form-item-bg': 'rgb(31, 35, 41)',
+
       // scrollbar
       'scrollbar-bright': 'rgb(150, 150, 150)',
-      'scrollbar-dark': 'rgb(100, 100, 100)'
+      'scrollbar-dark': 'rgb(100, 100, 100)',
+
+      // user state colors
+      'user-online': '#21C01E',
+      'user-away': '#C08315',
+      'user-offline': '#222222'
     }
   })

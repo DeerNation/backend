@@ -25,6 +25,14 @@ qx.Theme.define('app.theme.Decoration',
         style: {
           radius: 2
         }
+      },
+
+      'channel-bar-form-items': {
+        style: {
+          color: 'background-selected',
+          backgroundColor: 'dark-form-item-bg',
+          width: 2
+        }
       }
     }
   })

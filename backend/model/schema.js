@@ -27,6 +27,10 @@ class Schema {
     return this.__crud.thinky.r
   }
 
+  getCrud () {
+    return this.__crud
+  }
+
   create (worker) {
     const thinky = scCrudRethink.thinky
     const type = thinky.type
@@ -215,16 +219,37 @@ class Schema {
     function mustBeOwner (req, next) {
       if (!req.socket.getAuthToken()) {
         next(true)
-      } else if (!req.query.viewParams ||
-        // only allow queries of own ID
-        !req.query.viewParams.actorId ||
-        req.query.viewParams.actorId !== req.socket.getAuthToken().user) {
-        let err = new Error(i18n.__('You are not permitted to request this data.'))
-        err.name = 'CRUDBlockedError'
-        err.type = 'pre'
-        next(err)
       } else {
-        next()
+        let err
+        switch (req.action) {
+          case 'subscribe':
+            if (req.query.viewParams &&
+              // only allow queries of own ID
+              (!req.query.viewParams.actorId ||
+                req.query.viewParams.actorId !== req.socket.getAuthToken().user)) {
+              err = new Error(i18n.__('You are not permitted to request this data.'))
+              err.name = 'CRUDBlockedError'
+              err.type = 'pre'
+            }
+            break
+
+          case 'read':
+          case 'delete':
+          case 'update':
+            if (req.socket.getAuthToken().user !== req.query.id) {
+              if (req.action === 'read') {
+                err = new Error(i18n.__('You are not permitted to read this data.'))
+              } else if (req.action === 'delete') {
+                err = new Error(i18n.__('You are not permitted to delete this data.'))
+              } else {
+                err = new Error(i18n.__('You are not permitted to update this data.'))
+              }
+              err.name = 'CRUDBlockedError'
+              err.type = 'pre'
+            }
+            break
+        }
+        next(err)
       }
     }
 

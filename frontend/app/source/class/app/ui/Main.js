@@ -17,6 +17,11 @@ qx.Class.define('app.ui.Main', {
     this.base(arguments, 'horizontal')
     this._createChildControl('menu')
     this._createChildControl('channel')
+    this.getChildControl('splitter').set({
+      anonymous: true,
+      width: 0,
+      maxWidth: 0
+    })
   },
 
   /*

@@ -1,5 +1,13 @@
-#: app.io.Socket:96
+#: app.io.Socket:95
 msgid "Please login"
+msgstr ""
+
+#: app.Model:236
+msgid "Online"
+msgstr ""
+
+#: app.Model:236
+msgid "Offline"
 msgstr ""
 
 #: dialog.Login:225
@@ -18,15 +26,35 @@ msgstr ""
 msgid "Forgot Password?"
 msgstr ""
 
-#: app.ui.Menu:89
+#: app.ui.Menu:90
+msgid "Add a new channel"
+msgstr ""
+
+#: app.ui.Menu:93
+msgid "Private channel"
+msgstr ""
+
+#: app.ui.Menu:98
+msgid "Write-protected channel"
+msgstr ""
+
+#: app.ui.Menu:103
+msgid "Channel name"
+msgstr ""
+
+#: app.ui.Menu:161
+msgid "Search (^ +K)"
+msgstr ""
+
+#: app.ui.Menu:194
 msgid "Favorites"
 msgstr ""
 
-#: app.ui.Menu:91
+#: app.ui.Menu:196
 msgid "Channels"
 msgstr ""
 
-#: app.ui.Menu:94
+#: app.ui.Menu:199
 msgid "Private channels"
 msgstr ""
 
@@ -48,4 +76,64 @@ msgstr ""
 
 #: app.ui.form.ActivityItem:133
 msgid "Server"
+msgstr ""
+
+#: qx.util.Validate:90
+msgid "%1 is not a number."
+msgstr ""
+
+#: qx.util.Validate:129
+msgid "'%1' is not an email address."
+msgstr ""
+
+#: qx.util.Validate:166
+msgid "%1 is not a string."
+msgstr ""
+
+#: qx.util.Validate:202
+msgid "%1 is not an url."
+msgstr ""
+
+#: qx.util.Validate:243
+msgid "%1 is not a color! %2"
+msgstr ""
+
+#: qx.util.Validate:267
+msgid "%1 is not in the range from [%2, %3]."
+msgstr ""
+
+#: qx.util.Validate:290
+msgid "%1 is not in %2"
+msgstr ""
+
+#: qx.util.Validate:314
+msgid "%1 does not fit %2."
+msgstr ""
+
+#: dialog.Confirm:170
+msgid "yes"
+msgstr ""
+
+#: dialog.Confirm:180
+msgid "no"
+msgstr ""
+
+#: qx.ui.form.validation.Manager:37
+msgid "This field is required"
+msgstr ""
+
+#: qx.ui.control.DateChooser:258
+msgid "Last year"
+msgstr ""
+
+#: qx.ui.control.DateChooser:270
+msgid "Last month"
+msgstr ""
+
+#: qx.ui.control.DateChooser:282
+msgid "Next month"
+msgstr ""
+
+#: qx.ui.control.DateChooser:294
+msgid "Next year"
 msgstr ""

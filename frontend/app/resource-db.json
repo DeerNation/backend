@@ -28321,6 +28321,66 @@
       "css/style.css": {
         "doNotCopy": false,
         "resource": "resourcePath"
+      },
+      "app/icons/fontawesome/fa-brands-400.eot": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "app/icons/fontawesome/fa-brands-400.svg": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "app/icons/fontawesome/fa-brands-400.ttf": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "app/icons/fontawesome/fa-brands-400.woff": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "app/icons/fontawesome/fa-brands-400.woff2": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "app/icons/fontawesome/fa-regular-400.eot": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "app/icons/fontawesome/fa-regular-400.svg": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "app/icons/fontawesome/fa-regular-400.ttf": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "app/icons/fontawesome/fa-regular-400.woff": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "app/icons/fontawesome/fa-regular-400.woff2": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "app/icons/fontawesome/fa-solid-900.eot": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "app/icons/fontawesome/fa-solid-900.svg": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "app/icons/fontawesome/fa-solid-900.ttf": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "app/icons/fontawesome/fa-solid-900.woff": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "app/icons/fontawesome/fa-solid-900.woff2": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
       }
     },
     "dialog": {

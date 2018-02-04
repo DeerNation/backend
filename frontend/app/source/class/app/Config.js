@@ -19,6 +19,8 @@ qx.Class.define('app.Config', {
       secure: false,
       port: 8000,
       rejectUnauthorized: false // Only necessary during debug if using a self-signed certificate
-    }
+    },
+
+    channelPrefix: 'hbg.channel.'
   }
 })

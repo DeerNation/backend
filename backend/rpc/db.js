@@ -6,6 +6,9 @@
  */
 
 const schema = require('../model/schema')
+const acl = require('../acl')
+const i18n = require('i18n')
+const config = require('../config')
 
 function getSubscriptions (authToken) {
   return schema.getModel('Subscription').filter({actorId: authToken.user}).run()
@@ -17,10 +20,12 @@ function getSubscriptions (authToken) {
  */
 function getChannels (authToken) {
   // TODO: we need ACLs for a finer grained access level definition
+  acl.check('channel', acl.action.READ, authToken)
   return schema.getModel('Channel').filter({type: 'PUBLIC'}).run()
 }
 
 function getChannelActivities (authToken, channel, from) {
+  acl.check('activity', acl.action.READ, authToken)
   const r = schema.getR()
   let filter = r.row('channel').eq(channel).and(r.row.hasFields('actorId'))
   if (from) {
@@ -30,12 +35,61 @@ function getChannelActivities (authToken, channel, from) {
 }
 
 function getActors (authToken) {
+  acl.check('actor', acl.action.READ, authToken)
   return schema.getModel('Actor').pluck('id', 'name', 'username', 'type', 'role', 'online', 'status').run()
+}
+
+function createChannel (authToken, channelData) {
+  acl.check('channel', acl.action.CREATE, authToken, i18n.__('You are not allowed to create this channel.'))
+
+  const channelId = config.channelPrefix + channelData.name.toLowerCase() + (channelData.private ? '.private' : '.public')
+  const crud = schema.getCrud()
+  return new Promise((resolve, reject) => {
+    crud.create({
+      type: 'Channel',
+      value: {
+        id: channelId,
+        title: channelData.name,
+        type: channelData.private ? 'PRIVATE' : 'PUBLIC',
+        ownerId: authToken.user
+      }
+    }, (err, res) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
+      }
+    })
+  }).then(() => {
+    return new Promise((resolve, reject) => {
+      crud.create({
+        type: 'Subscription',
+        value: {
+          channelId: channelId,
+          actorId: authToken.user
+        }
+      }, (err, res) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(res)
+        }
+      })
+    })
+  })
+}
+
+function getObject (authToken, type, id) {
+  acl.check(type.toLowerCase(), acl.action.READ, authToken, i18n.__('You are not allowed to read this item.'))
+
+  return schema.getModel(type).get(id).run()
 }
 
 module.exports = {
   getChannels: getChannels,
   getSubscriptions: getSubscriptions,
   getChannelActivities: getChannelActivities,
-  getActors: getActors
+  getActors: getActors,
+  createChannel: createChannel,
+  getObject: getObject
 }
