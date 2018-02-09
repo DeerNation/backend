@@ -24,9 +24,6 @@ qx.Class.define('app.model.Activity', {
   ******************************************************
   */
   properties: {
-    id: {
-      check: 'String'
-    },
 
     title: {
       check: 'String',

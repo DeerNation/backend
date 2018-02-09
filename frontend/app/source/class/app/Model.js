@@ -22,6 +22,29 @@ qx.Class.define('app.Model', {
     this.setActors(new qx.data.Array())
 
     this.__lookupCache = {}
+
+    let timer = null
+    qx.event.Registration.addListener(window, 'blur', () => {
+      if (!timer) {
+        timer = qx.event.Timer.once(() => {
+          if (this.getActor() && this.getActor().getStatus() === 'online') {
+            this.getActor().setOnline(false)
+          }
+          timer = null
+        }, this, 15000)
+      } else {
+        timer.restart()
+      }
+    })
+    qx.event.Registration.addListener(window, 'focus', () => {
+      if (timer) {
+        timer.stop()
+        timer = null
+      }
+      if (this.getActor() && this.getActor().getStatus() === 'online') {
+        this.getActor().setOnline(true)
+      }
+    })
   },
 
   /*
@@ -103,6 +126,7 @@ qx.Class.define('app.Model', {
           modelConverter: function (model) {
             // look for current user
             if (model.getId() === currentUserId) {
+              model.setOnline(true)
               this.setActor(model)
             }
             return model
@@ -110,7 +134,6 @@ qx.Class.define('app.Model', {
         }))
 
         // as we can only get here when the user is online, tell the others
-
         socket.emit('$INT.users', {id: this.getActor().getId(), online: true})
 
         socket.addListener('changeAuthenticated', ev => {

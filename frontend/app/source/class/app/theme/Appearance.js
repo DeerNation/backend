@@ -113,6 +113,13 @@ qx.Theme.define('app.theme.Appearance',
        SIDEBAR
      ---------------------------------------------------------------------------
      */
+      'splitpane/menu/actor-container': {
+        style: function () {
+          return {
+            padding: 8
+          }
+        }
+      },
       'splitpane/menu/actor-name': {
         include: 'label',
         alias: 'label',
@@ -137,7 +144,7 @@ qx.Theme.define('app.theme.Appearance',
             maxHeight: 40,
             allowGrowX: false,
             allowGrowY: false,
-            margin: [0, 10],
+            marginRight: 10,
             center: true,
             decorator: 'rounded'
           }
@@ -148,7 +155,7 @@ qx.Theme.define('app.theme.Appearance',
 
         style: function () {
           return {
-            icon: '@FASolid/ellipsis-v/20',
+            icon: app.Config.icons.menu + '/20',
             show: 'icon',
             textColor: 'white',
             center: true
@@ -158,7 +165,7 @@ qx.Theme.define('app.theme.Appearance',
       'splitpane/menu/searchbar-container': {
         style: function () {
           return {
-            padding: [4, 8]
+            padding: 8
           }
         }
       },
@@ -167,7 +174,8 @@ qx.Theme.define('app.theme.Appearance',
         style: function () {
           return {
             padding: [4, 8],
-            decorator: 'channel-bar-form-items'
+            decorator: 'channel-bar-form-items',
+            allowGrowY: true
           }
         }
       },
@@ -190,12 +198,18 @@ qx.Theme.define('app.theme.Appearance',
       'splitpane/menu/actor-status': {
         include: 'atom',
         alias: 'atom',
-
-        style: function (states) {
+        style: function () {
           return {
-            textColor: states.online ? 'user-online' : 'user-offline',
-            icon: states.online ? '@FASolid/circle/22' : '@FARegular/circle/22',
-            show: 'both'
+            show: 'both',
+            icon: app.Config.icons.online + '/12'
+          }
+        }
+      },
+      'splitpane/menu/actor-status/icon': {
+
+        style: function () {
+          return {
+            source: app.Config.icons.online + '/12'
           }
         }
       },
@@ -226,6 +240,49 @@ qx.Theme.define('app.theme.Appearance',
         }
       },
 
+      'channel-listitem/icon': {
+        include: 'splitpane/menu/actor-icon',
+        alias: 'splitpane/menu/actor-icon',
+
+        style: function () {
+          return {
+            font: 'small',
+            width: 20,
+            height: 20,
+            maxWidth: 20,
+            maxHeight: 20,
+            marginRight: 4,
+            show: 'label'
+          }
+        }
+      },
+
+      'channel-listitem/type': {
+        style: function () {
+          return {
+            width: 12,
+            height: 12,
+            scale: true,
+            margin: [0, 4, 0, 8]
+          }
+        }
+      },
+      'channel-listitem/name': {
+        style: function () {
+          return {
+            allowGrowX: true
+          }
+        }
+      },
+
+      'channel-listitem/menu-button': {
+        style: function () {
+          return {
+
+          }
+        }
+      },
+
       'splitpane/menu': {
         style: function () {
           return {
@@ -247,6 +304,58 @@ qx.Theme.define('app.theme.Appearance',
             backgroundColor: 'transparent',
             textColor: 'inherit',
             decorator: null
+          }
+        }
+      },
+
+      'splitpane/channel/header': {
+        style: function () {
+          return {
+            minHeight: 50,
+            padding: [0, 20],
+            backgroundColor: '#EEEEEE'
+          }
+        }
+      },
+
+      'splitpane/channel/header/title': {
+        style: function () {
+          return {
+            margin: 8,
+            gap: 4
+          }
+        }
+      },
+
+      'splitpane/channel/header/title/label': {
+        style: function () {
+          return {
+            font: 'channel'
+          }
+        }
+      },
+
+      'splitpane/channel/header/title/icon': {
+        style: function () {
+          return {
+            textColor: 'lightgrey'
+          }
+        }
+      },
+
+      'splitpane/channel/header/favorite': {
+        style: function (states) {
+          return {
+            textColor: states.enabled ? 'favorite' : 'lightgrey'
+          }
+        }
+      },
+
+      'splitpane/channel/header/description': {
+        style: function () {
+          return {
+            textColor: 'lightgrey',
+            margin: 8
           }
         }
       },

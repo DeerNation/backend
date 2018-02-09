@@ -14,10 +14,7 @@ qx.Class.define('app.model.Actor', {
   ******************************************************
   */
   properties: {
-    id: {
-      check: 'String',
-      init: null
-    },
+
     name: {
       check: 'String',
       init: '',
@@ -57,12 +54,35 @@ qx.Class.define('app.model.Actor', {
     online: {
       check: 'Boolean',
       init: false,
-      event: 'changeOnline'
+      event: 'changedOnline',
+      apply: '_applyOnline'
     },
     status: {
       check: 'String',
-      init: null,
-      event: 'changedStatus'
+      init: 'online',
+      event: 'changedStatus',
+      apply: '_persistProperty'
+    }
+  },
+
+  /*
+  ******************************************************
+    MEMBERS
+  ******************************************************
+  */
+  members: {
+    // property apply
+    _applyOnline: function (value) {
+      if (app.Model.getInstance().getActor() === this) {
+        app.io.Socket.getInstance().emit('$INT.users', {id: this.getId(), online: value})
+      }
+    },
+
+    // property apply, overridden
+    _persistProperty: function (value, old, name) {
+      if (app.Model.getInstance().getActor() === this) {
+        this.base(arguments, value, old, name)
+      }
     }
   }
 })

@@ -22,6 +22,7 @@ qx.Class.define('app.ui.Menu', {
     this._createChildControl('list')
     this._createChildControl('searchbox')
     this._createChildControl('addchannel-button')
+    this._createChildControl('logo')
     app.Model.getInstance().bind('actor', this, 'actor')
   },
 
@@ -48,30 +49,53 @@ qx.Class.define('app.ui.Menu', {
   */
   members: {
     __subscribedChannel: null,
+    _statesMap: {
+      online: qx.locale.Manager.tr('Online'),
+      away: qx.locale.Manager.tr('Away'),
+      busy: qx.locale.Manager.tr('Busy'),
+      invisible: qx.locale.Manager.tr('Invisible')
+    },
 
     // property apply
-    _applyActor: function (value) {
+    _applyActor: function (value, old) {
+      if (old) {
+        old.removeListener('changedOnline', this._onActorOnline, this)
+        old.removeListener('changedStatus', this._onActorOnline, this)
+      }
       if (value) {
-        this.getChildControl('actor-name').setValue(value.getName())
-        this.getChildControl('actor-status').set({
-          label: value.getStatus()
-        })
+        value.bind('name', this.getChildControl('actor-name'), 'value')
+        value.addListener('changedOnline', this._onActorOnline, this)
+        value.addListener('changedStatus', this._onActorOnline, this)
+        this._onActorOnline()
+
         const actorIcon = this.getChildControl('actor-icon')
         actorIcon.set({
           label: value.getName().substring(0, 1).toUpperCase(),
           backgroundColor: '#ACACAC',
           show: 'label'
         })
-
-        if (value.isOnline()) {
-          this.getChildControl('actor-status').addState('online')
-        } else {
-          this.getChildControl('actor-status').removeState('online')
-        }
         this.getChildControl('actor-container').show()
       } else {
         this.getChildControl('actor-container').hide()
       }
+    },
+
+    _onActorOnline: function () {
+      const value = this.getActor().isOnline()
+      let status = this.getActor().getStatus()
+      if (status === 'online') {
+        if (value === false) {
+          status = 'offline'
+        }
+        this.getChildControl('actor-status').set({
+          label: value ? this.tr('Online') : this.tr('Offline')
+        })
+      } else {
+        this.getChildControl('actor-status').set({
+          label: this._statesMap[status]
+        })
+      }
+      this.getChildControl('actor-status').getChildControl('icon').setTextColor('user-' + status)
     },
 
     _onSelection: function () {
@@ -83,7 +107,7 @@ qx.Class.define('app.ui.Menu', {
      * @protected
      */
     _openUserMenu: function () {
-      // TODO: implement user menu
+      this.__menu && this.__menu.open()
     },
 
     _openNewChannelForm: function () {
@@ -113,6 +137,28 @@ qx.Class.define('app.ui.Menu', {
           app.io.Rpc.getProxy().createChannel(data)
         }
       }.bind(this))
+    },
+
+    __generateMenu: function () {
+      let menu = this.__menu = new qx.ui.menu.Menu()
+
+      Object.entries(this._statesMap).forEach(([name, title]) => {
+        let button = new qx.ui.menu.Button(title, app.Config.icons.online + '/8')
+        button.getChildControl('icon').setTextColor('user-' + name)
+        button.addListener('execute', () => {
+          app.Model.getInstance().getActor().setStatus(name)
+        })
+        menu.add(button)
+      })
+
+      menu.add(new qx.ui.menu.Separator())
+
+      let button = new qx.ui.menu.Button(this.tr('Logout'), app.Config.icons.logout + '/16')
+      button.addListener('execute', () => {
+        // TODO logout
+      })
+      menu.add(button)
+      return menu
     },
 
     // overridden
@@ -146,7 +192,7 @@ qx.Class.define('app.ui.Menu', {
           break
 
         case 'menu-button':
-          control = new qx.ui.form.MenuButton('|')
+          control = new qx.ui.form.MenuButton(null, app.Config.icons.menu + '/14', this.__generateMenu())
           control.setAnonymous(true)
           this.getChildControl('actor-container').add(control, {row: 0, column: 2, rowSpan: 2})
           break
@@ -173,26 +219,20 @@ qx.Class.define('app.ui.Menu', {
           control = new qx.ui.list.List(app.Model.getInstance().getSubscriptions())
           control.setDelegate({
 
-            configureItem: function (item) {
-              item.setAppearance('channel-listitem')
+            createItem: function () {
+              return new app.ui.form.SubscriptionItem()
             },
 
             bindItem: function (controller, item, index) {
               controller.bindProperty('', 'model', null, item, index)
-              controller.bindProperty('channel.title', 'label', {
-                converter: function (value, model) {
-                  let icon = model.getChannel().getType() === 'PRIVATE' ? '$' : '#'
-                  return icon + ' ' + value
-                }
-              }, item, index)
             },
 
             group: function (subscription) {
+              if (subscription.isFavorite()) {
+                return qx.locale.Manager.tr('Favorites')
+              }
               switch (subscription.getChannel().getType()) {
                 case 'PUBLIC':
-                  if (subscription.isFavorite()) {
-                    return qx.locale.Manager.tr('Favorites')
-                  }
                   return qx.locale.Manager.tr('Channels')
 
                 case 'PRIVATE':
@@ -202,6 +242,10 @@ qx.Class.define('app.ui.Menu', {
 
             configureGroupItem: function (item) {
               item.setAppearance('channel-group-item')
+            },
+
+            filter: function (model) {
+              return !model.isHidden()
             },
 
             sorter: function (a, b) {
@@ -227,11 +271,19 @@ qx.Class.define('app.ui.Menu', {
 
           control.getSelection().addListener('change', this._onSelection, this)
 
+          qx.event.message.Bus.subscribe('menu.subscription.update', control.refresh, control)
+
           this._addAt(control, 2, {flex: 1})
           break
 
         case 'logo':
-          control = new qx.ui.basic.Image()
+          control = new qx.ui.basic.Atom(null, qx.util.ResourceManager.getInstance().toUri('app/logo.png'))
+          control.setCenter(true)
+          control.getChildControl('icon').set({
+            maxWidth: 200,
+            maxHeight: 65,
+            scale: true
+          })
           this._addAt(control, 3)
           break
       }

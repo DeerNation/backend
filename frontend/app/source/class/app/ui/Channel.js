@@ -89,6 +89,8 @@ qx.Class.define('app.ui.Channel', {
 
         this.__currentSCChannel.subscribe()
         this.__currentSCChannel.watch(this._onActivity.bind(this))
+
+        this.getChildControl('header').setSubscription(subscription)
       }
     },
 
@@ -124,7 +126,7 @@ qx.Class.define('app.ui.Channel', {
       let control
       switch (id) {
         case 'header':
-          control = new qx.ui.container.Composite(new qx.ui.layout.VBox())
+          control = new app.ui.ChannelHeader()
           this._addAt(control, 0)
           break
 

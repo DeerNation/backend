@@ -28381,6 +28381,13 @@
       "app/icons/fontawesome/fa-solid-900.woff2": {
         "doNotCopy": false,
         "resource": "resourcePath"
+      },
+      "app/logo.png": {
+        "doNotCopy": false,
+        "resource": "resourcePath",
+        "mtime": "2018-02-07T20:10:43.242Z",
+        "width": 309,
+        "height": 95
       }
     },
     "dialog": {

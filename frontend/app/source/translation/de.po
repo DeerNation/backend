@@ -1,80 +1,96 @@
-#: app.io.Socket:95
+#: app.io.Socket:95 app/io/Socket.js:95
 msgid "Please login"
 msgstr ""
 
-#: app.Model:236
+#: app.ui.Menu:78 app/Model.js:262 app/Model.js:259 app/ui/Menu.js:78
+#: app/ui/Menu.js:131 app/ui/Menu.js:133 app/ui/Menu.js:53 app/ui/Menu.js:84
+#: app/ui/Menu.js:87 app/ui/Menu.js:89 app/ui/Menu.js:91
 msgid "Online"
 msgstr ""
 
-#: app.Model:236
+#: app.ui.Menu:78 app/Model.js:262 app/Model.js:259 app/ui/Menu.js:78
+#: app/ui/Menu.js:137 app/ui/Menu.js:84 app/ui/Menu.js:87 app/ui/Menu.js:89
+#: app/ui/Menu.js:91
 msgid "Offline"
 msgstr ""
 
-#: dialog.Login:225
+#: dialog.Login:225 dialog/Login.js:225
 msgid "Name"
 msgstr ""
 
-#: dialog.Login:225
+#: dialog.Login:225 dialog/Login.js:225
 msgid "Password"
 msgstr ""
 
-#: dialog.Login:268
+#: dialog.Login:268 dialog/Login.js:268
 msgid "Login"
 msgstr ""
 
-#: dialog.Login:280
+#: dialog.Login:280 dialog/Login.js:280
 msgid "Forgot Password?"
 msgstr ""
 
-#: app.ui.Menu:90
+#: app.ui.Menu:101 app/ui/Menu.js:101 app/ui/Menu.js:107 app/ui/Menu.js:116
+#: app/ui/Menu.js:118 app/ui/Menu.js:112 app/ui/Menu.js:114
 msgid "Add a new channel"
 msgstr ""
 
-#: app.ui.Menu:93
+#: app.ui.Menu:104 app/ui/Menu.js:104 app/ui/Menu.js:110 app/ui/Menu.js:119
+#: app/ui/Menu.js:121 app/ui/Menu.js:115 app/ui/Menu.js:117
 msgid "Private channel"
 msgstr ""
 
-#: app.ui.Menu:98
+#: app.ui.Menu:109 app/ui/Menu.js:109 app/ui/Menu.js:115 app/ui/Menu.js:124
+#: app/ui/Menu.js:126 app/ui/Menu.js:120 app/ui/Menu.js:122
 msgid "Write-protected channel"
 msgstr ""
 
-#: app.ui.Menu:103
+#: app.ui.Menu:114 app/ui/Menu.js:114 app/ui/Menu.js:120 app/ui/Menu.js:129
+#: app/ui/Menu.js:131 app/ui/Menu.js:125 app/ui/Menu.js:127
 msgid "Channel name"
 msgstr ""
 
-#: app.ui.Menu:161
+#: app.ui.Menu:172 app/ui/Menu.js:172 app/ui/Menu.js:181 app/ui/Menu.js:183
+#: app/ui/Menu.js:189 app/ui/Menu.js:204 app/ui/Menu.js:208 app/ui/Menu.js:211
+#: app/ui/Menu.js:201 app/ui/Menu.js:209 app/ui/Menu.js:205 app/ui/Menu.js:207
 msgid "Search (^ +K)"
 msgstr ""
 
-#: app.ui.Menu:194
+#: app.ui.Menu:197 app/ui/Menu.js:197 app/ui/Menu.js:206 app/ui/Menu.js:208
+#: app/ui/Menu.js:214 app/ui/Menu.js:229 app/ui/Menu.js:233 app/ui/Menu.js:236
+#: app/ui/Menu.js:226 app/ui/Menu.js:234 app/ui/Menu.js:230 app/ui/Menu.js:232
 msgid "Favorites"
 msgstr ""
 
-#: app.ui.Menu:196
+#: app.ui.Menu:201 app/ui/Menu.js:201 app/ui/Menu.js:210 app/ui/Menu.js:212
+#: app/ui/Menu.js:218 app/ui/Menu.js:233 app/ui/Menu.js:237 app/ui/Menu.js:240
+#: app/ui/Menu.js:230 app/ui/Menu.js:238 app/ui/Menu.js:234 app/ui/Menu.js:236
 msgid "Channels"
 msgstr ""
 
-#: app.ui.Menu:199
+#: app.ui.Menu:204 app/ui/Menu.js:204 app/ui/Menu.js:213 app/ui/Menu.js:215
+#: app/ui/Menu.js:221 app/ui/Menu.js:236 app/ui/Menu.js:240 app/ui/Menu.js:243
+#: app/ui/Menu.js:233 app/ui/Menu.js:241 app/ui/Menu.js:237 app/ui/Menu.js:239
 msgid "Private channels"
 msgstr ""
 
-#: dialog.Dialog:482
+#: dialog.Dialog:482 dialog/Dialog.js:482
 msgid "OK"
 msgstr ""
 
-#: dialog.Dialog:499
+#: dialog.Dialog:499 dialog/Dialog.js:499
 msgid "Cancel"
 msgstr ""
 
-#: app.ui.form.ActivityItem:128
+#: app.ui.form.ActivityItem:128 app/ui/form/ActivityItem.js:128
 msgid "Owner"
 msgstr ""
 
-#: app.ui.form.ActivityItem:131
+#: app.ui.form.ActivityItem:131 app/ui/form/ActivityItem.js:131
 msgid "Bot"
 msgstr ""
 
-#: app.ui.form.ActivityItem:133
+#: app.ui.form.ActivityItem:133 app/ui/form/ActivityItem.js:133
 msgid "Server"
 msgstr ""
 
@@ -136,4 +152,58 @@ msgstr ""
 
 #: qx.ui.control.DateChooser:294
 msgid "Next year"
+msgstr ""
+
+#: app.ui.form.SubscriptionItem:137 app/ui/form/SubscriptionItem.js:137
+#: app/ui/form/SubscriptionItem.js:149 app/ui/form/SubscriptionItem.js:151
+#: app/ui/form/SubscriptionItem.js:150 app/ui/form/SubscriptionItem.js:153
+#: app/ui/form/SubscriptionItem.js:152 app/ui/Menu.js:131
+msgid "Hide room"
+msgstr ""
+
+#: app.ui.form.SubscriptionItem:142 app/ui/form/SubscriptionItem.js:142
+#: app/ui/form/SubscriptionItem.js:81 app/ui/form/SubscriptionItem.js:154
+#: app/ui/form/SubscriptionItem.js:82 app/ui/form/SubscriptionItem.js:156
+#: app/ui/form/SubscriptionItem.js:155 app/ui/form/SubscriptionItem.js:84
+#: app/ui/form/SubscriptionItem.js:158 app/ui/form/SubscriptionItem.js:157
+msgid "Unfavorite"
+msgstr ""
+
+#: app.ui.form.SubscriptionItem:144 app/ui/form/SubscriptionItem.js:144
+#: app/ui/form/SubscriptionItem.js:86 app/ui/form/SubscriptionItem.js:156
+#: app/ui/form/SubscriptionItem.js:87 app/ui/form/SubscriptionItem.js:158
+#: app/ui/form/SubscriptionItem.js:157 app/ui/form/SubscriptionItem.js:89
+#: app/ui/form/SubscriptionItem.js:160 app/ui/form/SubscriptionItem.js:159
+msgid "Favorite"
+msgstr ""
+
+#: app.ui.form.SubscriptionItem:149 app/ui/form/SubscriptionItem.js:149
+#: app/ui/form/SubscriptionItem.js:161 app/ui/form/SubscriptionItem.js:163
+#: app/ui/form/SubscriptionItem.js:162 app/ui/form/SubscriptionItem.js:165
+#: app/ui/form/SubscriptionItem.js:164
+msgid "Leave room"
+msgstr ""
+
+#: app.ui.form.SubscriptionItem:167 app/ui/form/SubscriptionItem.js:167
+#: app/ui/form/SubscriptionItem.js:179 app/ui/form/SubscriptionItem.js:181
+#: app/ui/form/SubscriptionItem.js:180 app/ui/form/SubscriptionItem.js:183
+#: app/ui/form/SubscriptionItem.js:182
+msgid "Do you really want to leave this room?"
+msgstr ""
+
+#: app/ui/Menu.js:137 app/ui/Menu.js:54
+msgid "Away"
+msgstr ""
+
+#: app/ui/Menu.js:141 app/ui/Menu.js:55
+msgid "Busy"
+msgstr ""
+
+#: app/ui/Menu.js:145 app/ui/Menu.js:56
+msgid "Invisible"
+msgstr ""
+
+#: app/ui/Menu.js:160 app/ui/Menu.js:150 app/ui/Menu.js:158 app/ui/Menu.js:154
+#: app/ui/Menu.js:156
+msgid "Logout"
 msgstr ""

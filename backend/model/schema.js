@@ -50,7 +50,8 @@ class Schema {
             password: type.string(),
             defaultNotification: type.object(),
             online: type.boolean(),
-            status: type.string()
+            status: type.string(),
+            color: type.string()
           },
           views: {
             alphabeticalView: {
@@ -169,7 +170,8 @@ class Schema {
             title: type.string(),
             description: type.string(),
             created: type.date().default(new Date()),
-            ownerId: type.string()
+            ownerId: type.string(),
+            color: type.string()
           },
           views: {
             publicChannels: {
@@ -197,7 +199,7 @@ class Schema {
           },
           views: {
             mySubscriptions: {
-              paramFields: ['actorId'],
+              paramFields: ['actorId', 'favorite'],
               affectingFields: ['actorId'],
               transform: function (fullTableQuery, r, subscriptionFields) {
                 return fullTableQuery.filter(r.row('actorId').eq(subscriptionFields.actorId))
@@ -358,7 +360,8 @@ class Schema {
           type: 'PUBLIC',
           title: 'News',
           description: 'Alle Neuigkeiten aus Hirschberg',
-          ownerId: '0e4a6f6f-cc0c-4aa5-951a-fcfc480dd05a'
+          ownerId: '0e4a6f6f-cc0c-4aa5-951a-fcfc480dd05a',
+          color: '#ACACAC'
         }
       ],
       Subscription: [

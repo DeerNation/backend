@@ -1,0 +1,96 @@
+/**
+ * ChannelHeader
+ *
+ * @author Tobias Bräutigam <tbraeutigam@gmail.com>
+ * @since 2018
+ */
+
+qx.Class.define('app.ui.ChannelHeader', {
+  extend: qx.ui.core.Widget,
+
+  /*
+  ******************************************************
+    CONSTRUCTOR
+  ******************************************************
+  */
+  construct: function () {
+    this.base(arguments)
+    this._setLayout(new qx.ui.layout.HBox())
+    this._getLayout().setAlignY('middle')
+  },
+
+  /*
+  ******************************************************
+    PROPERTIES
+  ******************************************************
+  */
+  properties: {
+    subscription: {
+      check: 'app.model.Subscription',
+      nullable: true,
+      apply: '_applySubscription'
+    }
+  },
+
+  /*
+  ******************************************************
+    MEMBERS
+  ******************************************************
+  */
+  members: {
+    // property apply
+    _applySubscription: function (value, old) {
+      if (old) {
+        old.getChannel().removeRelatedBindings(this)
+        old.removeRelatedBindings(this)
+      }
+      if (value) {
+        const channel = value.getChannel()
+        channel.bind('title', this.getChildControl('title'), 'label')
+        value.bind('icon', this.getChildControl('title'), 'icon', {
+          converter: function (value) {
+            return value + '/16'
+          }
+        })
+        channel.bind('description', this.getChildControl('description'), 'value')
+        value.bind('favorite', this.getChildControl('favorite'), 'source', {
+          converter: function (val) {
+            if (val) {
+              this.getChildControl('favorite').addState('enabled')
+            } else {
+              this.getChildControl('favorite').removeState('enabled')
+            }
+            return val === true ? app.Config.icons.favorite + '/18' : app.Config.icons.noFavorite + '/18'
+          }.bind(this)
+        })
+      }
+    },
+
+    _toggleFavorite: function () {
+      this.getSubscription().toggleFavorite()
+    },
+
+    // overridden
+    _createChildControlImpl: function (id, hash) {
+      let control
+      switch (id) {
+        case 'favorite':
+          control = new qx.ui.basic.Image()
+          control.addListener('tap', this._toggleFavorite, this)
+          this._addAt(control, 0)
+          break
+
+        case 'title':
+          control = new qx.ui.basic.Atom()
+          this._addAt(control, 1)
+          break
+
+        case 'description':
+          control = new qx.ui.basic.Label()
+          this._addAt(control, 2)
+          break
+      }
+      return control || this.base(arguments, id, hash)
+    }
+  }
+})

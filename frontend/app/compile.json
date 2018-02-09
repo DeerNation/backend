@@ -2,7 +2,10 @@
   "targets": [
     {
       "type": "source",
-      "outputPath": "source-output"
+      "outputPath": "source-output",
+      "environment": {
+        "qx.globalErrorHandling": false
+      }
     },
     {
       "type": "hybrid",

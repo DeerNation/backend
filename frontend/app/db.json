@@ -320,7 +320,7 @@
       }
     },
     "app.theme.Color": {
-      "mtime": "2018-02-04T12:21:08.131Z",
+      "mtime": "2018-02-09T18:36:38.637Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -352,7 +352,7 @@
       "implement": []
     },
     "app.theme.Font": {
-      "mtime": "2018-02-04T12:31:59.490Z",
+      "mtime": "2018-02-09T17:00:17.158Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -381,7 +381,7 @@
       }
     },
     "app.theme.Appearance": {
-      "mtime": "2018-02-04T12:47:09.531Z",
+      "mtime": "2018-02-09T19:05:27.040Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -390,7 +390,8 @@
         },
         "qx.theme.indigo.Appearance": {
           "load": true
-        }
+        },
+        "app.Config": {}
       },
       "extends": "qx.theme.indigo.Appearance",
       "include": [],
@@ -7341,7 +7342,7 @@
       }
     },
     "qx.ui.menu.ButtonLayout": {
-      "mtime": "2018-01-27T22:11:00.461Z",
+      "mtime": "2018-02-09T18:11:35.356Z",
       "libraryName": "qx",
       "dependsOn": {
         "qx.Class": {
@@ -7544,7 +7545,7 @@
       ]
     },
     "qx.bom.webfonts.Manager": {
-      "mtime": "2018-02-04T10:16:47.847Z",
+      "mtime": "2018-02-05T17:51:20.384Z",
       "libraryName": "qx",
       "dependsOn": {
         "qx.Class": {
@@ -8781,7 +8782,7 @@
       "implement": []
     },
     "qx.bom.webfonts.Validator": {
-      "mtime": "2018-01-27T22:11:00.333Z",
+      "mtime": "2018-02-07T18:59:41.226Z",
       "libraryName": "qx",
       "dependsOn": {
         "qx.Class": {
@@ -9449,7 +9450,7 @@
       "implement": []
     },
     "app.io.Socket": {
-      "mtime": "2018-02-04T16:46:48.449Z",
+      "mtime": "2018-02-05T18:31:40.431Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -9483,68 +9484,10 @@
       "extends": "qx.core.Object",
       "include": [],
       "implement": [],
-      "unresolved": [
-        {
-          "name": "socketCluster.connect",
-          "locations": [
-            {
-              "start": {
-                "line": 23,
-                "column": 20
-              },
-              "end": {
-                "line": 23,
-                "column": 41
-              }
-            }
-          ]
-        },
-        {
-          "name": "socketCluster.destroy",
-          "locations": [
-            {
-              "start": {
-                "line": 154,
-                "column": 6
-              },
-              "end": {
-                "line": 154,
-                "column": 27
-              }
-            }
-          ]
-        }
-      ],
       "translations": [
         {
           "msgid": "Please login",
           "lineNo": 95
-        }
-      ],
-      "markers": [
-        {
-          "msgId": "qx.tool.compiler.symbol.unresolved",
-          "pos": {
-            "start": {
-              "line": 23,
-              "column": 20
-            }
-          },
-          "args": [
-            "socketCluster.connect"
-          ]
-        },
-        {
-          "msgId": "qx.tool.compiler.symbol.unresolved",
-          "pos": {
-            "start": {
-              "line": 154,
-              "column": 6
-            }
-          },
-          "args": [
-            "socketCluster.destroy"
-          ]
         }
       ]
     },
@@ -9634,7 +9577,7 @@
       ]
     },
     "app.model.Activity": {
-      "mtime": "2018-02-03T18:39:00.950Z",
+      "mtime": "2018-02-07T16:42:58.908Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13738,17 +13681,33 @@
       ]
     },
     "app.Config": {
-      "mtime": "2018-02-04T13:10:07.860Z",
+      "mtime": "2018-02-09T18:37:08.273Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
           "load": true,
           "usage": "dynamic"
+        },
+        "qx.core.Environment": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.bom.client.Device": {
+          "load": true
         }
       },
       "extends": null,
       "include": [],
-      "implement": []
+      "implement": [],
+      "environment": {
+        "provided": [],
+        "required": {
+          "device.type": {
+            "load": true,
+            "className": "qx.bom.client.Device"
+          }
+        }
+      }
     },
     "app.model.Factory": {
       "mtime": "2018-02-04T09:05:13.661Z",
@@ -13781,7 +13740,7 @@
       "implement": []
     },
     "app.model.AbstractModel": {
-      "mtime": "2018-02-03T14:27:56.634Z",
+      "mtime": "2018-02-07T17:25:00.412Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13793,6 +13752,7 @@
           "construct": true
         },
         "qx.lang.Type": {},
+        "app.io.Rpc": {},
         "qx.core.ObjectRegistry": {
           "load": true
         },
@@ -13891,7 +13851,7 @@
       "implement": []
     },
     "app.ui.Menu": {
-      "mtime": "2018-02-04T16:02:24.381Z",
+      "mtime": "2018-02-09T19:02:11.005Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13908,8 +13868,15 @@
         "app.Model": {
           "construct": true
         },
+        "qx.locale.Manager": {
+          "load": true
+        },
         "dialog.Dialog": {},
         "app.io.Rpc": {},
+        "qx.ui.menu.Menu": {},
+        "qx.ui.menu.Button": {},
+        "app.Config": {},
+        "qx.ui.menu.Separator": {},
         "qx.ui.layout.Grid": {},
         "qx.ui.container.Composite": {},
         "qx.ui.basic.Atom": {},
@@ -13919,8 +13886,9 @@
         "qx.ui.form.VirtualComboBox": {},
         "qx.ui.form.Button": {},
         "qx.ui.list.List": {},
-        "qx.locale.Manager": {},
-        "qx.ui.basic.Image": {},
+        "app.ui.form.SubscriptionItem": {},
+        "qx.event.message.Bus": {},
+        "qx.util.ResourceManager": {},
         "qx.ui.core.LayoutItem": {
           "load": true
         },
@@ -13945,41 +13913,69 @@
       "implement": [],
       "translations": [
         {
+          "msgid": "Online",
+          "lineNo": 53
+        },
+        {
+          "msgid": "Away",
+          "lineNo": 54
+        },
+        {
+          "msgid": "Busy",
+          "lineNo": 55
+        },
+        {
+          "msgid": "Invisible",
+          "lineNo": 56
+        },
+        {
+          "msgid": "Online",
+          "lineNo": 91
+        },
+        {
+          "msgid": "Offline",
+          "lineNo": 91
+        },
+        {
           "msgid": "Add a new channel",
-          "lineNo": 90
+          "lineNo": 114
         },
         {
           "msgid": "Private channel",
-          "lineNo": 93
+          "lineNo": 117
         },
         {
           "msgid": "Write-protected channel",
-          "lineNo": 98
+          "lineNo": 122
         },
         {
           "msgid": "Channel name",
-          "lineNo": 103
+          "lineNo": 127
+        },
+        {
+          "msgid": "Logout",
+          "lineNo": 156
         },
         {
           "msgid": "Search (^ +K)",
-          "lineNo": 161
+          "lineNo": 207
         },
         {
           "msgid": "Favorites",
-          "lineNo": 194
+          "lineNo": 232
         },
         {
           "msgid": "Channels",
-          "lineNo": 196
+          "lineNo": 236
         },
         {
           "msgid": "Private channels",
-          "lineNo": 199
+          "lineNo": 239
         }
       ]
     },
     "app.ui.Channel": {
-      "mtime": "2018-02-04T17:39:47.077Z",
+      "mtime": "2018-02-07T16:45:53.024Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14010,7 +14006,7 @@
         "app.model.Factory": {},
         "app.model.Activity": {},
         "qx.lang.Type": {},
-        "qx.ui.container.Composite": {},
+        "app.ui.ChannelHeader": {},
         "qx.ui.list.List": {},
         "qx.util.Function": {},
         "app.ui.form.ActivityItem": {},
@@ -14220,7 +14216,7 @@
       }
     },
     "app.model.Subscription": {
-      "mtime": "2018-02-04T17:48:33.113Z",
+      "mtime": "2018-02-09T17:47:25.067Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14230,6 +14226,8 @@
         "app.model.AbstractModel": {
           "load": true
         },
+        "qx.event.message.Bus": {},
+        "app.Config": {},
         "app.Model": {},
         "qx.core.Object": {
           "load": true
@@ -14249,7 +14247,7 @@
       "implement": []
     },
     "app.model.Channel": {
-      "mtime": "2018-02-03T14:56:19.997Z",
+      "mtime": "2018-02-09T16:41:44.414Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14257,7 +14255,8 @@
           "usage": "dynamic"
         },
         "app.model.AbstractModel": {
-          "load": true
+          "load": true,
+          "construct": true
         },
         "qx.core.Object": {
           "load": true
@@ -14277,7 +14276,7 @@
       "implement": []
     },
     "app.Model": {
-      "mtime": "2018-02-04T17:55:21.651Z",
+      "mtime": "2018-02-09T18:42:14.646Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14289,6 +14288,12 @@
           "construct": true
         },
         "qx.data.Array": {
+          "construct": true
+        },
+        "qx.event.Registration": {
+          "construct": true
+        },
+        "qx.event.Timer": {
           "construct": true
         },
         "app.io.Socket": {},
@@ -14316,16 +14321,16 @@
       "translations": [
         {
           "msgid": "Online",
-          "lineNo": 236
+          "lineNo": 259
         },
         {
           "msgid": "Offline",
-          "lineNo": 236
+          "lineNo": 259
         }
       ]
     },
     "app.model.Actor": {
-      "mtime": "2018-02-03T19:58:48.111Z",
+      "mtime": "2018-02-09T18:42:14.654Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14339,6 +14344,8 @@
           "load": true,
           "usage": "dynamic"
         },
+        "app.Model": {},
+        "app.io.Socket": {},
         "qx.core.Object": {
           "load": true
         },
@@ -14530,6 +14537,182 @@
       "extends": "qx.ui.popup.Popup",
       "include": [],
       "implement": []
+    },
+    "app.ui.ChannelHeader": {
+      "mtime": "2018-02-08T16:17:54.656Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.ui.core.Widget": {
+          "load": true,
+          "construct": true
+        },
+        "qx.ui.layout.HBox": {
+          "construct": true
+        },
+        "app.Config": {},
+        "qx.ui.basic.Image": {},
+        "qx.ui.basic.Atom": {},
+        "qx.ui.basic.Label": {},
+        "qx.ui.core.LayoutItem": {
+          "load": true
+        },
+        "qx.core.Object": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.theme.manager.Meta": {
+          "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
+        }
+      },
+      "extends": "qx.ui.core.Widget",
+      "include": [],
+      "implement": []
+    },
+    "qx.event.message.Bus": {
+      "mtime": "2018-01-27T22:11:00.349Z",
+      "libraryName": "qx",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.core.Object": {
+          "load": true
+        },
+        "qx.event.message.Message": {},
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
+        }
+      },
+      "extends": "qx.core.Object",
+      "include": [],
+      "implement": []
+    },
+    "qx.event.message.Message": {
+      "mtime": "2018-01-27T22:11:00.349Z",
+      "libraryName": "qx",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.core.Object": {
+          "load": true,
+          "construct": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
+        }
+      },
+      "extends": "qx.core.Object",
+      "include": [],
+      "implement": []
+    },
+    "app.ui.form.SubscriptionItem": {
+      "mtime": "2018-02-09T18:14:48.082Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.ui.core.Widget": {
+          "load": true,
+          "construct": true
+        },
+        "qx.ui.form.IModel": {
+          "load": true
+        },
+        "qx.ui.layout.HBox": {
+          "construct": true
+        },
+        "app.Config": {},
+        "qx.ui.basic.Atom": {},
+        "qx.ui.basic.Image": {},
+        "qx.ui.basic.Label": {},
+        "qx.ui.form.MenuButton": {},
+        "qx.ui.menu.Menu": {},
+        "qx.ui.menu.Button": {},
+        "qx.event.message.Bus": {},
+        "dialog.Dialog": {},
+        "qx.ui.core.LayoutItem": {
+          "load": true
+        },
+        "qx.core.Object": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.theme.manager.Meta": {
+          "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
+        }
+      },
+      "extends": "qx.ui.core.Widget",
+      "include": [],
+      "implement": [
+        "qx.ui.form.IModel"
+      ],
+      "translations": [
+        {
+          "msgid": "Unfavorite",
+          "lineNo": 82
+        },
+        {
+          "msgid": "Favorite",
+          "lineNo": 87
+        },
+        {
+          "msgid": "Hide room",
+          "lineNo": 150
+        },
+        {
+          "msgid": "Unfavorite",
+          "lineNo": 155
+        },
+        {
+          "msgid": "Favorite",
+          "lineNo": 157
+        },
+        {
+          "msgid": "Leave room",
+          "lineNo": 162
+        },
+        {
+          "msgid": "Do you really want to leave this room?",
+          "lineNo": 180
+        }
+      ]
     }
   }
 }

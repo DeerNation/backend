@@ -3,5 +3,7 @@
 	"You are not permitted to request subscriptions from another user.": "You are not permitted to request subscriptions from another user.",
 	"You are not allowed to create this channel.": "You are not allowed to create this channel.",
 	"You are not permitted to request this data.": "You are not permitted to request this data.",
-	"You are not allowed to read this item.": "You are not allowed to read this item."
+	"You are not allowed to read this item.": "You are not allowed to read this item.",
+	"You are not allowed to update this item.": "You are not allowed to update this item.",
+	"You are not allowed to update property %s of this item.": "You are not allowed to update property %s of this item."
 }

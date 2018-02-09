@@ -17,7 +17,22 @@ qx.Class.define('app.model.AbstractModel', {
   construct: function (props) {
     this.base(arguments)
     if (props) {
+      this._detachBackend = true
       this.set(props)
+      this._detachBackend = false
+    }
+  },
+
+  /*
+  ******************************************************
+    PROPERTIES
+  ******************************************************
+  */
+  properties: {
+    id: {
+      check: 'String',
+      init: null,
+      event: 'changedId'
     }
   },
 
@@ -27,12 +42,20 @@ qx.Class.define('app.model.AbstractModel', {
   ******************************************************
   */
   members: {
+    _detachBackend: false,
 
     _transformDate: function (value) {
       if (qx.lang.Type.isString(value)) {
         return new Date(value)
       }
       return value
+    },
+
+    // property apply
+    _persistProperty: function (value, old, name) {
+      if (!this._detachBackend) {
+        app.io.Rpc.getProxy().updateObjectProperty(this.basename, this.getId(), name, value)
+      }
     }
   }
 })

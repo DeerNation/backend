@@ -14,11 +14,7 @@ qx.Class.define('app.model.Subscription', {
   ******************************************************
   */
   properties: {
-    id: {
-      check: 'String',
-      init: null,
-      event: 'changedId'
-    },
+
     actorId: {
       check: 'String',
       init: null,
@@ -54,13 +50,28 @@ qx.Class.define('app.model.Subscription', {
 
     favorite: {
       check: 'Boolean',
-      init: false
+      init: false,
+      event: 'changedFavorite',
+      apply: '_persistProperty'
     },
 
     channel: {
       check: 'app.model.Channel',
       init: null,
-      event: 'changedChannel'
+      event: 'changedChannel',
+      apply: '_updateIcon'
+    },
+
+    icon: {
+      check: 'String',
+      nullable: true,
+      event: 'changedIcon'
+    },
+
+    hidden: {
+      check: 'Boolean',
+      init: false,
+      event: 'changedHidden'
     }
   },
 
@@ -70,6 +81,17 @@ qx.Class.define('app.model.Subscription', {
   ******************************************************
   */
   members: {
+
+    // property apply, overridden
+    _persistProperty: function (value, old, name) {
+      this.base(arguments, value, old, name)
+      qx.event.message.Bus.dispatchByName('menu.subscription.update', true)
+    },
+
+    // property apply
+    _updateIcon: function () {
+      this.setIcon(this.getChannel().getType() === 'PRIVATE' ? app.Config.icons.private : app.Config.icons.public)
+    },
 
     // property apply
     _applyChannelId: function (value) {
@@ -81,6 +103,13 @@ qx.Class.define('app.model.Subscription', {
           this.setChannel(channel)
         })
       }
+    },
+
+    /**
+     * Delete this subscription
+     */
+    delete: function () {
+
     }
   }
 })

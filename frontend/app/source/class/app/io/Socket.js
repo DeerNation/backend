@@ -3,7 +3,7 @@
  *
  * @author tobiasb
  * @since 2018
- * @ignore(socketcluster,wampSocketCluster)
+ * @ignore(socketcluster,wampSocketCluster,socketCluster.connect,socketCluster.destroy)
  */
 
 qx.Class.define('app.io.Socket', {
@@ -140,7 +140,7 @@ qx.Class.define('app.io.Socket', {
       return this.__socket.emit(channel, payload)
     },
 
-    _onSubscribeError: function (promiseReject, err, channel, channelName) {
+    _onSubscribeError: function (promiseReject, channel, err, channelName) {
       channel.off('subscribeFail')
       this.error('Error on subscribing channel', channelName, ':', err)
       promiseReject && promiseReject(err)

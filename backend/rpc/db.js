@@ -15,13 +15,17 @@ function getSubscriptions (authToken) {
 }
 
 /**
- * Return all channels the current user has read access to
+ * Return all channels the current user is subscribed to + the public ones
  * @param authToken
  */
 function getChannels (authToken) {
   // TODO: we need ACLs for a finer grained access level definition
   acl.check('channel', acl.action.READ, authToken)
-  return schema.getModel('Channel').filter({type: 'PUBLIC'}).run()
+  const r = schema.getR()
+  let filter = r.row('right')('type').eq('PUBLIC').or(r.row('right')('ownerId').eq(authToken.user))
+  return r.table('Subscription').eqJoin('channelId', r.table('Channel')).filter(filter).map(function (entry) {
+    return entry('right')
+  }).run()
 }
 
 function getChannelActivities (authToken, channel, from) {
@@ -85,11 +89,32 @@ function getObject (authToken, type, id) {
   return schema.getModel(type).get(id).run()
 }
 
+function updateObjectProperty (authToken, type, id, prop, value) {
+  acl.check(type.toLowerCase() + '.' + id + '.' + prop, acl.action.write, authToken, i18n.__('You are not allowed to update property %s of this item.', prop))
+
+  const crud = schema.getCrud()
+  return new Promise((resolve, reject) => {
+    crud.update({
+      type: type,
+      id: id,
+      field: prop,
+      value: value
+    }, (err, res) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
+      }
+    })
+  })
+}
+
 module.exports = {
   getChannels: getChannels,
   getSubscriptions: getSubscriptions,
   getChannelActivities: getChannelActivities,
   getActors: getActors,
   createChannel: createChannel,
-  getObject: getObject
+  getObject: getObject,
+  updateObjectProperty: updateObjectProperty
 }
