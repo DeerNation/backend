@@ -123,41 +123,6 @@ class Schema {
           }
         },
 
-        // Message: {
-        //   fields: {
-        //     id: type.string(),
-        //     message: type.string()
-        //   },
-        //   filters: {
-        //     pre: mustBeLoggedIn
-        //   }
-        // },
-        //
-        // Event: {
-        //   fields: {
-        //     id: type.string(),
-        //     start: type.date(),
-        //     end: type.date(),
-        //     location: type.string().optional(),
-        //     categories: type.array(),
-        //     organizer: type.string().optional()
-        //   },
-        //   views: {
-        //     locationView: {
-        //       // Declare the fields from the Product model which are required by the transform function.
-        //       paramFields: ['location'],
-        //       transform: function (fullTableQuery, r, productFields) {
-        //         // Because we declared the category field above, it is available in here.
-        //         // This allows us to transform/filter the Product collection based on a specific category
-        //         // ID provided by the frontend.
-        //         return fullTableQuery.filter(r.row('location').eq(productFields.location)).orderBy(r.desc('start'))
-        //       }
-        //     }
-        //   },
-        //   filters: {
-        //     pre: mustBeLoggedIn
-        //   }
-        // },
         Attachment: {
           fields: {
             id: type.string(),
@@ -376,7 +341,8 @@ class Schema {
         {
           id: 'f2edfa36-c431-42f8-bc69-c0b060d941dc',
           actorId: '0e4a6f6f-cc0c-4aa5-951a-fcfc480dd05a',
-          channelId: 'hbg.channel.news.public'
+          channelId: 'hbg.channel.news.public',
+          favorite: true
         }
       ]
     }

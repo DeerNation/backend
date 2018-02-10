@@ -60,11 +60,10 @@ qx.Theme.define('app.theme.Appearance',
       'activity-listitem/author-icon': {
         style: function () {
           return {
-            font: 'sidebar-actor-icon',
-            width: 36,
-            height: 36,
-            maxWidth: 36,
-            maxHeight: 36,
+            width: 20,
+            height: 20,
+            maxWidth: 20,
+            maxHeight: 20,
             allowGrowX: false,
             allowGrowY: false,
             marginRight: 8
@@ -112,10 +111,6 @@ qx.Theme.define('app.theme.Appearance',
         }
       },
 
-      'message-activity': {},
-      'message-activity/title': 'label',
-      'message-activity/message': 'message-activity/title',
-
       'activity-group-item':
       {
         include: 'label',
@@ -132,10 +127,54 @@ qx.Theme.define('app.theme.Appearance',
       },
 
       /*
-     ---------------------------------------------------------------------------
-       SIDEBAR
-     ---------------------------------------------------------------------------
-     */
+      ---------------------------------------------------------------------------
+        Acivity type 'message'
+      ---------------------------------------------------------------------------
+      */
+      'message-activity': {},
+      'message-activity/title': 'label',
+      'message-activity/message': 'message-activity/title',
+
+      /*
+      ---------------------------------------------------------------------------
+        Acivity type 'event'
+      ---------------------------------------------------------------------------
+      */
+      'event-activity': {},
+      'event-activity/date-sheet': {
+        style: function () {
+          return {
+            decorator: 'date-sheet',
+            backgroundColor: 'event-default-bg',
+            textColor: 'white',
+            padding: 4,
+            marginRight: 10,
+            allowGrowY: false
+          }
+        }
+      },
+      'event-activity/day': {
+        style: function () {
+          return {
+            font: 'event-day'
+          }
+        }
+      },
+      'event-activity/year': {
+        style: function () {
+          return {
+            font: 'default'
+          }
+        }
+      },
+      'event-activity/title': 'label',
+      'event-activity/description': 'message-activity/title',
+
+      /*
+      ---------------------------------------------------------------------------
+        SIDEBAR
+      ---------------------------------------------------------------------------
+      */
       'splitpane/menu/actor-container': {
         style: function () {
           return {
@@ -323,6 +362,17 @@ qx.Theme.define('app.theme.Appearance',
           return {
             backgroundColor: 'transparent',
             textColor: 'inherit',
+            decorator: null
+          }
+        }
+      },
+
+      'splitpane/channel/list': {
+        include: 'list',
+        alias: 'list',
+
+        style: function () {
+          return {
             decorator: null
           }
         }

@@ -27,6 +27,19 @@ qx.Theme.define('app.theme.Decoration',
         }
       },
 
+      'date-sheet': {
+        style: {
+          radius: 6,
+          width: 1,
+          color: 'menu-background',
+          style: 'solid',
+          shadowBlurRadius: 4,
+          shadowVerticalLength: 2,
+          shadowColor: ['rgba(0, 0, 0, 0.2)', 'rgba(255, 255, 255, 0.4)'],
+          inset: [true, false]
+        }
+      },
+
       'channel-bar-form-items': {
         style: {
           color: 'background-selected',

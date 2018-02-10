@@ -57,10 +57,16 @@ qx.Theme.define('app.theme.Font', {
       bold: true
     },
 
+    'event-day': {
+      size: 22,
+      family: ['Roboto', 'Helvetica Neue', 'Arial', 'sans-serif']
+    },
+
     'sidebar-actor-icon': {
       size: 26,
       family: ['Roboto', 'Helvetica Neue', 'Arial', 'sans-serif']
-    }//,
+    }
+
     //
     // 'FARegular': {
     //   size: 40,

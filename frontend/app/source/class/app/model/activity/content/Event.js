@@ -40,10 +40,15 @@ qx.Class.define('app.model.activity.content.Event', {
       check: 'String',
       nullable: true,
       event: 'changeOrganizer'
+    },
+    description: {
+      check: 'String',
+      nullable: true,
+      event: 'changedDescription'
     }
   },
 
   defer: function (statics) {
-    // app.model.activity.Registry.getInstance().register('event', statics, app.ui.form.ActivityItem, app.ui.form.MessageField)
+    app.model.activity.Registry.getInstance().register('event', statics, app.ui.renderer.Event, app.ui.form.Event)
   }
 })

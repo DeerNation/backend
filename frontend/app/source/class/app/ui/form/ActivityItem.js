@@ -8,6 +8,7 @@
 qx.Class.define('app.ui.form.ActivityItem', {
   extend: qx.ui.core.Widget,
   implement: [qx.ui.form.IModel],
+  include: app.ui.form.MBindPropertyToChildControl,
 
   /*
   ******************************************************
@@ -118,11 +119,11 @@ qx.Class.define('app.ui.form.ActivityItem', {
 
     // property apply
     _applyAuthor: function (author, old) {
-      this.__bindAuthorProperty(author, 'name', 'author-icon', 'title', null, old)
-      this.__bindAuthorProperty(author, 'color', 'author-icon', 'backgroundColor', null, old)
+      this._bindPropertyToChildControl(author, 'name', 'author-icon', 'title', null, old)
+      this._bindPropertyToChildControl(author, 'color', 'author-icon', 'backgroundColor', null, old)
 
-      this.__bindAuthorProperty(author, 'name', 'authorName', 'value', null, old)
-      this.__bindAuthorProperty(author, 'username', 'authorUsername', 'value', {
+      this._bindPropertyToChildControl(author, 'name', 'authorName', 'value', null, old)
+      this._bindPropertyToChildControl(author, 'username', 'authorUsername', 'value', {
         converter: function (value) {
           return '@' + value
         }
@@ -145,14 +146,6 @@ qx.Class.define('app.ui.form.ActivityItem', {
       } else {
         this.getChildControl('authorRoles').exclude()
       }
-    },
-
-    __bindAuthorProperty: function (author, propertyName, childControlName, childControlProperty, bindProperties, oldAuthor) {
-      let control = this.getChildControl(childControlName)
-      if (oldAuthor) {
-        oldAuthor.removeRelatedBindings(control)
-      }
-      author.bind(propertyName, control, childControlProperty || 'value', bindProperties)
     },
 
     // overridden

@@ -34,6 +34,9 @@ qx.Theme.define('app.theme.Color',
       'user-away': 'rgb(255, 210, 31)',
       'user-busy': 'rgb(245, 69, 92)',
       'user-invisible': 'rgb(203, 206, 209)',
-      'user-offline': '#222222'
+      'user-offline': '#222222',
+
+      // activity items
+      'event-default-bg': 'rgb(15, 108, 0)'
     }
   })

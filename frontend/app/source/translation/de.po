@@ -89,6 +89,7 @@ msgstr ""
 #: app/ui/form/ActivityItem.js:130 app/ui/form/ActivityItem.js:126
 #: app/ui/form/ActivityItem.js:120 app/ui/form/ActivityItem.js:132
 #: app/ui/form/ActivityItem.js:131 app/ui/form/ActivityItem.js:134
+#: app/ui/form/ActivityItem.js:135
 msgid "Owner"
 msgstr ""
 
@@ -99,6 +100,7 @@ msgstr ""
 #: app/ui/form/ActivityItem.js:133 app/ui/form/ActivityItem.js:129
 #: app/ui/form/ActivityItem.js:123 app/ui/form/ActivityItem.js:135
 #: app/ui/form/ActivityItem.js:134 app/ui/form/ActivityItem.js:137
+#: app/ui/form/ActivityItem.js:138
 msgid "Bot"
 msgstr ""
 
@@ -109,6 +111,7 @@ msgstr ""
 #: app/ui/form/ActivityItem.js:135 app/ui/form/ActivityItem.js:131
 #: app/ui/form/ActivityItem.js:125 app/ui/form/ActivityItem.js:137
 #: app/ui/form/ActivityItem.js:136 app/ui/form/ActivityItem.js:139
+#: app/ui/form/ActivityItem.js:140
 msgid "Server"
 msgstr ""
 

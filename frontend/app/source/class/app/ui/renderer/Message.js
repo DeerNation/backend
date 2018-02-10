@@ -76,24 +76,12 @@ qx.Class.define('app.ui.renderer.Message', {
       let control
       switch (id) {
         case 'title':
-          control = new qx.ui.basic.Label()
-          control.set({
-            anonymous: true,
-            rich: true,
-            wrap: true,
-            selectable: true
-          })
+          control = new app.ui.basic.Label()
           this._addAt(control, 0)
           break
 
         case 'message':
-          control = new qx.ui.basic.Label()
-          control.set({
-            anonymous: true,
-            rich: true,
-            wrap: true,
-            selectable: true
-          })
+          control = new app.ui.basic.Label()
           this._addAt(control, 1, {flex: 1})
           break
       }

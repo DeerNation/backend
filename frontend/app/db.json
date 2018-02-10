@@ -317,7 +317,7 @@
       }
     },
     "app.theme.Color": {
-      "mtime": "2018-02-09T18:36:38.637Z",
+      "mtime": "2018-02-10T16:02:20.283Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -333,7 +333,7 @@
       "implement": []
     },
     "app.theme.Decoration": {
-      "mtime": "2018-02-04T12:21:08.119Z",
+      "mtime": "2018-02-10T16:18:26.020Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -349,7 +349,7 @@
       "implement": []
     },
     "app.theme.Font": {
-      "mtime": "2018-02-09T17:00:17.158Z",
+      "mtime": "2018-02-10T16:26:56.464Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -378,7 +378,7 @@
       }
     },
     "app.theme.Appearance": {
-      "mtime": "2018-02-10T14:23:38.688Z",
+      "mtime": "2018-02-10T16:15:20.122Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -13598,7 +13598,7 @@
       "implement": []
     },
     "app.ui.form.ActivityItem": {
-      "mtime": "2018-02-10T14:18:22.938Z",
+      "mtime": "2018-02-10T15:31:56.865Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13610,6 +13610,9 @@
           "construct": true
         },
         "qx.ui.form.IModel": {
+          "load": true
+        },
+        "app.ui.form.MBindPropertyToChildControl": {
           "load": true
         },
         "qx.ui.layout.Grid": {
@@ -13650,22 +13653,24 @@
         }
       },
       "extends": "qx.ui.core.Widget",
-      "include": [],
+      "include": [
+        "app.ui.form.MBindPropertyToChildControl"
+      ],
       "implement": [
         "qx.ui.form.IModel"
       ],
       "translations": [
         {
           "msgid": "Owner",
-          "lineNo": 134
+          "lineNo": 135
         },
         {
           "msgid": "Bot",
-          "lineNo": 137
+          "lineNo": 138
         },
         {
           "msgid": "Server",
-          "lineNo": 139
+          "lineNo": 140
         }
       ]
     },
@@ -14002,6 +14007,21 @@
         "app.model.activity.Registry": {},
         "app.ui.form.ActivityItem": {},
         "qx.ui.core.LayoutItem": {
+          "load": true
+        },
+        "qx.core.Object": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.theme.manager.Meta": {
+          "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
           "load": true
         }
       },
@@ -14773,7 +14793,7 @@
       "implement": []
     },
     "app.ui.renderer.Message": {
-      "mtime": "2018-02-10T13:49:02.470Z",
+      "mtime": "2018-02-10T15:52:36.000Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14791,7 +14811,7 @@
           "construct": true
         },
         "app.data.converter.Markdown": {},
-        "qx.ui.basic.Label": {},
+        "app.ui.basic.Label": {},
         "qx.ui.core.LayoutItem": {
           "load": true
         },
@@ -14851,11 +14871,12 @@
       "implement": []
     },
     "app.model.activity.content.Event": {
-      "mtime": "2018-02-10T11:03:15.360Z",
+      "mtime": "2018-02-10T15:15:40.268Z",
       "libraryName": "app",
       "dependsOn": {
         "app.model.activity.Registry": {
-          "require": true
+          "require": true,
+          "defer": "runtime"
         },
         "qx.Class": {
           "load": true,
@@ -14863,6 +14884,12 @@
         },
         "app.model.activity.content.AbstractActivityContent": {
           "load": true
+        },
+        "app.ui.renderer.Event": {
+          "defer": "runtime"
+        },
+        "app.ui.form.Event": {
+          "defer": "runtime"
         },
         "qx.core.Object": {
           "load": true
@@ -14922,7 +14949,7 @@
       "hasDefer": true
     },
     "app.model.activity.content.AbstractActivityContent": {
-      "mtime": "2018-02-10T10:48:20.955Z",
+      "mtime": "2018-02-10T15:45:37.551Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14933,6 +14960,7 @@
           "load": true,
           "construct": true
         },
+        "qx.lang.Type": {},
         "qx.core.ObjectRegistry": {
           "load": true
         },
@@ -15031,6 +15059,163 @@
         }
       },
       "extends": "qx.ui.core.Widget",
+      "include": [],
+      "implement": []
+    },
+    "app.ui.renderer.Event": {
+      "mtime": "2018-02-10T16:13:22.186Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.ui.core.Widget": {
+          "load": true,
+          "construct": true
+        },
+        "app.ui.renderer.IRenderer": {
+          "load": true
+        },
+        "app.ui.form.MBindPropertyToChildControl": {
+          "load": true
+        },
+        "qx.ui.layout.Grid": {
+          "construct": true
+        },
+        "qx.util.format.DateFormat": {
+          "construct": true
+        },
+        "app.data.converter.Markdown": {},
+        "qx.lang.String": {},
+        "qx.ui.layout.VBox": {},
+        "qx.ui.container.Composite": {},
+        "app.ui.basic.Label": {},
+        "qx.ui.core.LayoutItem": {
+          "load": true
+        },
+        "qx.core.Object": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.theme.manager.Meta": {
+          "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
+        }
+      },
+      "extends": "qx.ui.core.Widget",
+      "include": [
+        "app.ui.form.MBindPropertyToChildControl"
+      ],
+      "implement": [
+        "app.ui.renderer.IRenderer"
+      ]
+    },
+    "app.ui.form.Event": {
+      "mtime": "2018-02-10T15:15:40.276Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.ui.core.Widget": {
+          "load": true,
+          "construct": true
+        },
+        "qx.ui.form.IModel": {
+          "load": true
+        },
+        "qx.ui.layout.HBox": {
+          "construct": true
+        },
+        "app.io.Rpc": {},
+        "qx.ui.form.TextField": {},
+        "qx.ui.form.Button": {},
+        "app.Config": {},
+        "qx.ui.core.LayoutItem": {
+          "load": true
+        },
+        "qx.core.Object": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.theme.manager.Meta": {
+          "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
+        }
+      },
+      "extends": "qx.ui.core.Widget",
+      "include": [],
+      "implement": [
+        "qx.ui.form.IModel"
+      ]
+    },
+    "app.ui.form.MBindPropertyToChildControl": {
+      "mtime": "2018-02-10T16:26:56.456Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "qx.Mixin": {
+          "load": true,
+          "usage": "dynamic"
+        }
+      },
+      "extends": null,
+      "include": [],
+      "implement": []
+    },
+    "app.ui.basic.Label": {
+      "mtime": "2018-02-10T15:52:35.996Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.ui.basic.Label": {
+          "load": true,
+          "construct": true
+        },
+        "qx.ui.core.Widget": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.locale.Manager": {
+          "load": true
+        },
+        "qx.ui.core.LayoutItem": {
+          "load": true
+        },
+        "qx.core.Object": {
+          "load": true
+        },
+        "qx.theme.manager.Meta": {
+          "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
+        }
+      },
+      "extends": "qx.ui.basic.Label",
       "include": [],
       "implement": []
     }
