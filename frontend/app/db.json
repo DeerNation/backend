@@ -1,12 +1,9 @@
 {
   "classInfo": {
     "app.Application": {
-      "mtime": "2018-02-03T14:44:10.934Z",
+      "mtime": "2018-02-10T10:49:09.855Z",
       "libraryName": "app",
       "dependsOn": {
-        "app.model.Event": {
-          "require": true
-        },
         "qx.Class": {
           "load": true,
           "usage": "dynamic"
@@ -381,7 +378,7 @@
       }
     },
     "app.theme.Appearance": {
-      "mtime": "2018-02-09T19:05:27.040Z",
+      "mtime": "2018-02-09T19:58:22.881Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -9577,9 +9574,15 @@
       ]
     },
     "app.model.Activity": {
-      "mtime": "2018-02-07T16:42:58.908Z",
+      "mtime": "2018-02-10T12:20:43.581Z",
       "libraryName": "app",
       "dependsOn": {
+        "app.model.activity.content.Event": {
+          "require": true
+        },
+        "app.model.activity.content.Message": {
+          "require": true
+        },
         "qx.Class": {
           "load": true,
           "usage": "dynamic"
@@ -9588,6 +9591,8 @@
           "load": true,
           "construct": true
         },
+        "app.Model": {},
+        "qx.core.Assert": {},
         "qx.core.Object": {
           "load": true
         },
@@ -10895,35 +10900,21 @@
       }
     },
     "app.model.Event": {
-      "mtime": "2018-02-03T09:05:42.091Z",
+      "mtime": "2018-02-10T10:31:46.579Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
           "load": true,
           "usage": "dynamic"
         },
-        "app.model.Activity": {
-          "load": true
-        },
-        "app.model.AbstractModel": {
-          "load": true
-        },
-        "qx.core.Object": {
-          "load": true
-        },
-        "qx.core.ObjectRegistry": {
-          "load": true
-        },
-        "qx.core.Environment": {
-          "load": true
-        },
-        "qx.core.IDisposable": {
+        "app.model.AbstractActivity": {
           "load": true
         }
       },
-      "extends": "app.model.Activity",
+      "extends": "app.model.AbstractActivity",
       "include": [],
-      "implement": []
+      "implement": [],
+      "hasDefer": true
     },
     "dialog.Login": {
       "mtime": "2017-05-03T21:35:54.000Z",
@@ -13607,7 +13598,7 @@
       "implement": []
     },
     "app.ui.form.ActivityItem": {
-      "mtime": "2018-02-03T21:09:08.615Z",
+      "mtime": "2018-02-10T12:23:06.772Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13621,9 +13612,6 @@
         "qx.ui.form.IModel": {
           "load": true
         },
-        "qx.ui.form.MModelProperty": {
-          "load": true
-        },
         "qx.ui.layout.VBox": {
           "construct": true
         },
@@ -13633,12 +13621,14 @@
         "qx.data.Array": {
           "construct": true
         },
+        "app.model.activity.Registry": {},
         "app.Model": {},
         "qx.ui.layout.HBox": {},
         "qx.ui.container.Composite": {},
         "qx.ui.basic.Label": {},
         "qx.ui.form.List": {},
         "qx.data.controller.List": {},
+        "qx.ui.layout.Grow": {},
         "qx.ui.core.LayoutItem": {
           "load": true
         },
@@ -13650,38 +13640,30 @@
         },
         "qx.theme.manager.Meta": {
           "load": true
-        },
-        "qx.core.ObjectRegistry": {
-          "load": true
-        },
-        "qx.core.IDisposable": {
-          "load": true
         }
       },
       "extends": "qx.ui.core.Widget",
-      "include": [
-        "qx.ui.form.MModelProperty"
-      ],
+      "include": [],
       "implement": [
         "qx.ui.form.IModel"
       ],
       "translations": [
         {
           "msgid": "Owner",
-          "lineNo": 128
+          "lineNo": 120
         },
         {
           "msgid": "Bot",
-          "lineNo": 131
+          "lineNo": 123
         },
         {
           "msgid": "Server",
-          "lineNo": 133
+          "lineNo": 125
         }
       ]
     },
     "app.Config": {
-      "mtime": "2018-02-09T18:37:08.273Z",
+      "mtime": "2018-02-09T19:50:06.080Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13710,7 +13692,7 @@
       }
     },
     "app.model.Factory": {
-      "mtime": "2018-02-04T09:05:13.661Z",
+      "mtime": "2018-02-10T10:48:20.931Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13975,7 +13957,7 @@
       ]
     },
     "app.ui.Channel": {
-      "mtime": "2018-02-07T16:45:53.024Z",
+      "mtime": "2018-02-10T10:52:11.618Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14009,6 +13991,7 @@
         "app.ui.ChannelHeader": {},
         "qx.ui.list.List": {},
         "qx.util.Function": {},
+        "app.model.activity.Registry": {},
         "app.ui.form.ActivityItem": {},
         "qx.ui.core.LayoutItem": {
           "load": true
@@ -14713,6 +14696,256 @@
           "lineNo": 180
         }
       ]
+    },
+    "app.ui.form.MessageField": {
+      "mtime": "2018-02-10T12:02:47.574Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.ui.core.Widget": {
+          "load": true,
+          "construct": true
+        },
+        "qx.ui.form.IModel": {
+          "load": true
+        },
+        "qx.ui.layout.HBox": {
+          "construct": true
+        },
+        "app.io.Rpc": {},
+        "qx.ui.form.Button": {},
+        "app.Config": {},
+        "qx.ui.form.TextArea": {},
+        "qx.ui.core.LayoutItem": {
+          "load": true
+        },
+        "qx.core.Object": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.theme.manager.Meta": {
+          "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
+        }
+      },
+      "extends": "qx.ui.core.Widget",
+      "include": [],
+      "implement": [
+        "qx.ui.form.IModel"
+      ]
+    },
+    "app.model.activity.Registry": {
+      "mtime": "2018-02-10T11:07:43.334Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.core.Object": {
+          "load": true,
+          "construct": true
+        },
+        "qx.core.Assert": {},
+        "app.model.activity.content.AbstractActivityContent": {},
+        "qx.ui.form.IModel": {},
+        "app.ui.renderer.IRenderer": {},
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
+        }
+      },
+      "extends": "qx.core.Object",
+      "include": [],
+      "implement": []
+    },
+    "app.ui.renderer.Message": {
+      "mtime": "2018-02-10T12:24:06.784Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.ui.core.Widget": {
+          "load": true,
+          "construct": true
+        },
+        "app.ui.renderer.IRenderer": {
+          "load": true
+        },
+        "qx.ui.layout.VBox": {
+          "construct": true
+        },
+        "app.data.converter.Markdown": {},
+        "qx.ui.basic.Label": {},
+        "qx.ui.core.LayoutItem": {
+          "load": true
+        }
+      },
+      "extends": "qx.ui.core.Widget",
+      "include": [],
+      "implement": [
+        "app.ui.renderer.IRenderer"
+      ]
+    },
+    "app.ui.renderer.IRenderer": {
+      "mtime": "2018-02-10T11:04:08.628Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "qx.Interface": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.ui.form.IModel": {
+          "load": true
+        }
+      },
+      "extends": "qx.ui.form.IModel",
+      "include": [],
+      "implement": []
+    },
+    "app.model.AbstractActivity": {
+      "mtime": "2018-02-10T10:31:46.571Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "app.model.AbstractModel": {
+          "load": true,
+          "construct": true
+        }
+      },
+      "extends": "app.model.AbstractModel",
+      "include": [],
+      "implement": []
+    },
+    "app.model.activity.content.Event": {
+      "mtime": "2018-02-10T11:03:15.360Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "app.model.activity.Registry": {
+          "require": true
+        },
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "app.model.activity.content.AbstractActivityContent": {
+          "load": true
+        },
+        "qx.core.Object": {
+          "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
+        }
+      },
+      "extends": "app.model.activity.content.AbstractActivityContent",
+      "include": [],
+      "implement": [],
+      "hasDefer": true
+    },
+    "app.model.activity.content.Message": {
+      "mtime": "2018-02-10T11:03:15.376Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "app.model.activity.Registry": {
+          "require": true,
+          "defer": "runtime"
+        },
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "app.model.activity.content.AbstractActivityContent": {
+          "load": true
+        },
+        "app.ui.renderer.Message": {
+          "defer": "runtime"
+        },
+        "app.ui.form.MessageField": {
+          "defer": "runtime"
+        },
+        "qx.core.Object": {
+          "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
+        }
+      },
+      "extends": "app.model.activity.content.AbstractActivityContent",
+      "include": [],
+      "implement": [],
+      "hasDefer": true
+    },
+    "app.model.activity.content.AbstractActivityContent": {
+      "mtime": "2018-02-10T10:48:20.955Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.core.Object": {
+          "load": true,
+          "construct": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
+        }
+      },
+      "extends": "qx.core.Object",
+      "include": [],
+      "implement": []
+    },
+    "app.data.converter.Markdown": {
+      "mtime": "2018-02-10T09:37:22.482Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        }
+      },
+      "extends": null,
+      "include": [],
+      "implement": []
     }
   }
 }

@@ -42,8 +42,7 @@ class WebhookHandler {
         // TODO: add encryption to incoming messages and verification with signature
         logger.debug('channel: %s, message: %o', result[0].channel, req.body)
         let message = req.body
-        message.actorId = result[0].actorId
-        channelHandler.publish(result[0].channel, message)
+        channelHandler.publish({user: result[0].actorId}, result[0].channel, message)
       } else {
         logger.debug('no webhook with id %s found', id)
       }

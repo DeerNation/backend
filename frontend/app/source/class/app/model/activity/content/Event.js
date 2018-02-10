@@ -3,10 +3,11 @@
  *
  * @author tobiasb
  * @since 2018
+ * @require(app.model.activity.Registry)
  */
 
-qx.Class.define('app.model.Event', {
-  extend: app.model.Activity,
+qx.Class.define('app.model.activity.content.Event', {
+  extend: app.model.activity.content.AbstractActivityContent,
 
   /*
   ******************************************************
@@ -40,5 +41,9 @@ qx.Class.define('app.model.Event', {
       nullable: true,
       event: 'changeOrganizer'
     }
+  },
+
+  defer: function (statics) {
+    // app.model.activity.Registry.getInstance().register('event', statics, app.ui.form.ActivityItem, app.ui.form.MessageField)
   }
 })

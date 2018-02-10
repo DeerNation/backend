@@ -42,6 +42,14 @@ qx.Theme.define('app.theme.Appearance',
       },
       'activity-listitem': 'listitem',
 
+      'activity-listitem/header': {
+        style: function () {
+          return {
+            marginTop: 8
+          }
+        }
+      },
+
       'activity-listitem/authorName': {
         include: 'label',
         style: function () {
@@ -71,6 +79,7 @@ qx.Theme.define('app.theme.Appearance',
         style: function () {
           return {
             padding: [0, 4],
+            marginRight: 4,
             backgroundColor: 'info-font',
             textColor: 'white',
             decorator: 'rounded',

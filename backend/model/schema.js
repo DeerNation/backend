@@ -86,47 +86,6 @@ class Schema {
             pre: mustBeOwner
           }
         },
-        Event: {
-          fields: {
-            id: type.string(),
-            title: type.string(),
-            content: type.string(),
-            created: type.date().default(new Date()),
-            published: type.date(),
-            start: type.date(),
-            end: type.date(),
-            location: type.string().optional(),
-            categories: type.array(),
-            organizer: type.string().optional(),
-            creatorId: type.string().optional(),
-            hash: type.string()
-          },
-          views: {
-            locationView: {
-              // Declare the fields from the Product model which are required by the transform function.
-              paramFields: ['location'],
-              transform: function (fullTableQuery, r, productFields) {
-                // Because we declared the category field above, it is available in here.
-                // This allows us to transform/filter the Product collection based on a specific category
-                // ID provided by the frontend.
-                return fullTableQuery.filter(r.row('location').eq(productFields.location)).orderBy(r.desc('start'))
-              }
-            }
-          },
-          filters: {
-            pre: mustBeLoggedIn
-          }
-        },
-        Attachment: {
-          fields: {
-            id: type.string(),
-            type: type.string(),
-            blob: type.buffer()
-          },
-          filters: {
-            pre: mustBeLoggedIn
-          }
-        },
         Webhook: {
           fields: {
             id: type.string(),
@@ -143,9 +102,10 @@ class Schema {
         Activity: {
           fields: {
             id: type.string(),
+            type: type.string().enum('Message', 'Event').default('Message'),
             channelId: type.string(),
+            content: type.object(),
             title: type.string(),
-            content: type.string(),
             created: type.date().default(new Date()),
             published: type.date(),
             actorId: type.string(),
@@ -160,6 +120,52 @@ class Schema {
                 return fullTableQuery.filter(r.row('channelId').eq(options.channelId)).orderBy(r.asc('published'))
               }
             }
+          }
+        },
+
+        // Message: {
+        //   fields: {
+        //     id: type.string(),
+        //     message: type.string()
+        //   },
+        //   filters: {
+        //     pre: mustBeLoggedIn
+        //   }
+        // },
+        //
+        // Event: {
+        //   fields: {
+        //     id: type.string(),
+        //     start: type.date(),
+        //     end: type.date(),
+        //     location: type.string().optional(),
+        //     categories: type.array(),
+        //     organizer: type.string().optional()
+        //   },
+        //   views: {
+        //     locationView: {
+        //       // Declare the fields from the Product model which are required by the transform function.
+        //       paramFields: ['location'],
+        //       transform: function (fullTableQuery, r, productFields) {
+        //         // Because we declared the category field above, it is available in here.
+        //         // This allows us to transform/filter the Product collection based on a specific category
+        //         // ID provided by the frontend.
+        //         return fullTableQuery.filter(r.row('location').eq(productFields.location)).orderBy(r.desc('start'))
+        //       }
+        //     }
+        //   },
+        //   filters: {
+        //     pre: mustBeLoggedIn
+        //   }
+        // },
+        Attachment: {
+          fields: {
+            id: type.string(),
+            type: type.string(),
+            blob: type.buffer()
+          },
+          filters: {
+            pre: mustBeLoggedIn
           }
         },
 
@@ -290,17 +296,17 @@ class Schema {
     const m = crudOptions.models
 
     // create indices
-    m.Event.ensureIndex('start')
+    m.Activity.ensureIndex('content.start')
 
     // create relations
 
     // n-n: An Activity can have many Attachments, an Attachment can belong to many Activities (e.g. shared attachments)
-    m.Event.hasAndBelongsToMany(m.Attachment, 'attachments', 'id', 'attachmentId')
-    m.Attachment.hasAndBelongsToMany(m.Event, 'event', 'attachmentId', 'id')
+    m.Activity.hasAndBelongsToMany(m.Attachment, 'attachments', 'id', 'attachmentId')
+    m.Attachment.hasAndBelongsToMany(m.Activity, 'event', 'attachmentId', 'id')
 
     // 1-n: An Activity can have only one creator (of type Actor), an Actor can be the creator of many Activities
-    m.Actor.hasMany(m.Event, 'createdEvents', 'id', 'creatorId')
-    m.Event.belongsTo(m.Actor, 'creator', 'creatorId', 'id')
+    // m.Actor.hasMany(m.Event, 'createdEvents', 'id', 'creatorId')
+    // m.Event.belongsTo(m.Actor, 'creator', 'creatorId', 'id')
 
     // 1-n: An webhook can have only one actor
     m.Actor.hasMany(m.Webhook, 'webhooks', 'id', 'actorId')

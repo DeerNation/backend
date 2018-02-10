@@ -3,13 +3,11 @@
  *
  * @author tobiasb
  * @since 2018
- * @ignore(showdown)
  */
 
 qx.Class.define('app.ui.form.ActivityItem', {
   extend: qx.ui.core.Widget,
   implement: [qx.ui.form.IModel],
-  include: [qx.ui.form.MModelProperty],
 
   /*
   ******************************************************
@@ -19,7 +17,6 @@ qx.Class.define('app.ui.form.ActivityItem', {
   construct: function (label, icon, model) {
     this.base(arguments, label, icon, model)
     this._setLayout(new qx.ui.layout.VBox())
-    this.__converter = new showdown.Converter()
 
     this.addListener('pointerover', this._onPointerOver, this)
     this.addListener('pointerout', this._onPointerOut, this)
@@ -52,24 +49,6 @@ qx.Class.define('app.ui.form.ActivityItem', {
       init: 'activity-listitem'
     },
 
-    title: {
-      check: 'String',
-      nullable: true,
-      apply: '_applyLabelValue'
-    },
-
-    message: {
-      check: 'String',
-      nullable: true,
-      apply: '_applyLabelValue'
-    },
-
-    rich: {
-      check: 'Boolean',
-      init: true,
-      event: 'changedRich'
-    },
-
     published: {
       check: 'Date',
       init: null,
@@ -85,6 +64,13 @@ qx.Class.define('app.ui.form.ActivityItem', {
     authorRoles: {
       check: 'qx.data.Array',
       init: null
+    },
+
+    model: {
+      nullable: true,
+      event: 'changeModel',
+      apply: '_applyModel',
+      dereference: true
     }
   },
 
@@ -94,18 +80,24 @@ qx.Class.define('app.ui.form.ActivityItem', {
   ******************************************************
   */
   members: {
-    __converter: null,
     __dateFormat: null,
     _roleController: null,
 
-    // property apply
-    _applyLabelValue: function (value, old, name) {
-      const control = this.getChildControl(name)
+    // apply method
+    _applyModel: function (value, old) {
+      if (old) {
+        old.removeRelatedBindings(this)
+      }
       if (value) {
-        control.setValue(this.__converter.makeHtml(value))
-        control.show()
-      } else {
-        control.exclude()
+        value.bind('published', this, 'published')
+        value.bind('actor', this, 'author')
+        const container = this.getChildControl('content-container')
+        container.removeAll().forEach(entry => {
+          entry.dispose()
+        })
+        const renderer = new (app.model.activity.Registry.getRendererClass(value.getType().toLowerCase()))()
+        renderer.setModel(value)
+        container.add(renderer)
       }
     },
 
@@ -197,18 +189,9 @@ qx.Class.define('app.ui.form.ActivityItem', {
           this.getChildControl('header').addAt(control, 3)
           break
 
-        case 'title':
-          control = new qx.ui.basic.Label(this.getTitle())
-          control.setAnonymous(true)
-          this.bind('rich', control, 'rich')
+        case 'content-container':
+          control = new qx.ui.container.Composite(new qx.ui.layout.Grow())
           this._addAt(control, 1)
-          break
-
-        case 'message':
-          control = new qx.ui.basic.Label(this.getMessage())
-          control.setAnonymous(true)
-          this.bind('rich', control, 'rich')
-          this._addAt(control, 2, {flex: 1})
           break
       }
       return control || this.base(arguments, id, hash)

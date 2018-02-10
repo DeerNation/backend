@@ -6,6 +6,7 @@
  */
 const schema = require('./model/schema')
 const {hash} = require('./util')
+const rpcHandler = require('./rpc')
 const logger = require('./logger')(__filename)
 
 class ChannelHandler {
@@ -23,6 +24,13 @@ class ChannelHandler {
       this.model = schema.getModel('Activity')
     }
     this.model.changes().then(this._onChange.bind(this))
+
+    rpcHandler.registerRPCEndpoints({
+      publish: {
+        func: this.publish,
+        context: this
+      }
+    })
   }
 
   _onChange (feed) {
@@ -40,7 +48,7 @@ class ChannelHandler {
     })
   }
 
-  publish (channel, message) {
+  publish (authToken, channel, message) {
     if (!this.model) {
       this.model = schema.getModel('Activity')
     }
@@ -49,7 +57,8 @@ class ChannelHandler {
     }
     this.model.save(Object.assign({
       channel: channel,
-      hash: hash(message)
+      hash: hash(message.content),
+      actorId: authToken.user
     }, message), {conflict: 'update'})
   }
 }

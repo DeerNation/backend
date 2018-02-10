@@ -22,7 +22,6 @@ qx.Class.define('app.ui.Channel', {
     // bind to global selected subscription
     app.Model.getInstance().bind('selectedSubscription', this, 'subscription')
 
-    this._createChildControl('header')
     this._createChildControl('list')
   },
 
@@ -91,6 +90,10 @@ qx.Class.define('app.ui.Channel', {
         this.__currentSCChannel.watch(this._onActivity.bind(this))
 
         this.getChildControl('header').setSubscription(subscription)
+        this.getChildControl('header').show()
+
+        this.getChildControl('message-field').setModel(subscription.getChannel())
+        this.getChildControl('message-field').show()
       }
     },
 
@@ -127,6 +130,11 @@ qx.Class.define('app.ui.Channel', {
       switch (id) {
         case 'header':
           control = new app.ui.ChannelHeader()
+          if (this.getSubscription()) {
+            control.setSubscription(this.getSubscription())
+          } else {
+            control.exclude()
+          }
           this._addAt(control, 0)
           break
 
@@ -139,6 +147,16 @@ qx.Class.define('app.ui.Channel', {
           this.getActivities().addListener('changeLength', deferredScroll, this)
           this.__applyListDelegate(control)
           this._addAt(control, 1, {flex: 1})
+          break
+
+        case 'message-field':
+          control = new (app.model.activity.Registry.getFormClass('message'))()
+          if (this.getSubscription()) {
+            control.setModel(this.getSubscription().getChannel())
+          } else {
+            control.exclude()
+          }
+          this._addAt(control, 2)
           break
       }
       return control || this.base(arguments, id, hash)
@@ -154,14 +172,6 @@ qx.Class.define('app.ui.Channel', {
 
         bindItem: function (controller, item, index) {
           controller.bindProperty('', 'model', null, item, index)
-          controller.bindProperty('title', 'title', null, item, index)
-          controller.bindProperty('content', 'message', null, item, index)
-          controller.bindProperty('published', 'published', null, item, index)
-          controller.bindProperty('actorId', 'author', {
-            converter: function (value, model) {
-              return app.Model.lookup('actor', model.getActorId())
-            }
-          }, item, index)
         },
 
         group: function (model) {

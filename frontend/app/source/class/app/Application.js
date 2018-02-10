@@ -12,7 +12,6 @@
  * This is the main application class of your custom application "app"
  *
  * @asset(app/*)
- * @require(app.model.Event)
  */
 qx.Class.define('app.Application', {
   extend: qx.application.Standalone,

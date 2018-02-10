@@ -19,13 +19,6 @@ qx.Class.define('app.model.Factory', {
      * @param data
      */
     create: function (data, Clazz) {
-      if (data.hasOwnProperty('__jsonclass__')) {
-        Clazz = qx.Class.getByName(data['__jsonclass__'])
-        if (!Clazz) {
-          throw Error('Class ' + Clazz + ' not found')
-        }
-        delete data['__jsonclass__']
-      }
       qx.core.Assert.assertNotNull(Clazz)
       return new Clazz(data)
     },

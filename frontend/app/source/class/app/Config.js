@@ -56,7 +56,9 @@ qx.Class.define('app.Config', {
       offline: '@FARegular/f111',
       private: '@FASolid/f023',
       public: '@FASolid/f292',
-      logout: '@FASolid/f2f5'
+      logout: '@FASolid/f2f5',
+      smiley: '@FARegular/f118',
+      plus: '@FASolid/f067'
     }
   }
 })

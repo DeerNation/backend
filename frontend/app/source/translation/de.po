@@ -83,74 +83,89 @@ msgid "Cancel"
 msgstr ""
 
 #: app.ui.form.ActivityItem:128 app/ui/form/ActivityItem.js:128
+#: app/ui/form/ActivityItem.js:151 app/ui/form/ActivityItem.js:149
+#: app/ui/form/ActivityItem.js:148 app/ui/form/ActivityItem.js:123
+#: app/ui/form/ActivityItem.js:125 app/ui/form/ActivityItem.js:129
+#: app/ui/form/ActivityItem.js:130 app/ui/form/ActivityItem.js:126
+#: app/ui/form/ActivityItem.js:120
 msgid "Owner"
 msgstr ""
 
 #: app.ui.form.ActivityItem:131 app/ui/form/ActivityItem.js:131
+#: app/ui/form/ActivityItem.js:154 app/ui/form/ActivityItem.js:152
+#: app/ui/form/ActivityItem.js:151 app/ui/form/ActivityItem.js:126
+#: app/ui/form/ActivityItem.js:128 app/ui/form/ActivityItem.js:132
+#: app/ui/form/ActivityItem.js:133 app/ui/form/ActivityItem.js:129
+#: app/ui/form/ActivityItem.js:123
 msgid "Bot"
 msgstr ""
 
 #: app.ui.form.ActivityItem:133 app/ui/form/ActivityItem.js:133
+#: app/ui/form/ActivityItem.js:156 app/ui/form/ActivityItem.js:154
+#: app/ui/form/ActivityItem.js:153 app/ui/form/ActivityItem.js:128
+#: app/ui/form/ActivityItem.js:130 app/ui/form/ActivityItem.js:134
+#: app/ui/form/ActivityItem.js:135 app/ui/form/ActivityItem.js:131
+#: app/ui/form/ActivityItem.js:125
 msgid "Server"
 msgstr ""
 
-#: qx.util.Validate:90
+#: qx.util.Validate:90 qx/util/Validate.js:90
 msgid "%1 is not a number."
 msgstr ""
 
-#: qx.util.Validate:129
+#: qx.util.Validate:129 qx/util/Validate.js:129
 msgid "'%1' is not an email address."
 msgstr ""
 
-#: qx.util.Validate:166
+#: qx.util.Validate:166 qx/util/Validate.js:166
 msgid "%1 is not a string."
 msgstr ""
 
-#: qx.util.Validate:202
+#: qx.util.Validate:202 qx/util/Validate.js:202
 msgid "%1 is not an url."
 msgstr ""
 
-#: qx.util.Validate:243
+#: qx.util.Validate:243 qx/util/Validate.js:243
 msgid "%1 is not a color! %2"
 msgstr ""
 
-#: qx.util.Validate:267
+#: qx.util.Validate:267 qx/util/Validate.js:267
 msgid "%1 is not in the range from [%2, %3]."
 msgstr ""
 
-#: qx.util.Validate:290
+#: qx.util.Validate:290 qx/util/Validate.js:290
 msgid "%1 is not in %2"
 msgstr ""
 
-#: qx.util.Validate:314
+#: qx.util.Validate:314 qx/util/Validate.js:314
 msgid "%1 does not fit %2."
 msgstr ""
 
-#: dialog.Confirm:170
+#: dialog.Confirm:170 dialog/Confirm.js:170
 msgid "yes"
 msgstr ""
 
-#: dialog.Confirm:180
+#: dialog.Confirm:180 dialog/Confirm.js:180
 msgid "no"
 msgstr ""
 
-#: qx.ui.form.validation.Manager:37
+#: qx.ui.form.validation.Manager:37 qx/ui/form/validation/Manager.js:37
 msgid "This field is required"
 msgstr ""
 
-#: qx.ui.control.DateChooser:258
+#: qx.ui.control.DateChooser:258 qx/ui/control/DateChooser.js:258
 msgid "Last year"
 msgstr ""
 
-#: qx.ui.control.DateChooser:270
+#: qx.ui.control.DateChooser:270 qx/ui/control/DateChooser.js:270
 msgid "Last month"
 msgstr ""
 
-#: qx.ui.control.DateChooser:282
+#: qx.ui.control.DateChooser:282 qx/ui/control/DateChooser.js:282
 msgid "Next month"
 msgstr ""
 
-#: qx.ui.control.DateChooser:294
+#: qx.ui.control.DateChooser:294 qx/ui/control/DateChooser.js:294
 msgid "Next year"
 msgstr ""
 

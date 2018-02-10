@@ -3,6 +3,8 @@
  *
  * @author tobiasb
  * @since 2018
+ * @require(app.model.activity.content.Event)
+ * @require(app.model.activity.content.Message)
  */
 
 qx.Class.define('app.model.Activity', {
@@ -31,10 +33,22 @@ qx.Class.define('app.model.Activity', {
       event: 'changeTitle'
     },
 
+    type: {
+      check: ['Message', 'Event'],
+      init: null,
+      apply: '_updateContentObject'
+    },
+
     content: {
-      check: 'String',
+      check: 'Object',
       nullable: true,
-      event: 'changeContent'
+      apply: '_updateContentObject'
+    },
+
+    contentObject: {
+      check: 'app.model.activity.content.AbstractActivityContent',
+      nullable: true,
+      event: 'changedContentObject'
     },
 
     /* Creation date of this Activity */
@@ -55,7 +69,8 @@ qx.Class.define('app.model.Activity', {
 
     actorId: {
       check: 'String',
-      init: null
+      init: null,
+      apply: '_applyActorId'
     },
 
     hash: {
@@ -69,9 +84,38 @@ qx.Class.define('app.model.Activity', {
     },
 
     actor: {
-      check: 'Object',
+      check: 'app.model.Actor',
       init: null,
       event: 'changeActor'
+    }
+  },
+
+  /*
+  ******************************************************
+    MEMBERS
+  ******************************************************
+  */
+  members: {
+
+    // property apply
+    _applyActorId: function (value) {
+      if (value) {
+        this.setActor(app.Model.lookup('actor', value))
+      }
+    },
+
+    /**
+     * Transform data to activity content object
+     * @protected
+     */
+    _updateContentObject: function () {
+      if (!this.getType() || !this.getContent()) {
+        // property not ready
+        return
+      }
+      const Clazz = qx.Class.getByName('app.model.activity.content.' + this.getType())
+      qx.core.Assert.assertNotNull(Clazz)
+      return new Clazz(this.getContent())
     }
   }
 })
