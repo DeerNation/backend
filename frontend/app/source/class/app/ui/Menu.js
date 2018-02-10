@@ -68,12 +68,10 @@ qx.Class.define('app.ui.Menu', {
         value.addListener('changedStatus', this._onActorOnline, this)
         this._onActorOnline()
 
-        const actorIcon = this.getChildControl('actor-icon')
-        actorIcon.set({
-          label: value.getName().substring(0, 1).toUpperCase(),
-          backgroundColor: '#ACACAC',
-          show: 'label'
-        })
+        const actorIconBox = this.getChildControl('actor-icon-box')
+        actorIconBox.removeAll()
+        actorIconBox.add(value.getIcon())
+
         this.getChildControl('actor-container').show()
       } else {
         this.getChildControl('actor-container').hide()
@@ -173,8 +171,8 @@ qx.Class.define('app.ui.Menu', {
           this._addAt(control, 0)
           break
 
-        case 'actor-icon':
-          control = new qx.ui.basic.Atom()
+        case 'actor-icon-box':
+          control = new qx.ui.container.Composite(new qx.ui.layout.Grow())
           control.setAnonymous(true)
           this.getChildControl('actor-container').add(control, {row: 0, column: 0, rowSpan: 2})
           break

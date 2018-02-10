@@ -115,7 +115,17 @@ qx.Class.define('app.model.Activity', {
       }
       const Clazz = qx.Class.getByName('app.model.activity.content.' + this.getType())
       qx.core.Assert.assertNotNull(Clazz)
-      return new Clazz(this.getContent())
+      const content = this.getContentObject()
+      if (content instanceof Clazz) {
+        // update content object of same type
+        content.set(this.getContent())
+      } else {
+        // replace content object with new type
+        if (content) {
+          content.dispose()
+        }
+        this.setContentObject(new Clazz(this.getContent()))
+      }
     }
   }
 })

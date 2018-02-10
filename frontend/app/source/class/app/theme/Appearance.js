@@ -40,12 +40,34 @@ qx.Theme.define('app.theme.Appearance',
           }
         }
       },
-      'activity-listitem': 'listitem',
-
+      'activity-listitem': {
+        include: 'listitem',
+        alias: 'listitem',
+        style: function () {
+          return {
+            paddingTop: 10
+          }
+        }
+      },
       'activity-listitem/header': {
         style: function () {
           return {
-            marginTop: 8
+            marginBottom: 4
+          }
+        }
+      },
+
+      'activity-listitem/author-icon': {
+        style: function () {
+          return {
+            font: 'sidebar-actor-icon',
+            width: 36,
+            height: 36,
+            maxWidth: 36,
+            maxHeight: 36,
+            allowGrowX: false,
+            allowGrowY: false,
+            marginRight: 8
           }
         }
       },
@@ -56,7 +78,7 @@ qx.Theme.define('app.theme.Appearance',
           return {
             font: 'bold',
             alignY: 'middle',
-            padding: [4, 4]
+            paddingRight: 4
           }
         }
       },
@@ -90,17 +112,9 @@ qx.Theme.define('app.theme.Appearance',
         }
       },
 
-      'activity-listitem/title': {
-        include: 'label',
-        style: function () {
-          return {
-            alignY: 'middle',
-            padding: [0, 18],
-            margin: 0
-          }
-        }
-      },
-      'activity-listitem/message': 'activity-listitem/title',
+      'message-activity': {},
+      'message-activity/title': 'label',
+      'message-activity/message': 'message-activity/title',
 
       'activity-group-item':
       {
@@ -141,21 +155,18 @@ qx.Theme.define('app.theme.Appearance',
         }
       },
 
-      'splitpane/menu/actor-icon': {
+      'splitpane/menu/actor-icon-box': {
 
         style: function () {
           return {
             font: 'sidebar-actor-icon',
-            textColor: 'white',
             width: 40,
             height: 40,
             maxWidth: 40,
             maxHeight: 40,
             allowGrowX: false,
             allowGrowY: false,
-            marginRight: 10,
-            center: true,
-            decorator: 'rounded'
+            marginRight: 10
           }
         }
       },

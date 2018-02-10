@@ -378,7 +378,7 @@
       }
     },
     "app.theme.Appearance": {
-      "mtime": "2018-02-09T19:58:22.881Z",
+      "mtime": "2018-02-10T14:23:38.688Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -9574,7 +9574,7 @@
       ]
     },
     "app.model.Activity": {
-      "mtime": "2018-02-10T12:20:43.581Z",
+      "mtime": "2018-02-10T12:52:43.527Z",
       "libraryName": "app",
       "dependsOn": {
         "app.model.activity.content.Event": {
@@ -13598,7 +13598,7 @@
       "implement": []
     },
     "app.ui.form.ActivityItem": {
-      "mtime": "2018-02-10T12:23:06.772Z",
+      "mtime": "2018-02-10T14:18:22.938Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13612,7 +13612,7 @@
         "qx.ui.form.IModel": {
           "load": true
         },
-        "qx.ui.layout.VBox": {
+        "qx.ui.layout.Grid": {
           "construct": true
         },
         "qx.util.format.DateFormat": {
@@ -13623,6 +13623,7 @@
         },
         "app.model.activity.Registry": {},
         "app.Model": {},
+        "app.ui.basic.AvatarIcon": {},
         "qx.ui.layout.HBox": {},
         "qx.ui.container.Composite": {},
         "qx.ui.basic.Label": {},
@@ -13640,6 +13641,12 @@
         },
         "qx.theme.manager.Meta": {
           "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
         }
       },
       "extends": "qx.ui.core.Widget",
@@ -13650,15 +13657,15 @@
       "translations": [
         {
           "msgid": "Owner",
-          "lineNo": 120
+          "lineNo": 134
         },
         {
           "msgid": "Bot",
-          "lineNo": 123
+          "lineNo": 137
         },
         {
           "msgid": "Server",
-          "lineNo": 125
+          "lineNo": 139
         }
       ]
     },
@@ -13833,7 +13840,7 @@
       "implement": []
     },
     "app.ui.Menu": {
-      "mtime": "2018-02-09T19:02:11.005Z",
+      "mtime": "2018-02-10T13:22:19.802Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13861,8 +13868,9 @@
         "qx.ui.menu.Separator": {},
         "qx.ui.layout.Grid": {},
         "qx.ui.container.Composite": {},
-        "qx.ui.basic.Atom": {},
+        "qx.ui.layout.Grow": {},
         "qx.ui.basic.Label": {},
+        "qx.ui.basic.Atom": {},
         "qx.ui.form.MenuButton": {},
         "qx.ui.layout.HBox": {},
         "qx.ui.form.VirtualComboBox": {},
@@ -13912,52 +13920,52 @@
         },
         {
           "msgid": "Online",
-          "lineNo": 91
+          "lineNo": 89
         },
         {
           "msgid": "Offline",
-          "lineNo": 91
+          "lineNo": 89
         },
         {
           "msgid": "Add a new channel",
-          "lineNo": 114
+          "lineNo": 112
         },
         {
           "msgid": "Private channel",
-          "lineNo": 117
+          "lineNo": 115
         },
         {
           "msgid": "Write-protected channel",
-          "lineNo": 122
+          "lineNo": 120
         },
         {
           "msgid": "Channel name",
-          "lineNo": 127
+          "lineNo": 125
         },
         {
           "msgid": "Logout",
-          "lineNo": 156
+          "lineNo": 154
         },
         {
           "msgid": "Search (^ +K)",
-          "lineNo": 207
+          "lineNo": 205
         },
         {
           "msgid": "Favorites",
-          "lineNo": 232
+          "lineNo": 230
         },
         {
           "msgid": "Channels",
-          "lineNo": 236
+          "lineNo": 234
         },
         {
           "msgid": "Private channels",
-          "lineNo": 239
+          "lineNo": 237
         }
       ]
     },
     "app.ui.Channel": {
-      "mtime": "2018-02-10T10:52:11.618Z",
+      "mtime": "2018-02-10T14:36:49.966Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13994,21 +14002,6 @@
         "app.model.activity.Registry": {},
         "app.ui.form.ActivityItem": {},
         "qx.ui.core.LayoutItem": {
-          "load": true
-        },
-        "qx.core.Object": {
-          "load": true
-        },
-        "qx.core.Environment": {
-          "load": true
-        },
-        "qx.theme.manager.Meta": {
-          "load": true
-        },
-        "qx.core.ObjectRegistry": {
-          "load": true
-        },
-        "qx.core.IDisposable": {
           "load": true
         }
       },
@@ -14313,7 +14306,7 @@
       ]
     },
     "app.model.Actor": {
-      "mtime": "2018-02-09T18:42:14.654Z",
+      "mtime": "2018-02-10T13:19:35.391Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14321,7 +14314,11 @@
           "usage": "dynamic"
         },
         "app.model.AbstractModel": {
-          "load": true
+          "load": true,
+          "construct": true
+        },
+        "app.ui.basic.AvatarIcon": {
+          "construct": true
         },
         "qx.util.Validate": {
           "load": true,
@@ -14616,7 +14613,7 @@
       "implement": []
     },
     "app.ui.form.SubscriptionItem": {
-      "mtime": "2018-02-09T18:14:48.082Z",
+      "mtime": "2018-02-10T13:30:16.906Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14634,9 +14631,10 @@
           "construct": true
         },
         "app.Config": {},
-        "qx.ui.basic.Atom": {},
+        "app.ui.basic.AvatarIcon": {},
         "qx.ui.basic.Image": {},
         "qx.ui.basic.Label": {},
+        "qx.ui.basic.Atom": {},
         "qx.ui.form.MenuButton": {},
         "qx.ui.menu.Menu": {},
         "qx.ui.menu.Button": {},
@@ -14775,7 +14773,7 @@
       "implement": []
     },
     "app.ui.renderer.Message": {
-      "mtime": "2018-02-10T12:24:06.784Z",
+      "mtime": "2018-02-10T13:49:02.470Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14795,6 +14793,21 @@
         "app.data.converter.Markdown": {},
         "qx.ui.basic.Label": {},
         "qx.ui.core.LayoutItem": {
+          "load": true
+        },
+        "qx.core.Object": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.theme.manager.Meta": {
+          "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
           "load": true
         }
       },
@@ -14944,6 +14957,80 @@
         }
       },
       "extends": null,
+      "include": [],
+      "implement": []
+    },
+    "app.ui.Utils": {
+      "mtime": "2018-02-10T13:07:44.072Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.ui.basic.Atom": {}
+      },
+      "extends": null,
+      "include": [],
+      "implement": []
+    },
+    "app.ui.basic.AvatarIcon": {
+      "mtime": "2018-02-10T13:31:55.670Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.ui.basic.Atom": {
+          "load": true,
+          "construct": true
+        },
+        "qx.ui.core.Widget": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.ui.layout.Atom": {
+          "load": true
+        },
+        "qx.ui.core.LayoutItem": {
+          "load": true
+        },
+        "qx.core.Object": {
+          "load": true
+        },
+        "qx.theme.manager.Meta": {
+          "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
+        }
+      },
+      "extends": "qx.ui.basic.Atom",
+      "include": [],
+      "implement": []
+    },
+    "app.ui.form.ActivityActor": {
+      "mtime": "2018-02-10T14:32:12.280Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.ui.core.Widget": {
+          "load": true
+        },
+        "qx.ui.core.LayoutItem": {
+          "load": true
+        }
+      },
+      "extends": "qx.ui.core.Widget",
       "include": [],
       "implement": []
     }

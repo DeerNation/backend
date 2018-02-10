@@ -17,7 +17,6 @@ qx.Class.define('app.ui.renderer.Message', {
   construct: function () {
     this.base(arguments)
     this._setLayout(new qx.ui.layout.VBox())
-
   },
 
   /*
@@ -31,6 +30,11 @@ qx.Class.define('app.ui.renderer.Message', {
       event: 'changeModel',
       apply: '_applyModel',
       dereference: true
+    },
+
+    appearance: {
+      refine: true,
+      init: 'message-activity'
     }
   },
 
@@ -42,15 +46,28 @@ qx.Class.define('app.ui.renderer.Message', {
   members: {
     _applyModel: function (value, old) {
       if (old) {
-        old.removeRelatedBindings(this)
+        old.removeRelatedBindings(this.getChildControl('title'))
+        old.getContentObject() && old.getContentObject().removeRelatedBindings(this.getChildControl('message'))
       }
       if (value) {
+        let control = this.getChildControl('title')
         value.bind('title', this.getChildControl('title'), 'value', {
-          converter: app.data.converter.Markdown.convert
+          converter: function (value) {
+            if (value) {
+              control.show()
+              return app.data.converter.Markdown.convert(value)
+            } else {
+              control.exclude()
+              return value
+            }
+          }
         })
-        value.bind('contentObject.message', this.getChildControl('message'), 'value', {
-          converter: app.data.converter.Markdown.convert
-        })
+        const content = value.getContentObject()
+        if (content) {
+          content.bind('message', this.getChildControl('message'), 'value', {
+            converter: app.data.converter.Markdown.convert
+          })
+        }
       }
     },
 

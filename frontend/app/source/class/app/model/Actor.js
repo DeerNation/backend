@@ -10,6 +10,20 @@ qx.Class.define('app.model.Actor', {
 
   /*
   ******************************************************
+    CONSTRUCTOR
+  ******************************************************
+  */
+  construct: function (props) {
+    this.base(arguments, props)
+
+    const icon = new app.ui.basic.AvatarIcon()
+    this.setIcon(icon)
+    this.bind('username', icon, 'title')
+    this.bind('color', icon, 'backgroundColor')
+  },
+
+  /*
+  ******************************************************
     PROPERTIES
   ******************************************************
   */
@@ -62,6 +76,17 @@ qx.Class.define('app.model.Actor', {
       init: 'online',
       event: 'changedStatus',
       apply: '_persistProperty'
+    },
+
+    color: {
+      check: 'Color',
+      init: null,
+      event: 'changedColor'
+    },
+
+    icon: {
+      check: 'qx.ui.basic.Atom',
+      nullable: true
     }
   },
 

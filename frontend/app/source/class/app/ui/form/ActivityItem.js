@@ -16,7 +16,11 @@ qx.Class.define('app.ui.form.ActivityItem', {
   */
   construct: function (label, icon, model) {
     this.base(arguments, label, icon, model)
-    this._setLayout(new qx.ui.layout.VBox())
+    const layout = new qx.ui.layout.Grid()
+    layout.setColumnFlex(1, 1)
+    layout.setColumnAlign(0, 'left', 'top')
+    layout.setColumnAlign(1, 'left', 'top')
+    this._setLayout(layout)
 
     this.addListener('pointerover', this._onPointerOver, this)
     this.addListener('pointerout', this._onPointerOut, this)
@@ -24,6 +28,12 @@ qx.Class.define('app.ui.form.ActivityItem', {
     this.__dateFormat = new qx.util.format.DateFormat('H:m')
 
     this.setAuthorRoles(new qx.data.Array())
+
+    // create child-controls in the right order
+    this._createChildControl('author-icon')
+    this._createChildControl('authorName')
+    this._createChildControl('authorRoles')
+    this._createChildControl('published')
 
     this.getContentElement().addClass('activity')
   },
@@ -108,12 +118,16 @@ qx.Class.define('app.ui.form.ActivityItem', {
 
     // property apply
     _applyAuthor: function (author, old) {
-      this.__bindAuthorProperty('authorName', author, 'name', old)
-      this.__bindAuthorProperty('authorUsername', author, 'username', old, {
+      this.__bindAuthorProperty(author, 'name', 'author-icon', 'title', null, old)
+      this.__bindAuthorProperty(author, 'color', 'author-icon', 'backgroundColor', null, old)
+
+      this.__bindAuthorProperty(author, 'name', 'authorName', 'value', null, old)
+      this.__bindAuthorProperty(author, 'username', 'authorUsername', 'value', {
         converter: function (value) {
           return '@' + value
         }
-      })
+      }, old)
+
       const roles = this.getAuthorRoles()
       roles.removeAll()
       if (app.Model.getInstance().getSelectedSubscription().getChannel().getOwnerId() === author.getId()) {
@@ -133,12 +147,12 @@ qx.Class.define('app.ui.form.ActivityItem', {
       }
     },
 
-    __bindAuthorProperty: function (childControlName, author, propertyName, oldAuthor, bindProperties) {
+    __bindAuthorProperty: function (author, propertyName, childControlName, childControlProperty, bindProperties, oldAuthor) {
       let control = this.getChildControl(childControlName)
       if (oldAuthor) {
         oldAuthor.removeRelatedBindings(control)
       }
-      author.bind(propertyName, control, 'value', bindProperties)
+      author.bind(propertyName, control, childControlProperty || 'value', bindProperties)
     },
 
     // overridden
@@ -146,17 +160,23 @@ qx.Class.define('app.ui.form.ActivityItem', {
       let control
 
       switch (id) {
+        case 'author-icon':
+          control = new app.ui.basic.AvatarIcon()
+          control.setAnonymous(true)
+          this._add(control, {row: 0, column: 0, rowSpan: 2})
+          break
+
         case 'header':
           const layout = new qx.ui.layout.HBox()
           layout.setAlignY('middle')
           control = new qx.ui.container.Composite(layout)
-          this._addAt(control, 0)
+          this._add(control, {row: 0, column: 1})
           break
 
         case 'authorName':
           control = new qx.ui.basic.Label()
           control.setAnonymous(true)
-          this.getChildControl('header').addAt(control, 0)
+          this.getChildControl('header').addAt(control, 1)
           break
 
         case 'authorRoles':
@@ -174,24 +194,24 @@ qx.Class.define('app.ui.form.ActivityItem', {
               item.setAppearance('authorRole-listitem')
             }
           })
-          this.getChildControl('header').addAt(control, 2)
+          this.getChildControl('header').addAt(control, 3)
           break
 
         case 'authorUsername':
           control = new qx.ui.basic.Label()
           control.setAnonymous(true)
-          this.getChildControl('header').addAt(control, 1)
+          this.getChildControl('header').addAt(control, 2)
           break
 
         case 'published':
           control = new qx.ui.basic.Label(this.__dateFormat.format(this.getPublished()))
           control.setAnonymous(true)
-          this.getChildControl('header').addAt(control, 3)
+          this.getChildControl('header').addAt(control, 4)
           break
 
         case 'content-container':
           control = new qx.ui.container.Composite(new qx.ui.layout.Grow())
-          this._addAt(control, 1)
+          this._add(control, {row: 1, column: 1})
           break
       }
       return control || this.base(arguments, id, hash)

@@ -87,7 +87,8 @@ msgstr ""
 #: app/ui/form/ActivityItem.js:148 app/ui/form/ActivityItem.js:123
 #: app/ui/form/ActivityItem.js:125 app/ui/form/ActivityItem.js:129
 #: app/ui/form/ActivityItem.js:130 app/ui/form/ActivityItem.js:126
-#: app/ui/form/ActivityItem.js:120
+#: app/ui/form/ActivityItem.js:120 app/ui/form/ActivityItem.js:132
+#: app/ui/form/ActivityItem.js:131 app/ui/form/ActivityItem.js:134
 msgid "Owner"
 msgstr ""
 
@@ -96,7 +97,8 @@ msgstr ""
 #: app/ui/form/ActivityItem.js:151 app/ui/form/ActivityItem.js:126
 #: app/ui/form/ActivityItem.js:128 app/ui/form/ActivityItem.js:132
 #: app/ui/form/ActivityItem.js:133 app/ui/form/ActivityItem.js:129
-#: app/ui/form/ActivityItem.js:123
+#: app/ui/form/ActivityItem.js:123 app/ui/form/ActivityItem.js:135
+#: app/ui/form/ActivityItem.js:134 app/ui/form/ActivityItem.js:137
 msgid "Bot"
 msgstr ""
 
@@ -105,7 +107,8 @@ msgstr ""
 #: app/ui/form/ActivityItem.js:153 app/ui/form/ActivityItem.js:128
 #: app/ui/form/ActivityItem.js:130 app/ui/form/ActivityItem.js:134
 #: app/ui/form/ActivityItem.js:135 app/ui/form/ActivityItem.js:131
-#: app/ui/form/ActivityItem.js:125
+#: app/ui/form/ActivityItem.js:125 app/ui/form/ActivityItem.js:137
+#: app/ui/form/ActivityItem.js:136 app/ui/form/ActivityItem.js:139
 msgid "Server"
 msgstr ""
 

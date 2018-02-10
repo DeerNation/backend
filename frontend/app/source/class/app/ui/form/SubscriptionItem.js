@@ -66,15 +66,15 @@ qx.Class.define('app.ui.form.SubscriptionItem', {
     // apply method
     _applyModel: function (value, old) {
       if (old) {
-        old.getChannel().removeRelatedBindings(this)
-        old.removeRelatedBindings(this)
+        old.getChannel().removeRelatedBindings(this.getChildControl('icon'))
+        old.getChannel().removeRelatedBindings(this.getChildControl('name'))
+        old.removeRelatedBindings(this.getChildControl('type'))
       }
       if (value) {
         value.bind('icon', this.getChildControl('type'), 'source')
         value.getChannel().bind('title', this.getChildControl('name'), 'value')
+        value.getChannel().bind('title', this.getChildControl('icon'), 'title')
         value.getChannel().bind('color', this.getChildControl('icon'), 'backgroundColor')
-        const iconString = value.getChannel().getTitle().substring(0, 1).toUpperCase()
-        this.getChildControl('icon').setLabel(iconString)
 
         if (this.__favoriteButton) {
           if (this.getModel().isFavorite()) {
@@ -98,7 +98,7 @@ qx.Class.define('app.ui.form.SubscriptionItem', {
 
       switch (id) {
         case 'icon':
-          control = new qx.ui.basic.Atom()
+          control = new app.ui.basic.AvatarIcon()
           this._addAt(control, 0)
           break
 

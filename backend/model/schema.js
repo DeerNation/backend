@@ -341,7 +341,8 @@ class Schema {
         role: 'admin',
         name: 'Tobias Bräutigam',
         email: 'tbraeutigam@gmail.com',
-        password: bcrypt.hashSync('tester', 8)
+        password: bcrypt.hashSync('tester', 8),
+        color: '#ACACAC'
       }, {
         id: '135dd849-9cb6-466a-9a2b-688ae21b6cdf',
         type: 'Bot',
@@ -349,7 +350,8 @@ class Schema {
         role: 'bot',
         name: 'Hirschberg',
         email: 'tbraeutigam@gmail.com',
-        password: bcrypt.hashSync(botUUID, 8)
+        password: bcrypt.hashSync(botUUID, 8),
+        color: '#085525'
       }],
       Webhook: [
         {
@@ -367,7 +369,7 @@ class Schema {
           title: 'News',
           description: 'Alle Neuigkeiten aus Hirschberg',
           ownerId: '0e4a6f6f-cc0c-4aa5-951a-fcfc480dd05a',
-          color: '#ACACAC'
+          color: '#085525'
         }
       ],
       Subscription: [
@@ -381,7 +383,7 @@ class Schema {
 
     logger.debug('initializing database with default data')
     Object.keys(defaultData).forEach(key => {
-      m[key].save(defaultData[key], {conflict: 'update'}).then(result => {
+      m[key].save(defaultData[key], {conflict: 'update'}).then(() => {
         logger.debug('%s default data applied', key)
       }).error(error => {
         logger.error('Error applying default data to %s:%s', key, error)

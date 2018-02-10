@@ -40,7 +40,7 @@ function getChannelActivities (authToken, channel, from) {
 
 function getActors (authToken) {
   acl.check('actor', acl.action.READ, authToken)
-  return schema.getModel('Actor').pluck('id', 'name', 'username', 'type', 'role', 'online', 'status').run()
+  return schema.getModel('Actor').pluck('id', 'name', 'username', 'type', 'role', 'online', 'status', 'color').run()
 }
 
 function createChannel (authToken, channelData) {

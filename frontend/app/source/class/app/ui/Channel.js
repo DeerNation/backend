@@ -179,9 +179,17 @@ qx.Class.define('app.ui.Channel', {
           return date ? dateFormat.format(date) : null
         },
 
+        // createGroupItem: function () {
+        //   return new app.ui.form.ActivityActor()
+        // },
+        //
         configureGroupItem: function (item) {
           item.setAppearance('activity-group-item')
         },
+        //
+        // bindGroupItem: function (controller, item, index) {
+        //
+        // },
 
         sorter: function (a, b) {
           const adate = a.getPublished() || a.getCreated()
