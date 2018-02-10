@@ -58,7 +58,7 @@ qx.Theme.define('app.theme.Font', {
     },
 
     'event-day': {
-      size: 22,
+      size: 20,
       family: ['Roboto', 'Helvetica Neue', 'Arial', 'sans-serif']
     },
 

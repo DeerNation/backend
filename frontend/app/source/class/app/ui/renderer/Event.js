@@ -18,11 +18,14 @@ qx.Class.define('app.ui.renderer.Event', {
   construct: function () {
     this.base(arguments)
     const layout = new qx.ui.layout.Grid()
+    layout.setColumnAlign(0, 'center', 'middle')
+    layout.setColumnFlex(1, 1)
     this._setLayout(layout)
 
     const cc = ['date-sheet', 'date', 'location', 'categories']
     cc.forEach(this._createChildControl, this)
     this.__monthFormat = new qx.util.format.DateFormat('MMM')
+    this.__dayFormat = new qx.util.format.DateFormat('d')
   },
 
   /*
@@ -51,6 +54,8 @@ qx.Class.define('app.ui.renderer.Event', {
   */
   members: {
     __monthFormat: null,
+    __dayFormat: null,
+    __catController: null,
 
     _applyModel: function (value, old) {
       if (old && !value) {
@@ -78,8 +83,8 @@ qx.Class.define('app.ui.renderer.Event', {
         if (content) {
           this._bindPropertyToChildControl(content, 'start', 'day', 'value', {
             converter: function (value) {
-              return qx.lang.String.pad('' + value.getDay(), 2, '0')
-            }
+              return this.__dayFormat.format(value)
+            }.bind(this)
           }, old && old.getContentObject())
           this._bindPropertyToChildControl(content, 'start', 'month', 'value', {
             converter: function (value) {
@@ -87,12 +92,18 @@ qx.Class.define('app.ui.renderer.Event', {
             }.bind(this)
           }, old && old.getContentObject())
           this._bindPropertyToChildControl(content, 'location', 'location', 'value', null, old && old.getContentObject())
-          this._bindPropertyToChildControl(content, 'categories', 'categories', 'value', {
-            converter: function (value) {
-              return value.join(', ')
-            }
-          }, old && old.getContentObject())
           this._bindPropertyToChildControl(content, 'description', 'description', 'value', null, old && old.getContentObject())
+
+          if (!this.__catController) {
+            this.__catController = new qx.data.controller.List(content.getCategories(), this.getChildControl('categories'), '')
+            this.__catController.setDelegate({
+              configureItem: function (item) {
+                item.setAppearance('category')
+              }
+            })
+          } else {
+            this.__catController.setModel(content.getCategories())
+          }
         }
       }
     },
@@ -134,8 +145,8 @@ qx.Class.define('app.ui.renderer.Event', {
           break
 
         case 'categories':
-          control = new app.ui.basic.Label()
-          this.getChildControl('details').add(control)
+          control = new qx.ui.container.Composite(new qx.ui.layout.Flow(8, 8))
+          this._add(control, {row: 3, column: 0, colSpan: 2})
           break
 
         case 'date':
@@ -150,5 +161,14 @@ qx.Class.define('app.ui.renderer.Event', {
       }
       return control || this.base(arguments, id, hash)
     }
+  },
+
+  /*
+  ******************************************************
+    DESTRUCTOR
+  ******************************************************
+  */
+  destruct: function () {
+    this._disposeObjects('__monthFormat', '__dayFormat')
   }
 })

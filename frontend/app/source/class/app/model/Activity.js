@@ -78,7 +78,7 @@ qx.Class.define('app.model.Activity', {
       init: null
     },
 
-    channel: {
+    channelId: {
       check: 'String',
       init: null
     },

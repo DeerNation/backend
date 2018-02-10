@@ -34,12 +34,17 @@ class ICal {
           // console.log(ev)
           let event = {
             id: ev.uid,
-            start: ev.start,
-            end: ev.end,
-            location: ev.location,
+            type: 'Event',
             title: ev.summary,
-            content: ev.description,
-            categories: ev.categories
+            actorId: '135dd849-9cb6-466a-9a2b-688ae21b6cdf',
+            channelId: 'hbg.channel.events.public',
+            content: {
+              categories: ev.categories,
+              description: ev.description,
+              start: ev.start,
+              end: ev.end,
+              location: ev.location
+            }
           }
           if (ev.hasOwnProperty('organizer')) {
             let orga = ev.organizer.params.CN.trim()
@@ -50,10 +55,10 @@ class ICal {
               orga = orga.substring(0, orga.length - 1)
             }
             orga = orga.substring(1, orga.length - 1)
-            event.organizer = orga
+            event.content.organizer = orga
           }
 
-          this.__model.Event.save(event, {conflict: 'update'})
+          this.__model.Activity.save(event, {conflict: 'update'})
         }
       }
     }

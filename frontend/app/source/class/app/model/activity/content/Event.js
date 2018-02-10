@@ -17,7 +17,8 @@ qx.Class.define('app.model.activity.content.Event', {
   properties: {
     location: {
       check: 'String',
-      event: 'changeLocation'
+      event: 'changeLocation',
+      nullable: true,
     },
     start: {
       check: 'Date',
@@ -32,9 +33,10 @@ qx.Class.define('app.model.activity.content.Event', {
       transform: '_transformDate'
     },
     categories: {
-      check: 'Array',
+      check: 'qx.data.Array',
       nullable: true,
-      event: 'changeCategories'
+      event: 'changeCategories',
+      transform: '_transformArray'
     },
     organizer: {
       check: 'String',
@@ -45,6 +47,17 @@ qx.Class.define('app.model.activity.content.Event', {
       check: 'String',
       nullable: true,
       event: 'changedDescription'
+    }
+  },
+
+  /*
+  ******************************************************
+    MEMBERS
+  ******************************************************
+  */
+  members: {
+    _transformArray: function (value) {
+      return new qx.data.Array(value)
     }
   },
 

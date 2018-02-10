@@ -140,7 +140,13 @@ qx.Theme.define('app.theme.Appearance',
         Acivity type 'event'
       ---------------------------------------------------------------------------
       */
-      'event-activity': {},
+      'event-activity': {
+        style: function () {
+          return {
+            paddingTop: 8
+          }
+        }
+      },
       'event-activity/date-sheet': {
         style: function () {
           return {
@@ -167,8 +173,35 @@ qx.Theme.define('app.theme.Appearance',
           }
         }
       },
-      'event-activity/title': 'label',
-      'event-activity/description': 'message-activity/title',
+      'event-activity/title': {
+        include: 'label',
+        alias: 'label',
+
+        style: function () {
+          return {
+            font: 'bold'
+          }
+        }
+      },
+      'event-activity/description': 'label',
+
+      'event-activity/categories': {
+        style: function () {
+          return {
+            margin: [8, 0]
+          }
+        }
+      },
+
+      'category': {
+        style: function () {
+          return {
+            decorator: 'category',
+            padding: [4, 8],
+            textColor: 'info-font'
+          }
+        }
+      },
 
       /*
       ---------------------------------------------------------------------------

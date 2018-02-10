@@ -21,6 +21,7 @@ qx.Theme.define('app.theme.Color',
       'background-selected': 'rgb(65, 72, 82)',
       'lightgrey': 'rgba(68, 68, 68, 0.4)',
       'favorite': 'rgb(252, 179, 22)',
+      'category-bg': 'rgba(200, 200, 200, 0.6)',
 
       // channel-bar
       'dark-form-item-bg': 'rgb(31, 35, 41)',

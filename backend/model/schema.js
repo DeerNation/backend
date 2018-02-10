@@ -142,7 +142,8 @@ class Schema {
             description: type.string(),
             created: type.date().default(new Date()),
             ownerId: type.string(),
-            color: type.string()
+            color: type.string(),
+            typeIcon: type.string()
           },
           views: {
             publicChannels: {
@@ -294,8 +295,8 @@ class Schema {
     m.Subscription.belongsTo(m.Actor, 'actor', 'actorId', 'id')
 
     // 1-n: a Subscription has exactly one Channel, Channels can have multiple subscriptions
-    m.Channel.hasMany(m.Subscription, 'subscriptions', 'id', 'channeld')
-    m.Subscription.belongsTo(m.Channel, 'channel', 'channeld', 'id')
+    m.Channel.hasMany(m.Subscription, 'subscriptions', 'id', 'channelId')
+    m.Subscription.belongsTo(m.Channel, 'channel', 'channelId', 'id')
 
     // default Data
     let defaultData = {
@@ -335,6 +336,15 @@ class Schema {
           description: 'Alle Neuigkeiten aus Hirschberg',
           ownerId: '0e4a6f6f-cc0c-4aa5-951a-fcfc480dd05a',
           color: '#085525'
+        },
+        {
+          id: 'hbg.channel.events.public',
+          type: 'PUBLIC',
+          title: 'Veranstaltungen',
+          description: 'Veranstaltungen in Hirschberg',
+          ownerId: '0e4a6f6f-cc0c-4aa5-951a-fcfc480dd05a',
+          color: '#CC5525',
+          typeIcon: 'event'
         }
       ],
       Subscription: [
@@ -342,6 +352,12 @@ class Schema {
           id: 'f2edfa36-c431-42f8-bc69-c0b060d941dc',
           actorId: '0e4a6f6f-cc0c-4aa5-951a-fcfc480dd05a',
           channelId: 'hbg.channel.news.public',
+          favorite: true
+        },
+        {
+          id: '57ac49a7-2dc7-4997-8dbc-335f81cfad4b',
+          actorId: '0e4a6f6f-cc0c-4aa5-951a-fcfc480dd05a',
+          channelId: 'hbg.channel.events.public',
           favorite: true
         }
       ]

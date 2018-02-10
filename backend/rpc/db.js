@@ -31,7 +31,7 @@ function getChannels (authToken) {
 function getChannelActivities (authToken, channel, from) {
   acl.check('activity', acl.action.READ, authToken)
   const r = schema.getR()
-  let filter = r.row('channel').eq(channel).and(r.row.hasFields('actorId'))
+  let filter = r.row('channelId').eq(channel).and(r.row.hasFields('actorId'))
   if (from) {
     filter.and(r.row('published').ge(from))
   }

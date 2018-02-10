@@ -317,7 +317,7 @@
       }
     },
     "app.theme.Color": {
-      "mtime": "2018-02-10T16:02:20.283Z",
+      "mtime": "2018-02-10T21:19:32.277Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -333,7 +333,7 @@
       "implement": []
     },
     "app.theme.Decoration": {
-      "mtime": "2018-02-10T16:18:26.020Z",
+      "mtime": "2018-02-10T17:15:00.807Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -349,7 +349,7 @@
       "implement": []
     },
     "app.theme.Font": {
-      "mtime": "2018-02-10T16:26:56.464Z",
+      "mtime": "2018-02-10T16:37:39.072Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -378,7 +378,7 @@
       }
     },
     "app.theme.Appearance": {
-      "mtime": "2018-02-10T16:15:20.122Z",
+      "mtime": "2018-02-10T17:21:41.696Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -9574,7 +9574,7 @@
       ]
     },
     "app.model.Activity": {
-      "mtime": "2018-02-10T12:52:43.527Z",
+      "mtime": "2018-02-10T20:26:52.613Z",
       "libraryName": "app",
       "dependsOn": {
         "app.model.activity.content.Event": {
@@ -13675,7 +13675,7 @@
       ]
     },
     "app.Config": {
-      "mtime": "2018-02-09T19:50:06.080Z",
+      "mtime": "2018-02-10T19:36:01.723Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14212,7 +14212,7 @@
       }
     },
     "app.model.Subscription": {
-      "mtime": "2018-02-09T17:47:25.067Z",
+      "mtime": "2018-02-10T19:32:57.856Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14243,7 +14243,7 @@
       "implement": []
     },
     "app.model.Channel": {
-      "mtime": "2018-02-09T16:41:44.414Z",
+      "mtime": "2018-02-10T19:32:57.840Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14871,7 +14871,7 @@
       "implement": []
     },
     "app.model.activity.content.Event": {
-      "mtime": "2018-02-10T15:15:40.268Z",
+      "mtime": "2018-02-10T21:11:06.824Z",
       "libraryName": "app",
       "dependsOn": {
         "app.model.activity.Registry": {
@@ -14885,6 +14885,7 @@
         "app.model.activity.content.AbstractActivityContent": {
           "load": true
         },
+        "qx.data.Array": {},
         "app.ui.renderer.Event": {
           "defer": "runtime"
         },
@@ -15063,7 +15064,7 @@
       "implement": []
     },
     "app.ui.renderer.Event": {
-      "mtime": "2018-02-10T16:13:22.186Z",
+      "mtime": "2018-02-10T17:20:49.856Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -15087,10 +15088,11 @@
           "construct": true
         },
         "app.data.converter.Markdown": {},
-        "qx.lang.String": {},
+        "qx.data.controller.List": {},
         "qx.ui.layout.VBox": {},
         "qx.ui.container.Composite": {},
         "app.ui.basic.Label": {},
+        "qx.ui.layout.Flow": {},
         "qx.ui.core.LayoutItem": {
           "load": true
         },
@@ -15216,6 +15218,50 @@
         }
       },
       "extends": "qx.ui.basic.Label",
+      "include": [],
+      "implement": []
+    },
+    "qx.ui.layout.Flow": {
+      "mtime": "2018-01-27T22:11:00.461Z",
+      "libraryName": "qx",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.ui.layout.Abstract": {
+          "load": true,
+          "construct": true
+        },
+        "qx.core.Environment": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.ui.layout.LineSizeIterator": {},
+        "qx.ui.layout.Util": {}
+      },
+      "extends": "qx.ui.layout.Abstract",
+      "include": [],
+      "implement": [],
+      "environment": {
+        "provided": [],
+        "required": {
+          "qx.debug": {
+            "load": true
+          }
+        }
+      }
+    },
+    "qx.ui.layout.LineSizeIterator": {
+      "mtime": "2018-01-27T22:11:00.461Z",
+      "libraryName": "qx",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        }
+      },
+      "extends": "Object",
       "include": [],
       "implement": []
     }

@@ -84,6 +84,12 @@ qx.Class.define('app.model.Channel', {
       check: 'Color',
       init: null,
       event: 'changedColor'
+    },
+
+    typeIcon: {
+      check: 'String',
+      nullable: true,
+      event: 'changedTypeIcon'
     }
   }
 })
