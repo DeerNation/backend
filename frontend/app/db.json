@@ -13683,7 +13683,7 @@
       ]
     },
     "app.Config": {
-      "mtime": "2018-02-11T12:05:21.525Z",
+      "mtime": "2018-02-11T13:10:16.430Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13692,7 +13692,8 @@
         },
         "qx.core.Environment": {
           "load": true,
-          "usage": "dynamic"
+          "usage": "dynamic",
+          "defer": "runtime"
         },
         "qx.bom.client.Device": {
           "load": true
@@ -13708,6 +13709,9 @@
           "device.type": {
             "load": true,
             "className": "qx.bom.client.Device"
+          },
+          "qx.debug": {
+            "defer": true
           }
         }
       },

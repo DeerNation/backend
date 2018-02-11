@@ -13,7 +13,10 @@
     },
     {
       "type": "build",
-      "outputPath": "build-output"
+      "outputPath": "build-output",
+      "environment": {
+        "qx.debug": false
+      }
     }
   ],
   "defaultTarget": "source",

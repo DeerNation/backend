@@ -59,7 +59,7 @@ class Worker extends SCWorker {
 
     httpServer.on('request', app)
 
-    let iCal = new ICal('index.ics', crud.models)
+    let iCal = new ICal(environment === 'dev' ? 'index.ics' : 'https://www.hirschberg-sauerland.de/index.php?id=373&type=150&L=0&tx_cal_controller%5Bcalendar%5D=1&tx_cal_controller%5Bview%5D=ics&cHash=b1aa5a58b6552eaba4eae2551f8d6d75', crud.models)
     logger.debug('Installing iCal importer cronjob')
     cron.schedule('0 0 * * * *', iCal.update.bind(iCal), true)
 

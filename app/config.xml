@@ -7,7 +7,7 @@
     <author email="dev@hirschberg.sauerland.de" href="http://www.hischberg-sauerland.de">
         Tobias Bräutigam
     </author>
-    <content src="source-output/app/index.html" />
+    <content src="build-output/index.html" />
     <plugin name="cordova-plugin-whitelist" spec="1" />
     <access origin="*" />
     <allow-intent href="http://*/*" />

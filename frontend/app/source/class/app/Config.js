@@ -64,9 +64,10 @@ qx.Class.define('app.Config', {
   },
 
   defer: function (statics) {
+    // TODO: does not seem to work
     statics.isApp = !!window.cordova
-    if (statics.isApp) {
-      statics.socket.host = 'app.hirschberg-sauerland.de'
+    if (statics.isApp || qx.core.Environment.get('qx.debug') === false) {
+      statics.socket.hostname = 'app.hirschberg-sauerland.de'
       statics.socket.secure = true
     }
   }
