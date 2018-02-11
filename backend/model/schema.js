@@ -5,7 +5,7 @@
  * @since 2018
  */
 const scCrudRethink = require('sc-crud-rethink')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const logger = require('../logger')(__filename)
 const {botUUID} = require('../util')
 const i18n = require('i18n')

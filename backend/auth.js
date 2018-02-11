@@ -4,7 +4,7 @@
  * @author tobiasb
  * @since 2018
  */
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const logger = require('./logger')(__filename)
 const i18n = require('i18n')
 
