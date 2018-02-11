@@ -208,14 +208,14 @@ qx.Theme.define('app.theme.Appearance',
         SIDEBAR
       ---------------------------------------------------------------------------
       */
-      'splitpane/menu/actor-container': {
+      'main/menu/actor-container': {
         style: function () {
           return {
             padding: 8
           }
         }
       },
-      'splitpane/menu/actor-name': {
+      'main/menu/actor-name': {
         include: 'label',
         alias: 'label',
 
@@ -227,7 +227,7 @@ qx.Theme.define('app.theme.Appearance',
         }
       },
 
-      'splitpane/menu/actor-icon-box': {
+      'main/menu/actor-icon-box': {
 
         style: function () {
           return {
@@ -243,7 +243,7 @@ qx.Theme.define('app.theme.Appearance',
         }
       },
 
-      'splitpane/menu/menu-button': {
+      'main/menu/menu-button': {
 
         style: function () {
           return {
@@ -254,14 +254,14 @@ qx.Theme.define('app.theme.Appearance',
           }
         }
       },
-      'splitpane/menu/searchbar-container': {
+      'main/menu/searchbar-container': {
         style: function () {
           return {
             padding: 8
           }
         }
       },
-      'splitpane/menu/searchbox/textfield': {
+      'main/menu/searchbox/textfield': {
 
         style: function () {
           return {
@@ -271,7 +271,7 @@ qx.Theme.define('app.theme.Appearance',
           }
         }
       },
-      'splitpane/menu/addchannel-button': {
+      'main/menu/addchannel-button': {
 
         style: function () {
           return {
@@ -287,7 +287,7 @@ qx.Theme.define('app.theme.Appearance',
         }
       },
 
-      'splitpane/menu/actor-status': {
+      'main/menu/actor-status': {
         include: 'atom',
         alias: 'atom',
         style: function () {
@@ -297,7 +297,7 @@ qx.Theme.define('app.theme.Appearance',
           }
         }
       },
-      'splitpane/menu/actor-status/icon': {
+      'main/menu/actor-status/icon': {
 
         style: function () {
           return {
@@ -333,8 +333,8 @@ qx.Theme.define('app.theme.Appearance',
       },
 
       'channel-listitem/icon': {
-        include: 'splitpane/menu/actor-icon',
-        alias: 'splitpane/menu/actor-icon',
+        include: 'main/menu/actor-icon',
+        alias: 'main/menu/actor-icon',
 
         style: function () {
           return {
@@ -375,7 +375,7 @@ qx.Theme.define('app.theme.Appearance',
         }
       },
 
-      'splitpane/menu': {
+      'main/menu': {
         style: function () {
           return {
             backgroundColor: 'menu-background',
@@ -387,7 +387,7 @@ qx.Theme.define('app.theme.Appearance',
           }
         }
       },
-      'splitpane/menu/list': {
+      'main/menu/list': {
         include: 'list',
         alias: 'list',
 
@@ -400,7 +400,7 @@ qx.Theme.define('app.theme.Appearance',
         }
       },
 
-      'splitpane/channel/list': {
+      'main/channel/list': {
         include: 'list',
         alias: 'list',
 
@@ -411,7 +411,7 @@ qx.Theme.define('app.theme.Appearance',
         }
       },
 
-      'splitpane/channel/header': {
+      'main/channel/header': {
         style: function () {
           return {
             minHeight: 50,
@@ -421,7 +421,7 @@ qx.Theme.define('app.theme.Appearance',
         }
       },
 
-      'splitpane/channel/header/title': {
+      'main/channel/header/title': {
         style: function () {
           return {
             margin: 8,
@@ -430,7 +430,7 @@ qx.Theme.define('app.theme.Appearance',
         }
       },
 
-      'splitpane/channel/header/title/label': {
+      'main/channel/header/title/label': {
         style: function () {
           return {
             font: 'channel'
@@ -438,7 +438,7 @@ qx.Theme.define('app.theme.Appearance',
         }
       },
 
-      'splitpane/channel/header/title/icon': {
+      'main/channel/header/title/icon': {
         style: function () {
           return {
             textColor: 'lightgrey'
@@ -446,7 +446,7 @@ qx.Theme.define('app.theme.Appearance',
         }
       },
 
-      'splitpane/channel/header/favorite': {
+      'main/channel/header/favorite': {
         style: function (states) {
           return {
             textColor: states.enabled ? 'favorite' : 'lightgrey'
@@ -454,7 +454,7 @@ qx.Theme.define('app.theme.Appearance',
         }
       },
 
-      'splitpane/channel/header/description': {
+      'main/channel/header/description': {
         style: function () {
           return {
             textColor: 'lightgrey',
@@ -500,6 +500,18 @@ qx.Theme.define('app.theme.Appearance',
         }
       },
 
-      'scrollbar/button': {}
+      'scrollbar/button': {},
+
+      'button': {
+        alias: 'button-frame',
+        include: 'button-frame',
+
+        style: function () {
+          return {
+            center: true,
+            decorator: null
+          }
+        }
+      }
     }
   })

@@ -23,6 +23,8 @@ qx.Class.define('app.ui.Channel', {
     app.Model.getInstance().bind('selectedSubscription', this, 'subscription')
 
     this._createChildControl('list')
+
+    this.addListener('swipe', this._onSwipe, this)
   },
 
   /*
@@ -60,6 +62,13 @@ qx.Class.define('app.ui.Channel', {
   members: {
     __currentSCChannel: null,
     __dateFormat: null,
+
+    _onSwipe: function (ev) {
+      if (ev.getDirection() === 'right') {
+        const main = qx.core.Init.getApplication().getMain()
+        main.getChildControl('menu').getChildControl('list').getSelection().removeAll()
+      }
+    },
 
     // property apply
     _applySubscription: function (subscription, oldSubscription) {

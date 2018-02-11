@@ -3,6 +3,8 @@
  *
  * @author tobiasb
  * @since 2018
+ * @require(app.ui.Menu)
+ * @require(app.mobile.ui.Menu)
  */
 
 qx.Class.define('app.ui.Main', {
@@ -17,11 +19,25 @@ qx.Class.define('app.ui.Main', {
     this.base(arguments, 'horizontal')
     this._createChildControl('menu')
     this._createChildControl('channel')
+
     this.getChildControl('splitter').set({
       anonymous: true,
       width: 0,
-      maxWidth: 0
+      maxWidth: 0,
+      height: 0,
+      maxHeight: 0
     })
+  },
+  /*
+ ******************************************************
+   PROPERTIES
+ ******************************************************
+ */
+  properties: {
+    appearance: {
+      refine: true,
+      init: 'main'
+    }
   },
 
   /*
@@ -35,9 +51,10 @@ qx.Class.define('app.ui.Main', {
       let control
       switch (id) {
         case 'menu':
-          control = app.ui.Menu.getInstance()
+          control = new app.ui.Menu()
           this.add(control)
           break
+
         case 'channel': {
           control = new app.ui.Channel()
           this.add(control, 1)

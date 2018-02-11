@@ -12,6 +12,8 @@
  * This is the main application class of your custom application "app"
  *
  * @asset(app/*)
+ * @require(app.ui.Main)
+ * @require(app.mobile.ui.Main)
  */
 qx.Class.define('app.Application', {
   extend: qx.application.Standalone,
@@ -25,6 +27,8 @@ qx.Class.define('app.Application', {
   members: {
     __activities: null,
     __socket: null,
+    __main: null,
+
     /**
      * This method contains the initial application code and gets called
      * during startup of the application
@@ -34,6 +38,10 @@ qx.Class.define('app.Application', {
     main: function () {
       // Call super class
       this.base(arguments)
+
+      if (app.Config.target === 'mobile') {
+        qx.theme.manager.Meta.getInstance().setTheme(app.mobile.theme.Theme)
+      }
 
       // Enable logging in debug variant
       if (qx.core.Environment.get('qx.debug')) {
@@ -55,7 +63,7 @@ qx.Class.define('app.Application', {
       -------------------------------------------------------------------------
       */
       this.__socket = app.io.Socket.getInstance()
-      const main = new app.ui.Main()
+      const main = this.__main = new (app.Config.getTargetClass('app.ui.Main'))()
 
       // RPC test
       if (this.__socket.isAuthenticated()) {
@@ -75,9 +83,14 @@ qx.Class.define('app.Application', {
       doc.add(main, {edge: 0})
     },
 
+    getMain: function () {
+      return this.__main
+    },
+
     // interface method
     terminate: function () {
       this.__socket.close()
+      this.__main.dispose()
     }
   }
 })

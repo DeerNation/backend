@@ -131,7 +131,8 @@ qx.Class.define('app.ui.form.ActivityItem', {
 
       const roles = this.getAuthorRoles()
       roles.removeAll()
-      if (app.Model.getInstance().getSelectedSubscription().getChannel().getOwnerId() === author.getId()) {
+      if (app.Model.getInstance().getSelectedSubscription() &&
+        app.Model.getInstance().getSelectedSubscription().getChannel().getOwnerId() === author.getId()) {
         roles.push(this.tr('Owner'))
       }
       if (author.getType() === 'Bot') {

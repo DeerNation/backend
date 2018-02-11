@@ -31,10 +31,10 @@ qx.Class.define('app.Config', {
      * @returns {Class}
      */
     getTargetClass: function (path) {
-      let newPath = null
-      if (path !== 'desktop') {
+      let newPath = path
+      if (this.target !== 'desktop') {
         let parts = path.split('.')
-        parts.insertAt(1, this.target)
+        qx.lang.Array.insertAt(parts, this.target, 1)
         newPath = parts.join('.')
       }
       if (qx.Class.isDefined(newPath)) {
