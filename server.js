@@ -9,6 +9,7 @@
 
 const argv = require('minimist')(process.argv.slice(2))
 const scHotReboot = require('sc-hot-reboot')
+const fs = require('fs')
 
 const fsUtil = require('socketcluster/fsutil')
 const waitForFile = fsUtil.waitForFile
@@ -47,6 +48,14 @@ let options = {
   killMasterOnSignal: false,
   environment: environment,
   logLevel: logLevel
+}
+if (environment === 'production') {
+  options.protocol = 'https'
+  options.protocolOptions = {
+    key: fs.readFileSync('/opt/psa/var/modules/letsencrypt/etc/live/app.hirschberg-sauerland.de/privkey.pem'),
+    cert: fs.readFileSync('/opt/psa/var/modules/letsencrypt/etc/live/app.hirschberg-sauerland.de/cert.pem'),
+    ca: fs.readFileSync('/opt/psa/var/modules/letsencrypt/etc/live/app.hirschberg-sauerland.de/chain.pem')
+  }
 }
 
 let bootTimeout = Number(process.env.SOCKETCLUSTER_CONTROLLER_BOOT_TIMEOUT) || 10000

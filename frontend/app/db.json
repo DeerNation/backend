@@ -5265,6 +5265,12 @@
         },
         "qx.theme.manager.Meta": {
           "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
         }
       },
       "extends": "qx.ui.form.MenuButton",
@@ -13677,7 +13683,7 @@
       ]
     },
     "app.Config": {
-      "mtime": "2018-02-11T10:49:58.450Z",
+      "mtime": "2018-02-11T12:05:21.525Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
