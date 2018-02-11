@@ -185,7 +185,7 @@ class Schema {
       },
 
       thinkyOptions: {
-        host: process.env.DATABASE_HOST || '172.17.0.2',
+        host: process.env.DATABASE_HOST || '127.0.0.1',
         port: process.env.DATABASE_PORT || 28015
       }
     }

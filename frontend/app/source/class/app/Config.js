@@ -61,5 +61,13 @@ qx.Class.define('app.Config', {
       plus: '@FASolid/f067',
       event: '@FARegular/f073'
     }
+  },
+
+  defer: function (statics) {
+    statics.isApp = !!window.cordova
+    if (statics.isApp) {
+      statics.socket.host = 'app.hirschberg-sauerland.de'
+      statics.socket.secure = true
+    }
   }
 })
