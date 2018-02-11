@@ -41,7 +41,6 @@
   ],
   "readmeFilename": "README.md",
   "scripts": {
-    "prestart": "cd frontend/app && qx compile --target=build",
     "start": "ENV=production node server.js",
     "predev": "cd frontend/app && qx compile --watch &",
     "dev": "DATABASE_HOST=172.17.0.2 ENV=dev node server.js",
