@@ -26,7 +26,7 @@ qx.Class.define('app.ui.form.ActivityItem', {
     this.addListener('pointerover', this._onPointerOver, this)
     this.addListener('pointerout', this._onPointerOut, this)
 
-    this.__dateFormat = new qx.util.format.DateFormat('H:m')
+    this.__dateFormat = new qx.util.format.DateFormat('H:mm')
 
     this.setAuthorRoles(new qx.data.Array())
 
