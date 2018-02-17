@@ -1,13 +1,21 @@
 {
   "name": "de.hirschbergsauerland.app",
   "version": "1.0.0",
-  "displayName": "DeerNation",
+  "displayName": "Kuiern 2.0",
   "cordova": {
     "platforms": [
       "android"
-    ]
+    ],
+    "plugins": {
+      "cordova-plugin-whitelist": {},
+      "phonegap-plugin-push": {
+        "FCM_VERSION": "11.6.2"
+      }
+    }
   },
   "dependencies": {
-    "cordova-android": "7.0.0"
+    "cordova-android": "7.0.0",
+    "cordova-plugin-whitelist": "1",
+    "phonegap-plugin-push": "^2.1.3"
   }
 }

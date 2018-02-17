@@ -109,6 +109,53 @@ function updateObjectProperty (authToken, type, id, prop, value) {
   })
 }
 
+function setFirebaseToken (authToken, firebaseToken, oldToken) {
+  acl.check('firebase', acl.action.UPDATE, authToken, i18n.__('You are not allowed to save this token.'))
+  const crud = schema.getCrud()
+
+  if (oldToken) {
+    // delete old token
+    schema.getModel('Firebase').get(oldToken).delete()
+  }
+
+  if (firebaseToken) {
+    return schema.getModel('Firebase').get(firebaseToken).run()
+      .then(() => {
+        return new Promise((resolve, reject) => {
+          crud.update({
+            type: 'Firebase',
+            id: firebaseToken,
+            field: 'actorId',
+            value: authToken.user
+          }, (err, res) => {
+            if (err) {
+              reject(err)
+            } else {
+              resolve(res)
+            }
+          })
+        })
+      })
+      .catch(() => {
+        return new Promise((resolve, reject) => {
+          crud.create({
+            type: 'Firebase',
+            value: {
+              actorId: authToken.user,
+              id: firebaseToken
+            }
+          }, (err, res) => {
+            if (err) {
+              reject(err)
+            } else {
+              resolve(res)
+            }
+          })
+        })
+      })
+  }
+}
+
 module.exports = {
   getChannels: getChannels,
   getSubscriptions: getSubscriptions,
@@ -116,5 +163,6 @@ module.exports = {
   getActors: getActors,
   createChannel: createChannel,
   getObject: getObject,
-  updateObjectProperty: updateObjectProperty
+  updateObjectProperty: updateObjectProperty,
+  setFirebaseToken: setFirebaseToken
 }

@@ -4,18 +4,27 @@
  *
  * @author tobiasb
  * @since 2018
+ * @global(firebase)
  */
+importScripts('../js/firebase-app.js')
+importScripts('../js/firebase-messaging.js')
+let config = {
+  messagingSenderId: '1022981480494'
+}
+firebase.initializeApp(config)
 
-self.addEventListener('push', function (event) {
-  console.log('[Service Worker] Push Received.')
-  console.log(`[Service Worker] Push had this data: "${event.data.text()}"`)
+const messaging = firebase.messaging()
 
-  const title = 'Hirschberg'
-  const options = {
-    body: 'Yay it works.',
-    icon: 'app/test.png',
-    badge: 'app/test.png'
+messaging.setBackgroundMessageHandler(function (payload) {
+  console.log('[firebase-messaging-sw.js] Received background message ', payload)
+  // Customize notification here
+  const notificationTitle = payload.data.title
+  delete payload.data.title
+  const notificationOptions = {
+    body: payload.data.message
   }
+  delete payload.data.message
+  Object.assign(notificationOptions, payload.data)
 
-  event.waitUntil(self.registration.showNotification(title, options))
+  return self.registration.showNotification(notificationTitle, notificationOptions)
 })

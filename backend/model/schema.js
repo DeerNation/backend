@@ -77,6 +77,17 @@ class Schema {
             }
           }
         },
+        Firebase: {
+          fields: {
+            id: type.string(),
+            actorId: type.string(),
+            created: type.date().default(new Date()),
+            info: type.object()
+          },
+          filters: {
+            pre: mustBeOwner
+          }
+        },
         Config: {
           fields: {
             actorId: type.string(),
@@ -263,6 +274,8 @@ class Schema {
 
     // create indices
     m.Activity.ensureIndex('content.start')
+    m.Firebase.ensureIndex('infos.platform')
+    m.Firebase.ensureIndex('actorId')
 
     // create relations
 
@@ -285,6 +298,10 @@ class Schema {
     // 1-1: Actor<->Config relation
     m.Actor.hasOne(m.Config, 'config', 'id', 'actorId')
     m.Config.belongsTo(m.Actor, 'actor', 'actorId', 'id')
+
+    // 1-n: Firebase can oly have one actor
+    m.Actor.hasMany(m.Firebase, 'firebase', 'id', 'actorId')
+    m.Firebase.belongsTo(m.Actor, 'actor', 'actorId', 'id')
 
     // 1-n: a Channel has exactly one owner
     m.Actor.hasMany(m.Channel, 'channels', 'id', 'ownerId')
@@ -352,13 +369,31 @@ class Schema {
           id: 'f2edfa36-c431-42f8-bc69-c0b060d941dc',
           actorId: '0e4a6f6f-cc0c-4aa5-951a-fcfc480dd05a',
           channelId: 'hbg.channel.news.public',
-          favorite: true
+          favorite: true,
+          desktopNotification: {
+            type: 'all'
+          },
+          mobileNotification: {
+            type: 'mentioned'
+          },
+          emailNotification: {
+            type: 'none'
+          }
         },
         {
           id: '57ac49a7-2dc7-4997-8dbc-335f81cfad4b',
           actorId: '0e4a6f6f-cc0c-4aa5-951a-fcfc480dd05a',
           channelId: 'hbg.channel.events.public',
-          favorite: true
+          favorite: true,
+          desktopNotification: {
+            type: 'all'
+          },
+          mobileNotification: {
+            type: 'mentioned'
+          },
+          emailNotification: {
+            type: 'none'
+          }
         }
       ]
     }

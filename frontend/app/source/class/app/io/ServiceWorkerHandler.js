@@ -28,6 +28,12 @@ qx.Class.define('app.io.ServiceWorkerHandler', {
     subscribed: {
       check: 'Boolean',
       init: false
+    },
+
+    registration: {
+      check: 'Object',
+      nullable: true,
+      event: 'changedRegistration'
     }
   },
 
@@ -37,7 +43,6 @@ qx.Class.define('app.io.ServiceWorkerHandler', {
   ******************************************************
   */
   members: {
-    __swRegistration: null,
     __applicationServerPublicKey: null,
 
     init: function (pathToWorker) {
@@ -48,19 +53,19 @@ qx.Class.define('app.io.ServiceWorkerHandler', {
           .then(swReg => {
             this.info('Service Worker is registered', swReg)
 
-            this.__swRegistration = swReg
+            this.setRegistration(swReg)
 
-            this.__swRegistration.pushManager.getSubscription()
-              .then(subscription => {
-                const isSubscribed = !(subscription === null)
-
-                if (isSubscribed) {
-                  this.info('User IS subscribed.')
-                } else {
-                  this.info('User is NOT subscribed.')
-                  this.subscribeUser()
-                }
-              })
+            // this.__swRegistration.pushManager.getSubscription()
+            //   .then(subscription => {
+            //     const isSubscribed = !(subscription === null)
+            //
+            //     if (isSubscribed) {
+            //       this.info('User IS subscribed.')
+            //     } else {
+            //       this.info('User is NOT subscribed.')
+            //       this.subscribeUser()
+            //     }
+            //   })
           })
           .catch(error => {
             this.error('Service Worker Error', error)
@@ -70,44 +75,66 @@ qx.Class.define('app.io.ServiceWorkerHandler', {
       }
     },
 
-    subscribeUser: function () {
-      const applicationServerKey = this.__urlB64ToUint8Array(this.__applicationServerPublicKey)
-      this.__swRegistration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: applicationServerKey
+    /**
+     * @returns {Promise<ServiceWorkerRegistration>}
+     */
+    getWorkerRegistration: function () {
+      return new Promise((resolve, reject) => {
+        if (this.getRegistration()) {
+          resolve(this.getRegistration())
+        } else {
+          let timer = qx.event.Timer.once(() => {
+            reject(new Error('timeout waiting for ServiceRegistration'))
+          }, this, 5000)
+          let lid = this.addListener('changedRegistration', () => {
+            if (this.getRegistration()) {
+              resolve(this.getRegistration())
+              this.removeListenerById(lid)
+              timer.stop()
+            }
+          })
+        }
       })
-        .then(subscription => {
-          this.info('User is subscribed.')
-
-          this.updateSubscriptionOnServer(subscription)
-
-          this.setSubscribed(true)
-        })
-        .catch(function (err) {
-          this.info('Failed to subscribe the user: ', err)
-        })
-    },
-
-    updateSubscriptionOnServer: function (subscription) {
-      // TODO: Send subscription to application server
-      if (subscription) {
-        console.log(subscription)
-      }
-    },
-
-    __urlB64ToUint8Array: function (base64String) {
-      const padding = '='.repeat((4 - base64String.length % 4) % 4)
-      const base64 = (base64String + padding)
-        .replace(/-/g, '+')
-        .replace(/_/g, '/')
-
-      const rawData = window.atob(base64)
-      const outputArray = new Uint8Array(rawData.length)
-
-      for (let i = 0; i < rawData.length; ++i) {
-        outputArray[i] = rawData.charCodeAt(i)
-      }
-      return outputArray
     }
+
+    // subscribeUser: function () {
+    //   const applicationServerKey = this.__urlB64ToUint8Array(this.__applicationServerPublicKey)
+    //   this.__swRegistration.pushManager.subscribe({
+    //     userVisibleOnly: true,
+    //     applicationServerKey: applicationServerKey
+    //   })
+    //     .then(subscription => {
+    //       this.info('User is subscribed.')
+    //
+    //       this.updateSubscriptionOnServer(subscription)
+    //
+    //       this.setSubscribed(true)
+    //     })
+    //     .catch(function (err) {
+    //       this.info('Failed to subscribe the user: ', err)
+    //     })
+    // },
+    //
+    // updateSubscriptionOnServer: function (subscription) {
+    //   // TODO: Send subscription to application server
+    //   if (subscription) {
+    //     console.log(subscription)
+    //   }
+    // },
+
+    // __urlB64ToUint8Array: function (base64String) {
+    //   const padding = '='.repeat((4 - base64String.length % 4) % 4)
+    //   const base64 = (base64String + padding)
+    //     .replace(/-/g, '+')
+    //     .replace(/_/g, '/')
+    //
+    //   const rawData = window.atob(base64)
+    //   const outputArray = new Uint8Array(rawData.length)
+    //
+    //   for (let i = 0; i < rawData.length; ++i) {
+    //     outputArray[i] = rawData.charCodeAt(i)
+    //   }
+    //   return outputArray
+    // }
   }
 })

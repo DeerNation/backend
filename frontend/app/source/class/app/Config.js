@@ -25,6 +25,10 @@ qx.Class.define('app.Config', {
     crudChannelPrefix: 'crud>',
     target: qx.core.Environment.get('device.type'),
 
+    firebaseConfig: {
+      messagingSenderId: '1022981480494'
+    },
+
     /**
      * Adds the current target to the classpath
      * @param path {String} class path
@@ -60,15 +64,14 @@ qx.Class.define('app.Config', {
       smiley: '@FARegular/f118',
       plus: '@FASolid/f067',
       event: '@FARegular/f073'
-    }
-  },
+    },
 
-  defer: function (statics) {
-    // TODO: does not seem to work
-    statics.isApp = !!window.cordova
-    if (statics.isApp || qx.core.Environment.get('qx.debug') === false) {
-      statics.socket.hostname = 'app.hirschberg-sauerland.de'
-      statics.socket.secure = true
+    init: function () {
+      this.isApp = !!window.cordova
+      if (this.isApp) {
+        this.socket.hostname = 'app.hirschberg-sauerland.de'
+        this.socket.secure = true
+      }
     }
   }
 })

@@ -13,6 +13,7 @@ const logger = require('./backend/logger')(__filename)
 const WebhookHandler = require('./backend/webhook/handler')
 const channelHandler = require('./backend/ChannelHandler')
 const rpcServer = require('./backend/rpc')
+const pushNotifications = require('./backend/notification')
 
 class Worker extends SCWorker {
   run () {
@@ -66,15 +67,26 @@ class Worker extends SCWorker {
     // start listening on changes to Activities
     channelHandler.start()
 
+    // TODO: remove this once FCM is working fine
+    rpcServer.registerRPCEndpoints({
+      testPush: function (authToken, title, message, options) {
+        pushNotifications.send([authToken.user], title, message, options)
+      }
+    })
+
     /*
       In here we handle our incoming realtime connections and listen for events.
     */
     scServer.on('connection', function (socket) {
       // activate authentification
-      auth(socket, scServer)
+      if (socket.authToken) {
+        auth(socket, scServer)
+        pushNotifications.syncTopicSubscriptions(socket.authToken.user)
+      } else {
+        auth(socket, scServer, pushNotifications.syncTopicSubscriptions.bind(pushNotifications))
+      }
 
       rpcServer.upgradeToWAMP(socket)
-      // let iCal = new ICal('https://www.hirschberg-sauerland.de/index.php?id=373&type=150&L=0&tx_cal_controller%5Bcalendar%5D=1&tx_cal_controller%5Bview%5D=ics&cHash=b1aa5a58b6552eaba4eae2551f8d6d75', {}, function(err, data) {
 
       // socket.on('disconnect', function () {
       //

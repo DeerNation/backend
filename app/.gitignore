@@ -7,3 +7,5 @@ platforms/ios/cordova/console.log
 # android
 platforms/*
 plugins/*
+google-services.json
+GoogleService-Info.plist

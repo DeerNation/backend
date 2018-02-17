@@ -19,6 +19,9 @@
     "minimist": "1.1.0",
     "morgan": "1.7.0",
     "node-cron": "^1.2.1",
+    "node-gcm": "^0.14.10",
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2",
     "sc-crud-rethink": "^6.0.2",
     "sc-errors": "~1.3.3",
     "sc-framework-health-check": "~2.0.0",
@@ -78,7 +81,8 @@
       "dialog",
       "socketCluster",
       "wampSocketCluster",
-      "showdown"
+      "showdown",
+      "firebase"
     ]
   }
 }

@@ -28388,6 +28388,18 @@
         "mtime": "2018-02-07T20:10:43.242Z",
         "width": 309,
         "height": 95
+      },
+      "js/firebase-app.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/firebase-messaging.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "app/manifest.json": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
       }
     },
     "dialog": {

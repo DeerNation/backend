@@ -63,6 +63,8 @@
   "externalResources" :
   {
     "script": [
+      "js/firebase-app.js",
+      "js/firebase-messaging.js",
       "js/socketcluster.js",
       "js/WAMPClient.bundle.min.js",
       "js/showdown.min.js"

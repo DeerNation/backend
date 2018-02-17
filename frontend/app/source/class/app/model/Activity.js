@@ -3,8 +3,6 @@
  *
  * @author tobiasb
  * @since 2018
- * @require(app.model.activity.content.Event)
- * @require(app.model.activity.content.Message)
  */
 
 qx.Class.define('app.model.Activity', {

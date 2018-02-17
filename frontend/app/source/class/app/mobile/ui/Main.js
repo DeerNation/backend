@@ -19,6 +19,10 @@ qx.Class.define('app.mobile.ui.Main', {
     this._createChildControl('channel')
 
     app.Model.getInstance().addListener('changedSelectedSubscription', this._onSelectedSubscription, this)
+    this.setMaxWidth(qx.bom.Viewport.getWidth())
+    this.__lid = qx.core.Init.getApplication().getRoot().addListener('resize', () => {
+      this.setMaxWidth(qx.bom.Viewport.getWidth())
+    })
   },
 
   /*
@@ -39,6 +43,8 @@ qx.Class.define('app.mobile.ui.Main', {
   ******************************************************
   */
   members: {
+    __lid: null,
+
     /**
      * Show Channel page on stack if subscription is selected, or the menu if not
      * @protected
@@ -77,5 +83,9 @@ qx.Class.define('app.mobile.ui.Main', {
   */
   destruct: function () {
     app.Model.getInstance().removeListener('changedSelectedSubscription', this._onSelectedSubscription, this)
+    if (this.__lid) {
+      qx.core.Init.getApplication().getRoot().removeListenerById(this.__lid)
+      this.__lid = null
+    }
   }
 })

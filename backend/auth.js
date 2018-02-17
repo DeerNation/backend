@@ -8,7 +8,7 @@ const bcrypt = require('bcryptjs')
 const logger = require('./logger')(__filename)
 const i18n = require('i18n')
 
-module.exports = function (socket, scServer) {
+module.exports = function (socket, scServer, callback) {
   socket.on('login', function (credentials, respond) {
     logger.debug('login request for actor %s received', credentials.username)
 
@@ -26,6 +26,7 @@ module.exports = function (socket, scServer) {
         // have to login again if they lose their connection
         // or revisit the app at a later time.
         socket.setAuthToken({user: userRow.id})
+        callback && callback(userRow.id)
       } else {
         // Passing string as first argument indicates error
         respond('Login failed')

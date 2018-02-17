@@ -39,10 +39,6 @@ qx.Class.define('app.Application', {
       // Call super class
       this.base(arguments)
 
-      if (app.Config.target === 'mobile') {
-        qx.theme.manager.Meta.getInstance().setTheme(app.mobile.theme.Theme)
-      }
-
       // Enable logging in debug variant
       if (qx.core.Environment.get('qx.debug')) {
         // support native logging capabilities, e.g. Firebug for Firefox
@@ -57,11 +53,38 @@ qx.Class.define('app.Application', {
       const workerHandler = app.io.ServiceWorkerHandler.getInstance()
       workerHandler.init(qx.util.ResourceManager.getInstance().toUri('app/sw.js'))
 
+      if (qx.core.Environment.get('app.loadCordova')) {
+        const loader = new qx.util.DynamicScriptLoader(['../../cordova.js'])
+        loader.addListenerOnce('ready', () => {
+          console.log('all scripts have been loaded!')
+          this.__init()
+        })
+
+        loader.addListener('failed', function (e) {
+          const data = e.getData()
+          console.log('failed to load ' + data.script)
+        })
+
+        loader.start()
+      } else {
+        this.__init()
+      }
+    },
+
+    __init: function () {
+      app.Config.init()
+
+      const firebase = app.io.Firebase.getInstance()
+      firebase.init()
+
+      if (app.Config.target === 'mobile') {
+        qx.theme.manager.Meta.getInstance().setTheme(app.mobile.theme.Theme)
+      }
       /*
-      -------------------------------------------------------------------------
-        Init socketcluster connection
-      -------------------------------------------------------------------------
-      */
+     -------------------------------------------------------------------------
+       Init socketcluster connection
+     -------------------------------------------------------------------------
+     */
       this.__socket = app.io.Socket.getInstance()
       const main = this.__main = new (app.Config.getTargetClass('app.ui.Main'))()
 

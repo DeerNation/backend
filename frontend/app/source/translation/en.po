@@ -1,0 +1,147 @@
+#: app/io/Socket.js:95
+msgid "Please login"
+msgstr ""
+
+#: app/Model.js:259 app/ui/BaseMenu.js:48 app/ui/BaseMenu.js:84
+msgid "Online"
+msgstr ""
+
+#: app/Model.js:259 app/ui/BaseMenu.js:84
+msgid "Offline"
+msgstr ""
+
+#: dialog/Login.js:225
+msgid "Name"
+msgstr ""
+
+#: dialog/Login.js:225
+msgid "Password"
+msgstr ""
+
+#: dialog/Login.js:268
+msgid "Login"
+msgstr ""
+
+#: dialog/Login.js:280
+msgid "Forgot Password?"
+msgstr ""
+
+#: app/ui/BaseMenu.js:49
+msgid "Away"
+msgstr ""
+
+#: app/ui/BaseMenu.js:50
+msgid "Busy"
+msgstr ""
+
+#: app/ui/BaseMenu.js:51
+msgid "Invisible"
+msgstr ""
+
+#: app/ui/BaseMenu.js:112
+msgid "Add a new channel"
+msgstr ""
+
+#: app/ui/BaseMenu.js:115
+msgid "Private channel"
+msgstr ""
+
+#: app/ui/BaseMenu.js:120
+msgid "Write-protected channel"
+msgstr ""
+
+#: app/ui/BaseMenu.js:125
+msgid "Channel name"
+msgstr ""
+
+#: app/ui/BaseMenu.js:154
+msgid "Logout"
+msgstr ""
+
+#: app/ui/BaseMenu.js:205
+msgid "Search (^ +K)"
+msgstr ""
+
+#: app/ui/BaseMenu.js:230
+msgid "Favorites"
+msgstr ""
+
+#: app/ui/BaseMenu.js:234
+msgid "Channels"
+msgstr ""
+
+#: app/ui/BaseMenu.js:237
+msgid "Private channels"
+msgstr ""
+
+#: app/ui/form/ActivityItem.js:136
+msgid "Owner"
+msgstr ""
+
+#: app/ui/form/ActivityItem.js:139
+msgid "Bot"
+msgstr ""
+
+#: app/ui/form/ActivityItem.js:141
+msgid "Server"
+msgstr ""
+
+#: dialog/Dialog.js:482
+msgid "OK"
+msgstr ""
+
+#: dialog/Dialog.js:499
+msgid "Cancel"
+msgstr ""
+
+#: qx/util/Validate.js:90
+msgid "%1 is not a number."
+msgstr ""
+
+#: qx/util/Validate.js:129
+msgid "'%1' is not an email address."
+msgstr ""
+
+#: qx/util/Validate.js:166
+msgid "%1 is not a string."
+msgstr ""
+
+#: qx/util/Validate.js:202
+msgid "%1 is not an url."
+msgstr ""
+
+#: qx/util/Validate.js:243
+msgid "%1 is not a color! %2"
+msgstr ""
+
+#: qx/util/Validate.js:267
+msgid "%1 is not in the range from [%2, %3]."
+msgstr ""
+
+#: qx/util/Validate.js:290
+msgid "%1 is not in %2"
+msgstr ""
+
+#: qx/util/Validate.js:314
+msgid "%1 does not fit %2."
+msgstr ""
+
+#: app/ui/form/SubscriptionItem.js:82 app/ui/form/SubscriptionItem.js:155
+msgid "Unfavorite"
+msgstr ""
+
+#: app/ui/form/SubscriptionItem.js:87 app/ui/form/SubscriptionItem.js:157
+msgid "Favorite"
+msgstr ""
+
+#: app/ui/form/SubscriptionItem.js:150
+msgid "Hide room"
+msgstr ""
+
+#: app/ui/form/SubscriptionItem.js:162
+msgid "Leave room"
+msgstr ""
+
+#: app/ui/form/SubscriptionItem.js:180
+msgid "Do you really want to leave this room?"
+msgstr ""
