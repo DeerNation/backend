@@ -13605,7 +13605,7 @@
       "implement": []
     },
     "app.ui.form.ActivityItem": {
-      "mtime": "2018-02-11T10:10:06.441Z",
+      "mtime": "2018-02-17T18:22:52.489Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13650,12 +13650,6 @@
           "load": true
         },
         "qx.theme.manager.Meta": {
-          "load": true
-        },
-        "qx.core.ObjectRegistry": {
-          "load": true
-        },
-        "qx.core.IDisposable": {
           "load": true
         }
       },
@@ -15874,7 +15868,7 @@
       ]
     },
     "app.io.AbstractNotification": {
-      "mtime": "2018-02-17T17:52:08.707Z",
+      "mtime": "2018-02-17T18:48:31.798Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -15884,6 +15878,7 @@
         "qx.core.Object": {
           "load": true
         },
+        "app.io.Socket": {},
         "app.io.Rpc": {},
         "qx.bom.Storage": {},
         "qx.core.ObjectRegistry": {

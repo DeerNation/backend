@@ -31,17 +31,31 @@ qx.Class.define('app.io.AbstractNotification', {
     _applyToken: function (value, old) {
       if (old && !value) {
         // delete old token
-        app.io.Rpc.getProxy().setFirebaseToken(value, old)
+        this.__sendToBackend(value, old)
       }
       if (value) {
         if (!this.isTokenSentToServer()) {
           this.info('Sending token to server...')
-          app.io.Rpc.getProxy().setFirebaseToken(value, old)
-          this.setTokenSentToServer(true)
+          this.__sendToBackend(value, old)
         } else {
           this.info('Token already sent to server so won\'t send it again ' +
             'unless it changes')
         }
+      }
+    },
+
+    __sendToBackend: function (value, old) {
+      if (app.io.Socket.getInstance().isAuthenticated()) {
+        app.io.Rpc.getProxy().setFirebaseToken(value, old)
+        this.setTokenSentToServer(true)
+      } else {
+        const lid = app.io.Socket.getInstance().addListener('changeAuthenticated', ev => {
+          if (ev.getData()) {
+            app.io.Rpc.getProxy().setFirebaseToken(value, old)
+            app.io.Socket.getInstance().removeListenerById(lid)
+            this.setTokenSentToServer(true)
+          }
+        })
       }
     },
 

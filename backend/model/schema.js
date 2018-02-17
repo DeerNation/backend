@@ -80,6 +80,7 @@ class Schema {
         Firebase: {
           fields: {
             id: type.string(),
+            token: type.string(),
             actorId: type.string(),
             created: type.date().default(new Date()),
             info: type.object()
@@ -274,8 +275,8 @@ class Schema {
 
     // create indices
     m.Activity.ensureIndex('content.start')
-    m.Firebase.ensureIndex('infos.platform')
     m.Firebase.ensureIndex('actorId')
+    m.Firebase.ensureIndex('token')
 
     // create relations
 

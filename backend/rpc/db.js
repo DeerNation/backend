@@ -115,26 +115,46 @@ function setFirebaseToken (authToken, firebaseToken, oldToken) {
 
   if (oldToken) {
     // delete old token
-    schema.getModel('Firebase').get(oldToken).delete()
+    schema.getModel('Firebase').filter({token: oldToken}).delete()
   }
 
   if (firebaseToken) {
-    return schema.getModel('Firebase').get(firebaseToken).run()
-      .then(() => {
-        return new Promise((resolve, reject) => {
-          crud.update({
-            type: 'Firebase',
-            id: firebaseToken,
-            field: 'actorId',
-            value: authToken.user
-          }, (err, res) => {
-            if (err) {
-              reject(err)
-            } else {
-              resolve(res)
-            }
+    return schema.getModel('Firebase').filter({token: firebaseToken}).run()
+      .then((res) => {
+        if (res && res.length > 0) {
+          return new Promise((resolve, reject) => {
+            crud.update({
+              type: 'Firebase',
+              id: res[0].id,
+              value: {
+                token: firebaseToken,
+                actorId: authToken.user
+              }
+            }, (err, res) => {
+              if (err) {
+                reject(err)
+              } else {
+                resolve(res)
+              }
+            })
           })
-        })
+        } else {
+          return new Promise((resolve, reject) => {
+            crud.create({
+              type: 'Firebase',
+              value: {
+                actorId: authToken.user,
+                token: firebaseToken
+              }
+            }, (err, res) => {
+              if (err) {
+                reject(err)
+              } else {
+                resolve(res)
+              }
+            })
+          })
+        }
       })
       .catch(() => {
         return new Promise((resolve, reject) => {
@@ -142,7 +162,7 @@ function setFirebaseToken (authToken, firebaseToken, oldToken) {
             type: 'Firebase',
             value: {
               actorId: authToken.user,
-              id: firebaseToken
+              token: firebaseToken
             }
           }, (err, res) => {
             if (err) {
