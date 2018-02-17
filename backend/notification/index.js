@@ -175,7 +175,7 @@ class PushNotification {
   __createMessage (title, content, options) {
     let message = new gcm.Message()
     message.addData('title', title)
-    message.addData('message', content)
+    message.addData('body', content)
     if (options) {
       Object.keys(options).forEach(key => {
         message.addData(key, options[key])
