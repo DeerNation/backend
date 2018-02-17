@@ -49,16 +49,12 @@ qx.Class.define('app.Application', {
         qx.log.appender.Console
       }
 
-      // install service worker
-      const workerHandler = app.io.ServiceWorkerHandler.getInstance()
-      workerHandler.init(qx.util.ResourceManager.getInstance().toUri('app/sw.js'))
-
-      if (qx.core.Environment.get('app.loadCordova')) {
+      if (qx.core.Environment.get('app.cordova')) {
         const loader = new qx.util.DynamicScriptLoader(['../../cordova.js'])
         loader.addListenerOnce('ready', () => {
           console.log('all scripts have been loaded!')
-          this.__init()
         })
+        document.addEventListener('deviceready', this.__init.bind(this), false)
 
         loader.addListener('failed', function (e) {
           const data = e.getData()
@@ -74,8 +70,17 @@ qx.Class.define('app.Application', {
     __init: function () {
       app.Config.init()
 
-      const firebase = app.io.Firebase.getInstance()
-      firebase.init()
+      // install service worker (not working in app context)
+      if (qx.core.Environment.get('app.cordova')) {
+        // use push plugin
+        app.io.PushPlugin.getInstance().init()
+      } else {
+        // use service worker
+        const workerHandler = app.io.ServiceWorkerHandler.getInstance()
+        workerHandler.init(qx.util.ResourceManager.getInstance().toUri('app/sw.js'))
+
+        app.io.Firebase.getInstance().init()
+      }
 
       if (app.Config.target === 'mobile') {
         qx.theme.manager.Meta.getInstance().setTheme(app.mobile.theme.Theme)

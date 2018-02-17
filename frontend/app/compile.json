@@ -15,25 +15,15 @@
       "type": "build",
       "outputPath": "build-output",
       "environment": {
-        "qx.nativeScrollBars" : true,
-        "qx.dynlocale" : false,
-        "qx.dyntheme" : false,
-        "qx.emulatemouse" : false,
-
-        "qx.aspects" : false,
-        "qx.debug" : false,
-        "qx.debug.databinding" : false,
-        "qx.debug.ui.queue" : false,
-        "qx.debug.dispose" : false,
-        "qx.debug.io" : false,
-        "app.loadCordova": true
+        "qx.globalErrorHandling": false,
+        "app.cordova": true
       }
     }
   ],
   "defaultTarget": "source",
   "locales": [ "de", "en" ],
   "environment": {
-    "app.loadCordova": false
+    "app.cordova": false
   },
 
   "applications": [

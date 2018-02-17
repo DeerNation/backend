@@ -7,7 +7,7 @@
     <author email="dev@hirschberg.sauerland.de" href="http://www.hischberg-sauerland.de">
         Tobias Bräutigam
     </author>
-    <content src="source-output/index.html" />
+    <content src="build-output/index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -25,9 +25,9 @@
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>
-    <engine name="android" spec="7.0.0" />
     <plugin name="cordova-plugin-whitelist" spec="1" />
     <plugin name="phonegap-plugin-push" spec="^2.1.3">
         <variable name="FCM_VERSION" value="11.6.2" />
     </plugin>
+    <engine name="android" spec="7.0.0" />
 </widget>

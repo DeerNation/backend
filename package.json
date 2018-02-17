@@ -82,7 +82,8 @@
       "socketCluster",
       "wampSocketCluster",
       "showdown",
-      "firebase"
+      "firebase",
+      "PushNotification"
     ]
   }
 }

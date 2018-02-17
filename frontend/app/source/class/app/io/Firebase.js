@@ -6,21 +6,8 @@
  */
 
 qx.Class.define('app.io.Firebase', {
-  extend: qx.core.Object,
+  extend: app.io.AbstractNotification,
   type: 'singleton',
-
-  /*
-  ******************************************************
-    PROPERTIES
-  ******************************************************
-  */
-  properties: {
-    token: {
-      check: 'String',
-      nullable: true,
-      apply: '_applyToken'
-    }
-  },
 
   /*
   ******************************************************
@@ -45,34 +32,16 @@ qx.Class.define('app.io.Firebase', {
       // - the user clicks on an app notification created by a service worker
       //   `messaging.setBackgroundMessageHandler` handler.
       this.__messaging.onMessage((payload) => {
-        qx.log.Logger.debug(this, 'Message received. ', payload)
+        this.debug('Message received. ', payload)
         console.log(payload)
         // this.appendMessage(payload)
       })
     },
 
-    // property apply
-    _applyToken: function (value, old) {
-      if (old && !value) {
-        // delete old token
-        app.io.Rpc.getProxy().setFirebaseToken(value, old)
-      }
-      if (value) {
-        if (!this.isTokenSentToServer()) {
-          qx.log.Logger.info(this, 'Sending token to server...')
-          app.io.Rpc.getProxy().setFirebaseToken(value, old)
-          this.setTokenSentToServer(true)
-        } else {
-          qx.log.Logger.info(this, 'Token already sent to server so won\'t send it again ' +
-            'unless it changes')
-        }
-      }
-    },
-
     _onRefreshToken: function () {
       this.__messaging.getToken()
         .then((refreshedToken) => {
-          qx.log.Logger.debug(this, 'Token refreshed.')
+          this.debug('Token refreshed.')
           // Indicate that the new Instance ID token has not yet been sent to the
           // app server.
           this.setTokenSentToServer(false)
@@ -81,7 +50,7 @@ qx.Class.define('app.io.Firebase', {
           this.reset()
         })
         .catch((err) => {
-          qx.log.Logger.debug(this, 'Unable to retrieve refreshed token ', err)
+          this.debug('Unable to retrieve refreshed token ', err)
         })
     },
 
@@ -95,38 +64,30 @@ qx.Class.define('app.io.Firebase', {
             this.setToken(currentToken)
           } else {
             // Show permission request.
-            qx.log.Logger.debug(this, 'No Instance ID token available. Request permission to generate one.')
+            this.debug('No Instance ID token available. Request permission to generate one.')
             // Show permission UI.
             this.setTokenSentToServer(false)
             this.requestPermission()
           }
         })
         .catch((err) => {
-          qx.log.Logger.debug(this, 'An error occurred while retrieving token. ', err)
-          qx.log.Logger.error(this, 'Error retrieving Instance ID token. ', err)
+          this.debug('An error occurred while retrieving token. ', err)
+          this.error('Error retrieving Instance ID token. ', err)
           this.setTokenSentToServer(false)
         })
     },
 
-    isTokenSentToServer: function () {
-      return qx.bom.Storage.getLocal().getItem('sentToServer') === '1'
-    },
-
-    setTokenSentToServer: function (sent) {
-      qx.bom.Storage.getLocal().setItem('sentToServer', sent ? '1' : '0')
-    },
-
     requestPermission: function () {
-      qx.log.Logger.debug(this, 'Requesting permission...')
+      this.debug('Requesting permission...')
 
       // [START request_permission]
       this.__messaging.requestPermission()
         .then(() => {
-          qx.log.Logger.debug(this, 'Notification permission granted.')
+          this.debug('Notification permission granted.')
           this.reset()
         })
         .catch((err) => {
-          qx.log.Logger.error(this, 'Unable to get permission to notify.', err)
+          this.error('Unable to get permission to notify.', err)
         })
       // [END request_permission]
     },
@@ -138,17 +99,17 @@ qx.Class.define('app.io.Firebase', {
         .then((currentToken) => {
           this.__messaging.deleteToken(currentToken)
             .then(() => {
-              qx.log.Logger.debug(this, 'Token deleted.')
+              this.debug('Token deleted.')
               this.setTokenSentToServer(false)
               this.resetToken()
             })
             .catch((err) => {
-              qx.log.Logger.error(this, 'Unable to delete token. ', err)
+              this.error('Unable to delete token. ', err)
             })
           // [END delete_token]
         })
         .catch((err) => {
-          qx.log.Logger.error(this, 'Error retrieving Instance ID token. ', err)
+          this.error('Error retrieving Instance ID token. ', err)
         })
     }
   }

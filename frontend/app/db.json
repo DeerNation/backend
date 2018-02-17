@@ -1,7 +1,7 @@
 {
   "classInfo": {
     "app.Application": {
-      "mtime": "2018-02-17T09:05:23.429Z",
+      "mtime": "2018-02-17T18:07:12.560Z",
       "libraryName": "app",
       "dependsOn": {
         "app.ui.Main": {
@@ -20,10 +20,11 @@
         "qx.core.Environment": {},
         "qx.log.appender.Native": {},
         "qx.log.appender.Console": {},
-        "app.io.ServiceWorkerHandler": {},
-        "qx.util.ResourceManager": {},
         "qx.util.DynamicScriptLoader": {},
         "app.Config": {},
+        "app.io.PushPlugin": {},
+        "app.io.ServiceWorkerHandler": {},
+        "qx.util.ResourceManager": {},
         "app.io.Firebase": {},
         "qx.theme.manager.Meta": {},
         "app.mobile.theme.Theme": {},
@@ -37,7 +38,7 @@
         "provided": [],
         "required": {
           "qx.debug": {},
-          "app.loadCordova": {}
+          "app.cordova": {}
         }
       },
       "assets": [
@@ -15675,32 +15676,20 @@
       "hasDefer": true
     },
     "app.io.Firebase": {
-      "mtime": "2018-02-17T15:13:13.322Z",
+      "mtime": "2018-02-17T17:52:08.703Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
           "load": true,
           "usage": "dynamic"
         },
-        "qx.core.Object": {
+        "app.io.AbstractNotification": {
           "load": true
         },
         "app.Config": {},
-        "app.io.ServiceWorkerHandler": {},
-        "qx.log.Logger": {},
-        "app.io.Rpc": {},
-        "qx.bom.Storage": {},
-        "qx.core.ObjectRegistry": {
-          "load": true
-        },
-        "qx.core.Environment": {
-          "load": true
-        },
-        "qx.core.IDisposable": {
-          "load": true
-        }
+        "app.io.ServiceWorkerHandler": {}
       },
-      "extends": "qx.core.Object",
+      "extends": "app.io.AbstractNotification",
       "include": [],
       "implement": [],
       "unresolved": [
@@ -15709,11 +15698,11 @@
           "locations": [
             {
               "start": {
-                "line": 34,
+                "line": 21,
                 "column": 6
               },
               "end": {
-                "line": 34,
+                "line": 21,
                 "column": 28
               }
             }
@@ -15724,11 +15713,11 @@
           "locations": [
             {
               "start": {
-                "line": 35,
+                "line": 22,
                 "column": 25
               },
               "end": {
-                "line": 35,
+                "line": 22,
                 "column": 43
               }
             }
@@ -15740,7 +15729,7 @@
           "msgId": "qx.tool.compiler.symbol.unresolved",
           "pos": {
             "start": {
-              "line": 34,
+              "line": 21,
               "column": 6
             }
           },
@@ -15752,7 +15741,7 @@
           "msgId": "qx.tool.compiler.symbol.unresolved",
           "pos": {
             "start": {
-              "line": 35,
+              "line": 22,
               "column": 25
             }
           },
@@ -15834,6 +15823,80 @@
         "qx.lang.Type": {}
       },
       "extends": null,
+      "include": [],
+      "implement": []
+    },
+    "app.io.PushPlugin": {
+      "mtime": "2018-02-17T17:58:19.568Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "app.io.AbstractNotification": {
+          "load": true
+        }
+      },
+      "extends": "app.io.AbstractNotification",
+      "include": [],
+      "implement": [],
+      "unresolved": [
+        {
+          "name": "PushNotification.init",
+          "locations": [
+            {
+              "start": {
+                "line": 22,
+                "column": 20
+              },
+              "end": {
+                "line": 22,
+                "column": 41
+              }
+            }
+          ]
+        }
+      ],
+      "markers": [
+        {
+          "msgId": "qx.tool.compiler.symbol.unresolved",
+          "pos": {
+            "start": {
+              "line": 22,
+              "column": 20
+            }
+          },
+          "args": [
+            "PushNotification.init"
+          ]
+        }
+      ]
+    },
+    "app.io.AbstractNotification": {
+      "mtime": "2018-02-17T17:52:08.707Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.core.Object": {
+          "load": true
+        },
+        "app.io.Rpc": {},
+        "qx.bom.Storage": {},
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
+        }
+      },
+      "extends": "qx.core.Object",
       "include": [],
       "implement": []
     }
