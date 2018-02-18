@@ -28283,13 +28283,6 @@
       }
     },
     "app": {
-      "app/test.png": {
-        "mtime": "2018-01-26T17:06:47.149Z",
-        "width": 32,
-        "height": 32,
-        "doNotCopy": false,
-        "resource": "resourcePath"
-      },
       "js/socketcluster.js": {
         "doNotCopy": false,
         "resource": "resourcePath"
@@ -28400,6 +28393,13 @@
       "app/manifest.json": {
         "doNotCopy": false,
         "resource": "resourcePath"
+      },
+      "app/App-Logo.png": {
+        "doNotCopy": false,
+        "resource": "resourcePath",
+        "mtime": "2018-02-18T08:49:10.000Z",
+        "width": 192,
+        "height": 192
       }
     },
     "dialog": {

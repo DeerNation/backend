@@ -69,8 +69,9 @@ qx.Class.define('app.Config', {
     init: function () {
       this.isApp = !!window.cordova
       if (this.isApp) {
-        this.socket.hostname = 'app.hirschberg-sauerland.de'
-        this.socket.secure = true
+        // this.socket.hostname = 'app.hirschberg-sauerland.de'
+        // this.socket.secure = true
+        this.socket.hostname = 'hannibal'
       }
     }
   }

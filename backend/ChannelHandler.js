@@ -9,6 +9,7 @@ const {hash} = require('./util')
 const rpcHandler = require('./rpc')
 const logger = require('./logger')(__filename)
 const pushNotifications = require('./notification')
+const i18n = require('i18n')
 
 class ChannelHandler {
   constructor () {
@@ -49,7 +50,7 @@ class ChannelHandler {
     })
   }
 
-  publish (authToken, channelId, message) {
+  async publish (authToken, channelId, message) {
     if (!this.model) {
       this.model = schema.getModel('Activity')
     }
@@ -61,17 +62,28 @@ class ChannelHandler {
       hash: hash(message.content),
       actorId: authToken.user
     }, message), {conflict: 'update'})
-      .then(() => {
-        switch (message.type.toLowerCase()) {
-          case 'event':
-            pushNotifications.publish(channelId, message.title, message.content.description, {})
-            break
 
-          case 'message':
-            pushNotifications.publish(channelId, message.title, message.content.message, {})
-            break
-        }
-      })
+    let options = {
+      image: 'www/build-output/resource/app/App-Logo.png',
+      channelId: channelId
+    }
+    const channel = await schema.getModel('Channel').get(channelId).run()
+    const actor = await schema.getModel('Actor').get(authToken.user).run()
+    switch (message.type.toLowerCase()) {
+      case 'event':
+        pushNotifications.publish(channelId, i18n.__({
+          phrase: 'New event in %s',
+          locale: actor.locale
+        }, channel.title), message.content.description, options)
+        break
+
+      case 'message':
+        pushNotifications.publish(channelId, i18n.__({
+          phrase: 'New message in %s',
+          locale: actor.locale
+        }, channel.title), message.content.message, options)
+        break
+    }
   }
 }
 

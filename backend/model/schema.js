@@ -51,7 +51,8 @@ class Schema {
             defaultNotification: type.object(),
             online: type.boolean(),
             status: type.string(),
-            color: type.string()
+            color: type.string(),
+            locale: type.string().enum('de', 'en').default('de')
           },
           views: {
             alphabeticalView: {
@@ -326,7 +327,8 @@ class Schema {
         name: 'Tobias Bräutigam',
         email: 'tbraeutigam@gmail.com',
         password: bcrypt.hashSync('tester', 8),
-        color: '#ACACAC'
+        color: '#ACACAC',
+        locale: 'de'
       }, {
         id: '135dd849-9cb6-466a-9a2b-688ae21b6cdf',
         type: 'Bot',

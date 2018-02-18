@@ -21,6 +21,8 @@ qx.Class.define('app.io.PushPlugin', {
     init: function () {
       this.__push = PushNotification.init({
         android: {
+          icon: 'deer',
+          iconColor: '#426d2b'
         },
         browser: {
           pushServiceURL: 'http://push.api.phonegap.com/v1/push'
@@ -45,6 +47,10 @@ qx.Class.define('app.io.PushPlugin', {
         // data.sound,
         // data.image,
         // data.additionalData
+        this.debug('Notification: ', data)
+        if (data.additionalData.hasOwnProperty('channelId')) {
+          app.Model.getInstance()
+        }
       })
 
       this.__push.on('error', (e) => {

@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="de.hirschbergsauerland.app" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>DeerNation</name>
+    <name>Hirschberg</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+        Kuiern 2.0 in und über Hirschberg - natürlich im Sauerland
     </description>
     <author email="dev@hirschberg.sauerland.de" href="http://www.hischberg-sauerland.de">
         Tobias Bräutigam
@@ -16,9 +16,24 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <icon density="hdpi" src="res/mipmap-hdpi/ic_launcher.png" />
+    <icon density="mdpi" src="res/mipmap-mdpi/ic_launcher.png" />
+    <icon density="xhdpi" src="res/mipmap-xhdpi/ic_launcher.png" />
+    <icon density="xxhdpi" src="res/mipmap-xxhdpi/ic_launcher.png" />
+    <icon density="xxxhdpi" src="res/mipmap-xxxhdpi/ic_launcher.png" />
     <platform name="android">
         <allow-intent href="market:*" />
         <resource-file src="google-services.json" target="app/google-services.json" />
+        <resource-file src="res/drawable-hdpi/ic_shortcut_deer.png" target="app/src/main/res/drawable-hdpi/ic_shortcut_deer.png" />
+        <resource-file src="res/drawable-mdpi/ic_shortcut_deer.png" target="app/src/main/res/drawable-mdpi/ic_shortcut_deer.png" />
+        <resource-file src="res/drawable-xhdpi/ic_shortcut_deer.png" target="app/src/main/res/drawable-xhdpi/ic_shortcut_deer.png" />
+        <resource-file src="res/drawable-xxhdpi/ic_shortcut_deer.png" target="app/src/main/res/drawable-xxhdpi/ic_shortcut_deer.png" />
+        <resource-file src="res/drawable-xxxhdpi/ic_shortcut_deer.png" target="app/src/main/res/drawable-xxxhdpi/ic_shortcut_deer.png" />
+        <resource-file src="res/mipmap-hdpi/deer_launcher.png" target="app/src/main/res/mipmap-hdpi/deer_launcher.png" />
+        <resource-file src="res/mipmap-mdpi/deer_launcher.png" target="app/src/main/res/mipmap-mdpi/deer_launcher.png" />
+        <resource-file src="res/mipmap-xhdpi/deer_launcher.png" target="app/src/main/res/mipmap-xhdpi/deer_launcher.png" />
+        <resource-file src="res/mipmap-xxhdpi/deer_launcher.png" target="app/src/main/res/mipmap-xxhdpi/deer_launcher.png" />
+        <resource-file src="res/mipmap-xxxhdpi/deer_launcher.png" target="app/src/main/res/mipmap-xxxhdpi/deer_launcher.png" />
     </platform>
     <platform name="ios">
         <resource-file src="GoogleService-Info.plist" />

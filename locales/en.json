@@ -6,5 +6,6 @@
 	"You are not allowed to read this item.": "You are not allowed to read this item.",
 	"You are not allowed to update this item.": "You are not allowed to update this item.",
 	"You are not allowed to update property %s of this item.": "You are not allowed to update property %s of this item.",
-	"You are not allowed to save this token.": "You are not allowed to save this token."
+	"You are not allowed to save this token.": "You are not allowed to save this token.",
+	"New message in %s": "New message in %s"
 }

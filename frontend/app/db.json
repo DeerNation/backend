@@ -13651,6 +13651,12 @@
         },
         "qx.theme.manager.Meta": {
           "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
         }
       },
       "extends": "qx.ui.core.Widget",
@@ -13676,7 +13682,7 @@
       ]
     },
     "app.Config": {
-      "mtime": "2018-02-17T09:26:04.116Z",
+      "mtime": "2018-02-18T09:01:20.530Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -15821,7 +15827,7 @@
       "implement": []
     },
     "app.io.PushPlugin": {
-      "mtime": "2018-02-17T17:58:19.568Z",
+      "mtime": "2018-02-18T10:57:09.478Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -15830,7 +15836,8 @@
         },
         "app.io.AbstractNotification": {
           "load": true
-        }
+        },
+        "app.Model": {}
       },
       "extends": "app.io.AbstractNotification",
       "include": [],

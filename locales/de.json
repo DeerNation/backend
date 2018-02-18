@@ -1,3 +1,12 @@
 {
-  "You are not authorized to subscribe to #{{channel}}": "Sie haben keine Berechtigung Kanal #{{channel}} zu abonnieren"
+  "You are not authorized to subscribe to #%s": "Sie haben keine Berechtigung #%s zu abonieren",
+  "You are not permitted to request subscriptions from another user.": "Sie dürfen die Abos eines anderen Benutzers nicht abfragen.",
+  "You are not allowed to create this channel.": "Sie dürfen diesen Kanal nicht anlegen.",
+  "You are not permitted to request this data.": "Sie dürfen diese Daten nicht abfragen.",
+  "You are not allowed to read this item.": "Sie dürfen diesen Eintrag nicht lesen.",
+  "You are not allowed to update this item.": "Sie dürfen diesen Eintrag nicht aktualisieren.",
+  "You are not allowed to update property %s of this item.": "Sie dürfen %s dieses Eintrags nicht ändern.",
+  "You are not allowed to save this token.": "Sie dürfen dieses Token nicht speichern.",
+  "New message in %s": "Neue Nachricht in %s",
+  "New event in %s": "Neuer Termin in %s"
 }
