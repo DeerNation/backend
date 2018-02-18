@@ -55,23 +55,25 @@ qx.Class.define('app.io.ServiceWorkerHandler', {
 
             this.setRegistration(swReg)
 
-            // this.__swRegistration.pushManager.getSubscription()
-            //   .then(subscription => {
-            //     const isSubscribed = !(subscription === null)
-            //
-            //     if (isSubscribed) {
-            //       this.info('User IS subscribed.')
-            //     } else {
-            //       this.info('User is NOT subscribed.')
-            //       this.subscribeUser()
-            //     }
-            //   })
+            swReg.active.postMessage({baseUrl: window.location.href})
+            navigator.serviceWorker.addEventListener('message', this._handleWorkerMessage.bind(this))
           })
           .catch(error => {
             this.error('Service Worker Error', error)
           })
       } else {
         this.warn('Push messaging is not supported')
+      }
+    },
+
+    /**
+     * Handle incoming messages from serviceworker
+     * @param event {Event}
+     * @protected
+     */
+    _handleWorkerMessage: function (event) {
+      if (event.data.hasOwnProperty('showChannel')) {
+        app.Model.getInstance().selectChannel(event.data.showChannel)
       }
     },
 

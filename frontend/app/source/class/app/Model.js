@@ -251,6 +251,21 @@ qx.Class.define('app.Model', {
       }
     },
 
+    /**
+     * Selected the Subscription for this channel
+     * @param channelId {String}
+     */
+    selectChannel: function (channelId) {
+      this.getSubscriptions().some(sub => {
+        if (sub.getChannelId() === channelId) {
+          // this.setSelectedSubscription(sub)
+          const main = qx.core.Init.getApplication().getMain()
+          main.getChildControl('menu').getChildControl('list').getSelection().replace([sub])
+          return true
+        }
+      })
+    },
+
     _onIntUsersUpdate: function (data) {
       const actor = this.lookup('actor', data.id)
       if (actor) {

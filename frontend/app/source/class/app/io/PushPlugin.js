@@ -47,9 +47,11 @@ qx.Class.define('app.io.PushPlugin', {
         // data.sound,
         // data.image,
         // data.additionalData
-        this.debug('Notification: ', data)
+        console.log(data)
         if (data.additionalData.hasOwnProperty('channelId')) {
-          app.Model.getInstance()
+          // open the channel
+          this.debug('Opening channel ', data.additionalData.channelId)
+          app.Model.getInstance().selectChannel(data.additionalData.channelId)
         }
       })
 

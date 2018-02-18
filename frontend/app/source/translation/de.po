@@ -2,16 +2,18 @@
 msgid "Please login"
 msgstr ""
 
-#: app.ui.Menu:78 app/Model.js:262 app/Model.js:259 app/ui/Menu.js:78
-#: app/ui/Menu.js:131 app/ui/Menu.js:133 app/ui/Menu.js:53 app/ui/Menu.js:84
-#: app/ui/Menu.js:87 app/ui/Menu.js:89 app/ui/Menu.js:91 app/ui/BaseMenu.js:48
-#: app/ui/BaseMenu.js:67 app/ui/BaseMenu.js:84
+#: app.ui.Menu:78 app/Model.js:262 app/Model.js:259 app/Model.js:272
+#: app/Model.js:274 app/ui/Menu.js:78 app/ui/Menu.js:131 app/ui/Menu.js:133
+#: app/ui/Menu.js:53 app/ui/Menu.js:84 app/ui/Menu.js:87 app/ui/Menu.js:89
+#: app/ui/Menu.js:91 app/ui/BaseMenu.js:48 app/ui/BaseMenu.js:67
+#: app/ui/BaseMenu.js:84
 msgid "Online"
 msgstr ""
 
-#: app.ui.Menu:78 app/Model.js:262 app/Model.js:259 app/ui/Menu.js:78
-#: app/ui/Menu.js:137 app/ui/Menu.js:84 app/ui/Menu.js:87 app/ui/Menu.js:89
-#: app/ui/Menu.js:91 app/ui/BaseMenu.js:67 app/ui/BaseMenu.js:84
+#: app.ui.Menu:78 app/Model.js:262 app/Model.js:259 app/Model.js:272
+#: app/Model.js:274 app/ui/Menu.js:78 app/ui/Menu.js:137 app/ui/Menu.js:84
+#: app/ui/Menu.js:87 app/ui/Menu.js:89 app/ui/Menu.js:91 app/ui/BaseMenu.js:67
+#: app/ui/BaseMenu.js:84
 msgid "Offline"
 msgstr ""
 

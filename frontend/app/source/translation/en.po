@@ -2,11 +2,12 @@
 msgid "Please login"
 msgstr ""
 
-#: app/Model.js:259 app/ui/BaseMenu.js:48 app/ui/BaseMenu.js:84
+#: app/Model.js:259 app/Model.js:272 app/Model.js:274 app/ui/BaseMenu.js:48
+#: app/ui/BaseMenu.js:84
 msgid "Online"
 msgstr ""
 
-#: app/Model.js:259 app/ui/BaseMenu.js:84
+#: app/Model.js:259 app/Model.js:272 app/Model.js:274 app/ui/BaseMenu.js:84
 msgid "Offline"
 msgstr ""
 

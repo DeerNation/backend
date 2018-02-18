@@ -87,6 +87,11 @@ qx.Class.define('app.model.Actor', {
     icon: {
       check: 'qx.ui.basic.Atom',
       nullable: true
+    },
+
+    locale: {
+      check: 'String',
+      init: null
     }
   },
 

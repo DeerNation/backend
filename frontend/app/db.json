@@ -13578,7 +13578,7 @@
       "implement": []
     },
     "app.io.ServiceWorkerHandler": {
-      "mtime": "2018-02-17T09:06:37.033Z",
+      "mtime": "2018-02-18T13:52:51.710Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13589,6 +13589,7 @@
           "load": true
         },
         "qx.log.Logger": {},
+        "app.Model": {},
         "qx.event.Timer": {},
         "qx.core.ObjectRegistry": {
           "load": true
@@ -14221,7 +14222,7 @@
       "implement": []
     },
     "app.Model": {
-      "mtime": "2018-02-09T18:42:14.646Z",
+      "mtime": "2018-02-18T14:12:08.818Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14249,6 +14250,7 @@
         "app.model.Subscription": {},
         "qx.lang.Json": {},
         "qx.lang.String": {},
+        "qx.core.Init": {},
         "qx.locale.Manager": {},
         "qx.core.ObjectRegistry": {
           "load": true
@@ -14266,16 +14268,16 @@
       "translations": [
         {
           "msgid": "Online",
-          "lineNo": 259
+          "lineNo": 274
         },
         {
           "msgid": "Offline",
-          "lineNo": 259
+          "lineNo": 274
         }
       ]
     },
     "app.model.Actor": {
-      "mtime": "2018-02-10T13:19:35.391Z",
+      "mtime": "2018-02-18T11:05:07.586Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -15827,7 +15829,7 @@
       "implement": []
     },
     "app.io.PushPlugin": {
-      "mtime": "2018-02-18T10:57:09.478Z",
+      "mtime": "2018-02-18T11:09:34.664Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
