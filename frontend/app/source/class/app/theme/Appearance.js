@@ -45,7 +45,7 @@ qx.Theme.define('app.theme.Appearance',
         alias: 'listitem',
         style: function () {
           return {
-            paddingTop: 10
+            padding: [10, 20]
           }
         }
       },
@@ -60,13 +60,14 @@ qx.Theme.define('app.theme.Appearance',
       'activity-listitem/author-icon': {
         style: function () {
           return {
-            width: 20,
-            height: 20,
-            maxWidth: 20,
-            maxHeight: 20,
+            font: 'sidebar-actor-icon',
+            width: 40,
+            height: 40,
+            maxWidth: 40,
+            maxHeight: 40,
             allowGrowX: false,
             allowGrowY: false,
-            marginRight: 8
+            marginRight: 20
           }
         }
       },

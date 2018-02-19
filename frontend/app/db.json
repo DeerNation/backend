@@ -390,7 +390,7 @@
       }
     },
     "app.theme.Appearance": {
-      "mtime": "2018-02-11T09:42:57.310Z",
+      "mtime": "2018-02-18T20:12:34.333Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -13606,7 +13606,7 @@
       "implement": []
     },
     "app.ui.form.ActivityItem": {
-      "mtime": "2018-02-17T18:22:52.489Z",
+      "mtime": "2018-02-18T19:34:19.923Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13670,15 +13670,15 @@
       "translations": [
         {
           "msgid": "Owner",
-          "lineNo": 136
+          "lineNo": 137
         },
         {
           "msgid": "Bot",
-          "lineNo": 139
+          "lineNo": 140
         },
         {
           "msgid": "Server",
-          "lineNo": 141
+          "lineNo": 142
         }
       ]
     },
@@ -14667,7 +14667,7 @@
       ]
     },
     "app.ui.form.MessageField": {
-      "mtime": "2018-02-10T12:02:47.574Z",
+      "mtime": "2018-02-18T19:46:43.453Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {

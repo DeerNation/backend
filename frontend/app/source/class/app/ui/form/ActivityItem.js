@@ -37,6 +37,7 @@ qx.Class.define('app.ui.form.ActivityItem', {
     this._createChildControl('published')
 
     this.getContentElement().addClass('activity')
+    this.getContentElement().setStyle('-webkit-transform', 'translateZ(0)')
   },
 
   /*

@@ -69,20 +69,27 @@ class ChannelHandler {
     }
     const channel = await schema.getModel('Channel').get(channelId).run()
     const actor = await schema.getModel('Actor').get(authToken.user).run()
+    let phrase, content
+
     switch (message.type.toLowerCase()) {
       case 'event':
-        pushNotifications.publish(channelId, i18n.__({
-          phrase: 'New event in %s',
-          locale: actor.locale
-        }, channel.title), message.content.description, options)
+        phrase = 'New event in %s'
+        content = message.content.description
         break
 
       case 'message':
-        pushNotifications.publish(channelId, i18n.__({
-          phrase: 'New message in %s',
-          locale: actor.locale
-        }, channel.title), message.content.message, options)
+        phrase = 'New message in %s'
+        content = message.content.message
         break
+    }
+    if (content) {
+      if (content.length > 40) {
+        content = content.substring(0, 40) + '...'
+      }
+      pushNotifications.publish(channelId, i18n.__({
+        phrase: phrase,
+        locale: actor.locale
+      }, channel.title), content, options)
     }
   }
 }

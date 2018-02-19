@@ -23,6 +23,9 @@
   "defaultTarget": "source",
   "locales": [ "de", "en" ],
   "environment": {
+    "qx.nativeScrollBars": true,
+    "qx.dynlocale": true,
+    "qx.dyntheme": true,
     "app.cordova": false
   },
 

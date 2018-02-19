@@ -44,7 +44,7 @@ qx.Class.define('app.ui.form.MessageField', {
   members: {
 
     postMessage: function () {
-      if (this.getChannel()) {
+      if (this.getModel()) {
         app.io.Rpc.getProxy().publish(this.getModel().getId(), {
           type: 'Message',
           content: {

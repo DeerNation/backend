@@ -75,15 +75,15 @@ msgstr ""
 msgid "Private channels"
 msgstr ""
 
-#: app/ui/form/ActivityItem.js:136
+#: app/ui/form/ActivityItem.js:136 app/ui/form/ActivityItem.js:137
 msgid "Owner"
 msgstr ""
 
-#: app/ui/form/ActivityItem.js:139
+#: app/ui/form/ActivityItem.js:139 app/ui/form/ActivityItem.js:140
 msgid "Bot"
 msgstr ""
 
-#: app/ui/form/ActivityItem.js:141
+#: app/ui/form/ActivityItem.js:141 app/ui/form/ActivityItem.js:142
 msgid "Server"
 msgstr ""
 

@@ -1,8 +1,20 @@
 #!/usr/bin/env node
 
 let filestocopy = [{
-  'res/deer.png':
-   'platforms/android/app/src/main/res/deer.png'
+  'res/drawable-mdpi/deer.png':
+    'platforms/android/app/src/main/res/drawable-mdpi/deer.png'
+}, {
+  'res/drawable-hdpi/deer.png':
+    'platforms/android/app/src/main/res/drawable-hdpi/deer.png'
+}, {
+  'res/drawable-xhdpi/deer.png':
+    'platforms/android/app/src/main/res/drawable-xhdpi/deer.png'
+}, {
+  'res/drawable-xxhdpi/deer.png':
+    'platforms/android/app/src/main/res/drawable-xxhdpi/deer.png'
+}, {
+  'res/drawable-xxxhdpi/deer.png':
+    'platforms/android/app/src/main/res/drawable-xxxhdpi/deer.png'
 }]
 
 const fs = require('fs')
