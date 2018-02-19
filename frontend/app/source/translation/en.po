@@ -1,4 +1,4 @@
-#: app/io/Socket.js:95
+#: app/io/Socket.js:95 app/io/Socket.js:102
 msgid "Please login"
 msgstr ""
 
@@ -55,23 +55,33 @@ msgstr ""
 msgid "Channel name"
 msgstr ""
 
-#: app/ui/BaseMenu.js:154
+#: app/ui/BaseMenu.js:154 app/ui/BaseMenu.js:160 app/ui/BaseMenu.js:163
+#: app/ui/BaseMenu.js:164 app/ui/BaseMenu.js:166 app/ui/BaseMenu.js:179
+#: app/ui/BaseMenu.js:180 app/ui/BaseMenu.js:181
 msgid "Logout"
 msgstr ""
 
-#: app/ui/BaseMenu.js:205
+#: app/ui/BaseMenu.js:205 app/ui/BaseMenu.js:211 app/ui/BaseMenu.js:214
+#: app/ui/BaseMenu.js:215 app/ui/BaseMenu.js:217 app/ui/BaseMenu.js:230
+#: app/ui/BaseMenu.js:231 app/ui/BaseMenu.js:232
 msgid "Search (^ +K)"
 msgstr ""
 
-#: app/ui/BaseMenu.js:230
+#: app/ui/BaseMenu.js:230 app/ui/BaseMenu.js:236 app/ui/BaseMenu.js:239
+#: app/ui/BaseMenu.js:240 app/ui/BaseMenu.js:242 app/ui/BaseMenu.js:255
+#: app/ui/BaseMenu.js:256 app/ui/BaseMenu.js:257
 msgid "Favorites"
 msgstr ""
 
-#: app/ui/BaseMenu.js:234
+#: app/ui/BaseMenu.js:234 app/ui/BaseMenu.js:240 app/ui/BaseMenu.js:243
+#: app/ui/BaseMenu.js:244 app/ui/BaseMenu.js:246 app/ui/BaseMenu.js:259
+#: app/ui/BaseMenu.js:260 app/ui/BaseMenu.js:261
 msgid "Channels"
 msgstr ""
 
-#: app/ui/BaseMenu.js:237
+#: app/ui/BaseMenu.js:237 app/ui/BaseMenu.js:243 app/ui/BaseMenu.js:246
+#: app/ui/BaseMenu.js:247 app/ui/BaseMenu.js:249 app/ui/BaseMenu.js:262
+#: app/ui/BaseMenu.js:263 app/ui/BaseMenu.js:264
 msgid "Private channels"
 msgstr ""
 
@@ -145,4 +155,16 @@ msgstr ""
 
 #: app/ui/form/SubscriptionItem.js:180
 msgid "Do you really want to leave this room?"
+msgstr ""
+
+#: app/ui/BaseMenu.js:155
+msgid "Lokal"
+msgstr ""
+
+#: app/ui/BaseMenu.js:155 app/ui/BaseMenu.js:154
+msgid "Develop"
+msgstr ""
+
+#: app/ui/BaseMenu.js:158 app/ui/BaseMenu.js:155 app/ui/BaseMenu.js:156
+msgid "Productive"
 msgstr ""

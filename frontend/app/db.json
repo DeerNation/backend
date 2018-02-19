@@ -9459,7 +9459,7 @@
       "implement": []
     },
     "app.io.Socket": {
-      "mtime": "2018-02-05T18:31:40.431Z",
+      "mtime": "2018-02-19T19:24:07.547Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -9470,12 +9470,10 @@
           "load": true,
           "construct": true
         },
-        "app.Config": {
-          "construct": true
-        },
         "app.io.Rpc": {
           "construct": true
         },
+        "app.Config": {},
         "dialog.Login": {},
         "qx.locale.Manager": {},
         "qx.Promise": {},
@@ -9493,10 +9491,41 @@
       "extends": "qx.core.Object",
       "include": [],
       "implement": [],
+      "unresolved": [
+        {
+          "name": "socketCluster.create",
+          "locations": [
+            {
+              "start": {
+                "line": 83,
+                "column": 22
+              },
+              "end": {
+                "line": 83,
+                "column": 42
+              }
+            }
+          ]
+        }
+      ],
       "translations": [
         {
           "msgid": "Please login",
-          "lineNo": 95
+          "lineNo": 102
+        }
+      ],
+      "markers": [
+        {
+          "msgId": "qx.tool.compiler.symbol.unresolved",
+          "pos": {
+            "start": {
+              "line": 83,
+              "column": 22
+            }
+          },
+          "args": [
+            "socketCluster.create"
+          ]
         }
       ]
     },
@@ -13683,7 +13712,7 @@
       ]
     },
     "app.Config": {
-      "mtime": "2018-02-18T09:01:20.530Z",
+      "mtime": "2018-02-19T19:12:42.724Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13697,7 +13726,8 @@
         "qx.bom.client.Device": {
           "load": true
         },
-        "qx.lang.Array": {}
+        "qx.lang.Array": {},
+        "qx.bom.Storage": {}
       },
       "extends": null,
       "include": [],
@@ -15375,7 +15405,7 @@
       "implement": []
     },
     "app.ui.BaseMenu": {
-      "mtime": "2018-02-11T10:07:57.923Z",
+      "mtime": "2018-02-19T19:28:08.069Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -15401,6 +15431,10 @@
         "qx.ui.menu.Button": {},
         "app.Config": {},
         "qx.ui.menu.Separator": {},
+        "qx.ui.menu.RadioButton": {},
+        "qx.ui.form.RadioGroup": {},
+        "qx.bom.Storage": {},
+        "app.io.Socket": {},
         "qx.ui.layout.Grid": {},
         "qx.ui.container.Composite": {},
         "qx.ui.layout.Grow": {},
@@ -15418,18 +15452,6 @@
           "load": true
         },
         "qx.core.Object": {
-          "load": true
-        },
-        "qx.core.Environment": {
-          "load": true
-        },
-        "qx.theme.manager.Meta": {
-          "load": true
-        },
-        "qx.core.ObjectRegistry": {
-          "load": true
-        },
-        "qx.core.IDisposable": {
           "load": true
         }
       },
@@ -15478,24 +15500,32 @@
           "lineNo": 125
         },
         {
-          "msgid": "Logout",
+          "msgid": "Develop",
           "lineNo": 154
         },
         {
+          "msgid": "Productive",
+          "lineNo": 156
+        },
+        {
+          "msgid": "Logout",
+          "lineNo": 180
+        },
+        {
           "msgid": "Search (^ +K)",
-          "lineNo": 205
+          "lineNo": 231
         },
         {
           "msgid": "Favorites",
-          "lineNo": 230
+          "lineNo": 256
         },
         {
           "msgid": "Channels",
-          "lineNo": 234
+          "lineNo": 260
         },
         {
           "msgid": "Private channels",
-          "lineNo": 237
+          "lineNo": 263
         }
       ]
     },
@@ -15903,6 +15933,133 @@
       "extends": "qx.core.Object",
       "include": [],
       "implement": []
+    },
+    "qx.ui.form.RadioButtonGroup": {
+      "mtime": "2018-02-02T22:42:23.941Z",
+      "libraryName": "qx",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.ui.core.Widget": {
+          "load": true,
+          "construct": true
+        },
+        "qx.ui.core.MLayoutHandling": {
+          "load": true
+        },
+        "qx.ui.form.MModelSelection": {
+          "load": true
+        },
+        "qx.ui.form.IForm": {
+          "load": true
+        },
+        "qx.ui.form.IField": {
+          "load": true
+        },
+        "qx.ui.core.ISingleSelection": {
+          "load": true
+        },
+        "qx.ui.form.IModelSelection": {
+          "load": true
+        },
+        "qx.ui.layout.VBox": {
+          "construct": true
+        },
+        "qx.ui.form.RadioGroup": {
+          "construct": true
+        },
+        "qx.ui.form.IRadioItem": {},
+        "qx.ui.core.LayoutItem": {
+          "load": true
+        },
+        "qx.data.Array": {
+          "load": true
+        },
+        "qx.core.Object": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.theme.manager.Meta": {
+          "load": true
+        },
+        "qx.lang.Array": {
+          "load": true
+        }
+      },
+      "extends": "qx.ui.core.Widget",
+      "include": [
+        "qx.ui.core.MLayoutHandling",
+        "qx.ui.form.MModelSelection"
+      ],
+      "implement": [
+        "qx.ui.form.IForm",
+        "qx.ui.form.IField",
+        "qx.ui.core.ISingleSelection",
+        "qx.ui.form.IModelSelection"
+      ]
+    },
+    "qx.ui.menu.RadioButton": {
+      "mtime": "2018-01-27T22:11:00.461Z",
+      "libraryName": "qx",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.ui.menu.AbstractButton": {
+          "load": true,
+          "construct": true
+        },
+        "qx.ui.form.MModelProperty": {
+          "load": true
+        },
+        "qx.ui.form.IRadioItem": {
+          "load": true
+        },
+        "qx.ui.form.IBooleanForm": {
+          "load": true
+        },
+        "qx.ui.form.IModel": {
+          "load": true
+        },
+        "qx.ui.core.Widget": {
+          "load": true
+        },
+        "qx.ui.menu.ButtonLayout": {
+          "load": true
+        },
+        "qx.ui.core.LayoutItem": {
+          "load": true
+        },
+        "qx.core.Object": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.theme.manager.Meta": {
+          "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
+        }
+      },
+      "extends": "qx.ui.menu.AbstractButton",
+      "include": [
+        "qx.ui.form.MModelProperty"
+      ],
+      "implement": [
+        "qx.ui.form.IRadioItem",
+        "qx.ui.form.IBooleanForm",
+        "qx.ui.form.IModel"
+      ]
     }
   }
 }

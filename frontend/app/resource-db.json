@@ -28400,6 +28400,10 @@
         "mtime": "2018-02-18T08:49:10.000Z",
         "width": 192,
         "height": 192
+      },
+      "js/socketcluster.min.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
       }
     },
     "dialog": {

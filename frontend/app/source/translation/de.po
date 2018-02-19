@@ -1,4 +1,4 @@
-#: app.io.Socket:95 app/io/Socket.js:95
+#: app.io.Socket:95 app/io/Socket.js:95 app/io/Socket.js:102
 msgid "Please login"
 msgstr ""
 
@@ -61,6 +61,9 @@ msgstr "Kanalname"
 #: app/ui/Menu.js:189 app/ui/Menu.js:204 app/ui/Menu.js:208 app/ui/Menu.js:211
 #: app/ui/Menu.js:201 app/ui/Menu.js:209 app/ui/Menu.js:205 app/ui/Menu.js:207
 #: app/ui/BaseMenu.js:183 app/ui/BaseMenu.js:200 app/ui/BaseMenu.js:205
+#: app/ui/BaseMenu.js:211 app/ui/BaseMenu.js:214 app/ui/BaseMenu.js:215
+#: app/ui/BaseMenu.js:217 app/ui/BaseMenu.js:230 app/ui/BaseMenu.js:231
+#: app/ui/BaseMenu.js:232
 msgid "Search (^ +K)"
 msgstr "Suchen (^ +K)"
 
@@ -69,6 +72,9 @@ msgstr "Suchen (^ +K)"
 #: app/ui/Menu.js:226 app/ui/Menu.js:234 app/ui/Menu.js:230 app/ui/Menu.js:232
 #: app/mobile/ui/Menu.js:55 app/mobile/ui/Menu.js:59 app/mobile/ui/Menu.js:38
 #: app/ui/BaseMenu.js:208 app/ui/BaseMenu.js:225 app/ui/BaseMenu.js:230
+#: app/ui/BaseMenu.js:236 app/ui/BaseMenu.js:239 app/ui/BaseMenu.js:240
+#: app/ui/BaseMenu.js:242 app/ui/BaseMenu.js:255 app/ui/BaseMenu.js:256
+#: app/ui/BaseMenu.js:257
 msgid "Favorites"
 msgstr "Favoriten"
 
@@ -76,6 +82,9 @@ msgstr "Favoriten"
 #: app/ui/Menu.js:218 app/ui/Menu.js:233 app/ui/Menu.js:237 app/ui/Menu.js:240
 #: app/ui/Menu.js:230 app/ui/Menu.js:238 app/ui/Menu.js:234 app/ui/Menu.js:236
 #: app/ui/BaseMenu.js:212 app/ui/BaseMenu.js:229 app/ui/BaseMenu.js:234
+#: app/ui/BaseMenu.js:240 app/ui/BaseMenu.js:243 app/ui/BaseMenu.js:244
+#: app/ui/BaseMenu.js:246 app/ui/BaseMenu.js:259 app/ui/BaseMenu.js:260
+#: app/ui/BaseMenu.js:261
 msgid "Channels"
 msgstr "Kanäle"
 
@@ -84,6 +93,9 @@ msgstr "Kanäle"
 #: app/ui/Menu.js:233 app/ui/Menu.js:241 app/ui/Menu.js:237 app/ui/Menu.js:239
 #: app/mobile/ui/Menu.js:65 app/mobile/ui/Menu.js:69 app/mobile/ui/Menu.js:48
 #: app/ui/BaseMenu.js:215 app/ui/BaseMenu.js:232 app/ui/BaseMenu.js:237
+#: app/ui/BaseMenu.js:243 app/ui/BaseMenu.js:246 app/ui/BaseMenu.js:247
+#: app/ui/BaseMenu.js:249 app/ui/BaseMenu.js:262 app/ui/BaseMenu.js:263
+#: app/ui/BaseMenu.js:264
 msgid "Private channels"
 msgstr "Private Kanäle"
 
@@ -242,10 +254,24 @@ msgstr "Unsichtbar"
 
 #: app/ui/Menu.js:160 app/ui/Menu.js:150 app/ui/Menu.js:158 app/ui/Menu.js:154
 #: app/ui/Menu.js:156 app/ui/BaseMenu.js:132 app/ui/BaseMenu.js:149
-#: app/ui/BaseMenu.js:154
+#: app/ui/BaseMenu.js:154 app/ui/BaseMenu.js:160 app/ui/BaseMenu.js:163
+#: app/ui/BaseMenu.js:164 app/ui/BaseMenu.js:166 app/ui/BaseMenu.js:179
+#: app/ui/BaseMenu.js:180 app/ui/BaseMenu.js:181
 msgid "Logout"
 msgstr "Abmelden"
 
 #: app/mobile/ui/Menu.js:60 app/mobile/ui/Menu.js:64 app/mobile/ui/Menu.js:43
 msgid "Public channels"
 msgstr "Öffenytliche Kanale"
+
+#: app/ui/BaseMenu.js:155
+msgid "Lokal"
+msgstr ""
+
+#: app/ui/BaseMenu.js:155 app/ui/BaseMenu.js:154
+msgid "Develop"
+msgstr ""
+
+#: app/ui/BaseMenu.js:158 app/ui/BaseMenu.js:155 app/ui/BaseMenu.js:156
+msgid "Productive"
+msgstr ""

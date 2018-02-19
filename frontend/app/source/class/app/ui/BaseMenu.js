@@ -151,6 +151,32 @@ qx.Class.define('app.ui.BaseMenu', {
 
       menu.add(new qx.ui.menu.Separator())
 
+      const dev = new qx.ui.menu.RadioButton(this.tr('Develop'))
+      dev.setUserData('type', 'dev')
+      const prod = new qx.ui.menu.RadioButton(this.tr('Productive'))
+      prod.setUserData('type', 'prod')
+      menu.add(dev)
+      menu.add(prod)
+
+      const group = new qx.ui.form.RadioGroup(dev, prod)
+      group.addListener('changeSelection', ev => {
+        switch (ev.getData()[0].getUserData('type')) {
+          case 'dev':
+            app.Config.socket.hostname = 'hannibal'
+            app.Config.socket.secure = false
+            break
+
+          case 'prod':
+            app.Config.socket.hostname = 'app.hirschberg-sauerland.de'
+            app.Config.socket.secure = true
+            break
+        }
+        qx.bom.Storage.getLocal().setItem('socket', app.Config.socket)
+        app.io.Socket.getInstance().connect()
+      })
+
+      menu.add(new qx.ui.menu.Separator())
+
       let button = new qx.ui.menu.Button(this.tr('Logout'), app.Config.icons.logout + '/16')
       button.addListener('execute', () => {
         // TODO logout

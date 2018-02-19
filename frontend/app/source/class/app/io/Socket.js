@@ -19,8 +19,7 @@ qx.Class.define('app.io.Socket', {
     this.base(arguments)
     this.__channels = []
     this.__queuedSubscriptions = []
-    // Initiate the connection to the server
-    this.__socket = socketCluster.connect(app.Config.socket)
+    this.connect()
 
     // eslint-disable-next-line
     this.__wampClient = new wampSocketCluster()
@@ -75,6 +74,14 @@ qx.Class.define('app.io.Socket', {
     __queuedSubscriptions: null,
     __loginDialog: null,
     __wampClient: null,
+
+    connect: function () {
+      if (this.__socket && this.__socket.state !== this.__socket.CLOSED) {
+        this.__socket.destroy()
+      }
+      // Initiate the connection to the server
+      this.__socket = socketCluster.create(app.Config.socket)
+    },
 
     // property apply
     _applyAuthenticated: function (value, old) {

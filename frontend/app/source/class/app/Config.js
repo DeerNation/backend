@@ -68,7 +68,10 @@ qx.Class.define('app.Config', {
 
     init: function () {
       this.isApp = !!window.cordova
-      if (this.isApp) {
+      let storeSocket = qx.bom.Storage.getLocal().getItem('socket')
+      if (storeSocket) {
+        this.socket = storeSocket
+      } else if (this.isApp) {
         // this.socket.hostname = 'app.hirschberg-sauerland.de'
         // this.socket.secure = true
         this.socket.hostname = 'hannibal'
