@@ -8,5 +8,6 @@
   "You are not allowed to update property %s of this item.": "Sie dürfen %s dieses Eintrags nicht ändern.",
   "You are not allowed to save this token.": "Sie dürfen dieses Token nicht speichern.",
   "New message in %s": "Neue Nachricht in %s",
-  "New event in %s": "Neuer Termin in %s"
+  "New event in %s": "Neuer Termin in %s",
+  "There are %n% new messages": "Sie haben %n% neue Nachrichten"
 }

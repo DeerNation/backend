@@ -63,12 +63,17 @@ class ChannelHandler {
       actorId: authToken.user
     }, message), {conflict: 'update'})
 
-    let options = {
-      image: 'www/build-output/resource/app/App-Logo.png',
-      channelId: channelId
-    }
     const channel = await schema.getModel('Channel').get(channelId).run()
     const actor = await schema.getModel('Actor').get(authToken.user).run()
+    let options = {
+      image: 'www/build-output/resource/app/App-Logo.png',
+      channelId: channelId,
+      style: 'inbox',
+      summaryText: i18n.__({
+        phrase: 'There are %n% new messages',
+        locale: actor.locale
+      })
+    }
     let phrase, content
 
     switch (message.type.toLowerCase()) {
