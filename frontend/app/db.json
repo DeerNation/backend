@@ -1,7 +1,7 @@
 {
   "classInfo": {
     "app.Application": {
-      "mtime": "2018-02-17T18:07:12.560Z",
+      "mtime": "2018-02-20T19:52:27.962Z",
       "libraryName": "app",
       "dependsOn": {
         "app.ui.Main": {
@@ -42,7 +42,8 @@
         }
       },
       "assets": [
-        "app/*"
+        "app/*",
+        "font/*"
       ]
     },
     "app.theme.Theme": {
@@ -345,7 +346,7 @@
       "implement": []
     },
     "app.theme.Decoration": {
-      "mtime": "2018-02-10T17:15:00.807Z",
+      "mtime": "2018-02-20T19:35:54.694Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -361,7 +362,7 @@
       "implement": []
     },
     "app.theme.Font": {
-      "mtime": "2018-02-10T16:37:39.072Z",
+      "mtime": "2018-02-20T19:50:48.871Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -390,7 +391,7 @@
       }
     },
     "app.theme.Appearance": {
-      "mtime": "2018-02-18T20:12:34.333Z",
+      "mtime": "2018-02-20T19:39:52.704Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -13635,7 +13636,7 @@
       "implement": []
     },
     "app.ui.form.ActivityItem": {
-      "mtime": "2018-02-18T19:34:19.923Z",
+      "mtime": "2018-02-20T20:40:39.975Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13652,7 +13653,7 @@
         "app.ui.form.MBindPropertyToChildControl": {
           "load": true
         },
-        "qx.ui.layout.Grid": {
+        "qx.ui.layout.Canvas": {
           "construct": true
         },
         "qx.util.format.DateFormat": {
@@ -13663,29 +13664,18 @@
         },
         "app.model.activity.Registry": {},
         "app.Model": {},
+        "qx.ui.layout.Grid": {},
+        "qx.ui.container.Composite": {},
         "app.ui.basic.AvatarIcon": {},
         "qx.ui.layout.HBox": {},
-        "qx.ui.container.Composite": {},
         "qx.ui.basic.Label": {},
         "qx.ui.form.List": {},
         "qx.data.controller.List": {},
         "qx.ui.layout.Grow": {},
+        "qx.ui.form.Button": {},
+        "app.Config": {},
+        "app.io.Rpc": {},
         "qx.ui.core.LayoutItem": {
-          "load": true
-        },
-        "qx.core.Object": {
-          "load": true
-        },
-        "qx.core.Environment": {
-          "load": true
-        },
-        "qx.theme.manager.Meta": {
-          "load": true
-        },
-        "qx.core.ObjectRegistry": {
-          "load": true
-        },
-        "qx.core.IDisposable": {
           "load": true
         }
       },
@@ -13699,20 +13689,20 @@
       "translations": [
         {
           "msgid": "Owner",
-          "lineNo": 137
+          "lineNo": 166
         },
         {
           "msgid": "Bot",
-          "lineNo": 140
+          "lineNo": 169
         },
         {
           "msgid": "Server",
-          "lineNo": 142
+          "lineNo": 171
         }
       ]
     },
     "app.Config": {
-      "mtime": "2018-02-19T19:12:42.724Z",
+      "mtime": "2018-02-20T20:25:05.803Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13949,7 +13939,7 @@
       "implement": []
     },
     "app.ui.Channel": {
-      "mtime": "2018-02-11T10:09:03.452Z",
+      "mtime": "2018-02-20T20:24:53.551Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13975,12 +13965,14 @@
         "app.Model": {
           "construct": true
         },
+        "qx.event.message.Bus": {
+          "construct": true
+        },
         "qx.core.Init": {},
         "app.io.Socket": {},
         "app.io.Rpc": {},
         "app.model.Factory": {},
         "app.model.Activity": {},
-        "qx.lang.Type": {},
         "app.ui.ChannelHeader": {},
         "qx.ui.list.List": {},
         "qx.util.Function": {},
@@ -14307,7 +14299,7 @@
       ]
     },
     "app.model.Actor": {
-      "mtime": "2018-02-18T11:05:07.586Z",
+      "mtime": "2018-02-20T17:12:49.860Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14697,7 +14689,7 @@
       ]
     },
     "app.ui.form.MessageField": {
-      "mtime": "2018-02-18T19:46:43.453Z",
+      "mtime": "2018-02-20T20:26:13.830Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14712,6 +14704,12 @@
           "load": true
         },
         "qx.ui.layout.HBox": {
+          "construct": true
+        },
+        "qx.ui.command.Group": {
+          "construct": true
+        },
+        "qx.ui.command.Command": {
           "construct": true
         },
         "app.io.Rpc": {},
@@ -14958,7 +14956,7 @@
       "implement": []
     },
     "app.data.converter.Markdown": {
-      "mtime": "2018-02-10T09:37:22.482Z",
+      "mtime": "2018-02-20T20:33:48.810Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -15452,6 +15450,18 @@
           "load": true
         },
         "qx.core.Object": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.theme.manager.Meta": {
+          "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
           "load": true
         }
       },
@@ -16060,6 +16070,129 @@
         "qx.ui.form.IBooleanForm",
         "qx.ui.form.IModel"
       ]
+    },
+    "qx.ui.command.Group": {
+      "mtime": "2018-01-27T22:11:00.441Z",
+      "libraryName": "qx",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.core.Object": {
+          "load": true,
+          "construct": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.ui.command.Command": {},
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
+        }
+      },
+      "extends": "qx.core.Object",
+      "include": [],
+      "implement": [],
+      "environment": {
+        "provided": [],
+        "required": {
+          "qx.debug": {}
+        }
+      }
+    },
+    "qx.ui.command.Command": {
+      "mtime": "2018-01-27T22:11:00.441Z",
+      "libraryName": "qx",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.core.Object": {
+          "load": true,
+          "construct": true
+        },
+        "qx.bom.Shortcut": {
+          "construct": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
+        }
+      },
+      "extends": "qx.core.Object",
+      "include": [],
+      "implement": []
+    },
+    "qx.bom.Shortcut": {
+      "mtime": "2018-01-27T22:11:00.325Z",
+      "libraryName": "qx",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.core.Object": {
+          "load": true,
+          "construct": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
+        },
+        "qx.event.Registration": {},
+        "qx.event.util.Keyboard": {},
+        "qx.lang.String": {},
+        "qx.locale.Key": {},
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        }
+      },
+      "extends": "qx.core.Object",
+      "include": [],
+      "implement": [
+        "qx.core.IDisposable"
+      ]
+    },
+    "qx.locale.Key": {
+      "mtime": "2018-01-27T22:11:00.361Z",
+      "libraryName": "qx",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.core.Environment": {},
+        "qx.core.Assert": {},
+        "qx.bom.client.OperatingSystem": {},
+        "qx.locale.Manager": {
+          "defer": "runtime"
+        }
+      },
+      "extends": null,
+      "include": [],
+      "implement": [],
+      "environment": {
+        "provided": [],
+        "required": {
+          "qx.debug": {},
+          "os.name": {
+            "className": "qx.bom.client.OperatingSystem"
+          }
+        }
+      },
+      "hasDefer": true
     }
   }
 }

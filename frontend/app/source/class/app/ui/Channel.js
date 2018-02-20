@@ -25,6 +25,8 @@ qx.Class.define('app.ui.Channel', {
     this._createChildControl('list')
 
     this.addListener('swipe', this._onSwipe, this)
+
+    qx.event.message.Bus.subscribe('channel.activities.delete', this._onActivityDelete, this)
   },
 
   /*
@@ -114,23 +116,81 @@ qx.Class.define('app.ui.Channel', {
     },
 
     /**
+     * Handle bus messages of deleted activities
+     * @param ev {Event}
+     * @private
+     */
+    _onActivityDelete: function (ev) {
+      const activity = ev.getData()
+      if (activity.getChannelId() === this.getSubscription().getChannelId()) {
+        this.getActivities().remove(activity)
+      }
+    },
+
+    __findActivity: function (id) {
+      let found
+      this.getActivities().some(act => {
+        if (act.getId() === id) {
+          found = act
+          return true
+        }
+      })
+      return found
+    },
+
+    /**
      * Handler for channel watching
      *
      * @param payload {Object} incoming data
      * @protected
      */
     _onActivity: function (payload) {
-      if (!qx.lang.Type.isArray(payload)) {
-        payload = [payload]
-      }
-      // create Activity instances and add them to the model
-      this.getActivities().append(app.model.Factory.createAll(payload, app.model.Activity, {
-        converter: function (model) {
-          if (!model.published) {
-            model.published = model.created
-          }
+      if (payload.hasOwnProperty('a') && payload.hasOwnProperty('c')) {
+        let found
+        switch (payload.a) {
+          case 'd':
+            // delete
+            found = this.__findActivity(payload.c)
+            if (found) {
+              this.getActivities().remove(found)
+            }
+            break
+
+          case 'u':
+            // update
+            found = this.__findActivity(payload.c.id)
+            if (found) {
+              found.set(payload.c)
+            } else {
+              // add new activity
+              if (!payload.c.published) {
+                payload.c.published = payload.c.created
+              }
+              this.getActivities().push(app.model.Factory.create(payload.c, app.model.Activity))
+            }
+            break
+
+          case 'a':
+            if (!payload.c.published) {
+              payload.c.published = payload.c.created
+            }
+            this.getActivities().push(app.model.Factory.create(payload.c, app.model.Activity))
+            break
         }
-      }))
+      } else {
+        throw new Error('wrong activity payload')
+      }
+      // if (!qx.lang.Type.isArray(payload)) {
+      //   payload = [payload]
+      // }
+      // // create Activity instances and add them to the model
+      // this.getActivities().append(app.model.Factory.createAll(payload, app.model.Activity, {
+      //   converter: function (model) {
+      //     if (!model.published) {
+      //       model.published = model.created
+      //     }
+      //   }
+      // }))
     },
 
     // overridden

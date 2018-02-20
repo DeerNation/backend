@@ -39,13 +39,22 @@ class ChannelHandler {
     feed.each((err, message) => {
       if (err) {
         logger.error(err)
+        return
       }
+      const channel = message.channelId
 
-      if (message && message.isSaved() === true) {
-        logger.debug('publishing %o', message)
-        const channel = message.channel
-        delete message.channel
-        this.server.exchange.publish(channel, message)
+      if (message.isSaved() === false) {
+        // deleted activity
+        logger.debug('deleted activity on channel %s: %o', channel, message)
+        this.server.exchange.publish(channel, {a: 'd', c: message.id})
+      } else if (message.getOldValue() === null) {
+        // new activity
+        logger.debug('new activity on channel %s: %o', channel, message)
+        this.server.exchange.publish(channel, {a: 'a', c: message})
+      } else {
+        // updated activity
+        logger.debug('updated activity on channel %s: %o', channel, message)
+        this.server.exchange.publish(channel, {a: 'u', c: message})
       }
     })
   }

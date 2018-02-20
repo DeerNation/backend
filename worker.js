@@ -14,6 +14,7 @@ const WebhookHandler = require('./backend/webhook/handler')
 const channelHandler = require('./backend/ChannelHandler')
 const rpcServer = require('./backend/rpc')
 const pushNotifications = require('./backend/notification')
+const scCodecMinBin = require('sc-codec-min-bin')
 
 class Worker extends SCWorker {
   run () {
@@ -32,6 +33,7 @@ class Worker extends SCWorker {
 
     let httpServer = this.httpServer
     let scServer = this.scServer
+    // scServer.setCodecEngine(scCodecMinBin)
 
     channelHandler.init(this.scServer)
 
@@ -66,13 +68,6 @@ class Worker extends SCWorker {
 
     // start listening on changes to Activities
     channelHandler.start()
-
-    // TODO: remove this once FCM is working fine
-    rpcServer.registerRPCEndpoints({
-      testPush: function (authToken, title, message, options) {
-        pushNotifications.send([authToken.user], title, message, options)
-      }
-    })
 
     /*
       In here we handle our incoming realtime connections and listen for events.

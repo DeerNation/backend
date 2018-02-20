@@ -19,7 +19,13 @@ qx.Class.define('app.data.converter.Markdown', {
 
     convert: function (data) {
       if (!app.data.converter.Markdown.__converter) {
-        app.data.converter.Markdown.__converter = new showdown.Converter()
+        app.data.converter.Markdown.__converter = new showdown.Converter({
+          tables: true,
+          tasklists: true,
+          simpleLineBreaks: true,
+          openLinksInNewWindow: true,
+          emoji: true
+        })
       }
       return app.data.converter.Markdown.__converter.makeHtml(data)
     }

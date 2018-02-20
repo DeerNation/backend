@@ -48,6 +48,13 @@ qx.Theme.define('app.theme.Decoration',
         }
       },
 
+      'form-field': {
+        style: {
+          color: 'menu-text',
+          width: 1
+        }
+      },
+
       'category': {
         style: {
           radius: 10,

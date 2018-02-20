@@ -12,6 +12,7 @@
  * This is the main application class of your custom application "app"
  *
  * @asset(app/*)
+ * @asset(font/*)
  * @require(app.ui.Main)
  * @require(app.mobile.ui.Main)
  */

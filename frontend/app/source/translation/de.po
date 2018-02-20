@@ -115,9 +115,12 @@ msgstr "Abbrechen"
 #: app/ui/form/ActivityItem.js:120 app/ui/form/ActivityItem.js:132
 #: app/ui/form/ActivityItem.js:131 app/ui/form/ActivityItem.js:134
 #: app/ui/form/ActivityItem.js:135 app/ui/form/ActivityItem.js:136
-#: app/ui/form/ActivityItem.js:137
+#: app/ui/form/ActivityItem.js:137 app/ui/form/ActivityItem.js:133
+#: app/ui/form/ActivityItem.js:150 app/ui/form/ActivityItem.js:164
+#: app/ui/form/ActivityItem.js:161 app/ui/form/ActivityItem.js:162
+#: app/ui/form/ActivityItem.js:166
 msgid "Owner"
-msgstr "Besitzer"
+msgstr "Eigentümer"
 
 #: app.ui.form.ActivityItem:131 app/ui/form/ActivityItem.js:131
 #: app/ui/form/ActivityItem.js:154 app/ui/form/ActivityItem.js:152
@@ -127,7 +130,10 @@ msgstr "Besitzer"
 #: app/ui/form/ActivityItem.js:123 app/ui/form/ActivityItem.js:135
 #: app/ui/form/ActivityItem.js:134 app/ui/form/ActivityItem.js:137
 #: app/ui/form/ActivityItem.js:138 app/ui/form/ActivityItem.js:139
-#: app/ui/form/ActivityItem.js:140
+#: app/ui/form/ActivityItem.js:140 app/ui/form/ActivityItem.js:136
+#: app/ui/form/ActivityItem.js:153 app/ui/form/ActivityItem.js:167
+#: app/ui/form/ActivityItem.js:164 app/ui/form/ActivityItem.js:165
+#: app/ui/form/ActivityItem.js:169
 msgid "Bot"
 msgstr "Bot"
 
@@ -139,7 +145,10 @@ msgstr "Bot"
 #: app/ui/form/ActivityItem.js:125 app/ui/form/ActivityItem.js:137
 #: app/ui/form/ActivityItem.js:136 app/ui/form/ActivityItem.js:139
 #: app/ui/form/ActivityItem.js:140 app/ui/form/ActivityItem.js:141
-#: app/ui/form/ActivityItem.js:142
+#: app/ui/form/ActivityItem.js:142 app/ui/form/ActivityItem.js:138
+#: app/ui/form/ActivityItem.js:155 app/ui/form/ActivityItem.js:169
+#: app/ui/form/ActivityItem.js:166 app/ui/form/ActivityItem.js:167
+#: app/ui/form/ActivityItem.js:171
 msgid "Server"
 msgstr "Server"
 

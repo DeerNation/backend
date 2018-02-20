@@ -19,7 +19,29 @@ qx.Class.define('app.ui.form.MessageField', {
     this._setLayout(new qx.ui.layout.HBox())
 
     // this._createChildControl('emojis')
-    this._createChildControl('textfield')
+    const field = this.getChildControl('textfield')
+    let group = this._editCommandGroup = new qx.ui.command.Group()
+
+    const newLine = new qx.ui.command.Command('Shift+Enter')
+    const send = this.__sendCommand = new qx.ui.command.Command('Enter')
+    send.addListener('execute', this.postMessage, this)
+    newLine.addListener('execute', () => {
+      const start = field.getTextSelectionStart()
+      const end = field.getTextSelectionEnd()
+      let parts = [field.getValue().substring(0, start), field.getValue().substring(end)]
+      field.setValue(parts.join('\n'))
+      field.setTextSelection(start + 1, start + 1)
+    })
+    group.add('newline', newLine)
+    group.add('send', send)
+    field.addListener('focusin', () => {
+      group.setActive(true)
+    })
+
+    field.addListener('focusout', () => {
+      group.setActive(false)
+    })
+
     this._createChildControl('send-button')
   },
 
@@ -42,6 +64,8 @@ qx.Class.define('app.ui.form.MessageField', {
   ******************************************************
   */
   members: {
+    _editCommandGroup: null,
+    __sendCommand: null,
 
     postMessage: function () {
       if (this.getModel()) {
@@ -50,6 +74,8 @@ qx.Class.define('app.ui.form.MessageField', {
           content: {
             message: this.getChildControl('textfield').getValue()
           }
+        }).then(() => {
+          this.getChildControl('textfield').resetValue()
         })
       }
     },
@@ -65,12 +91,15 @@ qx.Class.define('app.ui.form.MessageField', {
 
         case 'textfield':
           control = new qx.ui.form.TextArea()
+          control.set({
+            minimalLineHeight: 1,
+            autoSize: true
+          })
           this._addAt(control, 1, {flex: 1})
           break
 
         case 'send-button':
-          control = new qx.ui.form.Button(null, app.Config.icons.plus + '/20')
-          control.addListener('execute', this.postMessage, this)
+          control = new qx.ui.form.Button(null, app.Config.icons.plus + '/20', this.__sendCommand)
           this._addAt(control, 2)
           break
       }

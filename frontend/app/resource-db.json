@@ -28404,6 +28404,62 @@
       "js/socketcluster.min.js": {
         "doNotCopy": false,
         "resource": "resourcePath"
+      },
+      "js/sc-codec-min-bin.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "font/roboto/LICENSE.txt": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "font/roboto/Roboto-Black.ttf": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "font/roboto/Roboto-BlackItalic.ttf": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "font/roboto/Roboto-Bold.ttf": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "font/roboto/Roboto-BoldItalic.ttf": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "font/roboto/Roboto-Italic.ttf": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "font/roboto/Roboto-Light.ttf": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "font/roboto/Roboto-LightItalic.ttf": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "font/roboto/Roboto-Medium.ttf": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "font/roboto/Roboto-MediumItalic.ttf": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "font/roboto/Roboto-Regular.ttf": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "font/roboto/Roboto-Thin.ttf": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "font/roboto/Roboto-ThinItalic.ttf": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
       }
     },
     "dialog": {

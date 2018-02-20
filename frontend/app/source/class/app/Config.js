@@ -18,7 +18,8 @@ qx.Class.define('app.Config', {
       hostname: 'localhost',
       secure: false,
       port: 8000,
-      rejectUnauthorized: false // Only necessary during debug if using a self-signed certificate
+      rejectUnauthorized: false, // Only necessary during debug if using a self-signed certificate
+      // codecEngine: scCodecMinBin
     },
 
     channelPrefix: 'hbg.channel.',
@@ -63,7 +64,8 @@ qx.Class.define('app.Config', {
       logout: '@FASolid/f2f5',
       smiley: '@FARegular/f118',
       plus: '@FASolid/f067',
-      event: '@FARegular/f073'
+      event: '@FARegular/f073',
+      delete: '@FASolid/f2ed'
     },
 
     init: function () {

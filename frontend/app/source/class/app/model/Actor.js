@@ -101,6 +101,11 @@ qx.Class.define('app.model.Actor', {
   ******************************************************
   */
   members: {
+
+    isAdmin: function () {
+      return this.getRole() === 'admin'
+    },
+
     // property apply
     _applyOnline: function (value) {
       if (app.Model.getInstance().getActor() === this) {

@@ -22,6 +22,7 @@
     "node-gcm": "^0.14.10",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
+    "sc-codec-min-bin": "^3.0.0",
     "sc-crud-rethink": "^6.0.2",
     "sc-errors": "^1.4.0",
     "sc-framework-health-check": "^2.0.0",
@@ -83,7 +84,8 @@
       "wampSocketCluster",
       "showdown",
       "firebase",
-      "PushNotification"
+      "PushNotification",
+      "scCodecMinBin"
     ]
   }
 }

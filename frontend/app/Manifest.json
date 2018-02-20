@@ -66,6 +66,7 @@
       "js/firebase-app.js",
       "js/firebase-messaging.js",
       "js/socketcluster.js",
+      "js/sc-codec-min-bin.js",
       "js/WAMPClient.bundle.min.js",
       "js/showdown.min.js"
     ],

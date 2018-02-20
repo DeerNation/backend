@@ -17,11 +17,8 @@ qx.Class.define('app.ui.form.ActivityItem', {
   */
   construct: function (label, icon, model) {
     this.base(arguments, label, icon, model)
-    const layout = new qx.ui.layout.Grid()
-    layout.setColumnFlex(1, 1)
-    layout.setColumnAlign(0, 'left', 'top')
-    layout.setColumnAlign(1, 'left', 'top')
-    this._setLayout(layout)
+    this._setLayout(new qx.ui.layout.Canvas())
+    this.__renderers = {}
 
     this.addListener('pointerover', this._onPointerOver, this)
     this.addListener('pointerout', this._onPointerOut, this)
@@ -83,6 +80,12 @@ qx.Class.define('app.ui.form.ActivityItem', {
       event: 'changeModel',
       apply: '_applyModel',
       dereference: true
+    },
+
+    deletable: {
+      check: 'Boolean',
+      init: false,
+      apply: '_applyDeletable'
     }
   },
 
@@ -94,6 +97,15 @@ qx.Class.define('app.ui.form.ActivityItem', {
   members: {
     __dateFormat: null,
     _roleController: null,
+    __renderers: null,
+    __currentRendererType: null,
+
+    _getRenderer: function (type) {
+      if (!this.__renderers.hasOwnProperty(type)) {
+        this.__renderers[type] = new (app.model.activity.Registry.getRendererClass(type))()
+      }
+      return this.__renderers[type]
+    },
 
     // apply method
     _applyModel: function (value, old) {
@@ -104,12 +116,27 @@ qx.Class.define('app.ui.form.ActivityItem', {
         value.bind('published', this, 'published')
         value.bind('actor', this, 'author')
         const container = this.getChildControl('content-container')
-        container.removeAll().forEach(entry => {
-          entry.dispose()
-        })
-        const renderer = new (app.model.activity.Registry.getRendererClass(value.getType().toLowerCase()))()
+        const type = value.getType().toLowerCase()
+        const renderer = this._getRenderer(type)
         renderer.setModel(value)
-        container.add(renderer)
+        if (container.hasChildren()) {
+          if (container.getChildren()[0] !== renderer) {
+            container.removeAt(0)
+            container.add(renderer)
+          }
+        } else {
+          container.add(renderer)
+        }
+      }
+      this.getChildControl('overlay').exclude()
+    },
+
+    // property apply
+    _applyDeletable: function (value) {
+      if (value) {
+        this.getChildControl('delete-button').show()
+      } else {
+        this.getChildControl('delete-button').exclude()
       }
     },
 
@@ -131,9 +158,11 @@ qx.Class.define('app.ui.form.ActivityItem', {
       }, old)
 
       const roles = this.getAuthorRoles()
+      let isOwner = false
       roles.removeAll()
       if (app.Model.getInstance().getSelectedSubscription() &&
         app.Model.getInstance().getSelectedSubscription().getChannel().getOwnerId() === author.getId()) {
+        isOwner = true
         roles.push(this.tr('Owner'))
       }
       if (author.getType() === 'Bot') {
@@ -148,24 +177,34 @@ qx.Class.define('app.ui.form.ActivityItem', {
       } else {
         this.getChildControl('authorRoles').exclude()
       }
+      this.setDeletable(isOwner || app.Model.getInstance().getActor().isAdmin() || author.getId() === app.Model.getInstance().getActor().getId())
     },
 
     // overridden
     _createChildControlImpl: function (id, hash) {
-      let control
+      let control, layout
 
       switch (id) {
+        case 'container':
+          layout = new qx.ui.layout.Grid()
+          layout.setColumnFlex(1, 1)
+          layout.setColumnAlign(0, 'left', 'top')
+          layout.setColumnAlign(1, 'left', 'top')
+          control = new qx.ui.container.Composite(layout)
+          this._add(control, {edge: 1})
+          break
+
         case 'author-icon':
           control = new app.ui.basic.AvatarIcon()
           control.setAnonymous(true)
-          this._add(control, {row: 0, column: 0, rowSpan: 2})
+          this.getChildControl('container').add(control, {row: 0, column: 0, rowSpan: 2})
           break
 
         case 'header':
-          const layout = new qx.ui.layout.HBox()
+          layout = new qx.ui.layout.HBox()
           layout.setAlignY('middle')
           control = new qx.ui.container.Composite(layout)
-          this._add(control, {row: 0, column: 1})
+          this.getChildControl('container').add(control, {row: 0, column: 1})
           break
 
         case 'authorName':
@@ -206,7 +245,29 @@ qx.Class.define('app.ui.form.ActivityItem', {
 
         case 'content-container':
           control = new qx.ui.container.Composite(new qx.ui.layout.Grow())
-          this._add(control, {row: 1, column: 1})
+          this.getChildControl('container').add(control, {row: 1, column: 1})
+          break
+
+        case 'overlay':
+          control = new qx.ui.container.Composite(new qx.ui.layout.HBox())
+          control.exclude()
+          this._add(control, {right: 0, top: 0})
+          break
+
+        case 'delete-button':
+          control = new qx.ui.form.Button(null, app.Config.icons.delete + '/12')
+          control.addListener('execute', () => {
+            app.io.Rpc.getProxy().deleteActivity(this.getModel().getId()).then(res => {
+              if (res === true) {
+                this.debug('activity as been deleted')
+              } else {
+                this.error(res)
+              }
+            }).catch(err => {
+              this.error(err)
+            })
+          })
+          this.getChildControl('overlay').add(control)
           break
       }
       return control || this.base(arguments, id, hash)
@@ -228,6 +289,7 @@ qx.Class.define('app.ui.form.ActivityItem', {
      */
     _onPointerOver: function () {
       this.addState('hovered')
+      this.getChildControl('overlay').show()
     },
 
     /**
@@ -235,6 +297,7 @@ qx.Class.define('app.ui.form.ActivityItem', {
      */
     _onPointerOut: function () {
       this.removeState('hovered')
+      this.getChildControl('overlay').exclude()
     }
   },
 
