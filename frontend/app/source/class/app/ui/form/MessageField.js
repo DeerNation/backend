@@ -55,6 +55,12 @@ qx.Class.define('app.ui.form.MessageField', {
       nullable: true,
       event: 'changeModel',
       dereference: true
+    },
+
+    activity: {
+      check: 'app.model.Activity',
+      nullable: true,
+      apply: '_applyActivity'
     }
   },
 
@@ -67,16 +73,50 @@ qx.Class.define('app.ui.form.MessageField', {
     _editCommandGroup: null,
     __sendCommand: null,
 
-    postMessage: function () {
+    postMessage: async function () {
       if (this.getModel()) {
-        app.io.Rpc.getProxy().publish(this.getModel().getId(), {
-          type: 'Message',
-          content: {
-            message: this.getChildControl('textfield').getValue()
+        // TODO: show spinner during message sending
+        this.getChildControl('textfield').setEnabled(false)
+        if (this.getActivity()) {
+          // update message in existing activity
+          try {
+            await app.io.Rpc.getProxy().updateObjectProperty('Activity',
+              this.getActivity().getId(),
+              {
+                content: {
+                  message: this.getChildControl('textfield').getValue()
+                }
+              })
+            this.getChildControl('textfield').setEnabled(true)
+            this.resetActivity()
+          } catch (err) {
+            this.getChildControl('textfield').setEnabled(true)
+            this.error(err)
           }
-        }).then(() => {
-          this.getChildControl('textfield').resetValue()
-        })
+        } else {
+          try {
+            await app.io.Rpc.getProxy().publish(this.getModel().getId(), {
+              type: 'Message',
+              content: {
+                message: this.getChildControl('textfield').getValue()
+              }
+            })
+            this.getChildControl('textfield').setEnabled(true)
+            this.getChildControl('textfield').resetValue()
+          } catch (err) {
+            this.getChildControl('textfield').setEnabled(true)
+            this.error(err)
+          }
+        }
+      }
+    },
+
+    // property apply
+    _applyActivity: function (value) {
+      if (value) {
+        this.getChildControl('textfield').setValue(value.getContent().message)
+      } else {
+        this.getChildControl('textfield').resetValue()
       }
     },
 

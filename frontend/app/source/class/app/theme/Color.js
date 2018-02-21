@@ -38,6 +38,7 @@ qx.Theme.define('app.theme.Color',
       'user-offline': '#222222',
 
       // activity items
-      'event-default-bg': 'rgb(15, 108, 0)'
+      'event-default-bg': 'rgb(15, 108, 0)',
+      'hovered': '#EFEFEF'
     }
   })

@@ -330,7 +330,7 @@
       }
     },
     "app.theme.Color": {
-      "mtime": "2018-02-10T21:19:32.277Z",
+      "mtime": "2018-02-21T17:41:13.182Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -391,7 +391,7 @@
       }
     },
     "app.theme.Appearance": {
-      "mtime": "2018-02-20T20:50:25.507Z",
+      "mtime": "2018-02-21T17:43:18.194Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -9616,7 +9616,7 @@
       ]
     },
     "app.model.Activity": {
-      "mtime": "2018-02-16T17:05:35.428Z",
+      "mtime": "2018-02-21T17:08:47.399Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -9627,6 +9627,7 @@
           "load": true,
           "construct": true
         },
+        "app.data.converter.Markdown": {},
         "app.Model": {},
         "qx.core.Assert": {},
         "qx.core.Object": {
@@ -13954,7 +13955,7 @@
       "implement": []
     },
     "app.ui.Channel": {
-      "mtime": "2018-02-20T20:24:53.551Z",
+      "mtime": "2018-02-21T19:17:46.243Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13981,6 +13982,9 @@
           "construct": true
         },
         "qx.event.message.Bus": {
+          "construct": true
+        },
+        "qx.ui.command.Command": {
           "construct": true
         },
         "qx.core.Init": {},
@@ -14704,7 +14708,7 @@
       ]
     },
     "app.ui.form.MessageField": {
-      "mtime": "2018-02-20T20:26:13.830Z",
+      "mtime": "2018-02-21T18:58:19.074Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14787,7 +14791,7 @@
       "implement": []
     },
     "app.ui.renderer.Message": {
-      "mtime": "2018-02-10T15:52:36.000Z",
+      "mtime": "2018-02-21T17:09:15.772Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14804,7 +14808,6 @@
         "qx.ui.layout.VBox": {
           "construct": true
         },
-        "app.data.converter.Markdown": {},
         "app.ui.basic.Label": {},
         "qx.ui.core.LayoutItem": {
           "load": true
@@ -14905,7 +14908,7 @@
       "hasDefer": true
     },
     "app.model.activity.content.Message": {
-      "mtime": "2018-02-10T11:03:15.376Z",
+      "mtime": "2018-02-21T17:08:47.379Z",
       "libraryName": "app",
       "dependsOn": {
         "app.model.activity.Registry": {
@@ -14919,6 +14922,7 @@
         "app.model.activity.content.AbstractActivityContent": {
           "load": true
         },
+        "app.data.converter.Markdown": {},
         "app.ui.renderer.Message": {
           "defer": "runtime"
         },
@@ -14971,7 +14975,7 @@
       "implement": []
     },
     "app.data.converter.Markdown": {
-      "mtime": "2018-02-20T20:33:48.810Z",
+      "mtime": "2018-02-21T17:20:32.787Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {

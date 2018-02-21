@@ -18,7 +18,29 @@ qx.Class.define('app.model.activity.content.Message', {
     message: {
       check: 'String',
       nullable: true,
-      event: 'changesMessage'
+      event: 'changedMessage',
+      apply: '_applyMessage'
+    },
+
+    /**
+     * Transformed message (markdown -> HTML)
+     */
+    displayMessage: {
+      check: 'String',
+      nullable: true,
+      event: 'changedDisplayMessage'
+    }
+  },
+
+  /*
+  ******************************************************
+    MEMBERS
+  ******************************************************
+  */
+  members: {
+    // property apply
+    _applyMessage: function (value) {
+      this.setDisplayMessage(app.data.converter.Markdown.convert(value))
     }
   },
 

@@ -43,9 +43,11 @@ qx.Theme.define('app.theme.Appearance',
       'activity-listitem': {
         include: 'listitem',
         alias: 'listitem',
-        style: function () {
+        style: function (states) {
           return {
-            padding: [10, 20]
+            padding: [10, 20],
+            backgroundColor: states.hovered || states.selected ? 'hovered' : null,
+            textColor: undefined
           }
         }
       },

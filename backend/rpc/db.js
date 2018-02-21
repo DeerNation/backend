@@ -94,13 +94,34 @@ function updateObjectProperty (authToken, type, id, prop, value) {
   acl.check(type.toLowerCase() + '.' + id + '.' + prop, acl.action.write, authToken, i18n.__('You are not allowed to update property %s of this item.', prop))
 
   const crud = schema.getCrud()
+  let update = {
+    type: type,
+    id: id
+  }
+  if (!value) {
+    update.value = prop
+  } else if (prop.indexOf('.') >= 0) {
+    // nested property
+    delete update.field
+    let parts = prop.split('.')
+    let part = parts.shift()
+    update.value = {}
+    update.value[part] = {}
+    let pointer = update.value[part]
+    while (parts.length > 0) {
+      part = parts.shift()
+      if (parts.length === 0) {
+        pointer[part] = value
+      } else {
+        pointer = pointer[part]
+      }
+    }
+  } else {
+    update.field = prop
+    update.value = value
+  }
   return new Promise((resolve, reject) => {
-    crud.update({
-      type: type,
-      id: id,
-      field: prop,
-      value: value
-    }, (err, res) => {
+    crud.update(update, (err, res) => {
       if (err) {
         reject(err)
       } else {

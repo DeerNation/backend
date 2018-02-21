@@ -27,6 +27,11 @@ qx.Class.define('app.ui.Channel', {
     this.addListener('swipe', this._onSwipe, this)
 
     qx.event.message.Bus.subscribe('channel.activities.delete', this._onActivityDelete, this)
+
+    const selectUp = new qx.ui.command.Command('Up')
+    const selectDown = new qx.ui.command.Command('Down')
+    selectUp.addListener('execute', this._onSelectUp, this)
+    selectUp.addListener('execute', this._onSelectDown, this)
   },
 
   /*
@@ -113,6 +118,34 @@ qx.Class.define('app.ui.Channel', {
       if (this.hasChildControl('list')) {
         this.getChildControl('list').setModel(value)
       }
+    },
+
+    /**
+     * Select the next editable activity above the current selection (or the last one when no one is selected)
+     * @protected
+     */
+    _onSelectUp: function () {
+      const selection = this.getChildControl('list').getSelection().getItem(0)
+      const activities = this.getActivities()
+      let index = selection ? activities.indexOf(selection) : activities.getLength() - 1
+      if (index > 0) {
+        index--
+      }
+      this.getChildControl('list').getSelection().replace([activities.getItem(index)])
+    },
+
+    /**
+     * Select the next editable activity below the current selection (stops at the end of the list)
+     * @protected
+     */
+    _onSelectDown: function () {
+      const selection = this.getChildControl('list').getSelection().getItem(0)
+      const activities = this.getActivities()
+      let index = selection ? activities.indexOf(selection) : activities.getLength() - 1
+      if (index + 1 < activities.getLength()) {
+        index++
+      }
+      this.getChildControl('list').getSelection().replace([activities.getItem(index)])
     },
 
     /**
@@ -214,6 +247,7 @@ qx.Class.define('app.ui.Channel', {
             control.scrollToY(1e99)
           }, 100)
           this.getActivities().addListener('changeLength', deferredScroll, this)
+          control.getSelection().addListener('change', this._onSelection, this)
           this.__applyListDelegate(control)
           this._addAt(control, 1, {flex: 1})
           break
@@ -229,6 +263,35 @@ qx.Class.define('app.ui.Channel', {
           break
       }
       return control || this.base(arguments, id, hash)
+    },
+
+    /**
+     * Handle activity selections
+     * @protected
+     */
+    _onSelection: function () {
+      const selection = this.getChildControl('list').getSelection()
+      // TODO handle other Activity types
+      if (selection.getLength() === 1) {
+        const activity = selection.getItem(0)
+        const actor = app.Model.getInstance().getActor()
+        if (actor.isAdmin() ||
+            activity.getActorId() === actor.getId() ||
+            this.getSubscription().getChannel().getOwnerId() === actor.getId()
+        ) {
+          switch (activity.getType()) {
+            case 'Message':
+              this.getChildControl('message-field').setActivity(activity)
+              break
+
+            case 'Event':
+              this.error('Not implemented')
+              break
+          }
+        }
+      } else {
+        this.getChildControl('message-field').resetActivity()
+      }
     },
 
     __applyListDelegate: function (list) {

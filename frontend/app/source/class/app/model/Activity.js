@@ -28,7 +28,17 @@ qx.Class.define('app.model.Activity', {
     title: {
       check: 'String',
       nullable: true,
-      event: 'changeTitle'
+      event: 'changeTitle',
+      apply: '_applyTitle'
+    },
+
+    /**
+     * Transformed title (markdown -> HTML)
+     */
+    displayTitle: {
+      check: 'String',
+      nullable: true,
+      event: 'changeDisplayTitle'
     },
 
     type: {
@@ -94,6 +104,11 @@ qx.Class.define('app.model.Activity', {
   ******************************************************
   */
   members: {
+
+    // property apply
+    _applyTitle: function (value) {
+      this.setDisplayTitle(app.data.converter.Markdown.convert(value))
+    },
 
     // property apply
     _applyActorId: function (value) {

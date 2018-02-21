@@ -3,7 +3,12 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' localhost https://app.hirschberg-sauerland.de 'unsafe-eval' 'unsafe-inline'; connect-src 'self' https://fcm.googleapis.com/fcm/connect/subscribe ws://localhost:8000 ws://hannibal:8000 wss://app.hirschberg-sauerland.de:8000">
+  <meta http-equiv="Content-Security-Policy" content="
+    img-src * data:;
+    media-src *;
+    default-src 'self' localhost https://app.hirschberg-sauerland.de 'unsafe-eval' 'unsafe-inline';
+    connect-src 'self' https://fcm.googleapis.com/fcm/connect/subscribe ws://localhost:8000 ws://hannibal:8000 wss://app.hirschberg-sauerland.de:8000
+  ">
   <link rel="manifest" href="/resource/app/manifest.json">
   <title>Kuiern in Hirschberg</title>
 </head>

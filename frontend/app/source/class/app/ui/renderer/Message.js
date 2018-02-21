@@ -51,11 +51,11 @@ qx.Class.define('app.ui.renderer.Message', {
       }
       if (value) {
         let control = this.getChildControl('title')
-        value.bind('title', this.getChildControl('title'), 'value', {
+        value.bind('displayTitle', this.getChildControl('title'), 'value', {
           converter: function (value) {
             if (value) {
               control.show()
-              return app.data.converter.Markdown.convert(value)
+              return value
             } else {
               control.exclude()
               return value
@@ -64,9 +64,7 @@ qx.Class.define('app.ui.renderer.Message', {
         })
         const content = value.getContentObject()
         if (content) {
-          content.bind('message', this.getChildControl('message'), 'value', {
-            converter: app.data.converter.Markdown.convert
-          })
+          content.bind('displayMessage', this.getChildControl('message'), 'value')
         }
       }
     },
