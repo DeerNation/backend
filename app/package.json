@@ -10,11 +10,13 @@
       "cordova-plugin-whitelist": {},
       "phonegap-plugin-push": {
         "FCM_VERSION": "11.6.2"
-      }
+      },
+      "cordova-plugin-splashscreen": {}
     }
   },
   "dependencies": {
     "cordova-android": "7.0.0",
+    "cordova-plugin-splashscreen": "^5.0.2",
     "cordova-plugin-whitelist": "1",
     "phonegap-plugin-push": "^2.1.3"
   }

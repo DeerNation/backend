@@ -9632,15 +9632,6 @@
         "qx.core.Assert": {},
         "qx.core.Object": {
           "load": true
-        },
-        "qx.core.ObjectRegistry": {
-          "load": true
-        },
-        "qx.core.Environment": {
-          "load": true
-        },
-        "qx.core.IDisposable": {
-          "load": true
         }
       },
       "extends": "app.model.AbstractModel",
@@ -13999,21 +13990,6 @@
         "app.ui.form.ActivityItem": {},
         "qx.ui.core.LayoutItem": {
           "load": true
-        },
-        "qx.core.Object": {
-          "load": true
-        },
-        "qx.core.Environment": {
-          "load": true
-        },
-        "qx.theme.manager.Meta": {
-          "load": true
-        },
-        "qx.core.ObjectRegistry": {
-          "load": true
-        },
-        "qx.core.IDisposable": {
-          "load": true
         }
       },
       "extends": "qx.ui.core.Widget",
@@ -14737,21 +14713,6 @@
         "qx.ui.form.TextArea": {},
         "qx.ui.core.LayoutItem": {
           "load": true
-        },
-        "qx.core.Object": {
-          "load": true
-        },
-        "qx.core.Environment": {
-          "load": true
-        },
-        "qx.theme.manager.Meta": {
-          "load": true
-        },
-        "qx.core.ObjectRegistry": {
-          "load": true
-        },
-        "qx.core.IDisposable": {
-          "load": true
         }
       },
       "extends": "qx.ui.core.Widget",
@@ -14810,21 +14771,6 @@
         },
         "app.ui.basic.Label": {},
         "qx.ui.core.LayoutItem": {
-          "load": true
-        },
-        "qx.core.Object": {
-          "load": true
-        },
-        "qx.core.Environment": {
-          "load": true
-        },
-        "qx.theme.manager.Meta": {
-          "load": true
-        },
-        "qx.core.ObjectRegistry": {
-          "load": true
-        },
-        "qx.core.IDisposable": {
           "load": true
         }
       },
@@ -14930,15 +14876,6 @@
           "defer": "runtime"
         },
         "qx.core.Object": {
-          "load": true
-        },
-        "qx.core.ObjectRegistry": {
-          "load": true
-        },
-        "qx.core.Environment": {
-          "load": true
-        },
-        "qx.core.IDisposable": {
           "load": true
         }
       },
