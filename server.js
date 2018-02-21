@@ -21,6 +21,7 @@ let workerControllerPath = argv.wc || process.env.SOCKETCLUSTER_WORKER_CONTROLLE
 let brokerControllerPath = argv.bc || process.env.SOCKETCLUSTER_BROKER_CONTROLLER
 let workerClusterControllerPath = argv.wcc || process.env.SOCKETCLUSTER_WORKERCLUSTER_CONTROLLER
 let environment = process.env.ENV || 'dev'
+let serverId = process.env.SERVER_ID || environment
 let logLevel = environment === 'dev' ? 3 : 2
 
 let options = {
@@ -47,7 +48,8 @@ let options = {
   // If using nodemon, set this to true, and make sure that environment is 'dev'.
   killMasterOnSignal: false,
   environment: environment,
-  logLevel: logLevel
+  logLevel: logLevel,
+  serverId: serverId
 }
 if (environment === 'production') {
   options.protocol = 'https'

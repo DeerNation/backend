@@ -391,7 +391,7 @@
       }
     },
     "app.theme.Appearance": {
-      "mtime": "2018-02-20T19:39:52.704Z",
+      "mtime": "2018-02-20T20:50:25.507Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -13676,6 +13676,21 @@
         "app.Config": {},
         "app.io.Rpc": {},
         "qx.ui.core.LayoutItem": {
+          "load": true
+        },
+        "qx.core.Object": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.theme.manager.Meta": {
+          "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
           "load": true
         }
       },

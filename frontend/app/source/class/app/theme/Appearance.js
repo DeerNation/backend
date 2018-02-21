@@ -49,6 +49,15 @@ qx.Theme.define('app.theme.Appearance',
           }
         }
       },
+
+      'activity-listitem/content-container': {
+        style: function () {
+          return {
+            font: 'message'
+          }
+        }
+      },
+
       'activity-listitem/header': {
         style: function () {
           return {

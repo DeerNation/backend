@@ -1,6 +1,7 @@
 # Was fehlt noch
 
 * JSON Schema für Activity-Types
+* Logout Funktion (automatisch triggern bei Serverwechsel)
 * FormHandler für Message + Event (für create + edit von Activities)
 * In einem Kanal nur bestimmte Activity-Types zulassen (auch Activity-Attachments prüfen)
 * ungelesene Nachrichten (in Menü + Kanalansicht)
@@ -22,8 +23,12 @@
 * Channel-View zu breit (vlt. Kanaldescription weglassen)
 * Appearance auf Zielsystem anpassen (Android -> Material), v.a. die Dialoge/Formularfelder, Scroll-Bounce usw.
 * Push-Notifications:
-  * notId, Gruppierungen usw.
-  * Leerer Kreis ohne Icon im Locked-Screen
+  * ✔ notId, Gruppierungen usw.
+  * ✔ Leerer Kreis ohne Icon im Locked-Screen
+  * ✔ Nachrichten die von Dev-System gesendet werden dürfen nicht auf Clients, die mit dem Prod-System verbunden sind angezeigt werden
+    (=> ServerName in die Topics mit einbauen, der Server muss dann aber auch die Subscriptions löschen, wenn der CLient
+    sich auslogged (durch serverwechel), sonst kann der Client nach Wechsel des Servers auf beiden subscribed sein)
+  * Subscriptions löschen, bei logout (nicht beim disconnect)
 
 # Fehler/Probleme
 

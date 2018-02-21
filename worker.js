@@ -20,6 +20,8 @@ class Worker extends SCWorker {
   run () {
     logger.info('   >> Worker PID: %d', process.pid)
     let environment = this.options.environment
+    const serverId = this.options.serverId
+    console.log('ServerId:', serverId)
 
     let app = express()
 
@@ -76,9 +78,9 @@ class Worker extends SCWorker {
       // activate authentification
       if (socket.authToken) {
         auth(socket, scServer)
-        pushNotifications.syncTopicSubscriptions(socket.authToken.user)
+        pushNotifications.syncTopicSubscriptions(socket.authToken.user, serverId)
       } else {
-        auth(socket, scServer, pushNotifications.syncTopicSubscriptions.bind(pushNotifications))
+        auth(socket, scServer, pushNotifications.syncTopicSubscriptions.bind(pushNotifications, serverId))
       }
 
       rpcServer.upgradeToWAMP(socket)

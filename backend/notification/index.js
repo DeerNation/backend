@@ -13,6 +13,7 @@ class PushNotification {
       'Content-Type': 'application/json',
       'Authorization': 'key=' + fcmKey
     }
+    this.__serverTopicPrefix = null
   }
 
   __getUserTokens (userId) {
@@ -104,9 +105,12 @@ class PushNotification {
   /**
    * Synchronize FCM topic subscriptions and channel subscriptions
    * @param userId {String} user id
+   * @param serverId {String} server identifier used as topic prefix
    */
-  async syncTopicSubscriptions (userId) {
+  async syncTopicSubscriptions (userId, serverId) {
     try {
+      this.__serverTopicPrefix = serverId ? serverId + '-' : ''
+      logger.debug('using %s as topic prefix', this.__serverTopicPrefix)
       let firebases = await schema.getModel('Firebase').filter({actorId: userId}).run()
       let subscriptions = await schema.getModel('Subscription').filter({actorId: userId}).run()
       firebases.forEach(async (firebase) => {
@@ -120,7 +124,7 @@ class PushNotification {
 
         // check type and settings
         let type = infos.platform === 'WEBPUSH' ? 'desktopNotification' : 'mobileNotification'
-        let clientSubscriptions = subscriptions.filter(x => x[type] && x[type].type !== 'none').map(x => x.channelId)
+        let clientSubscriptions = subscriptions.filter(x => x[type] && x[type].type !== 'none').map(x => this.__serverTopicPrefix + x.channelId)
 
         logger.debug('user %s is subscribed to %s', userId, clientSubscriptions)
         let add = clientSubscriptions.filter(x => !subscribedTopics.includes(x))
@@ -169,7 +173,7 @@ class PushNotification {
    */
   publish (topic, title, content, options) {
     let message = this.__createMessage(title, content, options)
-    this.__push(message, { to: '/topics/' + topic })
+    this.__push(message, { to: '/topics/' + this.__serverTopicPrefix + topic })
   }
 
   __createMessage (title, content, options) {
