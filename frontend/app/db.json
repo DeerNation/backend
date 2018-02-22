@@ -9632,6 +9632,15 @@
         "qx.core.Assert": {},
         "qx.core.Object": {
           "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
         }
       },
       "extends": "app.model.AbstractModel",
@@ -13946,7 +13955,7 @@
       "implement": []
     },
     "app.ui.Channel": {
-      "mtime": "2018-02-21T19:17:46.243Z",
+      "mtime": "2018-02-22T18:01:55.049Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13983,12 +13992,26 @@
         "app.io.Rpc": {},
         "app.model.Factory": {},
         "app.model.Activity": {},
+        "app.data.Label": {},
+        "qx.event.Timer": {},
         "app.ui.ChannelHeader": {},
         "qx.ui.list.List": {},
         "qx.util.Function": {},
+        "qx.ui.container.Composite": {},
+        "qx.ui.layout.Flow": {},
+        "qx.data.controller.List": {},
         "app.model.activity.Registry": {},
         "app.ui.form.ActivityItem": {},
         "qx.ui.core.LayoutItem": {
+          "load": true
+        },
+        "qx.core.Object": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.theme.manager.Meta": {
           "load": true
         }
       },
@@ -14684,7 +14707,7 @@
       ]
     },
     "app.ui.form.MessageField": {
-      "mtime": "2018-02-21T18:58:19.074Z",
+      "mtime": "2018-02-22T17:56:39.740Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14708,10 +14731,27 @@
           "construct": true
         },
         "app.io.Rpc": {},
+        "app.io.Socket": {},
+        "app.Model": {},
         "qx.ui.form.Button": {},
         "app.Config": {},
         "qx.ui.form.TextArea": {},
         "qx.ui.core.LayoutItem": {
+          "load": true
+        },
+        "qx.core.Object": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.theme.manager.Meta": {
+          "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
           "load": true
         }
       },
@@ -14772,6 +14812,21 @@
         "app.ui.basic.Label": {},
         "qx.ui.core.LayoutItem": {
           "load": true
+        },
+        "qx.core.Object": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.theme.manager.Meta": {
+          "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
         }
       },
       "extends": "qx.ui.core.Widget",
@@ -14814,7 +14869,7 @@
       "implement": []
     },
     "app.model.activity.content.Event": {
-      "mtime": "2018-02-10T21:11:06.824Z",
+      "mtime": "2018-02-22T18:35:48.463Z",
       "libraryName": "app",
       "dependsOn": {
         "app.model.activity.Registry": {
@@ -14836,15 +14891,6 @@
           "defer": "runtime"
         },
         "qx.core.Object": {
-          "load": true
-        },
-        "qx.core.ObjectRegistry": {
-          "load": true
-        },
-        "qx.core.Environment": {
-          "load": true
-        },
-        "qx.core.IDisposable": {
           "load": true
         }
       },
@@ -14876,6 +14922,15 @@
           "defer": "runtime"
         },
         "qx.core.Object": {
+          "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
           "load": true
         }
       },
@@ -16149,6 +16204,32 @@
         }
       },
       "hasDefer": true
+    },
+    "app.data.Label": {
+      "mtime": "2018-02-22T17:57:03.735Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.core.Object": {
+          "load": true,
+          "construct": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
+        }
+      },
+      "extends": "qx.core.Object",
+      "include": [],
+      "implement": []
     }
   }
 }

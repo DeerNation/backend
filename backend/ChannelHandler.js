@@ -10,11 +10,15 @@ const rpcHandler = require('./rpc')
 const logger = require('./logger')(__filename)
 const pushNotifications = require('./notification')
 const i18n = require('i18n')
+const Ajv = require('ajv')
+const ActivitySchema = require('./model/json/Activity.json')
 
 class ChannelHandler {
   constructor () {
     this.server = null
     this.model = null
+    this.ajv = new Ajv({allErrors: true})
+    this.validateActivity = this.ajv.compile(ActivitySchema)
   }
 
   init (scServer) {
@@ -63,14 +67,29 @@ class ChannelHandler {
     if (!this.model) {
       this.model = schema.getModel('Activity')
     }
-    if (!message.hasOwnProperty('published') || !message.published) {
-      message.published = new Date()
-    }
-    this.model.save(Object.assign({
+    message = Object.assign({
       channelId: channelId,
       hash: hash(message.content),
       actorId: authToken.user
-    }, message), {conflict: 'update'})
+    }, message)
+
+    // only allow valid activities to be published
+    if (!this.validateActivity(message)) {
+      logger.error('\nNo valid activity: \n  * %s', this.validateActivity.errors.map(x => {
+        switch (x.keyword) {
+          case 'additionalProperties':
+            return x.message + ': \'' + x.params.additionalProperty + '\''
+
+          default:
+            return x.message
+        }
+      }).join('\n  * '))
+      return
+    }
+    if (!message.hasOwnProperty('published') || !message.published) {
+      message.published = new Date()
+    }
+    this.model.save(message, {conflict: 'update'})
 
     const channel = await schema.getModel('Channel').get(channelId).run()
     const actor = await schema.getModel('Actor').get(authToken.user).run()

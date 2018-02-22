@@ -1,0 +1,81 @@
+{
+  "title": "Activity",
+  "type": "object",
+  "required": ["type", "channelId", "content", "actorId"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "type": {
+      "enum": [
+        "Message",
+        "Event"
+      ]
+    },
+    "channelId": {
+      "type": "string"
+    },
+    "content": {
+      "type": "object",
+      "oneOf": [
+        { "$ref": "#/contentTypes/Message" },
+        { "$ref": "#/contentTypes/Event" }
+      ]
+    },
+    "title": {
+      "type": "string"
+    },
+    "created": {
+      "type": "string",
+      "format": "date"
+    },
+    "published": {
+      "type": "string",
+      "format": "date"
+    },
+    "actorId": {
+      "type": "string"
+    },
+    "hash": {
+      "type": "string"
+    }
+  },
+  "contentTypes": {
+    "Message": {
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "required": ["message"],
+        "additionalProperties": false
+      }
+    },
+    "Event": {
+      "properties": {
+        "location": {
+          "type": "string"
+        },
+        "start": {
+          "type": "string",
+          "format": "date"
+        },
+        "end": {
+          "type": "string",
+          "format": "date"
+        },
+        "categories": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true
+        },
+        "organizer": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
