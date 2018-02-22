@@ -284,3 +284,9 @@ msgstr ""
 #: app/ui/BaseMenu.js:158 app/ui/BaseMenu.js:155 app/ui/BaseMenu.js:156
 msgid "Productive"
 msgstr ""
+
+#: app/ui/Channel.js:259
+msgid "%1 is writing..."
+msgid_plural "%1 and %2 are writing..."
+msgstr[0] "%1 schreibt..."
+msgstr[1] "%1 und %2 schreiben..."

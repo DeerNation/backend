@@ -1,6 +1,6 @@
 # Was fehlt noch
 
-* JSON Schema für Activity-Types
+* JSON Schema für Activity-Types (im ChannelHandler implementiert, nur valide Activities werden im Kanal ge-published)
 * Logout Funktion (automatisch triggern bei Serverwechsel)
 * ungelesene Nachrichten: Badge an Kanal im Menü
 * Kanal/Actor suche
@@ -12,7 +12,7 @@
 * User Online bei pointerover
 
 * app.ui.Channel
- * Activity de-selektieren bei erneutem Klick
+ * ✔ Activity de-selektieren bei erneutem Klick
  * ✔ FormHandler für Messages (Anlegen/Editieren)
  * FormHandler für Event (Anlegen/Editieren)
  * ✔ Nachrichten posten, ändern, löschen
@@ -22,7 +22,7 @@
  * Attachments (Bilder, andere Nachrichten) 
  * Nachrichten teilen (in anderen Kanäle, per Email, Whatsapp, etc.)
  * Ungelesene Nachrichten kennzeichen + tracken
- * User xy schreibt...
+ * ✔ User xy schreibt...
  
 
 # Mobile

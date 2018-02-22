@@ -31,8 +31,13 @@ qx.Class.define('app.ui.Channel', {
 
     const selectUp = new qx.ui.command.Command('Up')
     const selectDown = new qx.ui.command.Command('Down')
+    const deselect = new qx.ui.command.Command('Esc')
     selectUp.addListener('execute', this._onSelectUp, this)
     selectDown.addListener('execute', this._onSelectDown, this)
+    deselect.addListener('exceute', this._onDeselection, this)
+
+    this.__writingUsers = new qx.data.Array()
+    this.__writingUserTimers = {}
   },
 
   /*
@@ -70,6 +75,8 @@ qx.Class.define('app.ui.Channel', {
   members: {
     __currentSCChannel: null,
     __dateFormat: null,
+    __writingUsers: null,
+    __writingUserTimers: null,
 
     _onSwipe: function (ev) {
       if (ev.getDirection() === 'right') {
@@ -150,6 +157,29 @@ qx.Class.define('app.ui.Channel', {
     },
 
     /**
+     * Reset list selection
+     * @protected
+     */
+    _onDeselection: function () {
+      this.getChildControl('list').getSelection().removeAll()
+    },
+
+    /**
+     * Deselect the currently selected item if it has been clicked
+     * @param ev {Event}
+     * @protected
+     */
+    _toggleSelection: function (ev) {
+      const activity = ev.getCurrentTarget().getModel()
+      const selection = this.getChildControl('list').getSelection().getLength() > 0
+        ? this.getChildControl('list').getSelection().getItem(0)
+        : null
+      if (selection === activity) {
+        this._onDeselection()
+      }
+    },
+
+    /**
      * Handle bus messages of deleted activities
      * @param ev {Event}
      * @private
@@ -162,7 +192,7 @@ qx.Class.define('app.ui.Channel', {
     },
 
     __findActivity: function (id) {
-      let found
+      let found = null
       this.getActivities().some(act => {
         if (act.getId() === id) {
           found = act
@@ -214,24 +244,46 @@ qx.Class.define('app.ui.Channel', {
           case 'i':
             // internal messaging, like states, writing users etc
             switch (payload.c.type) {
-              case 'writes':
-                const model = this._writingUsersController.getModel()
-                const label = app.data.Label.get(payload.c.uid)
+              case 'write':
+                if (payload.c.uid === app.Model.getInstance().getActor().getUsername()) {
+                  // ignore ourselves
+                  return
+                }
+                const model = this.__writingUsers
+
+                model.addListener('changeLength', (ev) => {
+                  if (ev.getData() === 0) {
+                    this.getChildControl('status-bar').resetValue()
+                  } else {
+                    const last = ev.getData() - 1
+                    this.getChildControl('status-bar').setValue(this.trn(
+                      '%1 is writing...',
+                      '%1 and %2 are writing...',
+                      model.getLength(),
+                      last > 0 ? model.slice(0, last).join(', ') : model.getItem(0),
+                      last > 0 ? model.getItem(last) : null)
+                    )
+                  }
+                })
+                const label = payload.c.uid
                 if (!model.includes(label)) {
                   model.push(label)
-                  label.$$timer = qx.event.Timer.once(function () {
+                  this.__writingUserTimers[label] = qx.event.Timer.once(function () {
                     model.remove(label)
-                    delete label.$$timer
-                    label.dispose()
+                    delete this.__writingUserTimers[label]
                   }, this, 5000)
                 } else if (payload.c.done) {
                   // user is done writing
                   model.remove(label)
-                  label.$$timer.stop()
-                  delete label.$$timer
-                  label.dispose()
+                  this.__writingUserTimers[label].stop()
+                  delete this.__writingUserTimers[label]
+                } else if (this.__writingUserTimers[label]) {
+                  this.__writingUserTimers[label].restart()
                 } else {
-                  label.$$timer.restart()
+                  this.__writingUserTimers[label] = qx.event.Timer.once(function () {
+                    model.remove(label)
+                    delete this.__writingUserTimers[label]
+                  }, this, 5000)
                 }
                 break
 
@@ -244,17 +296,6 @@ qx.Class.define('app.ui.Channel', {
       } else {
         throw new Error('wrong activity payload')
       }
-      // if (!qx.lang.Type.isArray(payload)) {
-      //   payload = [payload]
-      // }
-      // // create Activity instances and add them to the model
-      // this.getActivities().append(app.model.Factory.createAll(payload, app.model.Activity, {
-      //   converter: function (model) {
-      //     if (!model.published) {
-      //       model.published = model.created
-      //     }
-      //   }
-      // }))
     },
 
     // overridden
@@ -284,8 +325,7 @@ qx.Class.define('app.ui.Channel', {
           break
 
         case 'status-bar':
-          control = new qx.ui.container.Composite(new qx.ui.layout.Flow())
-          this._writingUsersController = new qx.data.controller.List(new qx.data.Array(), control, 'label')
+          control = new qx.ui.basic.Label()
           this._addAt(control, 2)
           break
 
@@ -339,6 +379,10 @@ qx.Class.define('app.ui.Channel', {
           return new app.ui.form.ActivityItem()
         },
 
+        configureItem: function (item) {
+          item.addListener('tap', this._toggleSelection, this)
+        }.bind(this),
+
         bindItem: function (controller, item, index) {
           controller.bindProperty('', 'model', null, item, index)
         },
@@ -367,5 +411,14 @@ qx.Class.define('app.ui.Channel', {
         }
       })
     }
+  },
+
+  /*
+  ******************************************************
+    DESTRUCTOR
+  ******************************************************
+  */
+  destruct: function () {
+    this._disposeMap('__writingUserTimers')
   }
 })

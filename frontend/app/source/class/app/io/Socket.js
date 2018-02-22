@@ -147,6 +147,10 @@ qx.Class.define('app.io.Socket', {
       return this.__socket.emit(channel, payload)
     },
 
+    publish: function (channel, payload) {
+      return this.__socket.publish(channel, payload)
+    },
+
     _onSubscribeError: function (promiseReject, channel, err, channelName) {
       channel.off('subscribeFail')
       this.error('Error on subscribing channel', channelName, ':', err)

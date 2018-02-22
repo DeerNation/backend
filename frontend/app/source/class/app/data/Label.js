@@ -31,9 +31,9 @@ qx.Class.define('app.data.Label', {
   statics: {
     __cache: {},
 
-    get: function (name) {
+    get: function (name, label) {
       if (!this.__cache.hasOwnProperty(name)) {
-        this.__cache[name] = new app.data.Label(name)
+        this.__cache[name] = new app.data.Label(label || name)
       }
       return this.__cache[name]
     }

@@ -121,21 +121,21 @@ qx.Class.define('app.ui.form.MessageField', {
     },
 
     _sendWrite: function () {
-      app.io.Socket.getInstance().emit(this.getModel().getId(), {
+      app.io.Socket.getInstance().publish(this.getModel().getId(), {
         a: 'i',
         c: {
           type: 'write',
-          uid: app.Model.getInstance().getActor().getId()
+          uid: app.Model.getInstance().getActor().getUsername()
         }
       })
     },
 
     _sendWriteEnd: function () {
-      app.io.Socket.getInstance().emit(this.getModel().getId(), {
+      app.io.Socket.getInstance().publish(this.getModel().getId(), {
         a: 'i',
         c: {
           type: 'write',
-          uid: app.Model.getInstance().getActor().getId(),
+          uid: app.Model.getInstance().getActor().getUsername(),
           done: true
         }
       })

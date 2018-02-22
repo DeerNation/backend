@@ -391,7 +391,7 @@
       }
     },
     "app.theme.Appearance": {
-      "mtime": "2018-02-21T17:43:18.194Z",
+      "mtime": "2018-02-22T21:14:54.635Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -9460,7 +9460,7 @@
       "implement": []
     },
     "app.io.Socket": {
-      "mtime": "2018-02-19T19:24:07.547Z",
+      "mtime": "2018-02-22T19:36:20.590Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13955,7 +13955,7 @@
       "implement": []
     },
     "app.ui.Channel": {
-      "mtime": "2018-02-22T18:01:55.049Z",
+      "mtime": "2018-02-22T21:17:12.811Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13992,14 +13992,11 @@
         "app.io.Rpc": {},
         "app.model.Factory": {},
         "app.model.Activity": {},
-        "app.data.Label": {},
         "qx.event.Timer": {},
         "app.ui.ChannelHeader": {},
         "qx.ui.list.List": {},
         "qx.util.Function": {},
-        "qx.ui.container.Composite": {},
-        "qx.ui.layout.Flow": {},
-        "qx.data.controller.List": {},
+        "qx.ui.basic.Label": {},
         "app.model.activity.Registry": {},
         "app.ui.form.ActivityItem": {},
         "qx.ui.core.LayoutItem": {
@@ -14013,11 +14010,24 @@
         },
         "qx.theme.manager.Meta": {
           "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
         }
       },
       "extends": "qx.ui.core.Widget",
       "include": [],
-      "implement": []
+      "implement": [],
+      "translations": [
+        {
+          "msgid": "%1 is writing...",
+          "msgid_plural": "%1 and %2 are writing...",
+          "lineNo": 259
+        }
+      ]
     },
     "qx.ui.splitpane.Slider": {
       "mtime": "2018-01-27T22:11:00.477Z",
@@ -14707,7 +14717,7 @@
       ]
     },
     "app.ui.form.MessageField": {
-      "mtime": "2018-02-22T17:56:39.740Z",
+      "mtime": "2018-02-22T19:38:52.949Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14891,6 +14901,15 @@
           "defer": "runtime"
         },
         "qx.core.Object": {
+          "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
           "load": true
         }
       },
@@ -16206,7 +16225,7 @@
       "hasDefer": true
     },
     "app.data.Label": {
-      "mtime": "2018-02-22T17:57:03.735Z",
+      "mtime": "2018-02-22T20:29:49.792Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {

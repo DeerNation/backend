@@ -180,3 +180,24 @@ msgstr ""
 #: app/ui/BaseMenu.js:158 app/ui/BaseMenu.js:155 app/ui/BaseMenu.js:156
 msgid "Productive"
 msgstr ""
+
+#: app/ui/Channel.js:248 app/ui/Channel.js:244 app/ui/Channel.js:252
+#: app/ui/Channel.js:256 app/ui/Channel.js:253 app/ui/Channel.js:257
+#: app/ui/Channel.js:261 app/ui/Channel.js:258 app/ui/Channel.js:263
+msgid "writes"
+msgid_plural "are writing"
+msgstr[0] ""
+msgstr[1] ""
+
+#: app/ui/Channel.js:255 app/ui/Channel.js:256 app/ui/Channel.js:257
+#: app/ui/Channel.js:260 app/ui/Channel.js:259
+msgid "%1 is writing"
+msgid_plural "%1 and %2 are writing"
+msgstr[0] ""
+msgstr[1] ""
+
+#: app/ui/Channel.js:259
+msgid "%1 is writing..."
+msgid_plural "%1 and %2 are writing..."
+msgstr[0] ""
+msgstr[1] ""

@@ -423,6 +423,14 @@ qx.Theme.define('app.theme.Appearance',
         }
       },
 
+      'main/channel/status-bar': {
+        style: function () {
+          return {
+            padding: [0, 10]
+          }
+        }
+      },
+
       'main/channel/header': {
         style: function () {
           return {

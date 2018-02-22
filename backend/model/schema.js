@@ -338,6 +338,16 @@ class Schema {
         email: 'tbraeutigam@gmail.com',
         password: bcrypt.hashSync(botUUID, 8),
         color: '#085525'
+      }, {
+        id: '39c83094-aaee-44bf-abc3-65281cc932dc',
+        type: 'Person',
+        username: 'user',
+        role: 'user',
+        name: 'Max Mustermann',
+        email: 'tbraeutigam@gmail.com',
+        password: bcrypt.hashSync('tester', 8),
+        color: '#FFFF00',
+        locale: 'de'
       }],
       Webhook: [
         {
@@ -387,6 +397,20 @@ class Schema {
           id: '57ac49a7-2dc7-4997-8dbc-335f81cfad4b',
           actorId: '0e4a6f6f-cc0c-4aa5-951a-fcfc480dd05a',
           channelId: 'hbg.channel.events.public',
+          favorite: true,
+          desktopNotification: {
+            type: 'all'
+          },
+          mobileNotification: {
+            type: 'mentioned'
+          },
+          emailNotification: {
+            type: 'none'
+          }
+        }, {
+          id: '55995e7e-e3e4-4af7-b766-dfd6a91a0ba8',
+          actorId: '39c83094-aaee-44bf-abc3-65281cc932dc',
+          channelId: 'hbg.channel.news.public',
           favorite: true,
           desktopNotification: {
             type: 'all'
