@@ -120,6 +120,27 @@ qx.Class.define('app.ui.form.MessageField', {
       }
     },
 
+    _sendWrite: function () {
+      app.io.Socket.getInstance().emit(this.getModel().getId(), {
+        a: 'i',
+        c: {
+          type: 'write',
+          uid: app.Model.getInstance().getActor().getId()
+        }
+      })
+    },
+
+    _sendWriteEnd: function () {
+      app.io.Socket.getInstance().emit(this.getModel().getId(), {
+        a: 'i',
+        c: {
+          type: 'write',
+          uid: app.Model.getInstance().getActor().getId(),
+          done: true
+        }
+      })
+    },
+
     // overridden
     _createChildControlImpl: function (id, hash) {
       let control
@@ -136,6 +157,9 @@ qx.Class.define('app.ui.form.MessageField', {
             autoSize: true
           })
           this._addAt(control, 1, {flex: 1})
+          control.addListener('focusin', this._sendWrite, this)
+          control.addListener('focusout', this._sendWriteEnd, this)
+          control.addListener('input', this._sendWrite, this)
           break
 
         case 'send-button':

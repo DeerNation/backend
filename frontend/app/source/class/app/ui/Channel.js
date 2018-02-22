@@ -23,6 +23,7 @@ qx.Class.define('app.ui.Channel', {
     app.Model.getInstance().bind('selectedSubscription', this, 'subscription')
 
     this._createChildControl('list')
+    this._createChildControl('status-bar')
 
     this.addListener('swipe', this._onSwipe, this)
 
@@ -31,7 +32,7 @@ qx.Class.define('app.ui.Channel', {
     const selectUp = new qx.ui.command.Command('Up')
     const selectDown = new qx.ui.command.Command('Down')
     selectUp.addListener('execute', this._onSelectUp, this)
-    selectUp.addListener('execute', this._onSelectDown, this)
+    selectDown.addListener('execute', this._onSelectDown, this)
   },
 
   /*
@@ -209,6 +210,36 @@ qx.Class.define('app.ui.Channel', {
             }
             this.getActivities().push(app.model.Factory.create(payload.c, app.model.Activity))
             break
+
+          case 'i':
+            // internal messaging, like states, writing users etc
+            switch (payload.c.type) {
+              case 'writes':
+                const model = this._writingUsersController.getModel()
+                const label = app.data.Label.get(payload.c.uid)
+                if (!model.includes(label)) {
+                  model.push(label)
+                  label.$$timer = qx.event.Timer.once(function () {
+                    model.remove(label)
+                    delete label.$$timer
+                    label.dispose()
+                  }, this, 5000)
+                } else if (payload.c.done) {
+                  // user is done writing
+                  model.remove(label)
+                  label.$$timer.stop()
+                  delete label.$$timer
+                  label.dispose()
+                } else {
+                  label.$$timer.restart()
+                }
+                break
+
+              default:
+                this.warning('unhandled internal message type: ', payload.c.type)
+                break
+            }
+            break
         }
       } else {
         throw new Error('wrong activity payload')
@@ -252,6 +283,12 @@ qx.Class.define('app.ui.Channel', {
           this._addAt(control, 1, {flex: 1})
           break
 
+        case 'status-bar':
+          control = new qx.ui.container.Composite(new qx.ui.layout.Flow())
+          this._writingUsersController = new qx.data.controller.List(new qx.data.Array(), control, 'label')
+          this._addAt(control, 2)
+          break
+
         case 'message-field':
           control = new (app.model.activity.Registry.getFormClass('message'))()
           if (this.getSubscription()) {
@@ -259,7 +296,7 @@ qx.Class.define('app.ui.Channel', {
           } else {
             control.exclude()
           }
-          this._addAt(control, 2)
+          this._addAt(control, 3)
           break
       }
       return control || this.base(arguments, id, hash)

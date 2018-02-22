@@ -2,20 +2,28 @@
 
 * JSON Schema für Activity-Types
 * Logout Funktion (automatisch triggern bei Serverwechsel)
-* FormHandler für Message + Event (für create + edit von Activities)
-* In einem Kanal nur bestimmte Activity-Types zulassen (auch Activity-Attachments prüfen)
-* ungelesene Nachrichten (in Menü + Kanalansicht)
-* Nachricht gelesen erfassen und anzeigen
-* Nachrichten posten, ändern, löschen
-* Attachments (Bilder, andere Nachrichten) 
-* Nachrichten teilen (in anderen Kanäle, per Email, Whatsapp, etc.)
-* Attachment hashes (keine Notification für bereits erhaltene Attachments)
+* ungelesene Nachrichten: Badge an Kanal im Menü
 * Kanal/Actor suche
 * Kanäle in Gruppen umbenennen?
 * OAuth über Facebook, Twitter, Google
 * Unit-, Integrations & End-to-end Tests
 * DB-Migration + Backup + Restore
 * Deployment auf Openshift? (automatische Skalierung von Backend + DB)
+* User Online bei pointerover
+
+* app.ui.Channel
+ * Activity de-selektieren bei erneutem Klick
+ * ✔ FormHandler für Messages (Anlegen/Editieren)
+ * FormHandler für Event (Anlegen/Editieren)
+ * ✔ Nachrichten posten, ändern, löschen
+ * Nachricht gelesen erfassen und anzeigen
+ * In einem Kanal nur bestimmte Activity-Types zulassen (auch Activity-Attachments prüfen)
+ * keine Notification für bereits erhalten Content
+ * Attachments (Bilder, andere Nachrichten) 
+ * Nachrichten teilen (in anderen Kanäle, per Email, Whatsapp, etc.)
+ * Ungelesene Nachrichten kennzeichen + tracken
+ * User xy schreibt...
+ 
 
 # Mobile
 

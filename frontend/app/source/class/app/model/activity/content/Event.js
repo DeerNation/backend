@@ -18,7 +18,7 @@ qx.Class.define('app.model.activity.content.Event', {
     location: {
       check: 'String',
       event: 'changeLocation',
-      nullable: true,
+      nullable: true
     },
     start: {
       check: 'Date',
