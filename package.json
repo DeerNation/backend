@@ -53,11 +53,16 @@
     "frontend": "ENV=dev cd frontend/app && qx serve --locale=de",
     "postdev": "killall -9 qx",
     "start:docker": "node dockerwait.js && node ${SOCKETCLUSTER_MASTER_CONTROLLER:-server.js}",
-    "test": "standard --verbose | snazzy",
-    "compile-frontend": "cd frontend/app && qx compile && cd ../../"
+    "lint": "standard --verbose | snazzy",
+    "compile-frontend": "cd frontend/app && qx compile && cd ../../",
+    "test": "ENV=dev DATABASE_HOST=172.17.0.2 nyc --reporter=html --reporter=text-summary mocha --recursive"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",
+    "chai": "^4.1.2",
+    "mocha": "^5.0.1",
+    "nyc": "^11.4.1",
+    "sinon": "^4.4.0",
     "snazzy": "^7.0.0",
     "standard": "^11.0.0"
   },

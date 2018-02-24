@@ -179,7 +179,7 @@ qx.Class.define('app.ui.BaseMenu', {
 
       let button = new qx.ui.menu.Button(this.tr('Logout'), app.Config.icons.logout + '/16')
       button.addListener('execute', () => {
-        // TODO logout
+        app.io.Socket.getInstance().logout()
       })
       menu.add(button)
       return menu

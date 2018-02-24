@@ -38,6 +38,8 @@ class RpcServer {
 
   _wrapper (func, context, data, callback) {
     try {
+      // ACL check
+
       if (data) {
         data.unshift(this.socket.getAuthToken())
       } else {

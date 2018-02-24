@@ -33,10 +33,12 @@ qx.Class.define('app.io.Socket', {
 
     this.__socket.on('authenticate', function () {
       this.setAuthenticated(true)
+      app.Model.getInstance().init()
     }.bind(this))
 
     this.__socket.on('deauthenticate', function () {
       this.setAuthenticated(false)
+      app.Model.getInstance().resetActor()
     }.bind(this))
 
     this.__socket.on('connect', function () {
@@ -106,6 +108,17 @@ qx.Class.define('app.io.Socket', {
       } else if (this.__loginDialog) {
         this.__loginDialog.hide()
       }
+    },
+
+    logout: function () {
+      this.__socket.emit('logout', (err) => {
+        if (err) {
+          this.error(err)
+        } else {
+          this.debug('Logout successful')
+          app.Model.getInstance().resetActor()
+        }
+      })
     },
 
     subscribe: function (channelId) {

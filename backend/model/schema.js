@@ -31,7 +31,7 @@ class Schema {
     return this.__crud
   }
 
-  create (worker) {
+  create (worker, callback) {
     const thinky = scCrudRethink.thinky
     const type = thinky.type
 
@@ -194,6 +194,25 @@ class Schema {
           filters: {
             pre: mustBeOwner
           }
+        },
+        ACLEntry: {
+          fields: {
+            id: type.string(),
+            type: type.string().enum('channel', 'rpc', 'channel-activity', 'generic', 'object'),
+            topic: type.string(),
+            actions: type.string(),
+            memberActions: type.string(),
+            ownerActions: type.string(),
+            targetType: type.string().enum('role', 'actor', 'channel'),
+            target: type.string()
+          }
+        },
+        ACLRole: {
+          fields: {
+            id: type.string(),
+            scope: type.string().enum('channel', 'actor'),
+            members: type.array()
+          }
         }
       },
 
@@ -271,7 +290,9 @@ class Schema {
     // }
 
     let crud = scCrudRethink.attach(worker, crudOptions)
-    worker.scServer.thinky = crud.thinky
+    if (worker.scServer) {
+      worker.scServer.thinky = crud.thinky
+    }
     const m = crudOptions.models
 
     // create indices
@@ -422,17 +443,101 @@ class Schema {
             type: 'none'
           }
         }
+      ],
+      ACLRole: [
+        {
+          id: 'guest',
+          weight: 0
+        }, {
+          id: 'user',
+          parent: 'guest',
+          members: ['39c83094-aaee-44bf-abc3-65281cc932dc'],
+          weight: 100
+        }, {
+          id: 'admin',
+          members: ['0e4a6f6f-cc0c-4aa5-951a-fcfc480dd05a'],
+          weight: 1000
+        }
+      ],
+      ACLEntry: [
+        {
+          id: 'f357da38-c0b4-4071-afcf-1b33da16636b',
+          type: 'generic',
+          topic: 'public-channel',
+          actions: 'r',
+          targetType: 'role',
+          target: 'guest'
+        },
+        {
+          id: 'c1ff521c-2633-4bac-9a55-344d9630cf06',
+          type: 'generic',
+          topic: 'public-channel',
+          actions: 'e',
+          memberActions: 'lp',
+          ownerActions: 'du',
+          targetType: 'role',
+          target: 'user'
+        },
+        {
+          id: 'bbfb3075-633e-40bc-adf4-8d0a470dd954',
+          type: 'generic',
+          topic: 'private-channel',
+          memberActions: 'rlpf',
+          ownerActions: 'ei',
+          targetType: 'role',
+          target: 'user'
+        },
+        {
+          id: 'cda76f47-1061-4225-a079-c4552510db3b',
+          type: 'object',
+          topic: '.*',
+          ownerActions: 'rud',
+          targetType: 'role',
+          target: 'user'
+        },
+        {
+          id: '22c3ab14-dd93-414b-87c4-c0d0c9245cd6',
+          type: 'channel',
+          topic: '.*',
+          actions: 'c',
+          memberActions: 'r',
+          ownerActions: 'ud',
+          targetType: 'role',
+          target: 'user'
+        },
+        {
+          id: '22c3ab14-dd93-414b-87c4-c0d0c9245cd6',
+          type: 'rpc',
+          topic: 'login',
+          actions: 'x',
+          targetType: 'role',
+          target: 'guest'
+        },
+        {
+          id: 'f894d70e-3aef-45ef-ac7b-53ea352f0869',
+          type: 'rpc',
+          topic: '.*',
+          actions: 'x',
+          targetType: 'role',
+          target: 'user'
+        }
       ]
     }
 
     logger.debug('initializing database with default data')
+    let promises = []
     Object.keys(defaultData).forEach(key => {
-      m[key].save(defaultData[key], {conflict: 'update'}).then(() => {
+      promises.push(m[key].save(defaultData[key], {conflict: 'update'}).then(() => {
         logger.debug('%s default data applied', key)
       }).error(error => {
         logger.error('Error applying default data to %s:%s', key, error)
-      })
+      }))
     })
+    if (callback) {
+      Promise.all(promises).then(() => {
+        callback()
+      })
+    }
     this.__crud = crud
     return crud
   }

@@ -24,6 +24,80 @@
  * Ungelesene Nachrichten kennzeichen + tracken
  * ✔ User xy schreibt...
  
+# ACL
+
+* Bekannte Rollen:
+ * guest: nicht angemeldete Benutzer
+  * Public Kanäle lesen (Liste der Kanäle + Activities abfragen + öffentliche Kanäle automatisch subscriben)
+  * Keine Kanal Aktionen (Favoriten anlegen, Kanal verlassen, usw.)
+  * Keine Notifications jeglicher Art
+  * RPC: login
+ * user: angemeldete Benutzer (Standard-Rolle)
+  * Public Kanäle subscriben
+  * Kanalaktionen (Favoriten, verlassen usw.)
+  * der Rest 
+ * admin: darf alles
+ * public/private-channel: spezielle Rolle um Rechte für öffentliche/private Kanäle zu definieren, 
+ dann gilt folgende Rollenhierachie in er die ACLs gelesen werden:
+  
+  public-channel-ACLEntry
+   -> channel-ACLEntry
+    -> user-role-ACLEntry
+ 
+## ACL actions
+
+* Channels (General) -> Object:
+ * c: create channel
+ * u: update channel item
+ * d: delete channel
+
+* Channel (specific):
+ * c: publish activity in channel
+ * r: read activity (without subscription)
+ * u: update activity in this channel
+ * d: delete activity
+ * e: subscribe to / enter this channel
+ * l: unsubscribe from / leave this channel
+ * f: toggle favorite of this channel
+ * i: invite others to this channel (add subscription for others to this channel)
+ 
+* Object/Property:
+ * c: create
+ * r: read
+ * u: update
+ * d: delete
+ 
+* RPC:
+ * x: execute
+ 
+ Channels can have types (public, private) and a read-only flag (only selected users can publish in this channel)
+ * public channels can be (un)-subscribed by users, read by guests
+   - user: rsutp(eo)
+   - guest: r
+   - admin: *
+ * private channels cannot be subscribed and read, certain users can invite others to this channel
+   users can unsubscribe from this channel
+    - user: utp(eo)
+    - guest: -
+    - admin: user
+ * Read-only channels: only users with 'p' rights can publish to this channel
+    * Default ACL (if not overridden by current user): 
+    - user: -p
+    - guest: -
+    - admin: user
+ * Not-Read-Only channels (user has p rights): 
+    
+ 
+* RPCs:
+ * e: execute
+ 
+# ACLEntry Schema:
+ id: uuid
+ type: channel|rpc|activity|template
+ topic: channelId|RPCname|ownActivity/allActivities|(public-/private-channel)
+ actions: rsutp
+ target-type: role|actor|channel
+ target: role-name|actorId|channelId
 
 # Mobile
 

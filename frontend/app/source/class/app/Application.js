@@ -95,16 +95,16 @@ qx.Class.define('app.Application', {
       const main = this.__main = new (app.Config.getTargetClass('app.ui.Main'))()
 
       // RPC test
-      if (this.__socket.isAuthenticated()) {
-        app.Model.getInstance().init()
-      } else {
-        const lid = this.__socket.addListener('changeAuthenticated', function (ev) {
-          if (ev.getData() === true) {
-            app.Model.getInstance().init()
-            this.__socket.removeListenerById(lid)
-          }
-        }, this)
-      }
+      // if (this.__socket.isAuthenticated()) {
+      //   app.Model.getInstance().init()
+      // } else {
+      //   const lid = this.__socket.addListener('changeAuthenticated', function (ev) {
+      //     if (ev.getData() === true) {
+      //       app.Model.getInstance().init()
+      //       this.__socket.removeListenerById(lid)
+      //     }
+      //   }, this)
+      // }
 
       // Document is the application root
       let doc = this.getRoot()

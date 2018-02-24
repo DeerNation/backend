@@ -21,7 +21,7 @@ function getSubscriptions (authToken) {
  */
 function getChannels (authToken) {
   // TODO: we need ACLs for a finer grained access level definition
-  acl.check('channel', acl.action.READ, authToken)
+  acl.check('public-channel|*', acl.action.READ, authToken)
   const r = schema.getR()
   let filter = r.row('right')('type').eq('PUBLIC').or(r.row('right')('ownerId').eq(authToken.user))
   return r.table('Subscription').eqJoin('channelId', r.table('Channel')).filter(filter).map(function (entry) {
@@ -40,12 +40,12 @@ function getChannelActivities (authToken, channel, from) {
 }
 
 function getActors (authToken) {
-  acl.check('actor', acl.action.READ, authToken)
+  acl.check('object|Actor', acl.action.READ, authToken)
   return schema.getModel('Actor').pluck('id', 'name', 'username', 'type', 'role', 'online', 'status', 'color').run()
 }
 
 function createChannel (authToken, channelData) {
-  acl.check('channel', acl.action.CREATE, authToken, i18n.__('You are not allowed to create this channel.'))
+  acl.check('channel|*', acl.action.CREATE, authToken, 'actions', i18n.__('You are not allowed to create this channel.'))
 
   const channelId = config.channelPrefix + channelData.name.toLowerCase() + (channelData.private ? '.private' : '.public')
   const crud = schema.getCrud()
