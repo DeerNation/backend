@@ -39,11 +39,13 @@ qx.Class.define('app.io.Socket', {
     this.__socket.on('deauthenticate', function () {
       this.setAuthenticated(false)
       app.Model.getInstance().resetActor()
+      app.Model.getInstance().init()
     }.bind(this))
 
     this.__socket.on('connect', function () {
       this.info('CONNECTED', this.__socket.authState === this.__socket.AUTHENTICATED)
       this.setAuthenticated(this.__socket.authState === this.__socket.AUTHENTICATED)
+      app.Model.getInstance().init()
     }.bind(this))
 
     this.__socket.on('rand', function (data) {
@@ -89,22 +91,22 @@ qx.Class.define('app.io.Socket', {
     _applyAuthenticated: function (value, old) {
       console.log(this.toHashCode(), 'authenticated: ', value)
       if (!value) {
-        if (!this.__loginDialog) {
-          this.__loginDialog = new dialog.Login({
-            checkCredentials: function (username, password, callback) {
-              this.__socket.emit('login', {username: username, password: password}, (err) => {
-                if (err) {
-                  this.error(err)
-                } else {
-                  this.debug('Login request successfully send')
-                }
-                callback(err)
-              })
-            }.bind(this),
-            text: qx.locale.Manager.tr('Please login')
-          })
-        }
-        this.__loginDialog.show()
+        // if (!this.__loginDialog) {
+        //   this.__loginDialog = new dialog.Login({
+        //     checkCredentials: function (username, password, callback) {
+        //       this.__socket.emit('login', {username: username, password: password}, (err) => {
+        //         if (err) {
+        //           this.error(err)
+        //         } else {
+        //           this.debug('Login request successfully send')
+        //         }
+        //         callback(err)
+        //       })
+        //     }.bind(this),
+        //     text: qx.locale.Manager.tr('Please login')
+        //   })
+        // }
+        // this.__loginDialog.show()
       } else if (this.__loginDialog) {
         this.__loginDialog.hide()
       }
@@ -138,6 +140,10 @@ qx.Class.define('app.io.Socket', {
           })
         }
       })
+    },
+
+    unsubscribe: function (channelId) {
+      this.__socket.unsubscribe(channelId)
     },
 
     /**

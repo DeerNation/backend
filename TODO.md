@@ -23,6 +23,7 @@
  * Nachrichten teilen (in anderen Kanäle, per Email, Whatsapp, etc.)
  * Ungelesene Nachrichten kennzeichen + tracken
  * ✔ User xy schreibt...
+ * Spezielle Nachrichten: Orte (Blitzermeldungen)
  
 # ACL
 

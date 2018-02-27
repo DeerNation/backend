@@ -26,7 +26,9 @@ qx.Class.define('app.ui.ChannelHeader', {
   */
   properties: {
     subscription: {
-      check: 'app.model.Subscription',
+      check: function (value) {
+        return (value instanceof app.model.Subscription) || (value instanceof app.model.Channel)
+      },
       nullable: true,
       apply: '_applySubscription'
     }
@@ -53,16 +55,21 @@ qx.Class.define('app.ui.ChannelHeader', {
           }
         })
         channel.bind('description', this.getChildControl('description'), 'value')
-        value.bind('favorite', this.getChildControl('favorite'), 'source', {
-          converter: function (val) {
-            if (val) {
-              this.getChildControl('favorite').addState('enabled')
-            } else {
-              this.getChildControl('favorite').removeState('enabled')
-            }
-            return val === true ? app.Config.icons.favorite + '/18' : app.Config.icons.noFavorite + '/18'
-          }.bind(this)
-        })
+        if (value instanceof app.model.Subscription) {
+          value.bind('favorite', this.getChildControl('favorite'), 'source', {
+            converter: function (val) {
+              if (val) {
+                this.getChildControl('favorite').addState('enabled')
+              } else {
+                this.getChildControl('favorite').removeState('enabled')
+              }
+              return val === true ? app.Config.icons.favorite + '/18' : app.Config.icons.noFavorite + '/18'
+            }.bind(this)
+          })
+          this.getChildControl('favorite').show()
+        } else {
+          this.getChildControl('favorite').exclude()
+        }
       }
     },
 

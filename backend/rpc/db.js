@@ -19,18 +19,25 @@ function getSubscriptions (authToken) {
  * Return all channels the current user is subscribed to + the public ones
  * @param authToken
  */
-function getChannels (authToken) {
-  // TODO: we need ACLs for a finer grained access level definition
-  acl.check('public-channel|*', acl.action.READ, authToken)
-  const r = schema.getR()
-  let filter = r.row('right')('type').eq('PUBLIC').or(r.row('right')('ownerId').eq(authToken.user))
-  return r.table('Subscription').eqJoin('channelId', r.table('Channel')).filter(filter).map(function (entry) {
-    return entry('right')
-  }).run()
+async function getChannels (authToken) {
+  await acl.check('generic|public-channel', acl.action.READ, authToken)
+  if (!authToken) {
+    return schema.getModel('Channel').filter({type: 'PUBLIC'}).run()
+  } else {
+    const r = schema.getR()
+    let filter = r.row('right')('type').eq('PUBLIC').or(r.row('right')('ownerId').eq(authToken.user))
+    return r.table('Subscription').eqJoin('channelId', r.table('Channel')).filter(filter).map(function (entry) {
+      return entry('right')
+    }).distinct().run()
+  }
 }
 
-function getChannelActivities (authToken, channel, from) {
-  acl.check('activity', acl.action.READ, authToken)
+async function getChannelActivities (authToken, channel, from) {
+  if (channel.includes('.public')) {
+    await acl.check('generic|public-channel', acl.action.READ, authToken)
+  } else {
+    await acl.check('channel|' + channel, acl.action.READ, authToken)
+  }
   const r = schema.getR()
   let filter = r.row('channelId').eq(channel).and(r.row.hasFields('actorId'))
   if (from) {
@@ -39,13 +46,13 @@ function getChannelActivities (authToken, channel, from) {
   return schema.getModel('Activity').filter(filter).orderBy(r.asc('published')).run()
 }
 
-function getActors (authToken) {
-  acl.check('object|Actor', acl.action.READ, authToken)
+async function getActors (authToken) {
+  await acl.check('object|Actor', acl.action.READ, authToken)
   return schema.getModel('Actor').pluck('id', 'name', 'username', 'type', 'role', 'online', 'status', 'color').run()
 }
 
-function createChannel (authToken, channelData) {
-  acl.check('channel|*', acl.action.CREATE, authToken, 'actions', i18n.__('You are not allowed to create this channel.'))
+async function createChannel (authToken, channelData) {
+  await acl.check('channel|*', acl.action.CREATE, authToken, 'actions', i18n.__('You are not allowed to create this channel.'))
 
   const channelId = config.channelPrefix + channelData.name.toLowerCase() + (channelData.private ? '.private' : '.public')
   const crud = schema.getCrud()
@@ -84,14 +91,14 @@ function createChannel (authToken, channelData) {
   })
 }
 
-function getObject (authToken, type, id) {
-  acl.check(type.toLowerCase(), acl.action.READ, authToken, i18n.__('You are not allowed to read this item.'))
+async function getObject (authToken, type, id) {
+  await acl.check(type.toLowerCase(), acl.action.READ, authToken, i18n.__('You are not allowed to read this item.'))
 
   return schema.getModel(type).get(id).run()
 }
 
-function updateObjectProperty (authToken, type, id, prop, value) {
-  acl.check(type.toLowerCase() + '.' + id + '.' + prop, acl.action.write, authToken, i18n.__('You are not allowed to update property %s of this item.', prop))
+async function updateObjectProperty (authToken, type, id, prop, value) {
+  await acl.check(type.toLowerCase() + '.' + id + '.' + prop, acl.action.write, authToken, i18n.__('You are not allowed to update property %s of this item.', prop))
 
   const crud = schema.getCrud()
   let update = {
@@ -131,8 +138,8 @@ function updateObjectProperty (authToken, type, id, prop, value) {
   })
 }
 
-function setFirebaseToken (authToken, firebaseToken, oldToken) {
-  acl.check('firebase', acl.action.UPDATE, authToken, i18n.__('You are not allowed to save this token.'))
+async function setFirebaseToken (authToken, firebaseToken, oldToken) {
+  await acl.check('firebase', acl.action.UPDATE, authToken, i18n.__('You are not allowed to save this token.'))
   const crud = schema.getCrud()
 
   if (oldToken) {
@@ -198,8 +205,8 @@ function setFirebaseToken (authToken, firebaseToken, oldToken) {
   }
 }
 
-function deleteActivity (authToken, id) {
-  acl.check('activity', acl.action.DELETE, authToken, i18n.__('You are not allowed to delete entries in this channel.'))
+async function deleteActivity (authToken, id) {
+  await acl.check('activity', acl.action.DELETE, authToken, i18n.__('You are not allowed to delete entries in this channel.'))
   return new Promise((resolve, reject) => {
     // message specific check
     schema.getModel('Activity').get(id).run().then(activity => {
@@ -211,7 +218,6 @@ function deleteActivity (authToken, id) {
         activity.delete()
         resolve(true)
         // publish deletion on channel
-
       }
       if (activity.actorId === authToken.user) {
         // user is owner of the message

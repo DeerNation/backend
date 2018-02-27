@@ -6,6 +6,7 @@
  */
 const WAMPServer = require('wamp-socket-cluster/WAMPServer')
 const dbModule = require('./db')
+const acl = require('../acl')
 
 class RpcServer {
   constructor () {
@@ -36,10 +37,10 @@ class RpcServer {
     this.rpcServer.registerRPCEndpoints(wrappedEndpoints)
   }
 
-  _wrapper (func, context, data, callback) {
+  async _wrapper (func, context, data, callback) {
     try {
       // ACL check
-
+      await acl.check('rpc|' + func.name, acl.action.EXECUTE, this.socket.getAuthToken())
       if (data) {
         data.unshift(this.socket.getAuthToken())
       } else {
@@ -56,5 +57,10 @@ class RpcServer {
 }
 
 const rpcServer = new RpcServer()
+
+rpcServer.registerRPCEndpoints({
+  getAllowedActions: acl.getAllowedActions,
+  check: acl.check
+})
 
 module.exports = rpcServer

@@ -457,6 +457,9 @@ class Schema {
           id: 'admin',
           members: ['0e4a6f6f-cc0c-4aa5-951a-fcfc480dd05a'],
           weight: 1000
+        }, {
+          id: 'bot',
+          weight: 100
         }
       ],
       ACLEntry: [
@@ -500,16 +503,24 @@ class Schema {
           type: 'channel',
           topic: '.*',
           actions: 'c',
-          memberActions: 'r',
+          memberActions: 'rpl',
           ownerActions: 'ud',
           targetType: 'role',
           target: 'user'
         },
         {
-          id: '22c3ab14-dd93-414b-87c4-c0d0c9245cd6',
+          id: '3fa41d14-e3bf-4bb9-b221-f69e16e2f153',
           type: 'rpc',
-          topic: 'login',
+          topic: '(login|getAllowedActions|check|getChannels|getActors|getChannelActivities)',
           actions: 'x',
+          targetType: 'role',
+          target: 'guest'
+        },
+        {
+          id: '08555f49-1738-4ddb-afda-4f3d1d33b6e6',
+          type: 'object',
+          topic: '(Actor)',
+          actions: 'r',
           targetType: 'role',
           target: 'guest'
         },

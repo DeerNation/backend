@@ -66,10 +66,11 @@ qx.Class.define('app.ui.BaseMenu', {
         const actorIconBox = this.getChildControl('actor-icon-box')
         actorIconBox.removeAll()
         actorIconBox.add(value.getIcon())
-
+        this.getChildControl('list').setModel(app.Model.getInstance().getSubscriptions())
         this.getChildControl('actor-container').show()
       } else {
         this.getChildControl('actor-container').hide()
+        this.getChildControl('list').setModel(app.Model.getInstance().getChannels())
       }
     },
 
@@ -240,7 +241,9 @@ qx.Class.define('app.ui.BaseMenu', {
           break
 
         case 'list':
-          control = new qx.ui.list.List(app.Model.getInstance().getSubscriptions())
+          control = new qx.ui.list.List(this.getActor()
+            ? app.Model.getInstance().getSubscriptions()
+            : app.Model.getInstance().getChannels())
           control.setDelegate({
 
             createItem: function () {

@@ -90,11 +90,7 @@ qx.Class.define('app.model.Subscription', {
 
     // property apply
     _updateIcon: function () {
-      if (this.getChannel().getTypeIcon()) {
-        this.setIcon(app.Config.icons[this.getChannel().getTypeIcon()])
-      } else {
-        this.setIcon(this.getChannel().getType() === 'PRIVATE' ? app.Config.icons.private : app.Config.icons.public)
-      }
+      this.setIcon(this.getChannel().getIcon())
     },
 
     // property apply

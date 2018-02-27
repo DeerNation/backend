@@ -9459,7 +9459,7 @@
       "implement": []
     },
     "app.io.Socket": {
-      "mtime": "2018-02-23T17:10:19.927Z",
+      "mtime": "2018-02-26T18:53:19.104Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -9477,8 +9477,6 @@
           "construct": true
         },
         "app.Config": {},
-        "dialog.Login": {},
-        "qx.locale.Manager": {},
         "qx.Promise": {},
         "qx.lang.Type": {},
         "qx.core.ObjectRegistry": {
@@ -9500,21 +9498,15 @@
           "locations": [
             {
               "start": {
-                "line": 85,
+                "line": 87,
                 "column": 22
               },
               "end": {
-                "line": 85,
+                "line": 87,
                 "column": 42
               }
             }
           ]
-        }
-      ],
-      "translations": [
-        {
-          "msgid": "Please login",
-          "lineNo": 104
         }
       ],
       "markers": [
@@ -9522,7 +9514,7 @@
           "msgId": "qx.tool.compiler.symbol.unresolved",
           "pos": {
             "start": {
-              "line": 85,
+              "line": 87,
               "column": 22
             }
           },
@@ -9618,7 +9610,7 @@
       ]
     },
     "app.model.Activity": {
-      "mtime": "2018-02-21T17:08:47.399Z",
+      "mtime": "2018-02-26T19:37:46.235Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13639,7 +13631,7 @@
       "implement": []
     },
     "app.ui.form.ActivityItem": {
-      "mtime": "2018-02-20T20:40:39.975Z",
+      "mtime": "2018-02-26T19:48:17.553Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13897,7 +13889,7 @@
       "implement": []
     },
     "app.ui.Menu": {
-      "mtime": "2018-02-11T09:55:41.276Z",
+      "mtime": "2018-02-26T19:13:53.394Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13908,20 +13900,19 @@
           "load": true,
           "construct": true
         },
-        "qx.ui.layout.VBox": {
-          "construct": true,
+        "qx.ui.core.Widget": {
           "load": true
         },
-        "qx.ui.core.Widget": {
+        "qx.ui.layout.VBox": {
           "load": true
         },
         "app.Model": {
           "load": true
         },
-        "qx.ui.layout.Abstract": {
+        "qx.ui.core.LayoutItem": {
           "load": true
         },
-        "qx.ui.core.LayoutItem": {
+        "qx.ui.layout.Abstract": {
           "load": true
         },
         "qx.core.Object": {
@@ -13957,7 +13948,7 @@
       "implement": []
     },
     "app.ui.Channel": {
-      "mtime": "2018-02-22T21:17:12.811Z",
+      "mtime": "2018-02-27T19:03:49.118Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13989,6 +13980,8 @@
         "qx.ui.command.Command": {
           "construct": true
         },
+        "app.model.Subscription": {},
+        "app.model.Channel": {},
         "qx.core.Init": {},
         "app.io.Socket": {},
         "app.io.Rpc": {},
@@ -14012,12 +14005,6 @@
         },
         "qx.theme.manager.Meta": {
           "load": true
-        },
-        "qx.core.ObjectRegistry": {
-          "load": true
-        },
-        "qx.core.IDisposable": {
-          "load": true
         }
       },
       "extends": "qx.ui.core.Widget",
@@ -14027,7 +14014,7 @@
         {
           "msgid": "%1 is writing...",
           "msgid_plural": "%1 and %2 are writing...",
-          "lineNo": 259
+          "lineNo": 270
         }
       ]
     },
@@ -14214,7 +14201,7 @@
       }
     },
     "app.model.Subscription": {
-      "mtime": "2018-02-10T19:32:57.856Z",
+      "mtime": "2018-02-26T19:20:01.663Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14225,7 +14212,6 @@
           "load": true
         },
         "qx.event.message.Bus": {},
-        "app.Config": {},
         "app.Model": {},
         "qx.core.Object": {
           "load": true
@@ -14245,7 +14231,7 @@
       "implement": []
     },
     "app.model.Channel": {
-      "mtime": "2018-02-10T19:32:57.840Z",
+      "mtime": "2018-02-26T19:30:11.598Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14256,6 +14242,7 @@
           "load": true,
           "construct": true
         },
+        "app.Config": {},
         "qx.core.Object": {
           "load": true
         },
@@ -14274,7 +14261,7 @@
       "implement": []
     },
     "app.Model": {
-      "mtime": "2018-02-18T14:12:08.818Z",
+      "mtime": "2018-02-26T19:45:48.458Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14294,12 +14281,12 @@
         "qx.event.Timer": {
           "construct": true
         },
+        "app.model.Subscription": {},
+        "app.model.Channel": {},
         "app.io.Socket": {},
         "app.io.Rpc": {},
         "app.model.Factory": {},
         "app.model.Actor": {},
-        "app.model.Channel": {},
-        "app.model.Subscription": {},
         "qx.lang.Json": {},
         "qx.lang.String": {},
         "qx.core.Init": {},
@@ -14317,14 +14304,45 @@
       "extends": "qx.core.Object",
       "include": [],
       "implement": [],
+      "unresolved": [
+        {
+          "name": "Promise.resolve",
+          "locations": [
+            {
+              "start": {
+                "line": 168,
+                "column": 17
+              },
+              "end": {
+                "line": 168,
+                "column": 32
+              }
+            }
+          ]
+        }
+      ],
       "translations": [
         {
           "msgid": "Online",
-          "lineNo": 274
+          "lineNo": 288
         },
         {
           "msgid": "Offline",
-          "lineNo": 274
+          "lineNo": 288
+        }
+      ],
+      "markers": [
+        {
+          "msgId": "qx.tool.compiler.symbol.unresolved",
+          "pos": {
+            "start": {
+              "line": 168,
+              "column": 17
+            }
+          },
+          "args": [
+            "Promise.resolve"
+          ]
         }
       ]
     },
@@ -14542,7 +14560,7 @@
       "implement": []
     },
     "app.ui.ChannelHeader": {
-      "mtime": "2018-02-08T16:17:54.656Z",
+      "mtime": "2018-02-26T19:36:53.039Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14556,6 +14574,8 @@
         "qx.ui.layout.HBox": {
           "construct": true
         },
+        "app.model.Subscription": {},
+        "app.model.Channel": {},
         "app.Config": {},
         "qx.ui.basic.Image": {},
         "qx.ui.basic.Atom": {},
@@ -15435,7 +15455,7 @@
       "implement": []
     },
     "app.ui.BaseMenu": {
-      "mtime": "2018-02-23T16:57:08.520Z",
+      "mtime": "2018-02-27T19:05:13.462Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -15483,18 +15503,6 @@
         },
         "qx.core.Object": {
           "load": true
-        },
-        "qx.core.Environment": {
-          "load": true
-        },
-        "qx.theme.manager.Meta": {
-          "load": true
-        },
-        "qx.core.ObjectRegistry": {
-          "load": true
-        },
-        "qx.core.IDisposable": {
-          "load": true
         }
       },
       "extends": "qx.ui.core.Widget",
@@ -15519,55 +15527,55 @@
         },
         {
           "msgid": "Online",
-          "lineNo": 84
+          "lineNo": 85
         },
         {
           "msgid": "Offline",
-          "lineNo": 84
+          "lineNo": 85
         },
         {
           "msgid": "Add a new channel",
-          "lineNo": 112
+          "lineNo": 113
         },
         {
           "msgid": "Private channel",
-          "lineNo": 115
+          "lineNo": 116
         },
         {
           "msgid": "Write-protected channel",
-          "lineNo": 120
+          "lineNo": 121
         },
         {
           "msgid": "Channel name",
-          "lineNo": 125
+          "lineNo": 126
         },
         {
           "msgid": "Develop",
-          "lineNo": 154
+          "lineNo": 155
         },
         {
           "msgid": "Productive",
-          "lineNo": 156
+          "lineNo": 157
         },
         {
           "msgid": "Logout",
-          "lineNo": 180
+          "lineNo": 181
         },
         {
           "msgid": "Search (^ +K)",
-          "lineNo": 231
+          "lineNo": 232
         },
         {
           "msgid": "Favorites",
-          "lineNo": 256
+          "lineNo": 259
         },
         {
           "msgid": "Channels",
-          "lineNo": 260
+          "lineNo": 263
         },
         {
           "msgid": "Private channels",
-          "lineNo": 263
+          "lineNo": 266
         }
       ]
     },

@@ -50,7 +50,9 @@ qx.Class.define('app.ui.Channel', {
      * The channel subscription currently shown
      */
     subscription: {
-      check: 'app.model.Subscription',
+      check: function (value) {
+        return (value instanceof app.model.Subscription) || (value instanceof app.model.Channel)
+      },
       nullable: true,
       event: 'changedSubscription',
       apply: '_applySubscription'
@@ -111,7 +113,16 @@ qx.Class.define('app.ui.Channel', {
         })
 
         this.__currentSCChannel.subscribe()
-        this.__currentSCChannel.watch(this._onActivity.bind(this))
+        this.__currentSCChannel.on('subscribe', () => {
+          this.__currentSCChannel.watch(this._onActivity.bind(this))
+          this.__currentSCChannel.off('subscribe')
+          this.__currentSCChannel.off('subscribeFail')
+        })
+        this.__currentSCChannel.on('subscribeFail', (err) => {
+          this.error(err)
+          this.__currentSCChannel.off('subscribe')
+          this.__currentSCChannel.off('subscribeFail')
+        })
 
         this.getChildControl('header').setSubscription(subscription)
         this.getChildControl('header').show()

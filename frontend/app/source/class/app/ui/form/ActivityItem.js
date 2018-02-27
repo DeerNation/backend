@@ -177,7 +177,11 @@ qx.Class.define('app.ui.form.ActivityItem', {
       } else {
         this.getChildControl('authorRoles').exclude()
       }
-      this.setDeletable(isOwner || app.Model.getInstance().getActor().isAdmin() || author.getId() === app.Model.getInstance().getActor().getId())
+      if (app.Model.getInstance().getActor()) {
+        this.setDeletable(isOwner || app.Model.getInstance().getActor().isAdmin() || author.getId() === app.Model.getInstance().getActor().getId())
+      } else {
+        this.setDeletable(false)
+      }
     },
 
     // overridden

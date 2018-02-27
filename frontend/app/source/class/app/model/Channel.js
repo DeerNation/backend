@@ -46,7 +46,8 @@ qx.Class.define('app.model.Channel', {
     type: {
       check: ['PUBLIC', 'PRIVATE'],
       init: 'PUBLIC',
-      event: 'changedType'
+      event: 'changedType',
+      apply: '_updateIcon'
     },
 
     title: {
@@ -89,7 +90,63 @@ qx.Class.define('app.model.Channel', {
     typeIcon: {
       check: 'String',
       nullable: true,
-      event: 'changedTypeIcon'
+      event: 'changedTypeIcon',
+      apply: '_updateIcon'
+    },
+
+    icon: {
+      check: 'String',
+      nullable: true,
+      event: 'changedIcon'
+    },
+    hidden: {
+      check: 'Boolean',
+      init: false
+    },
+    favorite: {
+      check: 'Boolean',
+      init: false
+    }
+  },
+
+  /*
+  ******************************************************
+    MEMBERS
+  ******************************************************
+  */
+  members: {
+    // property apply
+    _updateIcon: function () {
+      const typeIcon = this.getTypeIcon()
+      if (typeIcon) {
+        this.setIcon(app.Config.icons[typeIcon])
+      } else {
+        this.setIcon(this.getType() === 'PRIVATE' ? app.Config.icons.private : app.Config.icons.public)
+      }
+    },
+
+    /**
+     * Conveniance method to allow channels to be used in the same list as subscriptions
+     * @returns {app.model.Channel}
+     */
+    getChannel: function () {
+      return this
+    },
+
+    /**
+     * Conveniance method to allow channels to be used in the same list as subscriptions
+     * @returns {String}
+     */
+    getChannelId: function () {
+      return this.getId()
+    },
+
+    /**
+     * Conveniance method to allow channels to be used in the same list as subscriptions
+     * @returns {null}
+     */
+    getViewedUntil: function () {
+      return null
     }
   }
 })

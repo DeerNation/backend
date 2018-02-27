@@ -2,12 +2,15 @@
 msgid "Please login"
 msgstr ""
 
-#: app/Model.js:259 app/Model.js:272 app/Model.js:274 app/ui/BaseMenu.js:48
-#: app/ui/BaseMenu.js:84
+#: app/Model.js:259 app/Model.js:272 app/Model.js:274 app/Model.js:287
+#: app/Model.js:289 app/Model.js:290 app/Model.js:288 app/ui/BaseMenu.js:48
+#: app/ui/BaseMenu.js:84 app/ui/BaseMenu.js:85
 msgid "Online"
 msgstr ""
 
-#: app/Model.js:259 app/Model.js:272 app/Model.js:274 app/ui/BaseMenu.js:84
+#: app/Model.js:259 app/Model.js:272 app/Model.js:274 app/Model.js:287
+#: app/Model.js:289 app/Model.js:290 app/Model.js:288 app/ui/BaseMenu.js:84
+#: app/ui/BaseMenu.js:85
 msgid "Offline"
 msgstr ""
 
@@ -39,19 +42,19 @@ msgstr ""
 msgid "Invisible"
 msgstr ""
 
-#: app/ui/BaseMenu.js:112
+#: app/ui/BaseMenu.js:112 app/ui/BaseMenu.js:113
 msgid "Add a new channel"
 msgstr ""
 
-#: app/ui/BaseMenu.js:115
+#: app/ui/BaseMenu.js:115 app/ui/BaseMenu.js:116
 msgid "Private channel"
 msgstr ""
 
-#: app/ui/BaseMenu.js:120
+#: app/ui/BaseMenu.js:120 app/ui/BaseMenu.js:121
 msgid "Write-protected channel"
 msgstr ""
 
-#: app/ui/BaseMenu.js:125
+#: app/ui/BaseMenu.js:125 app/ui/BaseMenu.js:126
 msgid "Channel name"
 msgstr ""
 
@@ -69,19 +72,19 @@ msgstr ""
 
 #: app/ui/BaseMenu.js:230 app/ui/BaseMenu.js:236 app/ui/BaseMenu.js:239
 #: app/ui/BaseMenu.js:240 app/ui/BaseMenu.js:242 app/ui/BaseMenu.js:255
-#: app/ui/BaseMenu.js:256 app/ui/BaseMenu.js:257
+#: app/ui/BaseMenu.js:256 app/ui/BaseMenu.js:257 app/ui/BaseMenu.js:259
 msgid "Favorites"
 msgstr ""
 
 #: app/ui/BaseMenu.js:234 app/ui/BaseMenu.js:240 app/ui/BaseMenu.js:243
 #: app/ui/BaseMenu.js:244 app/ui/BaseMenu.js:246 app/ui/BaseMenu.js:259
-#: app/ui/BaseMenu.js:260 app/ui/BaseMenu.js:261
+#: app/ui/BaseMenu.js:260 app/ui/BaseMenu.js:261 app/ui/BaseMenu.js:263
 msgid "Channels"
 msgstr ""
 
 #: app/ui/BaseMenu.js:237 app/ui/BaseMenu.js:243 app/ui/BaseMenu.js:246
 #: app/ui/BaseMenu.js:247 app/ui/BaseMenu.js:249 app/ui/BaseMenu.js:262
-#: app/ui/BaseMenu.js:263 app/ui/BaseMenu.js:264
+#: app/ui/BaseMenu.js:263 app/ui/BaseMenu.js:264 app/ui/BaseMenu.js:266
 msgid "Private channels"
 msgstr ""
 
@@ -178,6 +181,7 @@ msgid "Develop"
 msgstr ""
 
 #: app/ui/BaseMenu.js:158 app/ui/BaseMenu.js:155 app/ui/BaseMenu.js:156
+#: app/ui/BaseMenu.js:157
 msgid "Productive"
 msgstr ""
 
@@ -196,7 +200,7 @@ msgid_plural "%1 and %2 are writing"
 msgstr[0] ""
 msgstr[1] ""
 
-#: app/ui/Channel.js:259
+#: app/ui/Channel.js:259 app/ui/Channel.js:261 app/ui/Channel.js:270
 msgid "%1 is writing..."
 msgid_plural "%1 and %2 are writing..."
 msgstr[0] ""

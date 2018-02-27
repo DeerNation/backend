@@ -10,10 +10,10 @@ const i18n = require('i18n')
 const acl = require('./acl')
 
 module.exports = function (socket, scServer, callback) {
-  socket.on('login', function (credentials, respond) {
+  socket.on('login', async function (credentials, respond) {
     logger.debug('login request for actor %s received', credentials.username)
     try {
-      acl.check('rpc|login', acl.actions.EXECUTE)
+      await acl.check('rpc|login', acl.action.EXECUTE)
 
       scServer.thinky.r.table('Actor').filter({username: credentials.username}).run((err, results) => {
         if (err) {
@@ -49,13 +49,21 @@ module.exports = function (socket, scServer, callback) {
     respond()
   })
 
-  scServer.addMiddleware(scServer.MIDDLEWARE_SUBSCRIBE, function (req, next) {
-    const authToken = req.socket.authToken
-
-    if (authToken && authToken.user) {
+  scServer.addMiddleware(scServer.MIDDLEWARE_SUBSCRIBE, async function (req, next) {
+    try {
+      await acl.check('channel|' + req.channel, acl.action.ENTER, req.socket.authToken)
       next()
-    } else {
+    } catch (e) {
       next(i18n.__('You are not authorized to subscribe to #%s', req.channel))
+    }
+  })
+
+  scServer.addMiddleware(scServer.MIDDLEWARE_PUBLISH_IN, async function (req, next) {
+    try {
+      await acl.check('channel|' + req.channel, acl.action.PUBLISH, req.socket.authToken)
+      next()
+    } catch (e) {
+      next(i18n.__('You are not authorized to publish in #%s', req.channel))
     }
   })
 }

@@ -6,6 +6,7 @@
  */
 const schema = require('./model/schema')
 const i18n = require('i18n')
+const logger = require('./logger')(__filename)
 
 class AclException extends Error {
 }
@@ -37,13 +38,16 @@ module.exports = {
    * @returns {Promise<Map>}
    */
   getEntries: async function (userId, type, topic) {
-    if (this.__cache.hasOwnProperty(userId)) {
-      return this.__cache[userId]
-    }
-    if (!userId && this.__cache.hasOwnProperty('*')) {
-      return this.__cache['*']
+    const cacheId = (userId || '*') + type + topic
+    if (this.__cache.hasOwnProperty(cacheId)) {
+      return this.__cache[cacheId]
     }
     const r = schema.getR()
+
+    if (type === 'channel' && topic.includes('.public')) {
+      type = [type, 'generic']
+      topic += '|public-channel'
+    }
 
     // get roles for user
     let roles = ['guest']
@@ -59,18 +63,19 @@ module.exports = {
       userRoles.forEach(userRole => {
         roles.push(userRole.id)
       })
-    } else {
-      // use * as cache key
-      userId = '*'
     }
-    // console.log(roles)
+    logger.debug('Roles: %s, Topic: %s, CacheID: %s, Type: %o', roles, topic, cacheId, type)
     const aclEntries = await schema.getModel('ACLEntry').filter(entry => {
-      return entry('targetType').eq('role')
+      const query = entry('targetType').eq('role')
         .and(r.expr(roles).contains(entry('target')))
-        .and(entry('type').eq(type))
         .and(r.expr(topic).match(entry('topic')))
+      if (Array.isArray(type)) {
+        return query.and(r.expr(type).contains(entry('type')))
+      } else {
+        return query.and(entry('type').eq(type))
+      }
     }).run()
-    // console.log(aclEntries)
+    logger.debug('found ACL entries: %o', aclEntries)
 
     let acl = {
       actions: '',
@@ -81,7 +86,7 @@ module.exports = {
     aclEntries.forEach(entry => {
       this.__mergeAcls(acl, entry)
     })
-    this.__cache[userId] = acl
+    this.__cache[cacheId] = acl
     return acl
   },
 
@@ -112,7 +117,7 @@ module.exports = {
 
   /**
    * Clear the cached ACLEntries
-   * @param userId {String?} userID whoms ACLEntry-Cache should be cleared, in undefinex all caches are cleared
+   * @param userId {String?} userID whoms ACLEntry-Cache should be cleared, in undefined all caches are cleared
    */
   clearCache: function (userId) {
     if (userId) {
@@ -135,15 +140,14 @@ module.exports = {
    * @returns {boolean} true if the check succeeds
    * @throws {AclException} if the check fails
    */
-  check: function (what, actions, authToken, actionType, exceptionText) {
-    // TODO read and evaluate ACLs, throw exception on failure
-    const allowed = this.getAllowedActions(what, authToken)
+  check: async function (what, actions, authToken, actionType, exceptionText) {
+    logger.debug('check %s for %s', actions, what)
+    const allowed = await this.getAllowedActions(what, authToken)
+    if (!exceptionText) {
+      exceptionText = i18n.__('You do not have the rights to do this.')
+    }
     if (!allowed) {
-      if (exceptionText) {
-        throw new AclException(exceptionText)
-      } else {
-        throw new AclException(i18n.__('You do not have the rights to do this.'))
-      }
+      throw new AclException(exceptionText)
     } else {
       let allowedActions = ''
       switch (actionType || 'actions') {
@@ -158,13 +162,16 @@ module.exports = {
         case 'owner':
           allowedActions = allowed.ownerActions
       }
+      if (!allowedActions) {
+        throw new AclException(exceptionText)
+      }
+      logger.debug('Allowed actions for %s: %s', what, allowedActions)
 
       for (let i = 0, l = actions.length; i < l; i++) {
-        if (!(actions.charAt(i) in allowedActions)) {
-          return false
+        if (!allowedActions.includes(actions.charAt(i))) {
+          throw new AclException(exceptionText)
         }
       }
-      return true
     }
   },
 
@@ -172,10 +179,10 @@ module.exports = {
    * Returns a concatenated string with all allowed actions on the topic
    * @param what {String} a | separated string of type|topic
    * @param authToken {Object} auth token of the current user
-   * @returns {string} concatenated allowed actions
+   * @returns {Promise<string>} concatenated allowed actions
    */
   getAllowedActions: function (what, authToken) {
-    const {type, topic} = what.split('|')
+    const [type, topic] = what.split('|')
     return this.getEntries(authToken && authToken.user, type, topic)
   },
 
