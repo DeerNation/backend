@@ -6,5 +6,6 @@
  */
 
 module.exports = {
+  domain: 'hbg',
   channelPrefix: 'hbg.channel.'
 }

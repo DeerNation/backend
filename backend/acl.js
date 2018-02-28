@@ -35,19 +35,15 @@ module.exports = {
    * }
    *
    * @param userId {String?} User whoms ACLs should be returned, if empty the guest users ACLs will be returned
+   * @param topic {String} topic to check
    * @returns {Promise<Map>}
    */
-  getEntries: async function (userId, type, topic) {
-    const cacheId = (userId || '*') + type + topic
+  getEntries: async function (userId, topic) {
+    const cacheId = (userId || '*') + topic
     if (this.__cache.hasOwnProperty(cacheId)) {
       return this.__cache[cacheId]
     }
     const r = schema.getR()
-
-    if (type === 'channel' && topic.includes('.public')) {
-      type = [type, 'generic']
-      topic += '|public-channel'
-    }
 
     // get roles for user
     let roles = ['guest']
@@ -64,16 +60,11 @@ module.exports = {
         roles.push(userRole.id)
       })
     }
-    logger.debug('Roles: %s, Topic: %s, CacheID: %s, Type: %o', roles, topic, cacheId, type)
+    logger.debug('Roles: %s, Topic: %s, CacheID: %s', roles, topic, cacheId)
     const aclEntries = await schema.getModel('ACLEntry').filter(entry => {
-      const query = entry('targetType').eq('role')
+      return entry('targetType').eq('role')
         .and(r.expr(roles).contains(entry('target')))
         .and(r.expr(topic).match(entry('topic')))
-      if (Array.isArray(type)) {
-        return query.and(r.expr(type).contains(entry('type')))
-      } else {
-        return query.and(entry('type').eq(type))
-      }
     }).run()
     logger.debug('found ACL entries: %o', aclEntries)
 
@@ -132,17 +123,17 @@ module.exports = {
   /**
    * Checks if the user can execute the action on that topic, otherwise an AclException is thrown
    *
-   * @param what {String} a | separated string of type|topic
+   * @param authToken {Object?} auth token of the current user
+   * @param token {String} topic to check
    * @param actions {String} a combination of acl.CREATE, acl.READ, ...
-   * @param authToken {Object} auth token of the current user
    * @param actionType {String} type of actions to check (null, member, owner)
    * @param exceptionText {String?} optional text if the check fails
    * @returns {boolean} true if the check succeeds
    * @throws {AclException} if the check fails
    */
-  check: async function (what, actions, authToken, actionType, exceptionText) {
-    logger.debug('check %s for %s', actions, what)
-    const allowed = await this.getAllowedActions(what, authToken)
+  check: async function (authToken, token, actions, actionType, exceptionText) {
+    logger.debug('check %s for %s', actions, token)
+    const allowed = await this.getAllowedActions(authToken, token)
     if (!exceptionText) {
       exceptionText = i18n.__('You do not have the rights to do this.')
     }
@@ -165,7 +156,7 @@ module.exports = {
       if (!allowedActions) {
         throw new AclException(exceptionText)
       }
-      logger.debug('Allowed actions for %s: %s', what, allowedActions)
+      logger.debug('Allowed actions for %s: %s', token, allowedActions)
 
       for (let i = 0, l = actions.length; i < l; i++) {
         if (!allowedActions.includes(actions.charAt(i))) {
@@ -177,13 +168,12 @@ module.exports = {
 
   /**
    * Returns a concatenated string with all allowed actions on the topic
-   * @param what {String} a | separated string of type|topic
-   * @param authToken {Object} auth token of the current user
+   * @param authToken {Object?} auth token of the current user
+   * @param topic {String} topic to check
    * @returns {Promise<string>} concatenated allowed actions
    */
-  getAllowedActions: function (what, authToken) {
-    const [type, topic] = what.split('|')
-    return this.getEntries(authToken && authToken.user, type, topic)
+  getAllowedActions: function (authToken, topic) {
+    return this.getEntries(authToken && authToken.user, topic)
   },
 
   AclException: AclException

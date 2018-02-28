@@ -294,6 +294,7 @@ msgid "Productive"
 msgstr ""
 
 #: app/ui/Channel.js:259 app/ui/Channel.js:261 app/ui/Channel.js:270
+#: app/ui/Channel.js:272 app/ui/Channel.js:273
 msgid "%1 is writing..."
 msgid_plural "%1 and %2 are writing..."
 msgstr[0] "%1 schreibt..."

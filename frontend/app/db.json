@@ -13948,7 +13948,7 @@
       "implement": []
     },
     "app.ui.Channel": {
-      "mtime": "2018-02-27T19:03:49.118Z",
+      "mtime": "2018-02-27T19:22:19.152Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13996,15 +13996,6 @@
         "app.ui.form.ActivityItem": {},
         "qx.ui.core.LayoutItem": {
           "load": true
-        },
-        "qx.core.Object": {
-          "load": true
-        },
-        "qx.core.Environment": {
-          "load": true
-        },
-        "qx.theme.manager.Meta": {
-          "load": true
         }
       },
       "extends": "qx.ui.core.Widget",
@@ -14014,7 +14005,7 @@
         {
           "msgid": "%1 is writing...",
           "msgid_plural": "%1 and %2 are writing...",
-          "lineNo": 270
+          "lineNo": 273
         }
       ]
     },
@@ -15502,6 +15493,18 @@
           "load": true
         },
         "qx.core.Object": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.theme.manager.Meta": {
+          "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
           "load": true
         }
       },

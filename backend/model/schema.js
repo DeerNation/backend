@@ -465,16 +465,14 @@ class Schema {
       ACLEntry: [
         {
           id: 'f357da38-c0b4-4071-afcf-1b33da16636b',
-          type: 'generic',
-          topic: 'public-channel',
+          topic: 'hbg\\.channel\\..+\\.public',
           actions: 'r',
           targetType: 'role',
           target: 'guest'
         },
         {
           id: 'c1ff521c-2633-4bac-9a55-344d9630cf06',
-          type: 'generic',
-          topic: 'public-channel',
+          topic: 'hbg\\.channel\\..+\\.public',
           actions: 'e',
           memberActions: 'lp',
           ownerActions: 'du',
@@ -483,8 +481,7 @@ class Schema {
         },
         {
           id: 'bbfb3075-633e-40bc-adf4-8d0a470dd954',
-          type: 'generic',
-          topic: 'private-channel',
+          topic: 'hbg\\.channel\\..+\\.private',
           memberActions: 'rlpf',
           ownerActions: 'ei',
           targetType: 'role',
@@ -492,16 +489,14 @@ class Schema {
         },
         {
           id: 'cda76f47-1061-4225-a079-c4552510db3b',
-          type: 'object',
-          topic: '.*',
+          topic: 'hbg\\.object\\..*',
           ownerActions: 'rud',
           targetType: 'role',
           target: 'user'
         },
         {
           id: '22c3ab14-dd93-414b-87c4-c0d0c9245cd6',
-          type: 'channel',
-          topic: '.*',
+          topic: 'hbg\\.channel\\..+',
           actions: 'c',
           memberActions: 'rpl',
           ownerActions: 'ud',
@@ -510,24 +505,21 @@ class Schema {
         },
         {
           id: '3fa41d14-e3bf-4bb9-b221-f69e16e2f153',
-          type: 'rpc',
-          topic: '(login|getAllowedActions|check|getChannels|getActors|getChannelActivities)',
+          topic: 'hbg\\.rpc\\.(login|getAllowedActions|check|getChannels|getActors|getChannelActivities)',
           actions: 'x',
           targetType: 'role',
           target: 'guest'
         },
         {
           id: '08555f49-1738-4ddb-afda-4f3d1d33b6e6',
-          type: 'object',
-          topic: '(Actor)',
+          topic: 'hbg\\.object\\.(Actor)',
           actions: 'r',
           targetType: 'role',
           target: 'guest'
         },
         {
           id: 'f894d70e-3aef-45ef-ac7b-53ea352f0869',
-          type: 'rpc',
-          topic: '.*',
+          topic: 'hbg\\.rpc\\..*',
           actions: 'x',
           targetType: 'role',
           target: 'user'

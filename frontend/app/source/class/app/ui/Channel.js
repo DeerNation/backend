@@ -111,17 +111,20 @@ qx.Class.define('app.ui.Channel', {
             }
           }))
         })
-
-        this.__currentSCChannel.subscribe()
-        this.__currentSCChannel.on('subscribe', () => {
-          this.__currentSCChannel.watch(this._onActivity.bind(this))
-          this.__currentSCChannel.off('subscribe')
-          this.__currentSCChannel.off('subscribeFail')
-        })
-        this.__currentSCChannel.on('subscribeFail', (err) => {
-          this.error(err)
-          this.__currentSCChannel.off('subscribe')
-          this.__currentSCChannel.off('subscribeFail')
+        app.io.Rpc.getProxy().getAllowedActions('channel|' + subscription.getChannelId()).then(acl => {
+          if (acl.actions.includes('e')) {
+            this.__currentSCChannel.subscribe()
+            this.__currentSCChannel.on('subscribe', () => {
+              this.__currentSCChannel.watch(this._onActivity.bind(this))
+              this.__currentSCChannel.off('subscribe')
+              this.__currentSCChannel.off('subscribeFail')
+            })
+            this.__currentSCChannel.on('subscribeFail', (err) => {
+              this.error(err)
+              this.__currentSCChannel.off('subscribe')
+              this.__currentSCChannel.off('subscribeFail')
+            })
+          }
         })
 
         this.getChildControl('header').setSubscription(subscription)
