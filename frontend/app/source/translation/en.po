@@ -1,4 +1,5 @@
 #: app/io/Socket.js:95 app/io/Socket.js:102 app/io/Socket.js:104
+#: app/io/Socket.js:111 app/io/Socket.js:114 app/io/Socket.js:116
 msgid "Please login"
 msgstr ""
 
@@ -201,8 +202,13 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: app/ui/Channel.js:259 app/ui/Channel.js:261 app/ui/Channel.js:270
-#: app/ui/Channel.js:272 app/ui/Channel.js:273
+#: app/ui/Channel.js:272 app/ui/Channel.js:273 app/ui/Channel.js:281
+#: app/ui/Channel.js:284
 msgid "%1 is writing..."
 msgid_plural "%1 and %2 are writing..."
 msgstr[0] ""
 msgstr[1] ""
+
+#: app/ui/Channel.js:371
+msgid "To enter this channel you need a user account. Please login or register yourself."
+msgstr ""

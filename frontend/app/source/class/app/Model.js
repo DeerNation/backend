@@ -121,6 +121,7 @@ qx.Class.define('app.Model', {
       const socket = app.io.Socket.getInstance()
       const currentUserId = socket.getAuthToken() && socket.getAuthToken().user
       this.getChannels().removeAll()
+      this.getSubscriptions().removeAll()
 
       const actors = await app.io.Rpc.getProxy().getActors()
       this.getActors().replace(app.model.Factory.createAll(actors, app.model.Actor, {
@@ -163,6 +164,7 @@ qx.Class.define('app.Model', {
         this.__subscribeAndWatchChannel('crud>publicChannels():Channel', this._onUpdate.bind(this, 'channel'))
 
         if (currentUserId) {
+          console.trace()
           return app.io.Rpc.getProxy().getSubscriptions()
         } else {
           return Promise.resolve([])

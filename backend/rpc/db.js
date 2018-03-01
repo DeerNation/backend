@@ -201,51 +201,32 @@ async function setFirebaseToken (authToken, firebaseToken, oldToken) {
 }
 
 async function deleteActivity (authToken, id) {
-  await acl.check(authToken, config.domain + '.object.activity', acl.action.DELETE, i18n.__('You are not allowed to delete entries in this channel.'))
-  return new Promise((resolve, reject) => {
-    // message specific check
-    schema.getModel('Activity').get(id).run().then(activity => {
-      if (!activity) {
-        // we cannot delete what does not exist
-        resolve(true)
-      }
-      const doDelete = function () {
+  // message specific check
+  const activity = await schema.getModel('Activity').get(id).run()
+  if (!activity) {
+    // we cannot delete what does not exist
+    return true
+  }
+  let actionType = activity.actorId === authToken.user ? 'ownerActions' : 'actions'
+  try {
+    await acl.check(authToken, config.domain + '.object.activity', acl.action.DELETE, actionType, i18n.__('You are not allowed to delete this activity.'))
+    activity.delete()
+    return true
+  } catch (e) {
+    // check if user is channel owner
+    const subs = await schema.getModel('Subscription').filter({
+      channelId: activity.channelId,
+      actorId: authToken.user
+    }).run()
+    if (subs.length === 1) {
+      if (subs[0].actorId === authToken.user) {
+        // user is owner of this channel
         activity.delete()
-        resolve(true)
-        // publish deletion on channel
+        return true
       }
-      if (activity.actorId === authToken.user) {
-        // user is owner of the message
-        doDelete()
-      } else {
-        schema.getModel('Subscription').filter({
-          channelId: activity.channelId,
-          actorId: authToken.user
-        }).run().then(subs => {
-          if (subs.length === 1) {
-            if (subs[0].actorId === authToken.user) {
-              // user is owner of this channel
-              doDelete()
-            } else {
-              schema.getModel('Actor').get(id).run().then(actor => {
-                if (actor.getRole() === 'admin') {
-                  doDelete()
-                } else {
-                  reject(new Error(i18n.__('You are not allowed to delete this entry.')))
-                }
-              })
-            }
-          } else if (subs.length === 0) {
-            reject(new Error(i18n.__('You are not allowed to delete this entry.')))
-            logger.error('The User is not subscribed to this channel')
-          } else {
-            reject(new Error(i18n.__('You are not allowed to delete this entry.')))
-            logger.error('Multiple subscriptions found for channel' + activity.channelId + ' and user ' + authToken.user)
-          }
-        })
-      }
-    })
-  })
+    }
+    throw e
+  }
 }
 
 module.exports = {

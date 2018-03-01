@@ -4,3 +4,5 @@ platforms
 .idea
 *.log
 */credentials.js
+coverage/
+.nyc_output

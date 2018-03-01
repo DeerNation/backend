@@ -9459,7 +9459,7 @@
       "implement": []
     },
     "app.io.Socket": {
-      "mtime": "2018-02-26T18:53:19.104Z",
+      "mtime": "2018-02-28T19:46:34.790Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -9477,6 +9477,8 @@
           "construct": true
         },
         "app.Config": {},
+        "dialog.Login": {},
+        "qx.locale.Manager": {},
         "qx.Promise": {},
         "qx.lang.Type": {},
         "qx.core.ObjectRegistry": {
@@ -9498,15 +9500,21 @@
           "locations": [
             {
               "start": {
-                "line": 87,
+                "line": 89,
                 "column": 22
               },
               "end": {
-                "line": 87,
+                "line": 89,
                 "column": 42
               }
             }
           ]
+        }
+      ],
+      "translations": [
+        {
+          "msgid": "Please login",
+          "lineNo": 116
         }
       ],
       "markers": [
@@ -9514,7 +9522,7 @@
           "msgId": "qx.tool.compiler.symbol.unresolved",
           "pos": {
             "start": {
-              "line": 87,
+              "line": 89,
               "column": 22
             }
           },
@@ -13948,7 +13956,7 @@
       "implement": []
     },
     "app.ui.Channel": {
-      "mtime": "2018-02-27T19:22:19.152Z",
+      "mtime": "2018-02-28T19:11:48.153Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13992,9 +14000,25 @@
         "qx.ui.list.List": {},
         "qx.util.Function": {},
         "qx.ui.basic.Label": {},
+        "qx.ui.container.Stack": {},
         "app.model.activity.Registry": {},
         "app.ui.form.ActivityItem": {},
         "qx.ui.core.LayoutItem": {
+          "load": true
+        },
+        "qx.core.Object": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.theme.manager.Meta": {
+          "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
           "load": true
         }
       },
@@ -14005,7 +14029,11 @@
         {
           "msgid": "%1 is writing...",
           "msgid_plural": "%1 and %2 are writing...",
-          "lineNo": 273
+          "lineNo": 284
+        },
+        {
+          "msgid": "To enter this channel you need a user account. Please login or register yourself.",
+          "lineNo": 371
         }
       ]
     },
@@ -14252,7 +14280,7 @@
       "implement": []
     },
     "app.Model": {
-      "mtime": "2018-02-26T19:45:48.458Z",
+      "mtime": "2018-02-28T19:44:30.403Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14301,11 +14329,11 @@
           "locations": [
             {
               "start": {
-                "line": 168,
+                "line": 170,
                 "column": 17
               },
               "end": {
-                "line": 168,
+                "line": 170,
                 "column": 32
               }
             }
@@ -14315,11 +14343,11 @@
       "translations": [
         {
           "msgid": "Online",
-          "lineNo": 288
+          "lineNo": 290
         },
         {
           "msgid": "Offline",
-          "lineNo": 288
+          "lineNo": 290
         }
       ],
       "markers": [
@@ -14327,7 +14355,7 @@
           "msgId": "qx.tool.compiler.symbol.unresolved",
           "pos": {
             "start": {
-              "line": 168,
+              "line": 170,
               "column": 17
             }
           },

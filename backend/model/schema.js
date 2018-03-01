@@ -512,7 +512,7 @@ class Schema {
         },
         {
           id: '08555f49-1738-4ddb-afda-4f3d1d33b6e6',
-          topic: 'hbg\\.object\\.(Actor)',
+          topic: 'hbg\\.object\\.Actor',
           actions: 'r',
           targetType: 'role',
           target: 'guest'
@@ -521,6 +521,28 @@ class Schema {
           id: 'f894d70e-3aef-45ef-ac7b-53ea352f0869',
           topic: 'hbg\\.rpc\\..*',
           actions: 'x',
+          targetType: 'role',
+          target: 'user'
+        },
+        {
+          id: '0e09cda6-fdca-4589-8929-3605943ba531',
+          topic: 'hbg\\.object\\..*',
+          actions: '',
+          ownerActions: 'du',
+          targetType: 'role',
+          target: 'user'
+        },
+        {
+          id: '2c55607a-9b52-4193-bead-1c1cb86f084a',
+          topic: '$INT\\.users',
+          actions: 'el',
+          targetType: 'role',
+          target: 'user'
+        },
+        {
+          id: 'ca68d6d3-851a-4aa0-832d-d3077dd2e0e1',
+          topic: 'crud>publicChannels.*',
+          actions: 'rel',
           targetType: 'role',
           target: 'user'
         }

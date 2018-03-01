@@ -38,37 +38,61 @@ module.exports = {
    * @param topic {String} topic to check
    * @returns {Promise<Map>}
    */
-  getEntries: async function (userId, topic) {
-    const cacheId = (userId || '*') + topic
+  getEntries: async function (userId, topic, role) {
+    let cacheId
+    if (role) {
+      cacheId = role + topic
+    } else {
+      cacheId = (userId || '*') + topic
+    }
     if (this.__cache.hasOwnProperty(cacheId)) {
       return this.__cache[cacheId]
     }
     const r = schema.getR()
 
-    // get roles for user
-    let roles = ['guest']
-    if (userId) {
-      // get the actors main role
-      const mainRole = await schema.getModel('Actor').get(userId).run()
-      roles.push(mainRole.role)
+    let aclEntries, acl
+    if (role) {
+      aclEntries = await schema.getModel('ACLEntry').filter(entry => {
+        return entry('targetType').eq('role')
+          .and(entry('target').eq(role))
+          .and(r.expr(topic).match(entry('topic')))
+      }).run()
+    } else {
+      // get roles for user
+      let roles = ['guest']
+      if (userId) {
+        // get the actors main role
+        const mainRole = await schema.getModel('Actor').get(userId).run()
+        roles.push(mainRole.role)
 
-      // get all other roles the actor is associated to
-      const userRoles = await schema.getModel('ACLRole').filter(role => {
-        return role('members').contains(userId).and(role('id').eq(mainRole.role).not())
-      }).orderBy(r.asc('weight')).run()
-      userRoles.forEach(userRole => {
-        roles.push(userRole.id)
-      })
+        // get all other roles the actor is associated to
+        const userRoles = await schema.getModel('ACLRole').filter(role => {
+          return role('members').contains(userId).and(role('id').eq(mainRole.role).not())
+        }).orderBy(r.asc('weight')).run()
+        userRoles.forEach(userRole => {
+          roles.push(userRole.id)
+        })
+      }
+      if (roles.includes('admin')) {
+        const all = Object.values(action).join('')
+        acl = {
+          actions: all,
+          memberActions: all,
+          ownerActions: all
+        }
+        this.__cache[cacheId] = acl
+        return acl
+      }
+      logger.debug('Roles: %s, Topic: %s, CacheID: %s', roles, topic, cacheId)
+      aclEntries = await schema.getModel('ACLEntry').filter(entry => {
+        return entry('targetType').eq('role')
+          .and(r.expr(roles).contains(entry('target')))
+          .and(r.expr(topic).match(entry('topic')))
+      }).run()
     }
-    logger.debug('Roles: %s, Topic: %s, CacheID: %s', roles, topic, cacheId)
-    const aclEntries = await schema.getModel('ACLEntry').filter(entry => {
-      return entry('targetType').eq('role')
-        .and(r.expr(roles).contains(entry('target')))
-        .and(r.expr(topic).match(entry('topic')))
-    }).run()
     logger.debug('found ACL entries: %o', aclEntries)
 
-    let acl = {
+    acl = {
       actions: '',
       memberActions: '',
       ownerActions: ''
@@ -174,6 +198,17 @@ module.exports = {
    */
   getAllowedActions: function (authToken, topic) {
     return this.getEntries(authToken && authToken.user, topic)
+  },
+
+  /**
+   * Returns concatenated string with all allowed actions for the given role on the topic
+   * @param authToken {Object?} only for compability reasons with rpc calls, not used here
+   * @param role {String} Role to check
+   * @param topic {String} topic to check
+   * @returns {*|Promise<Map>}
+   */
+  getAllowedActionsForRole: function (authToken, role, topic) {
+    return this.getEntries(null, topic, role)
   },
 
   AclException: AclException

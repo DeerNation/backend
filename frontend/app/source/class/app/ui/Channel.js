@@ -124,6 +124,17 @@ qx.Class.define('app.ui.Channel', {
               this.__currentSCChannel.off('subscribe')
               this.__currentSCChannel.off('subscribeFail')
             })
+            this.getChildControl('editor-container').setSelection([this.getChildControl('message-field')])
+          } else {
+            // show subscription hint
+            app.io.Rpc.getProxy().getAllowedActionsForRole('user', 'channel|' + subscription.getChannelId()).then(userAcl => {
+              if (userAcl.actions.includes('e')) {
+                // users can enter this channel -> show login/register hint
+                this.getChildControl('editor-container').setSelection([this.getChildControl('login-hint')])
+              } else {
+                this.getChildControl('editor-container').exclude()
+              }
+            })
           }
         })
 
@@ -131,7 +142,7 @@ qx.Class.define('app.ui.Channel', {
         this.getChildControl('header').show()
 
         this.getChildControl('message-field').setModel(subscription.getChannel())
-        this.getChildControl('message-field').show()
+        // this.getChildControl('message-field').show()
       }
     },
 
@@ -343,14 +354,30 @@ qx.Class.define('app.ui.Channel', {
           this._addAt(control, 2)
           break
 
+        case 'editor-container':
+          control = new qx.ui.container.Stack()
+          this._addAt(control, 3)
+          break
+
         case 'message-field':
           control = new (app.model.activity.Registry.getFormClass('message'))()
           if (this.getSubscription()) {
             control.setModel(this.getSubscription().getChannel())
-          } else {
-            control.exclude()
           }
-          this._addAt(control, 3)
+          this.getChildControl('editor-container').add(control)
+          break
+
+        case 'login-hint':
+          control = new qx.ui.basic.Label(this.tr('To enter this channel you need a user account. Please login or register yourself.'))
+          control.addListener('tap', () => {
+            app.io.Socket.getInstance().login().then(loggedIn => {
+              if (loggedIn) {
+                // TODO re-evaluate acls and if the currently shown channel is already subscribed by the current user
+
+              }
+            })
+          })
+          this.getChildControl('editor-container').add(control)
           break
       }
       return control || this.base(arguments, id, hash)

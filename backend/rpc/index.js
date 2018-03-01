@@ -61,7 +61,8 @@ const rpcServer = new RpcServer()
 
 rpcServer.registerRPCEndpoints({
   getAllowedActions: acl.getAllowedActions.bind(acl),
-  check: acl.check.bind(acl)
+  check: acl.check.bind(acl),
+  getAllowedActionsForRole: acl.getAllowedActionsForRole.bind(acl)
 })
 
 module.exports = rpcServer
