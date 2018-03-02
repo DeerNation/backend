@@ -207,7 +207,7 @@ async function deleteActivity (authToken, id) {
     // we cannot delete what does not exist
     return true
   }
-  let actionType = activity.actorId === authToken.user ? 'ownerActions' : 'actions'
+  let actionType = activity.actorId === authToken.user ? 'owner' : 'actions'
   try {
     await acl.check(authToken, config.domain + '.object.activity', acl.action.DELETE, actionType, i18n.__('You are not allowed to delete this activity.'))
     activity.delete()

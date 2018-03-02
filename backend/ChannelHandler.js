@@ -75,16 +75,16 @@ class ChannelHandler {
 
     // only allow valid activities to be published
     if (!this.validateActivity(message)) {
-      logger.error('\nNo valid activity: \n  * %s', this.validateActivity.errors.map(x => {
+      logger.error('\nNo valid activity: \n  * %s\n-------\n  %o', this.validateActivity.errors.map(x => {
         switch (x.keyword) {
           case 'additionalProperties':
-            return x.message + ': \'' + x.params.additionalProperty + '\''
+            return `${x.message}: '${x.params.additionalProperty}' [${x.schemaPath}]`
 
           default:
-            return x.message
+            return `${x.message} [${x.schemaPath}]`
         }
-      }).join('\n  * '))
-      return
+      }).join('\n  * '), message)
+      return false
     }
     if (!message.hasOwnProperty('published') || !message.published) {
       message.published = new Date()

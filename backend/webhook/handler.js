@@ -7,6 +7,7 @@
 const logger = require('../logger')(__filename)
 const schema = require('../model/schema')
 const channelHandler = require('../ChannelHandler')
+const acl = require('../acl')
 
 class WebhookHandler {
   constructor () {
@@ -19,10 +20,7 @@ class WebhookHandler {
     this.scServer = scServer
   }
 
-  _handlePost (req, res) {
-    // send response immediately
-    res.send()
-
+  async _handlePost (req, res) {
     let parts = req.path.substring(1).split('/')
 
     // remove hooks
@@ -37,16 +35,28 @@ class WebhookHandler {
     }
 
     // get channel for webhook from DB
-    this.models.Webhook.filter({id: id}).run().then(result => {
+    const result = await this.models.Webhook.filter({id: id}).run()
+    try {
       if (result.length === 1) {
         // TODO: add encryption to incoming messages and verification with signature
+        const authToken = {user: result[0].actorId}
+        await acl.check(authToken, result[0].channel, acl.action.PUBLISH, 'member')
         logger.debug('channel: %s, message: %o', result[0].channel, req.body)
         let message = req.body
-        channelHandler.publish({user: result[0].actorId}, result[0].channel, message)
+        const isPublished = await channelHandler.publish(authToken, result[0].channel, message)
+        if (isPublished === false) {
+          res.sendStatus(400)
+        } else {
+          res.sendStatus(200)
+        }
       } else {
         logger.debug('no webhook with id %s found', id)
+        res.sendStatus(400)
       }
-    })
+    } catch (e) {
+      logger.error(e)
+      res.sendStatus(400)
+    }
   }
 }
 

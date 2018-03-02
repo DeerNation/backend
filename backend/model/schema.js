@@ -504,6 +504,13 @@ class Schema {
           target: 'user'
         },
         {
+          id: '755d7d16-fa30-424a-ac3f-4d7ac8f62fde',
+          topic: 'hbg\\.channel\\..+',
+          memberActions: 'p',
+          targetType: 'role',
+          target: 'bot'
+        },
+        {
           id: '3fa41d14-e3bf-4bb9-b221-f69e16e2f153',
           topic: 'hbg\\.rpc\\.(login|getAllowedActions|check|getChannels|getActors|getChannelActivities)',
           actions: 'x',
