@@ -46,10 +46,10 @@
       "properties": {
         "message": {
           "type": "string"
-        },
-        "required": ["message"],
-        "additionalProperties": false
-      }
+        }
+      },
+      "required": ["message"],
+      "additionalProperties": false
     },
     "Event": {
       "properties": {
@@ -75,7 +75,9 @@
         "description": {
           "type": "string"
         }
-      }
+      },
+      "required": ["start"],
+      "additionalProperties": false
     }
   }
 }
