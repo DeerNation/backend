@@ -17,19 +17,9 @@ qx.Class.define('app.mobile.ui.Menu', {
     this.base(arguments)
 
     this._createChildControl('menu-button')
-    this._createChildControl('list')
+    this.getChildControl('list')
     this._createChildControl('searchbox')
     this._createChildControl('addchannel-button')
     this._createChildControl('logo')
-
-  },
-
-  /*
-  ******************************************************
-    MEMBERS
-  ******************************************************
-  */
-  members: {
-
   }
 })

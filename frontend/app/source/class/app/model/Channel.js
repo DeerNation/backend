@@ -106,6 +106,11 @@ qx.Class.define('app.model.Channel', {
     favorite: {
       check: 'Boolean',
       init: false
+    },
+
+    view: {
+      check: ['channel', 'calendar'],
+      init: 'channel'
     }
   },
 

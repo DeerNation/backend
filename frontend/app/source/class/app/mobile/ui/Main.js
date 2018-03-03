@@ -50,14 +50,21 @@ qx.Class.define('app.mobile.ui.Main', {
      * @protected
      */
     _onSelectedSubscription: function (ev) {
-      if (ev.getData()) {
-        this.setSelection([this.getChildControl('channel')])
+      let newView = ev.getData() ? ev.getData().getChannel().getView() : null
+      let oldView = ev.getOldData() ? ev.getOldData().getChannel().getView() : null
+      if (oldView && oldView !== newView) {
+        this.getChildControl(oldView).resetSubscription()
+      }
+      if (newView) {
+        const control = this.getChildControl(newView)
+        control.setSubscription(ev.getData())
+        this.setSelection([control])
       } else {
         this.setSelection([this.getChildControl('menu')])
       }
     },
 
-     // overridden
+    // overridden
     _createChildControlImpl: function (id, hash) {
       let control
       switch (id) {
@@ -66,11 +73,15 @@ qx.Class.define('app.mobile.ui.Main', {
           this.add(control)
           break
 
-        case 'channel': {
-          control = new app.ui.Channel()
+        case 'channel':
+          control = new app.ui.channel.Messages()
           this.add(control)
           break
-        }
+
+        case 'calendar':
+          control = new app.ui.channel.Events()
+          this.add(control)
+          break
       }
       return control || this.base(arguments, id, hash)
     }

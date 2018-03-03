@@ -156,7 +156,8 @@ class Schema {
             created: type.date().default(new Date()),
             ownerId: type.string(),
             color: type.string(),
-            typeIcon: type.string()
+            typeIcon: type.string(),
+            view: type.string().enum('calendar', 'channel').default('channel')
           },
           views: {
             publicChannels: {
@@ -391,11 +392,12 @@ class Schema {
         {
           id: 'hbg.channel.events.public',
           type: 'PUBLIC',
-          title: 'Veranstaltungen',
-          description: 'Veranstaltungen in Hirschberg',
+          title: 'Termine',
+          description: 'Termine & Veranstaltungen in Hirschberg',
           ownerId: '0e4a6f6f-cc0c-4aa5-951a-fcfc480dd05a',
           color: '#CC5525',
-          typeIcon: 'event'
+          typeIcon: 'event',
+          view: 'calendar'
         }
       ],
       Subscription: [

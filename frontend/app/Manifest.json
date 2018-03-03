@@ -68,10 +68,15 @@
       "js/socketcluster.js",
       "js/sc-codec-min-bin.js",
       "js/WAMPClient.bundle.min.js",
-      "js/showdown.min.js"
+      "js/showdown.min.js",
+      "js/jquery-3.3.1.min.js",
+      "js/moment.min.js",
+      "js/fullcalendar/fullcalendar.min.js",
+      "js/fullcalendar/locale/de.js"
     ],
     "css": [
-      "css/style.css"
+      "css/style.css",
+      "js/fullcalendar/fullcalendar.min.css"
     ]
   }
 }

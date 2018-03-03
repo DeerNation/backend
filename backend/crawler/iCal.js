@@ -4,7 +4,7 @@
  * @author tobiasb
  * @since 2018
  */
-const iCal = require('ical')
+const iCal = require('node-ical')
 const logger = require('../logger')(__filename)
 
 class ICal {
@@ -31,7 +31,7 @@ class ICal {
       if (this.__parsedData.hasOwnProperty(k)) {
         let ev = this.__parsedData[k]
         if (ev.type === 'VEVENT' && ev.start >= now) {
-          // console.log(ev)
+          console.log(ev)
           let event = {
             id: ev.uid,
             type: 'Event',

@@ -13809,7 +13809,7 @@
       "implement": []
     },
     "app.ui.Main": {
-      "mtime": "2018-02-11T09:56:29.849Z",
+      "mtime": "2018-03-03T14:49:35.552Z",
       "libraryName": "app",
       "dependsOn": {
         "app.ui.Menu": {
@@ -13826,7 +13826,14 @@
           "load": true,
           "construct": true
         },
-        "app.ui.Channel": {},
+        "app.Model": {
+          "construct": true
+        },
+        "app.model.Subscription": {},
+        "app.model.Channel": {},
+        "qx.ui.container.Stack": {},
+        "app.ui.channel.Messages": {},
+        "app.ui.channel.Events": {},
         "qx.ui.core.Widget": {
           "load": true
         },
@@ -13956,7 +13963,7 @@
       "implement": []
     },
     "app.ui.Channel": {
-      "mtime": "2018-02-28T19:11:48.153Z",
+      "mtime": "2018-03-03T12:13:06.882Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13979,9 +13986,6 @@
         "qx.locale.Date": {
           "construct": true
         },
-        "app.Model": {
-          "construct": true
-        },
         "qx.event.message.Bus": {
           "construct": true
         },
@@ -13995,6 +13999,7 @@
         "app.io.Rpc": {},
         "app.model.Factory": {},
         "app.model.Activity": {},
+        "app.Model": {},
         "qx.event.Timer": {},
         "app.ui.ChannelHeader": {},
         "qx.ui.list.List": {},
@@ -14014,12 +14019,6 @@
         },
         "qx.theme.manager.Meta": {
           "load": true
-        },
-        "qx.core.ObjectRegistry": {
-          "load": true
-        },
-        "qx.core.IDisposable": {
-          "load": true
         }
       },
       "extends": "qx.ui.core.Widget",
@@ -14029,11 +14028,11 @@
         {
           "msgid": "%1 is writing...",
           "msgid_plural": "%1 and %2 are writing...",
-          "lineNo": 284
+          "lineNo": 281
         },
         {
           "msgid": "To enter this channel you need a user account. Please login or register yourself.",
-          "lineNo": 371
+          "lineNo": 368
         }
       ]
     },
@@ -14250,7 +14249,7 @@
       "implement": []
     },
     "app.model.Channel": {
-      "mtime": "2018-02-26T19:30:11.598Z",
+      "mtime": "2018-03-03T14:49:35.560Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -15316,7 +15315,7 @@
       "implement": []
     },
     "app.mobile.ui.Menu": {
-      "mtime": "2018-02-11T09:55:41.264Z",
+      "mtime": "2018-03-02T20:02:52.536Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -15611,7 +15610,7 @@
       ]
     },
     "app.mobile.ui.Main": {
-      "mtime": "2018-02-11T14:06:19.338Z",
+      "mtime": "2018-03-03T14:55:01.346Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -15632,7 +15631,8 @@
           "construct": true
         },
         "app.mobile.ui.Menu": {},
-        "app.ui.Channel": {},
+        "app.ui.channel.Messages": {},
+        "app.ui.channel.Events": {},
         "qx.ui.core.Widget": {
           "load": true
         },
@@ -16288,6 +16288,204 @@
         }
       },
       "extends": "qx.core.Object",
+      "include": [],
+      "implement": []
+    },
+    "app.ui.Calendar": {
+      "mtime": "2018-03-03T11:45:15.073Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.ui.core.Widget": {
+          "load": true,
+          "construct": true
+        },
+        "qx.ui.core.LayoutItem": {
+          "load": true
+        },
+        "qx.core.Object": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.theme.manager.Meta": {
+          "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
+        }
+      },
+      "extends": "qx.ui.core.Widget",
+      "include": [],
+      "implement": []
+    },
+    "app.ui.channel.Messages": {
+      "mtime": "2018-03-03T13:52:26.022Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "app.ui.channel.AbstractChannel": {
+          "load": true,
+          "construct": true
+        },
+        "qx.ui.layout.VBox": {
+          "construct": true
+        },
+        "qx.util.format.DateFormat": {
+          "construct": true
+        },
+        "qx.locale.Date": {
+          "construct": true
+        },
+        "qx.ui.command.Command": {
+          "construct": true
+        },
+        "qx.data.Array": {
+          "construct": true,
+          "load": true
+        },
+        "app.io.Rpc": {},
+        "app.model.Factory": {},
+        "app.model.Activity": {},
+        "app.Model": {},
+        "qx.event.Timer": {},
+        "app.ui.ChannelHeader": {},
+        "qx.ui.list.List": {},
+        "qx.util.Function": {},
+        "qx.ui.basic.Label": {},
+        "qx.ui.container.Stack": {},
+        "app.model.activity.Registry": {},
+        "app.io.Socket": {},
+        "app.ui.form.ActivityItem": {},
+        "qx.ui.core.Widget": {
+          "load": true
+        },
+        "qx.event.message.Bus": {
+          "load": true
+        },
+        "qx.core.Object": {
+          "load": true
+        },
+        "qx.lang.Array": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.ui.core.LayoutItem": {
+          "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
+        },
+        "qx.theme.manager.Meta": {
+          "load": true
+        }
+      },
+      "extends": "app.ui.channel.AbstractChannel",
+      "include": [],
+      "implement": [],
+      "translations": [
+        {
+          "msgid": "%1 is writing...",
+          "msgid_plural": "%1 and %2 are writing...",
+          "lineNo": 208
+        },
+        {
+          "msgid": "To enter this channel you need a user account. Please login or register yourself.",
+          "lineNo": 295
+        }
+      ]
+    },
+    "app.ui.channel.Events": {
+      "mtime": "2018-03-03T15:56:58.486Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "app.ui.channel.AbstractChannel": {
+          "load": true,
+          "construct": true
+        },
+        "qx.ui.layout.Canvas": {
+          "construct": true
+        },
+        "qx.ui.core.Widget": {
+          "construct": true,
+          "load": true
+        },
+        "qx.locale.Manager": {},
+        "qx.data.Array": {
+          "load": true
+        },
+        "qx.event.message.Bus": {
+          "load": true
+        }
+      },
+      "extends": "app.ui.channel.AbstractChannel",
+      "include": [],
+      "implement": []
+    },
+    "app.ui.channel.AbstractChannel": {
+      "mtime": "2018-03-03T13:58:53.011Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.ui.core.Widget": {
+          "load": true,
+          "construct": true
+        },
+        "qx.data.Array": {
+          "construct": true
+        },
+        "qx.event.message.Bus": {
+          "construct": true
+        },
+        "app.model.Subscription": {},
+        "app.model.Channel": {},
+        "qx.core.Init": {},
+        "app.io.Socket": {},
+        "app.io.Rpc": {},
+        "app.model.Factory": {},
+        "app.model.Activity": {},
+        "qx.ui.core.LayoutItem": {
+          "load": true
+        },
+        "qx.core.Object": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.theme.manager.Meta": {
+          "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
+        }
+      },
+      "extends": "qx.ui.core.Widget",
       "include": [],
       "implement": []
     }

@@ -5,8 +5,8 @@
  * @since 2018
  */
 
-qx.Class.define('app.ui.Channel', {
-  extend: qx.ui.core.Widget,
+qx.Class.define('app.ui.channel.Messages', {
+  extend: app.ui.channel.AbstractChannel,
 
   /*
   ******************************************************
@@ -16,57 +16,21 @@ qx.Class.define('app.ui.Channel', {
   construct: function () {
     this.base(arguments)
     this._setLayout(new qx.ui.layout.VBox())
-    this.setActivities(new qx.data.Array())
-    this.__dateFormat = new qx.util.format.DateFormat(qx.locale.Date.getDateFormat('long'))
 
-    // bind to global selected subscription
-    app.Model.getInstance().bind('selectedSubscription', this, 'subscription')
+    this.__dateFormat = new qx.util.format.DateFormat(qx.locale.Date.getDateFormat('long'))
 
     this._createChildControl('list')
     this._createChildControl('status-bar')
-
-    this.addListener('swipe', this._onSwipe, this)
-
-    qx.event.message.Bus.subscribe('channel.activities.delete', this._onActivityDelete, this)
 
     const selectUp = new qx.ui.command.Command('Up')
     const selectDown = new qx.ui.command.Command('Down')
     const deselect = new qx.ui.command.Command('Esc')
     selectUp.addListener('execute', this._onSelectUp, this)
     selectDown.addListener('execute', this._onSelectDown, this)
-    deselect.addListener('exceute', this._onDeselection, this)
+    deselect.addListener('execute', this._onDeselection, this)
 
     this.__writingUsers = new qx.data.Array()
     this.__writingUserTimers = {}
-  },
-
-  /*
-  ******************************************************
-    PROPERTIES
-  ******************************************************
-  */
-  properties: {
-    /**
-     * The channel subscription currently shown
-     */
-    subscription: {
-      check: function (value) {
-        return (value instanceof app.model.Subscription) || (value instanceof app.model.Channel)
-      },
-      nullable: true,
-      event: 'changedSubscription',
-      apply: '_applySubscription'
-    },
-
-    /**
-     * All Activities in this channel
-     */
-    activities: {
-      check: 'qx.data.Array',
-      init: null,
-      event: 'changeActivities',
-      apply: '_applyActivities'
-    }
   },
 
   /*
@@ -75,42 +39,14 @@ qx.Class.define('app.ui.Channel', {
   ******************************************************
   */
   members: {
-    __currentSCChannel: null,
     __dateFormat: null,
     __writingUsers: null,
     __writingUserTimers: null,
 
-    _onSwipe: function (ev) {
-      if (ev.getDirection() === 'right') {
-        const main = qx.core.Init.getApplication().getMain()
-        main.getChildControl('menu').getChildControl('list').getSelection().removeAll()
-      }
-    },
-
     // property apply
     _applySubscription: function (subscription, oldSubscription) {
-      const socket = app.io.Socket.getInstance()
-      if (oldSubscription) {
-        const chan = this.__currentSCChannel ? this.__currentSCChannel : socket.getScChannel(oldSubscription.getChannelId())
-        if (chan) {
-          chan.unwatch()
-          chan.unsubscribe()
-        }
-      }
+      this.base(arguments, subscription, oldSubscription)
       if (subscription) {
-        this.__currentSCChannel = socket.getScChannel(subscription.getChannelId())
-        // get all messages published on this channel (aka the history)
-        let activities = this.getActivities()
-        activities.removeAll()
-        app.io.Rpc.getProxy().getChannelActivities(subscription.getChannelId(), subscription.getViewedUntil()).then(messages => {
-          activities.append(app.model.Factory.createAll(messages, app.model.Activity, {
-            converter: function (model) {
-              if (!model.published) {
-                model.published = model.created
-              }
-            }
-          }))
-        })
         app.io.Rpc.getProxy().getAllowedActions('channel|' + subscription.getChannelId()).then(acl => {
           if (acl.actions.includes('e')) {
             this.__currentSCChannel.subscribe()
@@ -201,18 +137,6 @@ qx.Class.define('app.ui.Channel', {
         : null
       if (selection === activity) {
         this._onDeselection()
-      }
-    },
-
-    /**
-     * Handle bus messages of deleted activities
-     * @param ev {Event}
-     * @private
-     */
-    _onActivityDelete: function (ev) {
-      const activity = ev.getData()
-      if (activity.getChannelId() === this.getSubscription().getChannelId()) {
-        this.getActivities().remove(activity)
       }
     },
 

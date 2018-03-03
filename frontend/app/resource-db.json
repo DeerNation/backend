@@ -28460,6 +28460,430 @@
       "font/roboto/Roboto-ThinItalic.ttf": {
         "doNotCopy": false,
         "resource": "resourcePath"
+      },
+      "js/fullcalendar/CHANGELOG.txt": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/CONTRIBUTING.txt": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/LICENSE.txt": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/fullcalendar.css": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/fullcalendar.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/fullcalendar.min.css": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/fullcalendar.min.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/fullcalendar.print.css": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/fullcalendar.print.min.css": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/gcal.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/gcal.min.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale-all.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/demos/agenda-views.html": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/demos/background-events.html": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/demos/basic-views.html": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/demos/default.html": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/demos/external-dragging.html": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/demos/gcal.html": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/demos/json.html": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/demos/list-views.html": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/demos/locales.html": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/demos/selectable.html": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/demos/themes.html": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/demos/timezones.html": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/demos/week-numbers.html": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/lib/jquery-ui.min.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/lib/jquery.min.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/lib/moment.min.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/af.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/ar-dz.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/ar-kw.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/ar-ly.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/ar-ma.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/ar-sa.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/ar-tn.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/ar.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/bg.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/bs.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/ca.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/cs.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/da.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/de-at.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/de-ch.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/de.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/el.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/en-au.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/en-ca.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/en-gb.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/en-ie.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/en-nz.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/es-do.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/es-us.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/es.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/et.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/eu.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/fa.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/fi.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/fr-ca.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/fr-ch.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/fr.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/gl.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/he.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/hi.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/hr.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/hu.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/id.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/is.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/it.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/ja.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/ka.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/kk.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/ko.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/lb.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/lt.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/lv.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/mk.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/ms-my.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/ms.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/nb.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/nl-be.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/nl.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/nn.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/pl.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/pt-br.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/pt.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/ro.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/ru.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/sk.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/sl.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/sq.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/sr-cyrl.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/sr.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/sv.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/th.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/tr.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/uk.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/vi.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/zh-cn.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/locale/zh-tw.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/demos/js/theme-chooser.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/demos/json/events.json": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/demos/php/get-events.php": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/demos/php/get-timezones.php": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/demos/php/utils.php": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/jquery-3.3.1.min.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/moment.min.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
       }
     },
     "dialog": {
