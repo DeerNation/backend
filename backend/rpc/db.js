@@ -99,7 +99,8 @@ async function updateObjectProperty (authToken, type, id, prop, value) {
     throw new Error(i18n.__('Object not found'))
   }
   let actionType = 'actions'
-  if (currentObject.hasOwnProperty('ownerId') && currentObject.ownerId === authToken.user) {
+  if ((currentObject.hasOwnProperty('ownerId') && currentObject.ownerId === authToken.user) ||
+    (currentObject.hasOwnProperty('actorId') && currentObject.actorId === authToken.user)) {
     actionType = 'owner'
   }
   await acl.check(authToken, config.domain + '.object.' + type, acl.action.UPDATE, actionType, i18n.__('You are not allowed to update property %s of this item.', prop))
