@@ -378,6 +378,13 @@ class Schema {
           secret: 'e802f7b0-224e-4437-a2dd-ac27933bc9a7',
           name: 'News',
           actorId: '135dd849-9cb6-466a-9a2b-688ae21b6cdf'
+        },
+        {
+          id: 'f1104eed-782c-4b0a-89d8-910cfa1de1c5',
+          channel: 'hbg.channel.events.public',
+          secret: 'e802f7b0-224e-4437-a2dd-ac27933bc9a7',
+          name: 'Termine',
+          actorId: '135dd849-9cb6-466a-9a2b-688ae21b6cdf'
         }
       ],
       Channel: [

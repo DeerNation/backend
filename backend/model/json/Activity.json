@@ -28,11 +28,11 @@
     },
     "created": {
       "type": "string",
-      "format": "date"
+      "format": "date-time"
     },
     "published": {
       "type": "string",
-      "format": "date"
+      "format": "date-time"
     },
     "actorId": {
       "type": "string"
@@ -58,11 +58,11 @@
         },
         "start": {
           "type": "string",
-          "format": "date"
+          "format": "date-time"
         },
         "end": {
           "type": "string",
-          "format": "date"
+          "format": "date-time"
         },
         "categories": {
           "type": "array",

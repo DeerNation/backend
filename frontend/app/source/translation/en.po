@@ -205,7 +205,9 @@ msgstr[1] ""
 #: app/ui/Channel.js:272 app/ui/Channel.js:273 app/ui/Channel.js:281
 #: app/ui/Channel.js:284 app/ui/channel/Messages.js:281
 #: app/ui/channel/Messages.js:229 app/ui/channel/Messages.js:207
-#: app/ui/channel/Messages.js:208
+#: app/ui/channel/Messages.js:208 app/ui/channel/Messages.js:205
+#: app/ui/channel/Messages.js:190 app/ui/channel/AbstractChannel.js:194
+#: app/ui/channel/AbstractChannel.js:197
 msgid "%1 is writing..."
 msgid_plural "%1 and %2 are writing..."
 msgstr[0] ""
@@ -213,6 +215,7 @@ msgstr[1] ""
 
 #: app/ui/Channel.js:371 app/ui/Channel.js:368 app/ui/channel/Messages.js:368
 #: app/ui/channel/Messages.js:316 app/ui/channel/Messages.js:294
-#: app/ui/channel/Messages.js:295
+#: app/ui/channel/Messages.js:295 app/ui/channel/Messages.js:282
+#: app/ui/channel/Messages.js:267 app/ui/channel/Messages.js:162
 msgid "To enter this channel you need a user account. Please login or register yourself."
 msgstr ""

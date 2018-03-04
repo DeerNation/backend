@@ -164,7 +164,6 @@ qx.Class.define('app.Model', {
         this.__subscribeAndWatchChannel('crud>publicChannels():Channel', this._onUpdate.bind(this, 'channel'))
 
         if (currentUserId) {
-          console.trace()
           return app.io.Rpc.getProxy().getSubscriptions()
         } else {
           return Promise.resolve([])

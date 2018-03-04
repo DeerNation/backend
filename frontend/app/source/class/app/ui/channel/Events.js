@@ -15,12 +15,10 @@ qx.Class.define('app.ui.channel.Events', {
   */
   construct: function () {
     this.base(arguments)
-    this._setLayout(new qx.ui.layout.Canvas())
-    const calendar = this._calendarWidget = new qx.ui.core.Widget()
-    calendar.getContentElement().setAttribute('id', 'calendar')
-    this._add(calendar, {edge: 10})
-
-    calendar.addListenerOnce('appear', this.__init, this)
+    this._setLayout(new qx.ui.layout.VBox())
+    this._createChildControl('header')
+    this._createChildControl('calendar-container')
+    this._createChildControl('status-bar')
 
     this.addListener('refresh', this.__refresh, this)
   },
@@ -59,8 +57,15 @@ qx.Class.define('app.ui.channel.Events', {
               title: act.getTitle(),
               id: act.getId()
             })
-            if (Number.isInteger(durationInDays)) {
+            // use the parsed date objects
+            data.start = event.getStart()
+            data.end = event.getEnd()
+            if (Number.isInteger(durationInDays) &&
+              event.getStart().getHours() === 0 && event.getEnd().getHours() === 0) {
               data.allDay = true
+            }
+            if (data.categories && data.categories.length > 0) {
+              data.title = `${data.categories.join(', ')}: ${data.title}`
             }
             events.push(data)
           }
@@ -76,17 +81,30 @@ qx.Class.define('app.ui.channel.Events', {
         // put your options and callbacks here
         defaultView: 'month',
         header: {
-          left: 'prev,next today',
+          left: app.Config.target === 'mobile' ? 'prev,next' : 'prev,next today',
           center: 'title',
-          right: 'month,agendaWeek,agendaDay,listMonth'
+          right: app.Config.target === 'mobile' ? 'month,agendaWeek,agendaDay' : 'month,agendaWeek,agendaDay,listMonth'
         },
-        weekNumbers: true,
         eventLimit: true, // allow "more" link when too many events
         locale: qx.locale.Manager.getInstance().getLocale(),
         height: 'parent',
-        timezoneParam: 'Europe/Berlin',
+        timezoneParam: 'UTC',
         events: this._getEvents.bind(this)
       })
+    },
+
+    // overridden
+    _createChildControlImpl: function (id, hash) {
+      let control
+      switch (id) {
+        case 'calendar-container':
+          control = new qx.ui.core.Widget()
+          control.getContentElement().setAttribute('id', 'calendar')
+          this._add(control, {flex: 1})
+          control.addListenerOnce('appear', this.__init, this)
+          break
+      }
+      return control || this.base(arguments, id, hash)
     }
   }
 })

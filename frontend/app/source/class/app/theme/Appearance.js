@@ -483,6 +483,16 @@ qx.Theme.define('app.theme.Appearance',
         }
       },
 
+      'main/calendar/header': 'main/channel/header',
+      'main/calendar/status-bar': 'main/channel/status-bar',
+      'main/calendar/calendar-container': {
+        style: function () {
+          return {
+            margin: 10
+          }
+        }
+      },
+
       /*
       ---------------------------------------------------------------------------
        ACTIVITY EDITOR

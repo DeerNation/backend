@@ -390,7 +390,7 @@
       }
     },
     "app.theme.Appearance": {
-      "mtime": "2018-02-22T21:14:54.635Z",
+      "mtime": "2018-03-04T10:21:39.787Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -13781,7 +13781,7 @@
       "implement": []
     },
     "app.model.AbstractModel": {
-      "mtime": "2018-02-07T17:25:00.412Z",
+      "mtime": "2018-03-04T09:52:17.648Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14279,7 +14279,7 @@
       "implement": []
     },
     "app.Model": {
-      "mtime": "2018-02-28T19:44:30.403Z",
+      "mtime": "2018-03-04T09:52:50.376Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14328,11 +14328,11 @@
           "locations": [
             {
               "start": {
-                "line": 170,
+                "line": 169,
                 "column": 17
               },
               "end": {
-                "line": 170,
+                "line": 169,
                 "column": 32
               }
             }
@@ -14342,11 +14342,11 @@
       "translations": [
         {
           "msgid": "Online",
-          "lineNo": 290
+          "lineNo": 289
         },
         {
           "msgid": "Offline",
-          "lineNo": 290
+          "lineNo": 289
         }
       ],
       "markers": [
@@ -14354,7 +14354,7 @@
           "msgId": "qx.tool.compiler.symbol.unresolved",
           "pos": {
             "start": {
-              "line": 170,
+              "line": 169,
               "column": 17
             }
           },
@@ -14999,7 +14999,7 @@
       "hasDefer": true
     },
     "app.model.activity.content.AbstractActivityContent": {
-      "mtime": "2018-02-10T15:45:37.551Z",
+      "mtime": "2018-03-04T09:55:04.183Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -16327,7 +16327,7 @@
       "implement": []
     },
     "app.ui.channel.Messages": {
-      "mtime": "2018-03-03T13:52:26.022Z",
+      "mtime": "2018-03-04T10:21:39.791Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -16354,18 +16354,13 @@
           "construct": true,
           "load": true
         },
-        "app.io.Rpc": {},
-        "app.model.Factory": {},
-        "app.model.Activity": {},
-        "app.Model": {},
-        "qx.event.Timer": {},
-        "app.ui.ChannelHeader": {},
         "qx.ui.list.List": {},
         "qx.util.Function": {},
-        "qx.ui.basic.Label": {},
         "qx.ui.container.Stack": {},
         "app.model.activity.Registry": {},
+        "qx.ui.basic.Label": {},
         "app.io.Socket": {},
+        "app.Model": {},
         "app.ui.form.ActivityItem": {},
         "qx.ui.core.Widget": {
           "load": true
@@ -16400,18 +16395,13 @@
       "implement": [],
       "translations": [
         {
-          "msgid": "%1 is writing...",
-          "msgid_plural": "%1 and %2 are writing...",
-          "lineNo": 208
-        },
-        {
           "msgid": "To enter this channel you need a user account. Please login or register yourself.",
-          "lineNo": 295
+          "lineNo": 162
         }
       ]
     },
     "app.ui.channel.Events": {
-      "mtime": "2018-03-03T15:56:58.486Z",
+      "mtime": "2018-03-04T10:39:25.155Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -16422,14 +16412,14 @@
           "load": true,
           "construct": true
         },
-        "qx.ui.layout.Canvas": {
+        "qx.ui.layout.VBox": {
           "construct": true
         },
+        "app.Config": {},
+        "qx.locale.Manager": {},
         "qx.ui.core.Widget": {
-          "construct": true,
           "load": true
         },
-        "qx.locale.Manager": {},
         "qx.data.Array": {
           "load": true
         },
@@ -16442,7 +16432,7 @@
       "implement": []
     },
     "app.ui.channel.AbstractChannel": {
-      "mtime": "2018-03-03T13:58:53.011Z",
+      "mtime": "2018-03-04T10:38:58.508Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -16466,6 +16456,10 @@
         "app.io.Rpc": {},
         "app.model.Factory": {},
         "app.model.Activity": {},
+        "app.Model": {},
+        "qx.event.Timer": {},
+        "app.ui.ChannelHeader": {},
+        "qx.ui.basic.Label": {},
         "qx.ui.core.LayoutItem": {
           "load": true
         },
@@ -16477,17 +16471,18 @@
         },
         "qx.theme.manager.Meta": {
           "load": true
-        },
-        "qx.core.ObjectRegistry": {
-          "load": true
-        },
-        "qx.core.IDisposable": {
-          "load": true
         }
       },
       "extends": "qx.ui.core.Widget",
       "include": [],
-      "implement": []
+      "implement": [],
+      "translations": [
+        {
+          "msgid": "%1 is writing...",
+          "msgid_plural": "%1 and %2 are writing...",
+          "lineNo": 197
+        }
+      ]
     }
   }
 }
