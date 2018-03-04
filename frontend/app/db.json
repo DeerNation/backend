@@ -14279,7 +14279,7 @@
       "implement": []
     },
     "app.Model": {
-      "mtime": "2018-03-04T09:52:50.376Z",
+      "mtime": "2018-03-04T15:41:28.812Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14342,11 +14342,11 @@
       "translations": [
         {
           "msgid": "Online",
-          "lineNo": 289
+          "lineNo": 311
         },
         {
           "msgid": "Offline",
-          "lineNo": 289
+          "lineNo": 311
         }
       ],
       "markers": [
@@ -16401,7 +16401,7 @@
       ]
     },
     "app.ui.channel.Events": {
-      "mtime": "2018-03-04T10:39:25.155Z",
+      "mtime": "2018-03-04T16:22:53.074Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -16415,6 +16415,8 @@
         "qx.ui.layout.VBox": {
           "construct": true
         },
+        "app.Model": {},
+        "app.io.Rpc": {},
         "app.Config": {},
         "qx.locale.Manager": {},
         "qx.ui.core.Widget": {
@@ -16432,7 +16434,7 @@
       "implement": []
     },
     "app.ui.channel.AbstractChannel": {
-      "mtime": "2018-03-04T10:38:58.508Z",
+      "mtime": "2018-03-04T15:41:28.816Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -16471,16 +16473,53 @@
         },
         "qx.theme.manager.Meta": {
           "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
         }
       },
       "extends": "qx.ui.core.Widget",
       "include": [],
       "implement": [],
+      "unresolved": [
+        {
+          "name": "Promise.all",
+          "locations": [
+            {
+              "start": {
+                "line": 121,
+                "column": 8
+              },
+              "end": {
+                "line": 121,
+                "column": 19
+              }
+            }
+          ]
+        }
+      ],
       "translations": [
         {
           "msgid": "%1 is writing...",
           "msgid_plural": "%1 and %2 are writing...",
-          "lineNo": 197
+          "lineNo": 240
+        }
+      ],
+      "markers": [
+        {
+          "msgId": "qx.tool.compiler.symbol.unresolved",
+          "pos": {
+            "start": {
+              "line": 121,
+              "column": 8
+            }
+          },
+          "args": [
+            "Promise.all"
+          ]
         }
       ]
     }

@@ -49,7 +49,8 @@ let options = {
   killMasterOnSignal: false,
   environment: environment,
   logLevel: logLevel,
-  serverId: serverId
+  serverId: serverId,
+  host: process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
 }
 if (environment === 'production') {
   options.protocol = 'https'

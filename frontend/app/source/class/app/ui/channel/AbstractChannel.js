@@ -57,6 +57,22 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
       init: null,
       event: 'changeActivities',
       apply: '_applyActivities'
+    },
+
+    /**
+     * ACLs for the current channel/user combination
+     */
+    channelAcls: {
+      check: 'Object',
+      nullable: true
+    },
+
+    /**
+     * ACLs for the current channel-activities/user combination
+     */
+    channelActivitiesAcls: {
+      check: 'Object',
+      nullable: true
     }
   },
 
@@ -102,16 +118,26 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
         // get all messages published on this channel (aka the history)
         let activities = this.getActivities()
         activities.removeAll()
-        app.io.Rpc.getProxy().getChannelActivities(subscription.getChannelId(), subscription.getViewedUntil()).then(messages => {
-          activities.append(app.model.Factory.createAll(messages, app.model.Activity, {
-            converter: function (model) {
-              if (!model.published) {
-                model.published = model.created
-              }
-            }
-          }))
-          this.fireEvent('refresh')
-          this._subscribeToChannel(subscription.getChannel())
+        Promise.all([
+          app.io.Rpc.getProxy().getAllowedActions(subscription.getChannelId()),
+          app.io.Rpc.getProxy().getAllowedActions(subscription.getChannelId() + '.activities')
+        ]).then(acls => {
+          this.setChannelAcls(acls[0])
+          this.setChannelActivitiesAcls(acls[1])
+          if (this.getChannelActivitiesAcls().actions.includes('r')) {
+            app.io.Rpc.getProxy().getChannelActivities(subscription.getChannelId(), subscription.getViewedUntil()).then(messages => {
+              activities.append(app.model.Factory.createAll(messages, app.model.Activity, {
+                converter: function (model) {
+                  if (!model.published) {
+                    model.published = model.created
+                  }
+                }
+              }))
+
+              this.fireEvent('refresh')
+              this._subscribeToChannel(subscription.getChannel())
+            })
+          }
         })
         this.getChildControl('header').setSubscription(subscription)
         this.getChildControl('header').show()
@@ -135,6 +161,23 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
         }
       })
       return found
+    },
+
+    /**
+     * Delete activity from channel
+     * @param id {String} activity ID
+     * @protected
+     */
+    _deleteActivity: function (id) {
+      app.io.Rpc.getProxy().deleteActivity(id).then(res => {
+        if (res === true) {
+          this.debug('activity as been deleted')
+        } else {
+          this.error(res)
+        }
+      }).catch(err => {
+        this.error(err)
+      })
     },
 
     /**
@@ -242,28 +285,27 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
      * @protected
      */
     _subscribeToChannel: function (channel) {
-      app.io.Rpc.getProxy().getAllowedActions('channel|' + channel.getId()).then(acl => {
-        if (acl.actions.includes('e')) {
-          this.__currentSCChannel.subscribe()
-          this.__currentSCChannel.on('subscribe', () => {
-            this.__currentSCChannel.watch(this._onActivity.bind(this))
-            this.__currentSCChannel.off('subscribe')
-            this.__currentSCChannel.off('subscribeFail')
-            this._handleSubscribed(true)
-          })
-          this.__currentSCChannel.on('subscribeFail', (err) => {
-            this.error(err)
-            this.__currentSCChannel.off('subscribe')
-            this.__currentSCChannel.off('subscribeFail')
-            this._handleSubscribed(false)
-          })
-        } else {
-          // show subscription hint
-          app.io.Rpc.getProxy().getAllowedActionsForRole('user', 'channel|' + channel.getId()).then(userAcl => {
-            this._handleSubscriptionAcl(userAcl.actions.includes('e'))
-          })
-        }
-      })
+      const acl = this.getChannelAcls()
+      if (acl.actions.includes('e')) {
+        this.__currentSCChannel.subscribe()
+        this.__currentSCChannel.on('subscribe', () => {
+          this.__currentSCChannel.watch(this._onActivity.bind(this))
+          this.__currentSCChannel.off('subscribe')
+          this.__currentSCChannel.off('subscribeFail')
+          this._handleSubscribed(true)
+        })
+        this.__currentSCChannel.on('subscribeFail', (err) => {
+          this.error(err)
+          this.__currentSCChannel.off('subscribe')
+          this.__currentSCChannel.off('subscribeFail')
+          this._handleSubscribed(false)
+        })
+      } else {
+        // show subscription hint
+        app.io.Rpc.getProxy().getAllowedActionsForRole('user', channel.getId()).then(userAcl => {
+          this._handleSubscriptionAcl(userAcl.actions.includes('e'))
+        })
+      }
     },
 
     /**

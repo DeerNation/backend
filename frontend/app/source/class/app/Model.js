@@ -184,6 +184,28 @@ qx.Class.define('app.Model', {
       })
     },
 
+    /**
+     * Returns the relation (owner, member, none) the current user has to this channel.
+     * This is relevant for checking the acls.
+     * @param channel {app.model.Channel}
+     */
+    getChannelRelation: function (channel) {
+      const actor = this.getActor()
+      const actorId = actor ? actor.getId() : null
+      let channelRelation = null
+      if (actorId && channel.getOwnerId() === actorId) {
+        channelRelation = 'owner'
+      } else {
+        this.getSubscriptions().some(sub => {
+          if (sub.getChannelId() === channel.getId()) {
+            channelRelation = 'member'
+            return true
+          }
+        })
+      }
+      return channelRelation
+    },
+
     __subscribeAndWatchChannel: function (name, callback) {
       const socket = app.io.Socket.getInstance()
       socket.subscribe(name).then(channel => {

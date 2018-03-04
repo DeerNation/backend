@@ -474,7 +474,7 @@ class Schema {
       ACLEntry: [
         {
           id: 'f357da38-c0b4-4071-afcf-1b33da16636b',
-          topic: 'hbg\\.channel\\..+\\.public',
+          topic: 'hbg\\.channel\\..+\\.public.*',
           actions: 'r',
           targetType: 'role',
           target: 'guest'

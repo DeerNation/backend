@@ -176,6 +176,7 @@ module.exports = {
 
         case 'owner':
           allowedActions = allowed.ownerActions
+          break
       }
       if (!allowedActions) {
         throw new AclException(exceptionText)

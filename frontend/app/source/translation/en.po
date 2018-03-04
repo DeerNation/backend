@@ -4,14 +4,14 @@ msgid "Please login"
 msgstr ""
 
 #: app/Model.js:259 app/Model.js:272 app/Model.js:274 app/Model.js:287
-#: app/Model.js:289 app/Model.js:290 app/Model.js:288 app/ui/BaseMenu.js:48
-#: app/ui/BaseMenu.js:84 app/ui/BaseMenu.js:85
+#: app/Model.js:289 app/Model.js:290 app/Model.js:288 app/Model.js:311
+#: app/ui/BaseMenu.js:48 app/ui/BaseMenu.js:84 app/ui/BaseMenu.js:85
 msgid "Online"
 msgstr ""
 
 #: app/Model.js:259 app/Model.js:272 app/Model.js:274 app/Model.js:287
-#: app/Model.js:289 app/Model.js:290 app/Model.js:288 app/ui/BaseMenu.js:84
-#: app/ui/BaseMenu.js:85
+#: app/Model.js:289 app/Model.js:290 app/Model.js:288 app/Model.js:311
+#: app/ui/BaseMenu.js:84 app/ui/BaseMenu.js:85
 msgid "Offline"
 msgstr ""
 
@@ -207,7 +207,8 @@ msgstr[1] ""
 #: app/ui/channel/Messages.js:229 app/ui/channel/Messages.js:207
 #: app/ui/channel/Messages.js:208 app/ui/channel/Messages.js:205
 #: app/ui/channel/Messages.js:190 app/ui/channel/AbstractChannel.js:194
-#: app/ui/channel/AbstractChannel.js:197
+#: app/ui/channel/AbstractChannel.js:197 app/ui/channel/AbstractChannel.js:214
+#: app/ui/channel/AbstractChannel.js:237 app/ui/channel/AbstractChannel.js:240
 msgid "%1 is writing..."
 msgid_plural "%1 and %2 are writing..."
 msgstr[0] ""

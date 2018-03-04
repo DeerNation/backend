@@ -87,13 +87,22 @@ async function createChannel (authToken, channelData) {
 }
 
 async function getObject (authToken, type, id) {
-  await acl.check(authToken, config.domain + '.object.' + type.toLowerCase(), acl.action.READ, i18n.__('You are not allowed to read this item.'))
+  await acl.check(authToken, config.domain + '.object.' + type, acl.action.READ, null, i18n.__('You are not allowed to read this item.'))
 
   return schema.getModel(type).get(id).run()
 }
 
 async function updateObjectProperty (authToken, type, id, prop, value) {
-  await acl.check(authToken, config.domain + '.object.' + type.toLowerCase() + '.' + id + '.' + prop, acl.action.write, i18n.__('You are not allowed to update property %s of this item.', prop))
+  const currentObject = await schema.getModel(type).get(id).run()
+  if (!currentObject) {
+    // nothing found that could be updates
+    throw new Error(i18n.__('Object not found'))
+  }
+  let actionType = 'actions'
+  if (currentObject.hasOwnProperty('ownerId') && currentObject.ownerId === authToken.user) {
+    actionType = 'owner'
+  }
+  await acl.check(authToken, config.domain + '.object.' + type, acl.action.UPDATE, actionType, i18n.__('You are not allowed to update property %s of this item.', prop))
 
   const crud = schema.getCrud()
   let update = {
@@ -101,6 +110,12 @@ async function updateObjectProperty (authToken, type, id, prop, value) {
     id: id
   }
   if (!value) {
+    // update all object values with the current values (aka do not overwrite nested objects, only update them)
+    Object.keys(prop).forEach(key => {
+      if (typeof prop[key] === 'object') {
+        prop[key] = Object.assign(currentObject[key], prop[key])
+      }
+    })
     update.value = prop
   } else if (prop.indexOf('.') >= 0) {
     // nested property
@@ -125,8 +140,10 @@ async function updateObjectProperty (authToken, type, id, prop, value) {
   return new Promise((resolve, reject) => {
     crud.update(update, (err, res) => {
       if (err) {
+        console.log(err)
         reject(err)
       } else {
+        console.log(res)
         resolve(res)
       }
     })
@@ -134,7 +151,7 @@ async function updateObjectProperty (authToken, type, id, prop, value) {
 }
 
 async function setFirebaseToken (authToken, firebaseToken, oldToken) {
-  await acl.check(authToken, config.domain + '.object.firebase', acl.action.UPDATE, i18n.__('You are not allowed to save this token.'))
+  await acl.check(authToken, config.domain + '.object.firebase', acl.action.UPDATE, null, i18n.__('You are not allowed to save this token.'))
   const crud = schema.getCrud()
 
   if (oldToken) {
