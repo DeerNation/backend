@@ -72,10 +72,12 @@ qx.Class.define('app.ui.channel.Events', {
               data.title = `${data.categories.join(', ')}: ${data.title}`
             }
             let aclTypeToCheck = 'actions'
-            if (actor.getId() === data.id) {
-              aclTypeToCheck = 'ownerActions'
-            } else if (channelRelation === 'member') {
-              aclTypeToCheck = 'memberActions'
+            if (actor) {
+              if (actor.getId() === data.id) {
+                aclTypeToCheck = 'ownerActions'
+              } else if (channelRelation === 'member') {
+                aclTypeToCheck = 'memberActions'
+              }
             }
             // check event permissions
             data.editable = this.getChannelActivitiesAcls().hasOwnProperty(aclTypeToCheck) &&
