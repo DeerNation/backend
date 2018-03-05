@@ -194,7 +194,7 @@ qx.Class.define('app.io.Socket', {
         channel.unsubscribe()
       })
       this.__channels = []
-      socketCluster.destroy(app.Config.socket)
+      this.__socket.destroy()
     }
   },
 
