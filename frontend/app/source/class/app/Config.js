@@ -74,9 +74,8 @@ qx.Class.define('app.Config', {
       if (storeSocket) {
         this.socket = storeSocket
       } else if (this.isApp) {
-        // this.socket.hostname = 'app.hirschberg-sauerland.de'
-        // this.socket.secure = true
-        this.socket.hostname = 'hannibal'
+        this.socket.hostname = 'app.hirschberg-sauerland.de'
+        this.socket.secure = true
       }
     }
   }
