@@ -52,7 +52,7 @@ let options = {
   serverId: serverId
   // host: process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
 }
-if (environment === 'production') {
+if (environment === 'production' || process.env.USE_SSL) {
   options.protocol = 'https'
   options.protocolOptions = {
     key: fs.readFileSync('/opt/psa/var/modules/letsencrypt/etc/live/app.hirschberg-sauerland.de/privkey.pem'),
