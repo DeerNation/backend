@@ -49,8 +49,8 @@ let options = {
   killMasterOnSignal: false,
   environment: environment,
   logLevel: logLevel,
-  serverId: serverId,
-  host: process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
+  serverId: serverId
+  // host: process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
 }
 if (environment === 'production') {
   options.protocol = 'https'
@@ -93,7 +93,7 @@ let start = function () {
     logger.info(`   !! The sc-hot-reboot plugin is watching for code changes in the ${__dirname} directory`)
     scHotReboot.attach(socketCluster, {
       cwd: __dirname,
-      ignored: ['public', 'node_modules', 'README.md', 'Dockerfile', 'server.js', 'broker.js', /[/\\]\./, '*.log', 'frontend', 'app']
+      ignored: ['public', 'node_modules', 'README.md', 'Dockerfile', 'server.js', 'broker.js', /[/\\]\./, '*.log', 'frontend', 'app', 'nohup.out']
     })
   }
 }
@@ -115,10 +115,10 @@ let filesReadyPromises = [
   startWhenFileIsReady(workerClusterControllerPath)
 ]
 Promise.all(filesReadyPromises)
-.then(() => {
-  start()
-})
-.catch((err) => {
-  logger.error(err.stack)
-  process.exit(1)
-})
+  .then(() => {
+    start()
+  })
+  .catch((err) => {
+    logger.error(err.stack)
+    process.exit(1)
+  })

@@ -14,7 +14,7 @@ const WebhookHandler = require('./backend/webhook/handler')
 const channelHandler = require('./backend/ChannelHandler')
 const rpcServer = require('./backend/rpc')
 const pushNotifications = require('./backend/notification')
-const scCodecMinBin = require('sc-codec-min-bin')
+// const scCodecMinBin = require('sc-codec-min-bin')
 
 class Worker extends SCWorker {
   run () {
