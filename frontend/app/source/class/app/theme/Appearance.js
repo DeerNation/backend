@@ -144,7 +144,16 @@ qx.Theme.define('app.theme.Appearance',
       ---------------------------------------------------------------------------
       */
       'message-activity': {},
-      'message-activity/title': 'label',
+      'message-activity/title': {
+        include: 'label',
+        alias: 'label',
+        style: function (states) {
+          return {
+            textColor: states.link ? 'link-color' : 'inherit',
+            cursor: states.link ? 'pointer' : 'default'
+          }
+        }
+      },
       'message-activity/message': 'message-activity/title',
 
       /*
