@@ -329,7 +329,7 @@
       }
     },
     "app.theme.Color": {
-      "mtime": "2018-02-21T17:41:13.182Z",
+      "mtime": "2018-03-07T19:56:51.699Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -390,7 +390,7 @@
       }
     },
     "app.theme.Appearance": {
-      "mtime": "2018-03-04T10:21:39.787Z",
+      "mtime": "2018-03-07T20:00:37.677Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -9459,7 +9459,7 @@
       "implement": []
     },
     "app.io.Socket": {
-      "mtime": "2018-02-28T19:46:34.790Z",
+      "mtime": "2018-03-05T16:49:04.370Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -9618,7 +9618,7 @@
       ]
     },
     "app.model.Activity": {
-      "mtime": "2018-02-26T19:37:46.235Z",
+      "mtime": "2018-03-07T19:33:06.431Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13720,7 +13720,7 @@
       ]
     },
     "app.Config": {
-      "mtime": "2018-02-20T20:25:05.803Z",
+      "mtime": "2018-03-05T18:02:50.119Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14842,7 +14842,7 @@
       "implement": []
     },
     "app.ui.renderer.Message": {
-      "mtime": "2018-02-21T17:09:15.772Z",
+      "mtime": "2018-03-07T20:03:38.456Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14861,21 +14861,6 @@
         },
         "app.ui.basic.Label": {},
         "qx.ui.core.LayoutItem": {
-          "load": true
-        },
-        "qx.core.Object": {
-          "load": true
-        },
-        "qx.core.Environment": {
-          "load": true
-        },
-        "qx.theme.manager.Meta": {
-          "load": true
-        },
-        "qx.core.ObjectRegistry": {
-          "load": true
-        },
-        "qx.core.IDisposable": {
           "load": true
         }
       },
@@ -16327,7 +16312,7 @@
       "implement": []
     },
     "app.ui.channel.Messages": {
-      "mtime": "2018-03-04T10:21:39.791Z",
+      "mtime": "2018-03-07T19:48:19.047Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -16401,7 +16386,7 @@
       ]
     },
     "app.ui.channel.Events": {
-      "mtime": "2018-03-04T16:22:53.074Z",
+      "mtime": "2018-03-05T17:25:04.863Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -16426,6 +16411,27 @@
           "load": true
         },
         "qx.event.message.Bus": {
+          "load": true
+        },
+        "qx.ui.core.LayoutItem": {
+          "load": true
+        },
+        "qx.core.Object": {
+          "load": true
+        },
+        "qx.lang.Array": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.theme.manager.Meta": {
+          "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
           "load": true
         }
       },

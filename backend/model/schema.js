@@ -118,6 +118,7 @@ class Schema {
             channelId: type.string(),
             content: type.object(),
             title: type.string(),
+            titleUrl: type.string(),
             created: type.date().default(new Date()),
             published: type.date(),
             actorId: type.string(),

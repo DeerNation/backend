@@ -26,6 +26,10 @@
     "title": {
       "type": "string"
     },
+    "titleUrl": {
+      "type": "string",
+      "format": "uri"
+    },
     "created": {
       "type": "string",
       "format": "date-time"

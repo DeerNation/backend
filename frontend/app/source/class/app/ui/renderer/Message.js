@@ -44,10 +44,12 @@ qx.Class.define('app.ui.renderer.Message', {
   ******************************************************
   */
   members: {
+    // property apply
     _applyModel: function (value, old) {
       if (old) {
         old.removeRelatedBindings(this.getChildControl('title'))
         old.getContentObject() && old.getContentObject().removeRelatedBindings(this.getChildControl('message'))
+        old.removeListener('changedTitleUrl', this._onChangedTitleUrl, this)
       }
       if (value) {
         let control = this.getChildControl('title')
@@ -66,6 +68,28 @@ qx.Class.define('app.ui.renderer.Message', {
         if (content) {
           content.bind('displayMessage', this.getChildControl('message'), 'value')
         }
+        value.addListener('changedTitleUrl', this._onChangedTitleUrl, this)
+        this._onChangedTitleUrl()
+      }
+    },
+
+    _onChangedTitleUrl: function () {
+      if (this.getModel().getTitleUrl()) {
+        this.getChildControl('title').addState('link')
+        this.getChildControl('title').setToolTipText(this.getModel().getTitleUrl())
+      } else {
+        this.getChildControl('title').removeState('link')
+        this.getChildControl('title').resetToolTipText()
+      }
+    },
+
+    /**
+     * Open the title url of there is one
+     * @protected
+     */
+    _onTitleTap: function () {
+      if (this.getModel().getTitleUrl()) {
+        window.open(this.getModel().getTitleUrl(), '_blank')
       }
     },
 
@@ -75,6 +99,8 @@ qx.Class.define('app.ui.renderer.Message', {
       switch (id) {
         case 'title':
           control = new app.ui.basic.Label()
+          control.setAnonymous(false)
+          control.addListener('tap', this._onTitleTap, this)
           this._addAt(control, 0)
           break
 

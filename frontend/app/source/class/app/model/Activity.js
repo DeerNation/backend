@@ -32,6 +32,12 @@ qx.Class.define('app.model.Activity', {
       apply: '_applyTitle'
     },
 
+    titleUrl: {
+      check: 'String',
+      nullable: true,
+      event: 'changedTitleUrl'
+    },
+
     /**
      * Transformed title (markdown -> HTML)
      */

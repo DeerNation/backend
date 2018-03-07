@@ -184,10 +184,10 @@ qx.Class.define('app.ui.channel.Messages', {
       if (selection.getLength() === 1) {
         const activity = selection.getItem(0)
         const actor = app.Model.getInstance().getActor()
-        if (actor.isAdmin() ||
+        if (actor && (actor.isAdmin() ||
             activity.getActorId() === actor.getId() ||
             this.getSubscription().getChannel().getOwnerId() === actor.getId()
-        ) {
+        )) {
           switch (activity.getType()) {
             case 'Message':
               this.getChildControl('message-field').setActivity(activity)
