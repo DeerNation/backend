@@ -8,6 +8,7 @@ const logger = require('../logger')(__filename)
 const schema = require('../model/schema')
 const channelHandler = require('../ChannelHandler')
 const acl = require('../acl')
+const fs = require('fs')
 
 class WebhookHandler {
   constructor () {
@@ -102,16 +103,23 @@ class WebhookHandler {
     const result = await this.models.Webhook.filter({id: id}).run()
     try {
       if (result.length === 1) {
+        const webhook = result[0]
         // TODO: add encryption to incoming messages and verification with signature
-        const authToken = {user: result[0].actorId}
-        await acl.check(authToken, result[0].channel, acl.action.PUBLISH, 'member')
+        const authToken = {user: webhook.actorId}
+        await acl.check(authToken, webhook.channel, acl.action.PUBLISH, 'member')
         logger.debug('channel: %s, message: %o', result[0].channel, req.body)
         let message = req.body
-        const isPublished = await channelHandler.publish(authToken, result[0].channel, message)
-        if (isPublished === false) {
-          res.sendStatus(400)
-        } else {
+        if (message.hasOwnProperty('field') && message.hasOwnProperty('value') && webhook.type === 'facebook') {
+          // currently only log facebooks hooks to collect some example data
+          fs.appendFile('facebook-data.txt', JSON.stringify(message) + '\n\n')
           res.sendStatus(200)
+        } else {
+          const isPublished = await channelHandler.publish(authToken, webhook.channel, message)
+          if (isPublished === false) {
+            res.sendStatus(400)
+          } else {
+            res.sendStatus(200)
+          }
         }
       } else {
         logger.debug('no webhook with id %s found', id)
