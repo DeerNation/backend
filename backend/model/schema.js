@@ -104,7 +104,8 @@ class Schema {
             name: type.string(),
             secret: type.string(),
             channel: type.string(),
-            actorId: type.string()
+            actorId: type.string(),
+            type: type.string()
           },
           filters: {
             pre: mustBeOwner

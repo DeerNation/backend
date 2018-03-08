@@ -17,7 +17,71 @@ class WebhookHandler {
 
   init (app, scServer) {
     app.post('/hooks/*', this._handlePost.bind(this))
+    app.get('/hooks/*', this._handleGet.bind(this))
     this.scServer = scServer
+  }
+
+  /**
+   * Handle webhook verification request send by facebooks graph api
+   * {@link https://developers.facebook.com/docs/graph-api/webhooks#verification}
+   *
+   * @param req
+   * @param res
+   * @returns {Promise<void>}
+   * @private
+   */
+  async _handleGet (req, res) {
+    let parts = req.path.substring(1).split('/')
+
+    // remove hooks
+    parts.shift()
+
+    // get webhook ID
+    const id = parts.shift()
+
+    logger.debug("incoming webhook GET request with id: '%s' received: %o", id, parts)
+    if (!this.models) {
+      this.models = schema.getModels()
+    }
+    // get channel for webhook from DB
+    const result = await this.models.Webhook.filter({id: id}).run()
+    try {
+      if (result.length === 1) {
+        const webhook = result[0]
+        const authToken = {user: webhook.actorId}
+        await acl.check(authToken, webhook.channel, acl.action.PUBLISH, 'member')
+
+        if (req.body.token === webhook.secret) {
+          logger.debug('VALID verification request for webhook on channel: %s, message: %o', webhook.channel, req.body)
+          res.status(200).send(res.body.challenge)
+          if (webhook.type !== 'facebook') {
+            const crud = schema.getCrud()
+            let update = {
+              type: 'Webhook',
+              id: webhook.id,
+              field: 'type',
+              value: 'facebook'
+            }
+            crud.update(update, (err, res) => {
+              if (err) {
+                console.error(err)
+              } else {
+                console.log(res)
+              }
+            })
+          }
+        } else {
+          logger.warning('INVALID verification request for webhook on channel: %s, message: %o', webhook.channel, req.body)
+          res.sendStatus(400)
+        }
+      } else {
+        logger.debug('no webhook with id %s found', id)
+        res.sendStatus(400)
+      }
+    } catch (e) {
+      logger.error(e)
+      res.sendStatus(400)
+    }
   }
 
   async _handlePost (req, res) {
