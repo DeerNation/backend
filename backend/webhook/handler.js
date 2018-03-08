@@ -109,7 +109,7 @@ class WebhookHandler {
         await acl.check(authToken, webhook.channel, acl.action.PUBLISH, 'member')
         logger.debug('channel: %s, message: %o', result[0].channel, req.body)
         let message = req.body
-        if (message.hasOwnProperty('field') && message.hasOwnProperty('value') && webhook.type === 'facebook') {
+        if (message.hasOwnProperty('entry') && message.hasOwnProperty('object') && webhook.type === 'facebook') {
           // currently only log facebooks hooks to collect some example data
           fs.appendFile('facebook-data.txt', JSON.stringify(message) + '\n\n')
           res.sendStatus(200)
