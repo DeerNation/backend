@@ -51,9 +51,9 @@ class WebhookHandler {
         const authToken = {user: webhook.actorId}
         await acl.check(authToken, webhook.channel, acl.action.PUBLISH, 'member')
 
-        if (req.query.token === webhook.secret) {
+        if (req.query.hub.verify_token === webhook.secret) {
           logger.debug('VALID verification request for webhook on channel: %s, message: %o', webhook.channel, req.query)
-          res.status(200).send(req.query.challenge)
+          res.status(200).send(req.query.hub.challenge)
           if (webhook.type !== 'facebook') {
             const crud = schema.getCrud()
             let update = {
