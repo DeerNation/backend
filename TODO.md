@@ -17,13 +17,15 @@
  * FormHandler für Event (Anlegen/Editieren)
  * ✔ Nachrichten posten, ändern, löschen
  * Nachricht gelesen erfassen und anzeigen
+ * Ungelesene Nachrichten kennzeichen + tracken
  * In einem Kanal nur bestimmte Activity-Types zulassen (auch Activity-Attachments prüfen)
  * keine Notification für bereits erhalten Content
  * Attachments (Bilder, andere Nachrichten) 
  * Nachrichten teilen (in anderen Kanäle, per Email, Whatsapp, etc.)
- * Ungelesene Nachrichten kennzeichen + tracken
  * ✔ User xy schreibt...
  * Spezielle Nachrichten: Orte (Blitzermeldungen)
+ 
+* ? Rückkanal für geänderte Events (wenn sie von externer Quelle stammen und diese editierbar ist)
  
 # ACL
 

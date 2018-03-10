@@ -15,7 +15,7 @@ qx.Class.define('app.ui.renderer.Event', {
     CONSTRUCTOR
   ******************************************************
   */
-  construct: function () {
+  construct: function (viewMode) {
     this.base(arguments)
     const layout = new qx.ui.layout.Grid()
     layout.setColumnAlign(0, 'center', 'middle')
@@ -26,6 +26,21 @@ qx.Class.define('app.ui.renderer.Event', {
     cc.forEach(this._createChildControl, this)
     this.__monthFormat = new qx.util.format.DateFormat('MMM')
     this.__dayFormat = new qx.util.format.DateFormat('d')
+
+    if (viewMode) {
+      this.setViewMode(viewMode)
+    }
+  },
+
+  /*
+  ******************************************************
+    EVENTS
+  ******************************************************
+  */
+  events: {
+    'delete': 'qx.event.type.Data',
+    'edit': 'qx.event.type.Data',
+    'share': 'qx.event.type.Data'
   },
 
   /*
@@ -44,6 +59,16 @@ qx.Class.define('app.ui.renderer.Event', {
     appearance: {
       refine: true,
       init: 'event-activity'
+    },
+
+    /**
+     * Depending on where this renderr is used the viewMode modifies the layout
+     * in a pre-defined way (e.g. Toolbar visibility, layout and position
+     */
+    viewMode: {
+      check: ['popup', 'channel'],
+      init: 'channel',
+      apply: '_applyViewMode'
     }
   },
 
@@ -108,6 +133,23 @@ qx.Class.define('app.ui.renderer.Event', {
       }
     },
 
+    // property apply
+    _applyViewMode: function (value) {
+      switch (value) {
+        case 'popup':
+          const toolbar = this.getChildControl('toolbar')
+          this._createChildControl('button-share')
+          this._createChildControl('button-edit')
+          this._createChildControl('button-delete')
+          toolbar.show()
+          break
+
+        case 'channel':
+          this.getChildControl('toolbar').exclude()
+          break
+      }
+    },
+
     // overridden
     _createChildControlImpl: function (id, hash) {
       let control
@@ -157,6 +199,38 @@ qx.Class.define('app.ui.renderer.Event', {
         case 'description':
           control = new app.ui.basic.Label()
           this._add(control, {row: 2, column: 1})
+          break
+
+        case 'toolbar':
+          control = new app.ui.toolbar.ToolBar('vertical')
+          control.setShow('icon')
+          control.exclude()
+          this._add(control, {row: 0, column: 2, rowSpan: 4})
+          break
+
+        // toolbar buttons
+        case 'button-share':
+          control = new qx.ui.toolbar.Button(this.tr('Share'), app.Config.icons.share + '/12')
+          control.addListener('execute', () => {
+            this.fireDataEvent('share', this.getModel())
+          })
+          this.getChildControl('toolbar').add(control)
+          break
+
+        case 'button-edit':
+          control = new qx.ui.toolbar.Button(this.tr('Edit'), app.Config.icons.edit + '/12')
+          control.addListener('execute', () => {
+            this.fireDataEvent('edit', this.getModel())
+          })
+          this.getChildControl('toolbar').add(control)
+          break
+
+        case 'button-delete':
+          control = new qx.ui.toolbar.Button(this.tr('Delete'), app.Config.icons.delete + '/12')
+          control.addListener('execute', () => {
+            this.fireDataEvent('delete', this.getModel())
+          })
+          this.getChildControl('toolbar').add(control)
           break
       }
       return control || this.base(arguments, id, hash)

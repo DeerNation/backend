@@ -65,7 +65,9 @@ qx.Class.define('app.Config', {
       smiley: '@FARegular/f118',
       plus: '@FASolid/f067',
       event: '@FARegular/f073',
-      delete: '@FASolid/f2ed'
+      delete: '@FASolid/f2ed',
+      edit: '@FARegular/f044',
+      share: '@FASolid/f1e0'
     },
 
     init: function () {

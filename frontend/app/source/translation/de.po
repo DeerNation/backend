@@ -83,6 +83,7 @@ msgstr "Suchen (^ +K)"
 #: app/ui/BaseMenu.js:236 app/ui/BaseMenu.js:239 app/ui/BaseMenu.js:240
 #: app/ui/BaseMenu.js:242 app/ui/BaseMenu.js:255 app/ui/BaseMenu.js:256
 #: app/ui/BaseMenu.js:257 app/ui/BaseMenu.js:259
+#: app/ui/list/Subscriptions.js:43
 msgid "Favorites"
 msgstr "Favoriten"
 
@@ -93,6 +94,7 @@ msgstr "Favoriten"
 #: app/ui/BaseMenu.js:240 app/ui/BaseMenu.js:243 app/ui/BaseMenu.js:244
 #: app/ui/BaseMenu.js:246 app/ui/BaseMenu.js:259 app/ui/BaseMenu.js:260
 #: app/ui/BaseMenu.js:261 app/ui/BaseMenu.js:263
+#: app/ui/list/Subscriptions.js:47
 msgid "Channels"
 msgstr "Kanäle"
 
@@ -104,6 +106,7 @@ msgstr "Kanäle"
 #: app/ui/BaseMenu.js:243 app/ui/BaseMenu.js:246 app/ui/BaseMenu.js:247
 #: app/ui/BaseMenu.js:249 app/ui/BaseMenu.js:262 app/ui/BaseMenu.js:263
 #: app/ui/BaseMenu.js:264 app/ui/BaseMenu.js:266
+#: app/ui/list/Subscriptions.js:50
 msgid "Private channels"
 msgstr "Private Kanäle"
 
@@ -302,6 +305,19 @@ msgstr ""
 #: app/ui/channel/Messages.js:190 app/ui/channel/AbstractChannel.js:194
 #: app/ui/channel/AbstractChannel.js:197 app/ui/channel/AbstractChannel.js:214
 #: app/ui/channel/AbstractChannel.js:237 app/ui/channel/AbstractChannel.js:240
+#: app/ui/channel/AbstractChannel.js:249 app/ui/channel/AbstractChannel.js:261
+#: app/ui/channel/AbstractChannel.js:262 app/ui/channel/AbstractChannel.js:272
+#: app/ui/channel/AbstractChannel.js:276 app/ui/channel/AbstractChannel.js:275
+#: app/ui/channel/AbstractChannel.js:277 app/ui/channel/AbstractChannel.js:280
+#: app/ui/channel/AbstractChannel.js:279 app/ui/channel/AbstractChannel.js:287
+#: app/ui/channel/AbstractChannel.js:297 app/ui/channel/AbstractChannel.js:295
+#: app/ui/channel/AbstractChannel.js:307 app/ui/channel/AbstractChannel.js:312
+#: app/ui/channel/AbstractChannel.js:313 app/ui/channel/AbstractChannel.js:314
+#: app/ui/channel/AbstractChannel.js:315 app/ui/channel/AbstractChannel.js:316
+#: app/ui/channel/AbstractChannel.js:319 app/ui/channel/AbstractChannel.js:320
+#: app/ui/channel/AbstractChannel.js:321 app/ui/channel/AbstractChannel.js:323
+#: app/ui/channel/AbstractChannel.js:324 app/ui/channel/AbstractChannel.js:325
+#: app/ui/channel/AbstractChannel.js:326 app/ui/channel/AbstractChannel.js:327
 msgid "%1 is writing..."
 msgid_plural "%1 and %2 are writing..."
 msgstr[0] "%1 schreibt..."
@@ -312,4 +328,26 @@ msgstr[1] "%1 und %2 schreiben..."
 #: app/ui/channel/Messages.js:295 app/ui/channel/Messages.js:282
 #: app/ui/channel/Messages.js:267 app/ui/channel/Messages.js:162
 msgid "To enter this channel you need a user account. Please login or register yourself."
+msgstr ""
+
+#: app/ui/renderer/Event.js:180 app/ui/renderer/Event.js:196
+#: app/ui/renderer/Event.js:200 app/ui/renderer/Event.js:201
+#: app/ui/renderer/Event.js:202 app/ui/renderer/Event.js:213
+msgid "Share"
+msgstr ""
+
+#: app/ui/renderer/Event.js:185 app/ui/renderer/Event.js:201
+#: app/ui/renderer/Event.js:205 app/ui/renderer/Event.js:206
+#: app/ui/renderer/Event.js:207 app/ui/renderer/Event.js:221
+msgid "Edit"
+msgstr ""
+
+#: app/ui/renderer/Event.js:190 app/ui/renderer/Event.js:206
+#: app/ui/renderer/Event.js:210 app/ui/renderer/Event.js:211
+#: app/ui/renderer/Event.js:212 app/ui/renderer/Event.js:229
+msgid "Delete"
+msgstr ""
+
+#: app/ui/channel/AbstractChannel.js:229 app/ui/channel/AbstractChannel.js:230
+msgid "Select channel"
 msgstr ""

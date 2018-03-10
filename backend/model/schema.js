@@ -123,7 +123,8 @@ class Schema {
             created: type.date().default(new Date()),
             published: type.date(),
             actorId: type.string(),
-            hash: type.string()
+            hash: type.string(),
+            ref: type.string()
           },
           filters: {
             pre: mustBeLoggedIn

@@ -40,6 +40,10 @@ qx.Theme.define('app.theme.Appearance',
           }
         }
       },
+      'app-toolbar-button': {
+        include: 'toolbar-button',
+        alias: 'toolbar-button'
+      },
       'activity-listitem': {
         include: 'listitem',
         alias: 'listitem',
@@ -158,7 +162,7 @@ qx.Theme.define('app.theme.Appearance',
 
       /*
       ---------------------------------------------------------------------------
-        Acivity type 'event'
+        Activity type 'event'
       ---------------------------------------------------------------------------
       */
       'event-activity': {
@@ -223,6 +227,21 @@ qx.Theme.define('app.theme.Appearance',
           }
         }
       },
+
+      'main/calendar/popup': {
+        include: 'popup',
+        alias: 'popup',
+        style: function () {
+          return {
+            padding: 10
+          }
+        }
+      },
+      'main/calendar/renderer': 'event-activity',
+      'main/calendar/renderer/toolbar': 'toolbar',
+      'main/calendar/renderer/button-share': 'app-toolbar-button',
+      'main/calendar/renderer/button-edit': 'app-toolbar-button',
+      'main/calendar/renderer/button-delete': 'app-toolbar-button',
 
       /*
       ---------------------------------------------------------------------------

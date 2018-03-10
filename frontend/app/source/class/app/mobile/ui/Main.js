@@ -69,7 +69,7 @@ qx.Class.define('app.mobile.ui.Main', {
       let control
       switch (id) {
         case 'menu':
-          control = new app.mobile.ui.Menu()
+          control = app.mobile.ui.Menu.getInstance()
           this.add(control)
           break
 

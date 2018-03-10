@@ -7,6 +7,7 @@
 
 qx.Class.define('app.ui.Menu', {
   extend: app.ui.BaseMenu,
+  type: 'singleton',
 
   /*
   ******************************************************

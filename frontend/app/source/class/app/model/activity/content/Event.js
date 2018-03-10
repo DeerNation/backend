@@ -15,6 +15,11 @@ qx.Class.define('app.model.activity.content.Event', {
   ******************************************************
   */
   properties: {
+    name: {
+      check: 'String',
+      init: null,
+      event: 'changedName'
+    },
     location: {
       check: 'String',
       event: 'changeLocation',

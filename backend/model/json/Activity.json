@@ -43,6 +43,15 @@
     },
     "hash": {
       "type": "string"
+    },
+    "ref": {
+      "type": "string"
+    },
+    "refType": {
+      "enum": [
+        "share",
+        "reply"
+      ]
     }
   },
   "contentTypes": {
@@ -57,6 +66,9 @@
     },
     "Event": {
       "properties": {
+        "name": {
+          "type": "string"
+        },
         "location": {
           "type": "string"
         },
@@ -80,7 +92,7 @@
           "type": "string"
         }
       },
-      "required": ["start"],
+      "required": ["start", "name"],
       "additionalProperties": false
     }
   }

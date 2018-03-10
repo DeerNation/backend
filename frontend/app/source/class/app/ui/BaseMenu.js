@@ -241,65 +241,10 @@ qx.Class.define('app.ui.BaseMenu', {
           break
 
         case 'list':
-          control = new qx.ui.list.List(this.getActor()
+          control = new app.ui.list.Subscriptions(this.getActor()
             ? app.Model.getInstance().getSubscriptions()
             : app.Model.getInstance().getChannels())
-          control.setDelegate({
-
-            createItem: function () {
-              return new app.ui.form.SubscriptionItem()
-            },
-
-            bindItem: function (controller, item, index) {
-              controller.bindProperty('', 'model', null, item, index)
-            },
-
-            group: function (subscription) {
-              if (subscription.isFavorite()) {
-                return qx.locale.Manager.tr('Favorites')
-              }
-              switch (subscription.getChannel().getType()) {
-                case 'PUBLIC':
-                  return qx.locale.Manager.tr('Channels')
-
-                case 'PRIVATE':
-                  return qx.locale.Manager.tr('Private channels')
-              }
-            },
-
-            configureGroupItem: function (item) {
-              item.setAppearance('channel-group-item')
-            },
-
-            filter: function (model) {
-              return !model.isHidden()
-            },
-
-            sorter: function (a, b) {
-              if (a.isFavorite()) {
-                if (b.isFavorite()) {
-                  return a.getChannel().getTitle().localeCompare(b.getChannel().getTitle())
-                } else {
-                  return -1
-                }
-              } else if (b.isFavorite()) {
-                return 1
-              } else if (a.getChannel().getType() === 'PUBLIC') {
-                if (b.getChannel().getType() === 'PUBLIC') {
-                  return a.getChannel().getTitle().localeCompare(b.getChannel().getTitle())
-                } else {
-                  return -1
-                }
-              } else {
-                return 1
-              }
-            }
-          })
-
           control.getSelection().addListener('change', this._onSelection, this)
-
-          qx.event.message.Bus.subscribe('menu.subscription.update', control.refresh, control)
-
           this._addAt(control, 2, {flex: 1})
           break
 

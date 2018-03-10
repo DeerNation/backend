@@ -5,6 +5,8 @@
  * @since 2018
  */
 const iCal = require('node-ical')
+const channelHandler = require('../ChannelHandler')
+const moment = require('moment')
 const logger = require('../logger')(__filename)
 
 class ICal {
@@ -31,20 +33,19 @@ class ICal {
       if (this.__parsedData.hasOwnProperty(k)) {
         let ev = this.__parsedData[k]
         if (ev.type === 'VEVENT' && ev.start >= now) {
-          console.log(ev)
           let event = {
             id: ev.uid,
             type: 'Event',
-            title: ev.summary,
-            actorId: '135dd849-9cb6-466a-9a2b-688ae21b6cdf',
-            channelId: 'hbg.channel.events.public',
             content: {
+              name: ev.summary,
               categories: ev.categories,
               description: ev.description,
-              start: ev.start,
-              end: ev.end,
-              location: ev.location
+              start: moment(ev.start).format(),
+              end: moment(ev.end).format()
             }
+          }
+          if (ev.location) {
+            event.content.location = ev.location
           }
           if (ev.hasOwnProperty('organizer')) {
             let orga = ev.organizer.params.CN.trim()
@@ -57,8 +58,7 @@ class ICal {
             orga = orga.substring(1, orga.length - 1)
             event.content.organizer = orga
           }
-
-          this.__model.Activity.save(event, {conflict: 'update'})
+          channelHandler.publish({user: '135dd849-9cb6-466a-9a2b-688ae21b6cdf'}, 'hbg.channel.events.public', event)
         }
       }
     }

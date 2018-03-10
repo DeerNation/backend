@@ -21,6 +21,8 @@ qx.Class.define('app.ui.channel.Events', {
     this._createChildControl('status-bar')
 
     this.addListener('refresh', this.__refresh, this)
+
+    this.__qxEvent = new qx.event.type.Pointer()
   },
 
   /*
@@ -30,6 +32,23 @@ qx.Class.define('app.ui.channel.Events', {
   */
   members: {
     __calendar: null,
+    __qxEvent: null,
+
+    _applySubscription: function (subscription, oldSubscription) {
+      this.base(arguments, subscription, oldSubscription)
+      this.addListenerOnce('subscriptionApplied', () => {
+        if (this.isAllowed('d')) {
+          this.getChildControl('renderer').getChildControl('button-delete').show()
+        } else {
+          this.getChildControl('renderer').getChildControl('button-delete').exclude()
+        }
+        if (this.isAllowed('u')) {
+          this.getChildControl('renderer').getChildControl('button-edit').show()
+        } else {
+          this.getChildControl('renderer').getChildControl('button-edit').exclude()
+        }
+      })
+    },
 
     /**
      * Refresh calendar events
@@ -42,14 +61,19 @@ qx.Class.define('app.ui.channel.Events', {
     },
 
     _getEvents: function (start, end, timezone, callback) {
+      let events = []
+      if (!this.getSubscription()) {
+        callback(events)
+        return
+      }
       const startDate = start.toDate()
       const endDate = end.toDate()
       this.debug('collect events from', startDate, 'to', endDate)
-      let events = []
       const dayInMs = (24 * 60 * 60 * 1000)
       const actor = app.Model.getInstance().getActor()
       const channelRelation = app.Model.getInstance().getChannelRelation(this.getSubscription().getChannel())
 
+      const acls = this.getChannelActivitiesAcls()
 
       this.getActivities().forEach(act => {
         if (act.getType() === 'Event') {
@@ -57,10 +81,10 @@ qx.Class.define('app.ui.channel.Events', {
           if (event.getEnd() >= startDate && event.getStart() <= endDate) {
             // workaround for wrong allDay events
             const durationInDays = (event.getEnd() - event.getStart()) / dayInMs
-            const data = Object.assign(act.getContent(), {
+            const data = Object.assign({
               title: act.getTitle(),
               id: act.getId()
-            })
+            }, act.getContent())
             // use the parsed date objects
             data.start = event.getStart()
             data.end = event.getEnd()
@@ -80,9 +104,7 @@ qx.Class.define('app.ui.channel.Events', {
               }
             }
             // check event permissions
-            data.editable = this.getChannelActivitiesAcls().hasOwnProperty(aclTypeToCheck) &&
-              this.getChannelActivitiesAcls()[aclTypeToCheck].includes('u')
-
+            data.editable = acls.hasOwnProperty(aclTypeToCheck) && acls[aclTypeToCheck].includes('u')
             events.push(data)
           }
         }
@@ -99,17 +121,23 @@ qx.Class.define('app.ui.channel.Events', {
      * @protected
      */
     _onEventClick: function (calEvent, jsEvent, view) {
-      if (jsEvent.ctrlKey === true) {
-        this._deleteActivity(calEvent.id)
+      const popup = this.getChildControl('popup')
+      if (popup.getVisibility() !== 'visible') {
+        this.getActivities().forEach(act => {
+          if (act.getId() === calEvent.id) {
+            this.getChildControl('renderer').setModel(act)
+            return true
+          }
+        })
+        this.__qxEvent.init(jsEvent)
+        popup.placeToPointer(this.__qxEvent)
+        popup.show()
       }
       return false
     },
 
-    /**
-     * Handle activity selections
-     * @protected
-     */
-    _onSelection: function () {
+    _editActivity: function () {
+      // TODO: open editor for event
     },
 
     /**
@@ -190,6 +218,27 @@ qx.Class.define('app.ui.channel.Events', {
           control.getContentElement().setAttribute('id', 'calendar')
           this._add(control, {flex: 1})
           control.addListenerOnce('appear', this.__init, this)
+          break
+
+        case 'popup':
+          control = new qx.ui.popup.Popup(new qx.ui.layout.Grow())
+          break
+
+        case 'renderer':
+          control = new app.ui.renderer.Event('popup')
+          control.addListener('delete', (ev) => {
+            this._deleteActivity(ev)
+            this.getChildControl('popup').hide()
+          })
+          control.addListener('share', (ev) => {
+            this._shareActivity(ev)
+            this.getChildControl('popup').hide()
+          })
+          control.addListener('edit', (ev) => {
+            this._editActivity(ev)
+            this.getChildControl('popup').hide()
+          })
+          this.getChildControl('popup').add(control)
           break
       }
       return control || this.base(arguments, id, hash)

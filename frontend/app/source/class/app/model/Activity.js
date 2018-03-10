@@ -101,6 +101,23 @@ qx.Class.define('app.model.Activity', {
       check: 'app.model.Actor',
       init: null,
       event: 'changeActor'
+    },
+
+    /**
+     * Reference to another activity (e.g. this activity has been shared in another channel by an actor
+     * the reference points to the original activity)
+     */
+    ref: {
+      check: 'String',
+      nullable: true
+    },
+
+    /**
+     * Type of the reference
+     */
+    refType: {
+      check: ['reply', 'share'],
+      nullable: true
     }
   },
 

@@ -28,7 +28,8 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
   ******************************************************
   */
   events: {
-    'refresh': 'qx.event.type.Event'
+    'refresh': 'qx.event.type.Event',
+    'subscriptionApplied': 'qx.event.type.Event'
   },
 
   /*
@@ -117,7 +118,6 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
         this.__currentSCChannel = socket.getScChannel(subscription.getChannelId())
         // get all messages published on this channel (aka the history)
         let activities = this.getActivities()
-        activities.removeAll()
         Promise.all([
           app.io.Rpc.getProxy().getAllowedActions(subscription.getChannelId()),
           app.io.Rpc.getProxy().getAllowedActions(subscription.getChannelId() + '.activities')
@@ -126,17 +126,21 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
           this.setChannelActivitiesAcls(acls[1])
           if (this.getChannelActivitiesAcls().actions.includes('r')) {
             app.io.Rpc.getProxy().getChannelActivities(subscription.getChannelId(), subscription.getViewedUntil()).then(messages => {
-              activities.append(app.model.Factory.createAll(messages, app.model.Activity, {
+              const newActivities = app.model.Factory.createAll(messages, app.model.Activity, {
                 converter: function (model) {
                   if (!model.published) {
                     model.published = model.created
                   }
                 }
-              }))
-
+              })
+              activities.replace(newActivities)
               this.fireEvent('refresh')
               this._subscribeToChannel(subscription.getChannel())
+              this.fireEvent('subscriptionApplied')
             })
+          } else {
+            activities.removeAll()
+            this.fireEvent('subscriptionApplied')
           }
         })
         this.getChildControl('header').setSubscription(subscription)
@@ -165,19 +169,102 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
 
     /**
      * Delete activity from channel
-     * @param id {String} activity ID
+     * @param ev {Event} event with activity instance as payload
      * @protected
      */
-    _deleteActivity: function (id) {
-      app.io.Rpc.getProxy().deleteActivity(id).then(res => {
-        if (res === true) {
-          this.debug('activity as been deleted')
-        } else {
-          this.error(res)
-        }
-      }).catch(err => {
-        this.error(err)
-      })
+    _deleteActivity: function (ev) {
+      const activity = ev.getData()
+      if (this.isAllowed('d')) {
+        app.io.Rpc.getProxy().deleteActivity(activity.getId()).then(res => {
+          if (res === true) {
+            this.debug('activity as been deleted')
+          } else {
+            this.error(res)
+          }
+        }).catch(err => {
+          this.error(err)
+        })
+      } else {
+        this.error('you are not allowed to delete activity', activity.getId())
+      }
+    },
+
+    /**
+     * Check is action is allowed in target
+     * @param action {String} single action to check
+     */
+    isAllowed: function (action, target) {
+      let acls, targetOwnerId
+      if (!target) {
+        target = this.getSubscription()
+      }
+      if (target instanceof app.model.Activity) {
+        acls = this.getChannelActivitiesAcls()
+        targetOwnerId = target.getActorId()
+      } else if (target instanceof app.model.Subscription || target instanceof app.model.Channel) {
+        targetOwnerId = target.getChannel().getOwnerId()
+        acls = this.getChannelAcls()
+      } else {
+        this.error('unknown target type', target.classname)
+        return false
+      }
+      let actionType = 'actions'
+      if (app.Model.getInstance().getActor() && targetOwnerId === app.Model.getInstance().getActor().getId()) {
+        actionType = 'ownerActions'
+      } else if (this.getSubscription() instanceof app.model.Subscription && this.getSubscription().getChannelId() === target.getChannelId()) {
+        actionType = 'memberActions'
+      }
+      return acls[actionType].includes(action)
+    },
+
+    /**
+     * Share an activity (content) with other apps (only works in app context)
+     * @protected
+     */
+    _shareActivity: function (ev) {
+      const activity = ev.getData()
+      if (app.Config.isApp) {
+        // TODO
+      } else {
+        // share in another channel, show channel selection
+        const dialog = new qx.ui.window.Window(this.tr('Select channel'), app.Config.icons.public + '/20')
+        dialog.setLayout(new qx.ui.layout.Grow())
+        dialog.set({
+          centerOnAppear: true,
+          centerOnContainerResize: true,
+          contentPadding: 10,
+          modal: true,
+          movable: false,
+          resizable: false
+        })
+        const list = new app.ui.list.Subscriptions(app.Model.getInstance().getSubscriptions(), {
+          filter: (model) => {
+            return !model.isHidden() && this.isAllowed('p', model) &&
+              model.getChannel().getChannelId() !== this.getSubscription().getChannelId()
+          }
+        })
+        dialog.add(list)
+        list.getSelection().addListenerOnce('change', () => {
+          const selection = list.getSelection()
+          console.log(selection)
+          if (selection.getLength() === 1) {
+            const channel = selection.getItem(0).getChannel()
+            app.io.Rpc.getProxy().publish(channel.getId(), {
+              type: activity.getType(),
+              title: activity.getTitle(),
+              content: activity.getContent(),
+              ref: activity.getId(),
+              refType: 'share'
+            }).then(() => {
+              // open the channel
+              dialog.close()
+              app.ui.Menu.getInstance().getChildControl('list').getSelection().replace([selection.getItem(0)])
+            }).catch(this.error)
+          }
+        })
+        dialog.open()
+        qx.core.Init.getApplication().getRoot().add(dialog, {left: 20, top: 20})
+      }
     },
 
     /**

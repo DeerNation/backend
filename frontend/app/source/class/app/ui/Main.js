@@ -96,7 +96,7 @@ qx.Class.define('app.ui.Main', {
       let control
       switch (id) {
         case 'menu':
-          control = new app.ui.Menu()
+          control = app.ui.Menu.getInstance()
           this.add(control)
           break
 
