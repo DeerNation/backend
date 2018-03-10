@@ -49,15 +49,15 @@ class ChannelHandler {
 
       if (message.isSaved() === false) {
         // deleted activity
-        logger.silly('deleted activity on channel %s: %o', channel, message)
+        logger.debug('deleted activity on channel %s: %s', channel, message.id)
         this.server.exchange.publish(channel, {a: 'd', c: message.id})
       } else if (message.getOldValue() === null) {
         // new activity
-        logger.silly('new activity on channel %s: %o', channel, message)
+        logger.debug('new activity on channel %s: %s', channel, message.id)
         this.server.exchange.publish(channel, {a: 'a', c: message})
       } else {
         // updated activity
-        logger.silly('updated activity on channel %s: %o', channel, message)
+        logger.debug('updated activity on channel %s: %s', channel, message.id)
         this.server.exchange.publish(channel, {a: 'u', c: message})
       }
     })

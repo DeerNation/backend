@@ -20,6 +20,8 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
     this.addListener('swipe', this._onSwipe, this)
 
     qx.event.message.Bus.subscribe('channel.activities.delete', this._onActivityDelete, this)
+
+    this._debouncedFireEvent = qx.util.Function.debounce(this.fireEvent.bind(this), 100)
   },
 
   /*
@@ -249,13 +251,16 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
           console.log(selection)
           if (selection.getLength() === 1) {
             const channel = selection.getItem(0).getChannel()
-            app.io.Rpc.getProxy().publish(channel.getId(), {
+            const message = {
               type: activity.getType(),
-              title: activity.getTitle(),
               content: activity.getContent(),
               ref: activity.getId(),
               refType: 'share'
-            }).then(() => {
+            }
+            if (activity.getTitle()) {
+              message.title = activity.getTitle()
+            }
+            app.io.Rpc.getProxy().publish(channel.getId(), message).then(() => {
               // open the channel
               dialog.close()
               app.ui.Menu.getInstance().getChildControl('list').getSelection().replace([selection.getItem(0)])
@@ -283,22 +288,24 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
             if (found) {
               this.getActivities().remove(found)
             }
-            this.fireEvent('refresh')
+            this._debouncedFireEvent('refresh')
             break
 
           case 'u':
             // update
             found = this._findActivity(payload.c.id)
             if (found) {
+              this.debug('updating existing activity', payload.c.id)
               found.set(payload.c)
             } else {
               // add new activity
               if (!payload.c.published) {
                 payload.c.published = payload.c.created
               }
+              this.debug('not activity to update found, creating new one')
               this.getActivities().push(app.model.Factory.create(payload.c, app.model.Activity))
             }
-            this.fireEvent('refresh')
+            this._debouncedFireEvent('refresh')
             break
 
           case 'a':
@@ -306,7 +313,7 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
               payload.c.published = payload.c.created
             }
             this.getActivities().push(app.model.Factory.create(payload.c, app.model.Activity))
-            this.fireEvent('refresh')
+            this._debouncedFireEvent('refresh')
             break
 
           case 'i':

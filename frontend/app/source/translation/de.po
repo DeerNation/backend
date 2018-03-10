@@ -318,6 +318,8 @@ msgstr ""
 #: app/ui/channel/AbstractChannel.js:321 app/ui/channel/AbstractChannel.js:323
 #: app/ui/channel/AbstractChannel.js:324 app/ui/channel/AbstractChannel.js:325
 #: app/ui/channel/AbstractChannel.js:326 app/ui/channel/AbstractChannel.js:327
+#: app/ui/channel/AbstractChannel.js:330 app/ui/channel/AbstractChannel.js:332
+#: app/ui/channel/AbstractChannel.js:334
 msgid "%1 is writing..."
 msgid_plural "%1 and %2 are writing..."
 msgstr[0] "%1 schreibt..."
@@ -333,21 +335,25 @@ msgstr ""
 #: app/ui/renderer/Event.js:180 app/ui/renderer/Event.js:196
 #: app/ui/renderer/Event.js:200 app/ui/renderer/Event.js:201
 #: app/ui/renderer/Event.js:202 app/ui/renderer/Event.js:213
+#: app/ui/renderer/Event.js:212
 msgid "Share"
 msgstr ""
 
 #: app/ui/renderer/Event.js:185 app/ui/renderer/Event.js:201
 #: app/ui/renderer/Event.js:205 app/ui/renderer/Event.js:206
 #: app/ui/renderer/Event.js:207 app/ui/renderer/Event.js:221
+#: app/ui/renderer/Event.js:220
 msgid "Edit"
 msgstr ""
 
 #: app/ui/renderer/Event.js:190 app/ui/renderer/Event.js:206
 #: app/ui/renderer/Event.js:210 app/ui/renderer/Event.js:211
 #: app/ui/renderer/Event.js:212 app/ui/renderer/Event.js:229
+#: app/ui/renderer/Event.js:228
 msgid "Delete"
 msgstr ""
 
 #: app/ui/channel/AbstractChannel.js:229 app/ui/channel/AbstractChannel.js:230
+#: app/ui/channel/AbstractChannel.js:232
 msgid "Select channel"
 msgstr ""

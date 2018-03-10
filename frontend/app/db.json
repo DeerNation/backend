@@ -15113,7 +15113,7 @@
       "implement": []
     },
     "app.ui.renderer.Event": {
-      "mtime": "2018-03-10T14:13:15.238Z",
+      "mtime": "2018-03-10T21:56:49.481Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -15174,15 +15174,15 @@
       "translations": [
         {
           "msgid": "Share",
-          "lineNo": 213
+          "lineNo": 212
         },
         {
           "msgid": "Edit",
-          "lineNo": 221
+          "lineNo": 220
         },
         {
           "msgid": "Delete",
-          "lineNo": 229
+          "lineNo": 228
         }
       ]
     },
@@ -16358,7 +16358,9 @@
           "load": true
         },
         "qx.ui.list.List": {},
-        "qx.util.Function": {},
+        "qx.util.Function": {
+          "load": true
+        },
         "qx.ui.container.Stack": {},
         "app.model.activity.Registry": {},
         "qx.ui.basic.Label": {},
@@ -16404,7 +16406,7 @@
       ]
     },
     "app.ui.channel.Events": {
-      "mtime": "2018-03-10T15:14:53.104Z",
+      "mtime": "2018-03-10T21:57:51.948Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -16457,6 +16459,9 @@
         },
         "qx.core.IDisposable": {
           "load": true
+        },
+        "qx.util.Function": {
+          "load": true
         }
       },
       "extends": "app.ui.channel.AbstractChannel",
@@ -16464,7 +16469,7 @@
       "implement": []
     },
     "app.ui.channel.AbstractChannel": {
-      "mtime": "2018-03-10T15:51:37.011Z",
+      "mtime": "2018-03-10T22:12:04.654Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -16479,6 +16484,9 @@
           "construct": true
         },
         "qx.event.message.Bus": {
+          "construct": true
+        },
+        "qx.util.Function": {
           "construct": true
         },
         "app.model.Subscription": {},
@@ -16499,21 +16507,6 @@
         "qx.ui.basic.Label": {},
         "qx.ui.core.LayoutItem": {
           "load": true
-        },
-        "qx.core.Object": {
-          "load": true
-        },
-        "qx.core.Environment": {
-          "load": true
-        },
-        "qx.theme.manager.Meta": {
-          "load": true
-        },
-        "qx.core.ObjectRegistry": {
-          "load": true
-        },
-        "qx.core.IDisposable": {
-          "load": true
         }
       },
       "extends": "qx.ui.core.Widget",
@@ -16525,11 +16518,11 @@
           "locations": [
             {
               "start": {
-                "line": 121,
+                "line": 123,
                 "column": 8
               },
               "end": {
-                "line": 121,
+                "line": 123,
                 "column": 19
               }
             }
@@ -16539,12 +16532,12 @@
       "translations": [
         {
           "msgid": "Select channel",
-          "lineNo": 230
+          "lineNo": 232
         },
         {
           "msgid": "%1 is writing...",
           "msgid_plural": "%1 and %2 are writing...",
-          "lineNo": 327
+          "lineNo": 334
         }
       ],
       "markers": [
@@ -16552,7 +16545,7 @@
           "msgId": "qx.tool.compiler.symbol.unresolved",
           "pos": {
             "start": {
-              "line": 121,
+              "line": 123,
               "column": 8
             }
           },

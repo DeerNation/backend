@@ -84,28 +84,27 @@ qx.Class.define('app.ui.renderer.Event', {
 
     _applyModel: function (value, old) {
       if (old && !value) {
-        old.removeRelatedBindings(this.getChildControl('title'))
         const content = old.getContentObject()
         if (content) {
+          content.removeRelatedBindings(this.getChildControl('title'))
           content.removeRelatedBindings(this.getChildControl('message'))
         }
       }
       if (value) {
-        let control = this.getChildControl('title')
-        this._bindPropertyToChildControl(value, 'title', 'title', 'value', {
-          converter: function (value) {
-            if (value) {
-              control.show()
-              return app.data.converter.Markdown.convert(value)
-            } else {
-              control.exclude()
-              return value
-            }
-          }
-        }, old)
-
         const content = value.getContentObject()
         if (content) {
+          let control = this.getChildControl('title')
+          this._bindPropertyToChildControl(content, 'name', 'title', 'value', {
+            converter: function (value) {
+              if (value) {
+                control.show()
+                return app.data.converter.Markdown.convert(value)
+              } else {
+                control.exclude()
+                return value
+              }
+            }
+          }, old)
           this._bindPropertyToChildControl(content, 'start', 'day', 'value', {
             converter: function (value) {
               return this.__dayFormat.format(value)

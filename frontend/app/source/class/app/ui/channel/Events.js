@@ -82,7 +82,7 @@ qx.Class.define('app.ui.channel.Events', {
             // workaround for wrong allDay events
             const durationInDays = (event.getEnd() - event.getStart()) / dayInMs
             const data = Object.assign({
-              title: act.getTitle(),
+              title: event.getName(),
               id: act.getId()
             }, act.getContent())
             // use the parsed date objects
