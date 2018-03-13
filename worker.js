@@ -14,6 +14,8 @@ const WebhookHandler = require('./backend/webhook/handler')
 const channelHandler = require('./backend/ChannelHandler')
 const rpcServer = require('./backend/rpc')
 const pushNotifications = require('./backend/notification')
+const graphqlThinky = require('./backend/model/graphql-thinky')
+const graphqlHTTP = require('express-graphql')
 // const scCodecMinBin = require('sc-codec-min-bin')
 
 class Worker extends SCWorker {
@@ -39,9 +41,6 @@ class Worker extends SCWorker {
 
     channelHandler.init(this.scServer)
 
-    // Create/Update RethinkDB schema
-    let crud = schema.create(this)
-
     if (environment === 'dev') {
       // Log every HTTP request. See https://github.com/expressjs/morgan for other
       // available formats.
@@ -54,6 +53,33 @@ class Worker extends SCWorker {
     }
 
     app.use(bodyParser.json())
+
+    // Create/Update RethinkDB schema
+    let crud = schema.create(this)
+
+    graphqlThinky.init(crud.thinky)
+    if (environment === 'dev') {
+      app.use('/graphql', graphqlHTTP(async (request, response, graphQLParams) => {
+        const startTime = Date.now()
+        return {
+          schema: graphqlThinky.getSchema(),
+          context: {
+            loaders: graphqlThinky.getModelLoaders()
+          },
+          graphiql: true,
+          pretty: true,
+          formatError: error => ({
+            message: error.message,
+            locations: error.locations,
+            stack: error.stack ? error.stack.split('\n') : [],
+            path: error.path
+          }),
+          extensions ({document, variables, operationName, result}) {
+            return {runTime: Date.now() - startTime}
+          }
+        }
+      }))
+    }
 
     // activate Webhookhandler
     const webhookHandler = new WebhookHandler()
@@ -84,6 +110,8 @@ class Worker extends SCWorker {
       }
 
       rpcServer.upgradeToWAMP(socket)
+
+      graphqlThinky.attach(socket)
 
       // socket.on('disconnect', function () {
       //

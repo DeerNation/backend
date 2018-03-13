@@ -48,6 +48,7 @@ qx.Class.define('app.io.Socket', {
       if (!this.isAuthenticated()) {
         app.Model.getInstance().init()
       }
+      app.io.GraphQL.getInstance().test()
     }.bind(this))
 
     this.__socket.on('rand', function (data) {
@@ -175,8 +176,8 @@ qx.Class.define('app.io.Socket', {
       return this.__socket.authToken
     },
 
-    emit: function (channel, payload) {
-      return this.__socket.emit(channel, payload)
+    emit: function (channel, payload, callback) {
+      return this.__socket.emit(channel, payload, callback)
     },
 
     publish: function (channel, payload) {

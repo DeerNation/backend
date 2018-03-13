@@ -9459,7 +9459,7 @@
       "implement": []
     },
     "app.io.Socket": {
-      "mtime": "2018-03-05T16:49:04.370Z",
+      "mtime": "2018-03-12T21:22:31.255Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -9474,6 +9474,9 @@
           "construct": true
         },
         "app.Model": {
+          "construct": true
+        },
+        "app.io.GraphQL": {
           "construct": true
         },
         "app.Config": {},
@@ -9500,11 +9503,11 @@
           "locations": [
             {
               "start": {
-                "line": 89,
+                "line": 90,
                 "column": 22
               },
               "end": {
-                "line": 89,
+                "line": 90,
                 "column": 42
               }
             }
@@ -9514,7 +9517,7 @@
       "translations": [
         {
           "msgid": "Please login",
-          "lineNo": 116
+          "lineNo": 117
         }
       ],
       "markers": [
@@ -9522,7 +9525,7 @@
           "msgId": "qx.tool.compiler.symbol.unresolved",
           "pos": {
             "start": {
-              "line": 89,
+              "line": 90,
               "column": 22
             }
           },
@@ -16507,6 +16510,21 @@
         "qx.ui.basic.Label": {},
         "qx.ui.core.LayoutItem": {
           "load": true
+        },
+        "qx.core.Object": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.theme.manager.Meta": {
+          "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
         }
       },
       "extends": "qx.ui.core.Widget",
@@ -16883,6 +16901,32 @@
           "lineNo": 50
         }
       ]
+    },
+    "app.io.GraphQL": {
+      "mtime": "2018-03-12T21:22:31.259Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.core.Object": {
+          "load": true
+        },
+        "app.io.Socket": {},
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
+        }
+      },
+      "extends": "qx.core.Object",
+      "include": [],
+      "implement": []
     }
   }
 }

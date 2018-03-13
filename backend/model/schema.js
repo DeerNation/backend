@@ -117,7 +117,7 @@ class Schema {
             id: type.string(),
             type: type.string().enum('Message', 'Event').default('Message'),
             channelId: type.string(),
-            content: type.object(),
+            content: type.object().allowExtra(true),
             title: type.string(),
             titleUrl: type.string(),
             created: type.date().default(new Date()),
