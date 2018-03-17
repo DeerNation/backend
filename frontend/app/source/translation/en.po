@@ -98,6 +98,9 @@ msgstr ""
 #: app/ui/form/ActivityItem.js:151 app/ui/form/ActivityItem.js:164
 #: app/ui/form/ActivityItem.js:161 app/ui/form/ActivityItem.js:162
 #: app/ui/form/ActivityItem.js:166 app/ui/form/ActivityItem.js:170
+#: app/ui/form/ActivityItem.js:171 app/ui/form/ActivityItem.js:181
+#: app/ui/form/ActivityItem.js:190 app/ui/form/ActivityItem.js:182
+#: app/ui/form/ActivityItem.js:183 app/ui/form/ActivityItem.js:185
 msgid "Owner"
 msgstr ""
 
@@ -106,6 +109,9 @@ msgstr ""
 #: app/ui/form/ActivityItem.js:154 app/ui/form/ActivityItem.js:167
 #: app/ui/form/ActivityItem.js:164 app/ui/form/ActivityItem.js:165
 #: app/ui/form/ActivityItem.js:169 app/ui/form/ActivityItem.js:173
+#: app/ui/form/ActivityItem.js:174 app/ui/form/ActivityItem.js:184
+#: app/ui/form/ActivityItem.js:193 app/ui/form/ActivityItem.js:185
+#: app/ui/form/ActivityItem.js:186 app/ui/form/ActivityItem.js:188
 msgid "Bot"
 msgstr ""
 
@@ -114,6 +120,9 @@ msgstr ""
 #: app/ui/form/ActivityItem.js:156 app/ui/form/ActivityItem.js:169
 #: app/ui/form/ActivityItem.js:166 app/ui/form/ActivityItem.js:167
 #: app/ui/form/ActivityItem.js:171 app/ui/form/ActivityItem.js:175
+#: app/ui/form/ActivityItem.js:176 app/ui/form/ActivityItem.js:186
+#: app/ui/form/ActivityItem.js:195 app/ui/form/ActivityItem.js:187
+#: app/ui/form/ActivityItem.js:188 app/ui/form/ActivityItem.js:190
 msgid "Server"
 msgstr ""
 
@@ -237,27 +246,32 @@ msgstr[1] ""
 #: app/ui/channel/Messages.js:316 app/ui/channel/Messages.js:294
 #: app/ui/channel/Messages.js:295 app/ui/channel/Messages.js:282
 #: app/ui/channel/Messages.js:267 app/ui/channel/Messages.js:162
+#: app/ui/channel/Messages.js:163 app/ui/channel/Messages.js:175
+#: app/ui/channel/Messages.js:176
 msgid "To enter this channel you need a user account. Please login or register yourself."
 msgstr ""
 
 #: app/ui/renderer/Event.js:180 app/ui/renderer/Event.js:196
 #: app/ui/renderer/Event.js:200 app/ui/renderer/Event.js:201
 #: app/ui/renderer/Event.js:202 app/ui/renderer/Event.js:213
-#: app/ui/renderer/Event.js:212
+#: app/ui/renderer/Event.js:212 app/ui/renderer/Event.js:217
+#: app/ui/renderer/Event.js:221
 msgid "Share"
 msgstr ""
 
 #: app/ui/renderer/Event.js:185 app/ui/renderer/Event.js:201
 #: app/ui/renderer/Event.js:205 app/ui/renderer/Event.js:206
 #: app/ui/renderer/Event.js:207 app/ui/renderer/Event.js:221
-#: app/ui/renderer/Event.js:220
+#: app/ui/renderer/Event.js:220 app/ui/renderer/Event.js:225
+#: app/ui/renderer/Event.js:229
 msgid "Edit"
 msgstr ""
 
 #: app/ui/renderer/Event.js:190 app/ui/renderer/Event.js:206
 #: app/ui/renderer/Event.js:210 app/ui/renderer/Event.js:211
 #: app/ui/renderer/Event.js:212 app/ui/renderer/Event.js:229
-#: app/ui/renderer/Event.js:228
+#: app/ui/renderer/Event.js:228 app/ui/renderer/Event.js:233
+#: app/ui/renderer/Event.js:237
 msgid "Delete"
 msgstr ""
 

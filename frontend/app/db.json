@@ -13642,7 +13642,7 @@
       "implement": []
     },
     "app.ui.form.ActivityItem": {
-      "mtime": "2018-03-15T16:25:37.310Z",
+      "mtime": "2018-03-17T13:41:55.018Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13680,25 +13680,10 @@
         "qx.ui.basic.Label": {},
         "qx.ui.form.List": {},
         "qx.data.controller.List": {},
-        "qx.ui.layout.Grow": {},
+        "qx.ui.container.Stack": {},
         "qx.ui.form.Button": {},
         "app.io.Rpc": {},
         "qx.ui.core.LayoutItem": {
-          "load": true
-        },
-        "qx.core.Object": {
-          "load": true
-        },
-        "qx.core.Environment": {
-          "load": true
-        },
-        "qx.theme.manager.Meta": {
-          "load": true
-        },
-        "qx.core.ObjectRegistry": {
-          "load": true
-        },
-        "qx.core.IDisposable": {
           "load": true
         }
       },
@@ -14849,7 +14834,7 @@
       "implement": []
     },
     "app.ui.renderer.Message": {
-      "mtime": "2018-03-07T20:03:38.456Z",
+      "mtime": "2018-03-17T12:32:58.296Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14893,7 +14878,7 @@
       ]
     },
     "app.ui.renderer.IRenderer": {
-      "mtime": "2018-02-10T11:04:08.628Z",
+      "mtime": "2018-03-17T12:32:58.308Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Interface": {
@@ -15120,7 +15105,7 @@
       "implement": []
     },
     "app.ui.renderer.Event": {
-      "mtime": "2018-03-10T21:56:49.481Z",
+      "mtime": "2018-03-17T12:53:29.875Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -15181,15 +15166,15 @@
       "translations": [
         {
           "msgid": "Share",
-          "lineNo": 212
+          "lineNo": 221
         },
         {
           "msgid": "Edit",
-          "lineNo": 220
+          "lineNo": 229
         },
         {
           "msgid": "Delete",
-          "lineNo": 228
+          "lineNo": 237
         }
       ]
     },
@@ -16337,7 +16322,7 @@
       "implement": []
     },
     "app.ui.channel.Messages": {
-      "mtime": "2018-03-07T19:48:19.047Z",
+      "mtime": "2018-03-17T13:39:53.895Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -16368,6 +16353,7 @@
         "qx.util.Function": {
           "load": true
         },
+        "qx.ui.virtual.behavior.Prefetch": {},
         "qx.ui.container.Stack": {},
         "app.model.activity.Registry": {},
         "qx.ui.basic.Label": {},
@@ -16391,15 +16377,6 @@
         },
         "qx.ui.core.LayoutItem": {
           "load": true
-        },
-        "qx.core.ObjectRegistry": {
-          "load": true
-        },
-        "qx.core.IDisposable": {
-          "load": true
-        },
-        "qx.theme.manager.Meta": {
-          "load": true
         }
       },
       "extends": "app.ui.channel.AbstractChannel",
@@ -16408,7 +16385,7 @@
       "translations": [
         {
           "msgid": "To enter this channel you need a user account. Please login or register yourself.",
-          "lineNo": 162
+          "lineNo": 176
         }
       ]
     },
@@ -16931,6 +16908,45 @@
       "extends": "qx.core.Object",
       "include": [],
       "implement": []
+    },
+    "qx.ui.virtual.behavior.Prefetch": {
+      "mtime": "2018-01-27T22:11:00.489Z",
+      "libraryName": "qx",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.core.Object": {
+          "load": true,
+          "construct": true
+        },
+        "qx.core.Environment": {
+          "construct": true,
+          "load": true
+        },
+        "qx.event.Timer": {
+          "construct": true
+        },
+        "qx.ui.core.queue.Manager": {},
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
+        }
+      },
+      "extends": "qx.core.Object",
+      "include": [],
+      "implement": [],
+      "environment": {
+        "provided": [],
+        "required": {
+          "qx.debug": {
+            "construct": true
+          }
+        }
+      }
     }
   }
 }

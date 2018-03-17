@@ -69,6 +69,11 @@ qx.Class.define('app.ui.renderer.Event', {
       check: ['popup', 'channel'],
       init: 'channel',
       apply: '_applyViewMode'
+    },
+
+    type: {
+      check: 'String',
+      init: 'event'
     }
   },
 
@@ -87,7 +92,11 @@ qx.Class.define('app.ui.renderer.Event', {
         const content = old.getContentObject()
         if (content) {
           content.removeRelatedBindings(this.getChildControl('title'))
-          content.removeRelatedBindings(this.getChildControl('message'))
+          content.removeRelatedBindings(this.getChildControl('day'))
+          content.removeRelatedBindings(this.getChildControl('month'))
+          content.removeRelatedBindings(this.getChildControl('location'))
+          content.removeRelatedBindings(this.getChildControl('description'))
+          content.removeRelatedBindings(this.getChildControl('title'))
         }
       }
       if (value) {

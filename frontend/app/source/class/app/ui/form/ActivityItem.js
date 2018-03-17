@@ -115,19 +115,19 @@ qx.Class.define('app.ui.form.ActivityItem', {
         old.removeRelatedBindings(this)
       }
       if (value) {
-        value.bind('published', this, 'published')
-        value.bind('actor', this, 'author')
         const container = this.getChildControl('content-container')
         const type = value.getType().toLowerCase()
-        const renderer = this._getRenderer(type)
-        renderer.setModel(value)
-        if (container.hasChildren()) {
-          if (container.getChildren()[0] !== renderer) {
-            container.removeAt(0)
+        const currentRenderer = container.getSelection().length === 1 ? container.getSelection()[0] : null
+        if (currentRenderer && currentRenderer.getType() === type) {
+          // shortcut: the renderer can handle the type, so we just update the model
+          currentRenderer.setModel(value)
+        } else {
+          const renderer = this._getRenderer(type)
+          renderer.setModel(value)
+          if (container.indexOf(renderer) === -1) {
             container.add(renderer)
           }
-        } else {
-          container.add(renderer)
+          container.setSelection([renderer])
         }
       }
       this.getChildControl('overlay').exclude()
@@ -256,7 +256,8 @@ qx.Class.define('app.ui.form.ActivityItem', {
           break
 
         case 'content-container':
-          control = new qx.ui.container.Composite(new qx.ui.layout.Grow())
+          control = new qx.ui.container.Stack()
+          control.setDynamic(true)
           this.getChildControl('container').add(control, {row: 1, column: 1})
           break
 

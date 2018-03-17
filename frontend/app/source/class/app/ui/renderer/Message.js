@@ -35,6 +35,11 @@ qx.Class.define('app.ui.renderer.Message', {
     appearance: {
       refine: true,
       init: 'message-activity'
+    },
+
+    type: {
+      check: 'String',
+      init: 'message'
     }
   },
 

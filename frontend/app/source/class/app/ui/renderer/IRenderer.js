@@ -6,5 +6,15 @@
  */
 
 qx.Interface.define('app.ui.renderer.IRenderer', {
-  extend: qx.ui.form.IModel
+  extend: qx.ui.form.IModel,
+  /*
+  ******************************************************
+    PROPERTIES
+  ******************************************************
+  */
+  properties: {
+    type: {
+      check: 'String'
+    }
+  }
 })

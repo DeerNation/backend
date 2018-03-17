@@ -42,6 +42,7 @@ qx.Class.define('app.ui.channel.Messages', {
     __dateFormat: null,
     __writingUsers: null,
     __writingUserTimers: null,
+    _prefetcher: null,
 
     // property apply
     _applySubscription: function (subscription, oldSubscription) {
@@ -137,12 +138,25 @@ qx.Class.define('app.ui.channel.Messages', {
           control = new qx.ui.list.List(this.getActivities())
           control.setVariableItemHeight(true)
           const deferredScroll = qx.util.Function.debounce(() => {
-            control.scrollToY(1e99)
+            console.log('list length', control.getPane().getScrollMaxY())
+            control.scrollToY(control.getPane().getScrollMaxY())
           }, 100)
           this.getActivities().addListener('changeLength', deferredScroll, this)
           control.getSelection().addListener('change', this._onSelection, this)
           this.__applyListDelegate(control)
           this._addAt(control, 1, {flex: 1})
+
+          // start prefetcher
+          this._prefetcher = new qx.ui.virtual.behavior.Prefetch(control, {
+            minLeft: 0,
+            maxLeft: 0,
+            minRight: 0,
+            maxRight: 0,
+            minAbove: 500,
+            maxAbove: 2000,
+            minBelow: 0,
+            maxBelow: 500
+          })
           break
 
         case 'editor-container':
@@ -205,9 +219,11 @@ qx.Class.define('app.ui.channel.Messages', {
 
     __applyListDelegate: function (list) {
       const dateFormat = this.__dateFormat
+      let counter = 0
 
       list.setDelegate({
         createItem: function () {
+          console.log('created ActivityItem', counter++)
           return new app.ui.form.ActivityItem()
         },
 
@@ -217,6 +233,8 @@ qx.Class.define('app.ui.channel.Messages', {
 
         bindItem: function (controller, item, index) {
           controller.bindProperty('', 'model', null, item, index)
+          controller.bindProperty('published', 'published', null, item, index)
+          controller.bindProperty('actor', 'author', null, item, index)
         },
 
         group: function (model) {
@@ -252,5 +270,7 @@ qx.Class.define('app.ui.channel.Messages', {
   */
   destruct: function () {
     this._disposeMap('__writingUserTimers')
+    this._disposeObjects('_prefetcher')
+    this._prefetcher = null
   }
 })
