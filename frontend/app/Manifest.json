@@ -31,30 +31,12 @@
     "type"        : "application",
     "webfonts": [
       {
-        "name": "FARegular",
+        "name": "Material",
         "defaultSize": 40,
-        "mapping": "fa-regular.map",
+        "mapping": "material.map",
         "testCharacters": "\uf2b9\uf2bb\uf2bb\uf358",
         "resources": [
-          "app/icons/fontawesome/fa-regular-400.ttf"
-        ]
-      },
-      {
-        "name": "FASolid",
-        "defaultSize": 40,
-        "mapping": "fa-solid.map",
-        "testCharacters": "\uf2b9\uf2bb\uf2bb\uf358",
-        "resources": [
-          "app/icons/fontawesome/fa-solid-900.ttf"
-        ]
-      },
-      {
-        "name": "FABrands",
-        "defaultSize": 40,
-        "mapping": "fa-brands.map",
-        "testCharacters": "\uf368\uf369\uf170\uf36d",
-        "resources": [
-          "app/icons/fontawesome/fa-brands-400.ttf"
+          "app/icons/material/MaterialIcons-Regular.ttf"
         ]
       }
     ]

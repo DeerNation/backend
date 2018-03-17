@@ -125,7 +125,7 @@ qx.Class.define('app.ui.form.SubscriptionItem', {
           break
 
         case 'menu-button':
-          control = new qx.ui.form.MenuButton(null, app.Config.icons.menu + '/12', this.__generateMenu())
+          control = new qx.ui.form.MenuButton(null, app.Config.icons.menu + '/16', this.__generateMenu())
           control.hide()
           this._addAt(control, 5)
           break

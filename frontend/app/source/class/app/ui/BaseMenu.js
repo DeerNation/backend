@@ -89,7 +89,9 @@ qx.Class.define('app.ui.BaseMenu', {
           label: this._statesMap[status]
         })
       }
-      this.getChildControl('actor-status').getChildControl('icon').setTextColor('user-' + status)
+      new qx.util.DeferredCall(() => {
+        this.getChildControl('actor-status').getChildControl('icon').setTextColor('user-' + status)
+      }).schedule()
     },
 
     _onSelection: function () {
@@ -217,7 +219,7 @@ qx.Class.define('app.ui.BaseMenu', {
           break
 
         case 'menu-button':
-          control = new qx.ui.form.MenuButton(null, app.Config.icons.menu + '/14', this.__generateMenu())
+          control = new qx.ui.form.MenuButton(null, app.Config.icons.menu + '/20', this.__generateMenu())
           control.setAnonymous(true)
           this.getChildControl('actor-container').add(control, {row: 0, column: 2, rowSpan: 2})
           break

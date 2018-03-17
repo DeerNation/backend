@@ -1,19 +1,33 @@
-#: app/io/Socket.js:95 app/io/Socket.js:102 app/io/Socket.js:104
-#: app/io/Socket.js:111 app/io/Socket.js:114 app/io/Socket.js:116
 #: app/io/Socket.js:117
 msgid "Please login"
 msgstr ""
 
-#: app/Model.js:259 app/Model.js:272 app/Model.js:274 app/Model.js:287
-#: app/Model.js:289 app/Model.js:290 app/Model.js:288 app/Model.js:311
-#: app/ui/BaseMenu.js:48 app/ui/BaseMenu.js:84 app/ui/BaseMenu.js:85
+#: app/ui/renderer/Event.js:131 app/ui/renderer/Event.js:133
+msgid "Uhr"
+msgstr ""
+
+#: app/ui/renderer/Event.js:229 app/ui/renderer/Event.js:231
+msgid "Share"
+msgstr ""
+
+#: app/ui/renderer/Event.js:237 app/ui/renderer/Event.js:239
+msgid "Edit"
+msgstr ""
+
+#: app/ui/renderer/Event.js:245 app/ui/renderer/Event.js:247
+msgid "Delete"
+msgstr ""
+
+#: app/Model.js:311 app/ui/BaseMenu.js:48 app/ui/BaseMenu.js:85
 msgid "Online"
 msgstr ""
 
-#: app/Model.js:259 app/Model.js:272 app/Model.js:274 app/Model.js:287
-#: app/Model.js:289 app/Model.js:290 app/Model.js:288 app/Model.js:311
-#: app/ui/BaseMenu.js:84 app/ui/BaseMenu.js:85
+#: app/Model.js:311 app/ui/BaseMenu.js:85
 msgid "Offline"
+msgstr ""
+
+#: app/ui/channel/Messages.js:175
+msgid "To enter this channel you need a user account. Please login or register yourself."
 msgstr ""
 
 #: dialog/Login.js:225
@@ -44,87 +58,47 @@ msgstr ""
 msgid "Invisible"
 msgstr ""
 
-#: app/ui/BaseMenu.js:112 app/ui/BaseMenu.js:113
+#: app/ui/BaseMenu.js:113 app/ui/BaseMenu.js:114 app/ui/BaseMenu.js:115
 msgid "Add a new channel"
 msgstr ""
 
-#: app/ui/BaseMenu.js:115 app/ui/BaseMenu.js:116
+#: app/ui/BaseMenu.js:116 app/ui/BaseMenu.js:117 app/ui/BaseMenu.js:118
 msgid "Private channel"
 msgstr ""
 
-#: app/ui/BaseMenu.js:120 app/ui/BaseMenu.js:121
+#: app/ui/BaseMenu.js:121 app/ui/BaseMenu.js:122 app/ui/BaseMenu.js:123
 msgid "Write-protected channel"
 msgstr ""
 
-#: app/ui/BaseMenu.js:125 app/ui/BaseMenu.js:126
+#: app/ui/BaseMenu.js:126 app/ui/BaseMenu.js:127 app/ui/BaseMenu.js:128
 msgid "Channel name"
 msgstr ""
 
-#: app/ui/BaseMenu.js:154 app/ui/BaseMenu.js:160 app/ui/BaseMenu.js:163
-#: app/ui/BaseMenu.js:164 app/ui/BaseMenu.js:166 app/ui/BaseMenu.js:179
-#: app/ui/BaseMenu.js:180 app/ui/BaseMenu.js:181
+#: app/ui/BaseMenu.js:155 app/ui/BaseMenu.js:156 app/ui/BaseMenu.js:157
+msgid "Develop"
+msgstr ""
+
+#: app/ui/BaseMenu.js:157 app/ui/BaseMenu.js:158 app/ui/BaseMenu.js:159
+msgid "Productive"
+msgstr ""
+
+#: app/ui/BaseMenu.js:181 app/ui/BaseMenu.js:182 app/ui/BaseMenu.js:183
 msgid "Logout"
 msgstr ""
 
-#: app/ui/BaseMenu.js:205 app/ui/BaseMenu.js:211 app/ui/BaseMenu.js:214
-#: app/ui/BaseMenu.js:215 app/ui/BaseMenu.js:217 app/ui/BaseMenu.js:230
-#: app/ui/BaseMenu.js:231 app/ui/BaseMenu.js:232
+#: app/ui/BaseMenu.js:232 app/ui/BaseMenu.js:233 app/ui/BaseMenu.js:234
 msgid "Search (^ +K)"
 msgstr ""
 
-#: app/ui/BaseMenu.js:230 app/ui/BaseMenu.js:236 app/ui/BaseMenu.js:239
-#: app/ui/BaseMenu.js:240 app/ui/BaseMenu.js:242 app/ui/BaseMenu.js:255
-#: app/ui/BaseMenu.js:256 app/ui/BaseMenu.js:257 app/ui/BaseMenu.js:259
-#: app/ui/list/Subscriptions.js:43
-msgid "Favorites"
+#: app/ui/channel/AbstractChannel.js:232
+msgid "Select channel"
 msgstr ""
 
-#: app/ui/BaseMenu.js:234 app/ui/BaseMenu.js:240 app/ui/BaseMenu.js:243
-#: app/ui/BaseMenu.js:244 app/ui/BaseMenu.js:246 app/ui/BaseMenu.js:259
-#: app/ui/BaseMenu.js:260 app/ui/BaseMenu.js:261 app/ui/BaseMenu.js:263
-#: app/ui/list/Subscriptions.js:47
-msgid "Channels"
-msgstr ""
-
-#: app/ui/BaseMenu.js:237 app/ui/BaseMenu.js:243 app/ui/BaseMenu.js:246
-#: app/ui/BaseMenu.js:247 app/ui/BaseMenu.js:249 app/ui/BaseMenu.js:262
-#: app/ui/BaseMenu.js:263 app/ui/BaseMenu.js:264 app/ui/BaseMenu.js:266
-#: app/ui/list/Subscriptions.js:50
-msgid "Private channels"
-msgstr ""
-
-#: app/ui/form/ActivityItem.js:136 app/ui/form/ActivityItem.js:137
-#: app/ui/form/ActivityItem.js:133 app/ui/form/ActivityItem.js:150
-#: app/ui/form/ActivityItem.js:151 app/ui/form/ActivityItem.js:164
-#: app/ui/form/ActivityItem.js:161 app/ui/form/ActivityItem.js:162
-#: app/ui/form/ActivityItem.js:166 app/ui/form/ActivityItem.js:170
-#: app/ui/form/ActivityItem.js:171 app/ui/form/ActivityItem.js:181
-#: app/ui/form/ActivityItem.js:190 app/ui/form/ActivityItem.js:182
-#: app/ui/form/ActivityItem.js:183 app/ui/form/ActivityItem.js:185
-msgid "Owner"
-msgstr ""
-
-#: app/ui/form/ActivityItem.js:139 app/ui/form/ActivityItem.js:140
-#: app/ui/form/ActivityItem.js:136 app/ui/form/ActivityItem.js:153
-#: app/ui/form/ActivityItem.js:154 app/ui/form/ActivityItem.js:167
-#: app/ui/form/ActivityItem.js:164 app/ui/form/ActivityItem.js:165
-#: app/ui/form/ActivityItem.js:169 app/ui/form/ActivityItem.js:173
-#: app/ui/form/ActivityItem.js:174 app/ui/form/ActivityItem.js:184
-#: app/ui/form/ActivityItem.js:193 app/ui/form/ActivityItem.js:185
-#: app/ui/form/ActivityItem.js:186 app/ui/form/ActivityItem.js:188
-msgid "Bot"
-msgstr ""
-
-#: app/ui/form/ActivityItem.js:141 app/ui/form/ActivityItem.js:142
-#: app/ui/form/ActivityItem.js:138 app/ui/form/ActivityItem.js:155
-#: app/ui/form/ActivityItem.js:156 app/ui/form/ActivityItem.js:169
-#: app/ui/form/ActivityItem.js:166 app/ui/form/ActivityItem.js:167
-#: app/ui/form/ActivityItem.js:171 app/ui/form/ActivityItem.js:175
-#: app/ui/form/ActivityItem.js:176 app/ui/form/ActivityItem.js:186
-#: app/ui/form/ActivityItem.js:195 app/ui/form/ActivityItem.js:187
-#: app/ui/form/ActivityItem.js:188 app/ui/form/ActivityItem.js:190
-msgid "Server"
-msgstr ""
+#: app/ui/channel/AbstractChannel.js:334
+msgid "%1 is writing..."
+msgid_plural "%1 and %2 are writing..."
+msgstr[0] ""
+msgstr[1] ""
 
 #: dialog/Dialog.js:482
 msgid "OK"
@@ -132,6 +106,18 @@ msgstr ""
 
 #: dialog/Dialog.js:499
 msgid "Cancel"
+msgstr ""
+
+#: app/ui/list/Subscriptions.js:43
+msgid "Favorites"
+msgstr ""
+
+#: app/ui/list/Subscriptions.js:47
+msgid "Channels"
+msgstr ""
+
+#: app/ui/list/Subscriptions.js:50
+msgid "Private channels"
 msgstr ""
 
 #: qx/util/Validate.js:90
@@ -166,6 +152,14 @@ msgstr ""
 msgid "%1 does not fit %2."
 msgstr ""
 
+#: dialog/Confirm.js:170
+msgid "yes"
+msgstr ""
+
+#: dialog/Confirm.js:180
+msgid "no"
+msgstr ""
+
 #: app/ui/form/SubscriptionItem.js:82 app/ui/form/SubscriptionItem.js:155
 msgid "Unfavorite"
 msgstr ""
@@ -186,104 +180,14 @@ msgstr ""
 msgid "Do you really want to leave this room?"
 msgstr ""
 
-#: app/ui/BaseMenu.js:155
-msgid "Lokal"
+#: app/ui/renderer/Event.js:131
+msgid "allday"
 msgstr ""
 
-#: app/ui/BaseMenu.js:155 app/ui/BaseMenu.js:154
-msgid "Develop"
+#: app/ui/renderer/Event.js:131
+msgid "all-day"
 msgstr ""
 
-#: app/ui/BaseMenu.js:158 app/ui/BaseMenu.js:155 app/ui/BaseMenu.js:156
-#: app/ui/BaseMenu.js:157
-msgid "Productive"
-msgstr ""
-
-#: app/ui/Channel.js:248 app/ui/Channel.js:244 app/ui/Channel.js:252
-#: app/ui/Channel.js:256 app/ui/Channel.js:253 app/ui/Channel.js:257
-#: app/ui/Channel.js:261 app/ui/Channel.js:258 app/ui/Channel.js:263
-msgid "writes"
-msgid_plural "are writing"
-msgstr[0] ""
-msgstr[1] ""
-
-#: app/ui/Channel.js:255 app/ui/Channel.js:256 app/ui/Channel.js:257
-#: app/ui/Channel.js:260 app/ui/Channel.js:259
-msgid "%1 is writing"
-msgid_plural "%1 and %2 are writing"
-msgstr[0] ""
-msgstr[1] ""
-
-#: app/ui/Channel.js:259 app/ui/Channel.js:261 app/ui/Channel.js:270
-#: app/ui/Channel.js:272 app/ui/Channel.js:273 app/ui/Channel.js:281
-#: app/ui/Channel.js:284 app/ui/channel/Messages.js:281
-#: app/ui/channel/Messages.js:229 app/ui/channel/Messages.js:207
-#: app/ui/channel/Messages.js:208 app/ui/channel/Messages.js:205
-#: app/ui/channel/Messages.js:190 app/ui/channel/AbstractChannel.js:194
-#: app/ui/channel/AbstractChannel.js:197 app/ui/channel/AbstractChannel.js:214
-#: app/ui/channel/AbstractChannel.js:237 app/ui/channel/AbstractChannel.js:240
-#: app/ui/channel/AbstractChannel.js:249 app/ui/channel/AbstractChannel.js:261
-#: app/ui/channel/AbstractChannel.js:262 app/ui/channel/AbstractChannel.js:272
-#: app/ui/channel/AbstractChannel.js:276 app/ui/channel/AbstractChannel.js:275
-#: app/ui/channel/AbstractChannel.js:277 app/ui/channel/AbstractChannel.js:280
-#: app/ui/channel/AbstractChannel.js:279 app/ui/channel/AbstractChannel.js:287
-#: app/ui/channel/AbstractChannel.js:297 app/ui/channel/AbstractChannel.js:295
-#: app/ui/channel/AbstractChannel.js:307 app/ui/channel/AbstractChannel.js:312
-#: app/ui/channel/AbstractChannel.js:313 app/ui/channel/AbstractChannel.js:314
-#: app/ui/channel/AbstractChannel.js:315 app/ui/channel/AbstractChannel.js:316
-#: app/ui/channel/AbstractChannel.js:319 app/ui/channel/AbstractChannel.js:320
-#: app/ui/channel/AbstractChannel.js:321 app/ui/channel/AbstractChannel.js:323
-#: app/ui/channel/AbstractChannel.js:324 app/ui/channel/AbstractChannel.js:325
-#: app/ui/channel/AbstractChannel.js:326 app/ui/channel/AbstractChannel.js:327
-#: app/ui/channel/AbstractChannel.js:330 app/ui/channel/AbstractChannel.js:332
-#: app/ui/channel/AbstractChannel.js:334
-msgid "%1 is writing..."
-msgid_plural "%1 and %2 are writing..."
-msgstr[0] ""
-msgstr[1] ""
-
-#: app/ui/Channel.js:371 app/ui/Channel.js:368 app/ui/channel/Messages.js:368
-#: app/ui/channel/Messages.js:316 app/ui/channel/Messages.js:294
-#: app/ui/channel/Messages.js:295 app/ui/channel/Messages.js:282
-#: app/ui/channel/Messages.js:267 app/ui/channel/Messages.js:162
-#: app/ui/channel/Messages.js:163 app/ui/channel/Messages.js:175
-#: app/ui/channel/Messages.js:176
-msgid "To enter this channel you need a user account. Please login or register yourself."
-msgstr ""
-
-#: app/ui/renderer/Event.js:180 app/ui/renderer/Event.js:196
-#: app/ui/renderer/Event.js:200 app/ui/renderer/Event.js:201
-#: app/ui/renderer/Event.js:202 app/ui/renderer/Event.js:213
-#: app/ui/renderer/Event.js:212 app/ui/renderer/Event.js:217
-#: app/ui/renderer/Event.js:221
-msgid "Share"
-msgstr ""
-
-#: app/ui/renderer/Event.js:185 app/ui/renderer/Event.js:201
-#: app/ui/renderer/Event.js:205 app/ui/renderer/Event.js:206
-#: app/ui/renderer/Event.js:207 app/ui/renderer/Event.js:221
-#: app/ui/renderer/Event.js:220 app/ui/renderer/Event.js:225
-#: app/ui/renderer/Event.js:229
-msgid "Edit"
-msgstr ""
-
-#: app/ui/renderer/Event.js:190 app/ui/renderer/Event.js:206
-#: app/ui/renderer/Event.js:210 app/ui/renderer/Event.js:211
-#: app/ui/renderer/Event.js:212 app/ui/renderer/Event.js:229
-#: app/ui/renderer/Event.js:228 app/ui/renderer/Event.js:233
-#: app/ui/renderer/Event.js:237
-msgid "Delete"
-msgstr ""
-
-#: app/ui/channel/AbstractChannel.js:229 app/ui/channel/AbstractChannel.js:230
-#: app/ui/channel/AbstractChannel.js:232
-msgid "Select channel"
-msgstr ""
-
-#: dialog/Confirm.js:170
-msgid "yes"
-msgstr ""
-
-#: dialog/Confirm.js:180
-msgid "no"
+#: app/ui/renderer/Event.js:131
+msgid "%1 o'clock"
 msgstr ""

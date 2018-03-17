@@ -31,12 +31,12 @@ qx.Class.define('app.Model', {
             this.getActor().setOnline(false)
           }
           timer = null
-        }, this, 15000)
+        }, this, 60000)
       } else {
         timer.restart()
       }
     })
-    qx.event.Registration.addListener(window, 'focus', () => {
+    qx.event.Registration.addListener(window, 'pointerover', () => {
       if (timer) {
         timer.stop()
         timer = null

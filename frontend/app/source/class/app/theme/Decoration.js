@@ -27,10 +27,18 @@ qx.Theme.define('app.theme.Decoration',
         }
       },
 
+      'actor-icon': {
+        style: {
+          radius: 50
+        }
+      },
+
       'date-sheet': {
         style: {
           radius: 6,
-          width: 1,
+          width: [0, 1, 0, 1],
+          innerWidth: [5, 0],
+          innerColor: 'event-default-bg',
           color: 'menu-background',
           style: 'solid',
           shadowBlurRadius: 4,

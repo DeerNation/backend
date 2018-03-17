@@ -154,37 +154,37 @@ qx.Class.define('app.ui.form.ActivityItem', {
 
       this._bindPropertyToChildControl(author, 'name', 'authorName', 'value', null, old)
 
-      let isOwner = false
-      if (app.Config.target !== 'mobile') {
-        this._bindPropertyToChildControl(author, 'username', 'authorUsername', 'value', {
-          converter: function (value) {
-            return '@' + value
-          }
-        }, old)
+      // let isOwner = false
+      // if (app.Config.target !== 'mobile') {
+      this._bindPropertyToChildControl(author, 'username', 'authorUsername', 'value', {
+        converter: function (value) {
+          return '@' + value
+        }
+      }, old)
 
-        const roles = this.getAuthorRoles()
-        roles.removeAll()
-        if (app.Model.getInstance().getSelectedSubscription() &&
-          app.Model.getInstance().getSelectedSubscription().getChannel().getOwnerId() === author.getId()) {
-          isOwner = true
-          roles.push(this.tr('Owner'))
-        }
-        if (author.getType() === 'Bot') {
-          roles.push(this.tr('Bot').toUpperCase())
-        } else if (author.getType() === 'Server') {
-          roles.push(this.tr('Server'))
-        } else {
-          roles.unshift(author.getRole())
-        }
-        if (roles.getLength() > 0) {
-          this.getChildControl('authorRoles').show()
-        } else {
-          this.getChildControl('authorRoles').exclude()
-        }
-      } else {
-        isOwner = app.Model.getInstance().getSelectedSubscription() &&
-          app.Model.getInstance().getSelectedSubscription().getChannel().getOwnerId() === author.getId()
-      }
+      // const roles = this.getAuthorRoles()
+      // roles.removeAll()
+      // if (app.Model.getInstance().getSelectedSubscription() &&
+      //   app.Model.getInstance().getSelectedSubscription().getChannel().getOwnerId() === author.getId()) {
+      //   isOwner = true
+      //   roles.push(this.tr('Owner'))
+      // }
+      // if (author.getType() === 'Bot') {
+      //   roles.push(this.tr('Bot').toUpperCase())
+      // } else if (author.getType() === 'Server') {
+      //   roles.push(this.tr('Server'))
+      // } else {
+      //   roles.unshift(qx.lang.String.firstUp(author.getRole()))
+      // }
+      // if (roles.getLength() > 0) {
+      //   this.getChildControl('authorRoles').show()
+      // } else {
+      //   this.getChildControl('authorRoles').exclude()
+      // }
+      // } else {
+      const isOwner = app.Model.getInstance().getSelectedSubscription() &&
+        app.Model.getInstance().getSelectedSubscription().getChannel().getOwnerId() === author.getId()
+      // }
       if (app.Model.getInstance().getActor()) {
         this.setDeletable(isOwner || app.Model.getInstance().getActor().isAdmin() || author.getId() === app.Model.getInstance().getActor().getId())
       } else {
@@ -198,10 +198,12 @@ qx.Class.define('app.ui.form.ActivityItem', {
 
       switch (id) {
         case 'container':
-          layout = new qx.ui.layout.Grid()
+          layout = new qx.ui.layout.Grid(20, 0)
           layout.setColumnFlex(1, 1)
-          layout.setColumnAlign(0, 'left', 'top')
+          layout.setRowFlex(1, 1)
+          layout.setColumnAlign(0, 'center', 'top')
           layout.setColumnAlign(1, 'left', 'top')
+          layout.setColumnWidth(0, 60)
           control = new qx.ui.container.Composite(layout)
           this._add(control, {edge: 1})
           break
@@ -209,7 +211,7 @@ qx.Class.define('app.ui.form.ActivityItem', {
         case 'author-icon':
           control = new app.ui.basic.AvatarIcon()
           control.setAnonymous(true)
-          this.getChildControl('container').add(control, {row: 0, column: 0, rowSpan: 2})
+          this.getChildControl('author-details').addAt(control, 0)
           break
 
         case 'header':
@@ -219,6 +221,11 @@ qx.Class.define('app.ui.form.ActivityItem', {
           this.getChildControl('container').add(control, {row: 0, column: 1})
           break
 
+        case 'author-details':
+          control = new qx.ui.container.Composite(new qx.ui.layout.VBox(2))
+          this.getChildControl('container').add(control, {row: 0, column: 0, rowSpan: 2})
+          break
+
         case 'authorName':
           control = new qx.ui.basic.Label()
           control.setAnonymous(true)
@@ -226,7 +233,7 @@ qx.Class.define('app.ui.form.ActivityItem', {
           break
 
         case 'authorRoles':
-          control = new qx.ui.form.List(true)
+          control = new qx.ui.form.List()
           control.set({
             height: null,
             width: null,
@@ -240,13 +247,13 @@ qx.Class.define('app.ui.form.ActivityItem', {
               item.setAppearance('authorRole-listitem')
             }
           })
-          this.getChildControl('header').addAt(control, 3)
+          this.getChildControl('author-details').addAt(control, 2)
           break
 
         case 'authorUsername':
           control = new qx.ui.basic.Label()
           control.setAnonymous(true)
-          this.getChildControl('header').addAt(control, 2)
+          this.getChildControl('author-details').addAt(control, 1)
           break
 
         case 'published':

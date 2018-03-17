@@ -29,13 +29,15 @@ qx.Class.define('app.model.activity.content.Event', {
       check: 'Date',
       nullable: true,
       event: 'changeStart',
-      transform: '_transformDate'
+      transform: '_transformDate',
+      apply: '_applyTime'
     },
     end: {
       check: 'Date',
       nullable: true,
       event: 'changeEnd',
-      transform: '_transformDate'
+      transform: '_transformDate',
+      apply: '_applyTime'
     },
     categories: {
       check: 'qx.data.Array',
@@ -52,6 +54,11 @@ qx.Class.define('app.model.activity.content.Event', {
       check: 'String',
       nullable: true,
       event: 'changedDescription'
+    },
+    allDay: {
+      check: 'Boolean',
+      init: false,
+      event: 'changedAllDay'
     }
   },
 
@@ -63,6 +70,15 @@ qx.Class.define('app.model.activity.content.Event', {
   members: {
     _transformArray: function (value) {
       return new qx.data.Array(value)
+    },
+
+    _applyTime: function () {
+      if (this.getStart() && this.getEnd() && !this.isAllDay()) {
+        // check if this is an allday event
+        const durationInDays = (this.getEnd() - this.getStart()) / (24 * 60 * 60 * 1000)
+        this.setAllDay(Number.isInteger(durationInDays) &&
+          this.getStart().getHours() === 0 && this.getEnd().getHours() === 0)
+      }
     }
   },
 

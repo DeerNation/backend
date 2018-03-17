@@ -17,6 +17,13 @@ qx.Theme.define('app.theme.Font', {
       color: 'font'
     },
 
+    'time-font': {
+      size: 15,
+      italic: true,
+      family: ['Roboto', 'Arial', 'sans-serif'],
+      color: 'font'
+    },
+
     'message': {
       size: 15,
       family: ['Roboto', 'Arial', 'sans-serif'],
@@ -25,6 +32,13 @@ qx.Theme.define('app.theme.Font', {
 
     'bold': {
       size: 13,
+      family: ['Roboto', 'Arial', 'sans-serif'],
+      bold: true,
+      color: 'font'
+    },
+
+    'activity-title': {
+      size: 15,
       family: ['Roboto', 'Arial', 'sans-serif'],
       bold: true,
       color: 'font'

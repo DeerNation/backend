@@ -40,6 +40,15 @@ qx.Theme.define('app.theme.Appearance',
           }
         }
       },
+      'avatar-icon': {
+        style: function () {
+          return {
+            textColor: 'white',
+            decorator: 'actor-icon',
+            center: true
+          }
+        }
+      },
       'app-toolbar-button': {
         include: 'toolbar-button',
         alias: 'toolbar-button'
@@ -67,7 +76,8 @@ qx.Theme.define('app.theme.Appearance',
       'activity-listitem/header': {
         style: function () {
           return {
-            marginBottom: 4
+            marginBottom: 4,
+            allowGrowY: false
           }
         }
       },
@@ -76,13 +86,17 @@ qx.Theme.define('app.theme.Appearance',
         style: function () {
           return {
             font: 'sidebar-actor-icon',
-            width: 40,
-            height: 40,
-            maxWidth: 40,
-            maxHeight: 40,
+            width: 50,
+            height: 50,
+            maxWidth: 50,
+            maxHeight: 50,
             allowGrowX: false,
             allowGrowY: false,
-            marginRight: 20
+            decorator: 'actor-icon',
+            textColor: 'white',
+            center: true,
+            alignY: 'middle',
+            alignX: 'center'
           }
         }
       },
@@ -103,7 +117,9 @@ qx.Theme.define('app.theme.Appearance',
         style: function () {
           return {
             font: 'default',
-            textColor: 'info-font'
+            textColor: 'info-font',
+            alignY: 'middle',
+            alignX: 'center'
           }
         }
       },
@@ -115,13 +131,15 @@ qx.Theme.define('app.theme.Appearance',
         alias: 'listitem',
         style: function () {
           return {
-            padding: [0, 4],
-            marginRight: 4,
+            padding: [2, 4],
+            marginTop: 4,
             backgroundColor: 'info-font',
             textColor: 'white',
             decorator: 'rounded',
             allowGrowY: false,
+            allowGrowX: false,
             alignY: 'middle',
+            alignX: 'center',
             font: 'small'
           }
         }
@@ -176,8 +194,8 @@ qx.Theme.define('app.theme.Appearance',
         style: function () {
           return {
             decorator: 'date-sheet',
-            backgroundColor: 'event-default-bg',
-            textColor: 'white',
+            // backgroundColor: 'event-default-bg',
+            // textColor: 'white',
             padding: 4,
             marginRight: 10,
             allowGrowY: false
@@ -198,13 +216,20 @@ qx.Theme.define('app.theme.Appearance',
           }
         }
       },
+      'event-activity/time': {
+        style: function () {
+          return {
+            font: 'time-font'
+          }
+        }
+      },
       'event-activity/title': {
         include: 'label',
         alias: 'label',
 
         style: function () {
           return {
-            font: 'bold'
+            font: 'activity-title'
           }
         }
       },
@@ -384,7 +409,10 @@ qx.Theme.define('app.theme.Appearance',
             maxWidth: 20,
             maxHeight: 20,
             marginRight: 4,
-            show: 'label'
+            show: 'label',
+            decorator: 'rounded',
+            textColor: 'white',
+            center: true
           }
         }
       },
@@ -392,8 +420,8 @@ qx.Theme.define('app.theme.Appearance',
       'channel-listitem/type': {
         style: function () {
           return {
-            width: 12,
-            height: 12,
+            width: 16,
+            height: 16,
             scale: true,
             margin: [0, 4, 0, 8]
           }

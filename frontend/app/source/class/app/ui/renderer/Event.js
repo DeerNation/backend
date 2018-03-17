@@ -18,14 +18,15 @@ qx.Class.define('app.ui.renderer.Event', {
   construct: function (viewMode) {
     this.base(arguments)
     const layout = new qx.ui.layout.Grid()
-    layout.setColumnAlign(0, 'center', 'middle')
+    layout.setColumnAlign(0, 'center', 'top')
     layout.setColumnFlex(1, 1)
     this._setLayout(layout)
 
-    const cc = ['date-sheet', 'date', 'location', 'categories']
+    const cc = ['date-sheet', 'time', 'location', 'categories']
     cc.forEach(this._createChildControl, this)
     this.__monthFormat = new qx.util.format.DateFormat('MMM')
     this.__dayFormat = new qx.util.format.DateFormat('d')
+    this.__timeFormat = new qx.util.format.DateFormat('H:mm')
 
     if (viewMode) {
       this.setViewMode(viewMode)
@@ -124,6 +125,13 @@ qx.Class.define('app.ui.renderer.Event', {
               return this.__monthFormat.format(value)
             }.bind(this)
           }, old && old.getContentObject())
+
+          this._bindPropertyToChildControl(content, 'start', 'time', 'value', {
+            converter: function (value) {
+              return content.isAllDay() ? this.tr('all-day') : this.tr('%1 o\'clock', this.__timeFormat.format(value))
+            }.bind(this)
+          }, old && old.getContentObject())
+
           this._bindPropertyToChildControl(content, 'location', 'location', 'value', null, old && old.getContentObject())
           this._bindPropertyToChildControl(content, 'description', 'description', 'value', null, old && old.getContentObject())
 
@@ -199,7 +207,7 @@ qx.Class.define('app.ui.renderer.Event', {
           this._add(control, {row: 3, column: 0, colSpan: 2})
           break
 
-        case 'date':
+        case 'time':
           control = new app.ui.basic.Label()
           this.getChildControl('details').add(control)
           break
@@ -218,7 +226,7 @@ qx.Class.define('app.ui.renderer.Event', {
 
         // toolbar buttons
         case 'button-share':
-          control = new qx.ui.toolbar.Button(this.tr('Share'), app.Config.icons.share + '/12')
+          control = new qx.ui.toolbar.Button(this.tr('Share'), app.Config.icons.share + '/20')
           control.addListener('execute', () => {
             this.fireDataEvent('share', this.getModel())
           })
@@ -226,7 +234,7 @@ qx.Class.define('app.ui.renderer.Event', {
           break
 
         case 'button-edit':
-          control = new qx.ui.toolbar.Button(this.tr('Edit'), app.Config.icons.edit + '/12')
+          control = new qx.ui.toolbar.Button(this.tr('Edit'), app.Config.icons.edit + '/20')
           control.addListener('execute', () => {
             this.fireDataEvent('edit', this.getModel())
           })
@@ -234,7 +242,7 @@ qx.Class.define('app.ui.renderer.Event', {
           break
 
         case 'button-delete':
-          control = new qx.ui.toolbar.Button(this.tr('Delete'), app.Config.icons.delete + '/12')
+          control = new qx.ui.toolbar.Button(this.tr('Delete'), app.Config.icons.delete + '/20')
           control.addListener('execute', () => {
             this.fireDataEvent('delete', this.getModel())
           })

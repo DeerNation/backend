@@ -69,7 +69,6 @@ qx.Class.define('app.ui.channel.Events', {
       const startDate = start.toDate()
       const endDate = end.toDate()
       this.debug('collect events from', startDate, 'to', endDate)
-      const dayInMs = (24 * 60 * 60 * 1000)
       const actor = app.Model.getInstance().getActor()
       const channelRelation = app.Model.getInstance().getChannelRelation(this.getSubscription().getChannel())
 
@@ -80,7 +79,6 @@ qx.Class.define('app.ui.channel.Events', {
           const event = act.getContentObject()
           if (event.getEnd() >= startDate && event.getStart() <= endDate) {
             // workaround for wrong allDay events
-            const durationInDays = (event.getEnd() - event.getStart()) / dayInMs
             const data = Object.assign({
               title: event.getName(),
               id: act.getId()
@@ -88,10 +86,7 @@ qx.Class.define('app.ui.channel.Events', {
             // use the parsed date objects
             data.start = event.getStart()
             data.end = event.getEnd()
-            if (Number.isInteger(durationInDays) &&
-              event.getStart().getHours() === 0 && event.getEnd().getHours() === 0) {
-              data.allDay = true
-            }
+            data.allDay = event.isAllDay()
             if (data.categories && data.categories.length > 0) {
               data.title = `${data.categories.join(', ')}: ${data.title}`
             }

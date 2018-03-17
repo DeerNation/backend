@@ -10,24 +10,14 @@ qx.Class.define('app.ui.basic.AvatarIcon', {
 
   /*
   ******************************************************
-    CONSTRUCTOR
-  ******************************************************
-  */
-  construct: function (label, icon) {
-    this.base(arguments, label, icon)
-    this.set({
-      textColor: 'white',
-      decorator: 'rounded',
-      center: true
-    })
-  },
-
-  /*
-  ******************************************************
     PROPERTIES
   ******************************************************
   */
   properties: {
+    appearance: {
+      refine: true,
+      init: 'avatar-icon'
+    },
     title: {
       check: 'String',
       nullable: true,

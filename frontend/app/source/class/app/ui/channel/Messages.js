@@ -138,7 +138,6 @@ qx.Class.define('app.ui.channel.Messages', {
           control = new qx.ui.list.List(this.getActivities())
           control.setVariableItemHeight(true)
           const deferredScroll = qx.util.Function.debounce(() => {
-            console.log('list length', control.getPane().getScrollMaxY())
             control.scrollToY(control.getPane().getScrollMaxY())
           }, 100)
           this.getActivities().addListener('changeLength', deferredScroll, this)
@@ -219,11 +218,9 @@ qx.Class.define('app.ui.channel.Messages', {
 
     __applyListDelegate: function (list) {
       const dateFormat = this.__dateFormat
-      let counter = 0
 
       list.setDelegate({
         createItem: function () {
-          console.log('created ActivityItem', counter++)
           return new app.ui.form.ActivityItem()
         },
 
