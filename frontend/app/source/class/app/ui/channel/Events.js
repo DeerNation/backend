@@ -194,9 +194,9 @@ qx.Class.define('app.ui.channel.Events', {
         // put your options and callbacks here
         defaultView: 'month',
         header: {
-          left: app.Config.target === 'mobile' ? 'prev,next' : 'prev,next today',
+          left: app.Config.target === 'mobile' ? 'prev' : 'prev,next today',
           center: 'title',
-          right: app.Config.target === 'mobile' ? 'month,agendaWeek,agendaDay' : 'month,agendaWeek,agendaDay,listMonth'
+          right: app.Config.target === 'mobile' ? 'next' : 'month,agendaWeek,agendaDay,listMonth'
         },
         eventLimit: true, // allow "more" link when too many events
         locale: qx.locale.Manager.getInstance().getLocale(),
@@ -215,6 +215,10 @@ qx.Class.define('app.ui.channel.Events', {
       switch (id) {
         case 'calendar-container':
           control = new qx.ui.core.Widget()
+          control.set({
+            allowGrowX: true,
+            allowGrowY: true
+          })
           control.getContentElement().setAttribute('id', 'calendar')
           this._add(control, {flex: 1})
           control.addListenerOnce('appear', this.__init, this)

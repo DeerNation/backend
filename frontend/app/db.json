@@ -390,7 +390,7 @@
       }
     },
     "app.theme.Appearance": {
-      "mtime": "2018-03-10T10:08:56.758Z",
+      "mtime": "2018-03-15T16:19:27.189Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -13642,7 +13642,7 @@
       "implement": []
     },
     "app.ui.form.ActivityItem": {
-      "mtime": "2018-02-26T19:48:17.553Z",
+      "mtime": "2018-03-15T16:25:37.310Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13668,6 +13668,9 @@
         "qx.data.Array": {
           "construct": true
         },
+        "app.Config": {
+          "construct": true
+        },
         "app.model.activity.Registry": {},
         "app.Model": {},
         "qx.ui.layout.Grid": {},
@@ -13679,7 +13682,6 @@
         "qx.data.controller.List": {},
         "qx.ui.layout.Grow": {},
         "qx.ui.form.Button": {},
-        "app.Config": {},
         "app.io.Rpc": {},
         "qx.ui.core.LayoutItem": {
           "load": true
@@ -13710,20 +13712,20 @@
       "translations": [
         {
           "msgid": "Owner",
-          "lineNo": 166
+          "lineNo": 170
         },
         {
           "msgid": "Bot",
-          "lineNo": 169
+          "lineNo": 173
         },
         {
           "msgid": "Server",
-          "lineNo": 171
+          "lineNo": 175
         }
       ]
     },
     "app.Config": {
-      "mtime": "2018-03-10T09:51:12.618Z",
+      "mtime": "2018-03-15T17:01:59.163Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14581,7 +14583,7 @@
       "implement": []
     },
     "app.ui.ChannelHeader": {
-      "mtime": "2018-02-26T19:36:53.039Z",
+      "mtime": "2018-03-15T17:02:48.911Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14598,6 +14600,8 @@
         "app.model.Subscription": {},
         "app.model.Channel": {},
         "app.Config": {},
+        "qx.ui.form.Button": {},
+        "qx.core.Init": {},
         "qx.ui.basic.Image": {},
         "qx.ui.basic.Atom": {},
         "qx.ui.basic.Label": {},
@@ -15477,7 +15481,7 @@
       "implement": []
     },
     "app.mobile.theme.Appearance": {
-      "mtime": "2018-02-11T09:45:25.344Z",
+      "mtime": "2018-03-15T17:41:10.603Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -16409,7 +16413,7 @@
       ]
     },
     "app.ui.channel.Events": {
-      "mtime": "2018-03-10T21:57:51.948Z",
+      "mtime": "2018-03-15T16:29:55.869Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -16442,6 +16446,9 @@
         "qx.event.message.Bus": {
           "load": true
         },
+        "qx.util.Function": {
+          "load": true
+        },
         "qx.ui.core.LayoutItem": {
           "load": true
         },
@@ -16461,9 +16468,6 @@
           "load": true
         },
         "qx.core.IDisposable": {
-          "load": true
-        },
-        "qx.util.Function": {
           "load": true
         }
       },

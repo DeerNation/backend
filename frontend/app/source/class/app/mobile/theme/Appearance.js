@@ -20,6 +20,32 @@ qx.Theme.define('app.mobile.theme.Appearance', {
           padding: [10, 18]
         }
       }
+    },
+    'main/calendar/calendar-container': {
+      style: function () {
+        return {
+          margin: [8, 0, 0, 0]
+        }
+      }
+    },
+
+    'main/channel/header': {
+      style: function () {
+        return {
+          minHeight: 50,
+          padding: [0, 10, 0, 0],
+          backgroundColor: '#EEEEEE'
+        }
+      }
+    },
+
+    'main/channel/header/back-button': {
+      style: function (states) {
+        return {
+          textColor: 'lightgrey',
+          backgroundColor: states.pressed ? 'lightgrey' : 'transparent'
+        }
+      }
     }
 
     // 'splitpane/menu/favorite-button': {

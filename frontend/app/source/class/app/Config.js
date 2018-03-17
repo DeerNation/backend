@@ -67,7 +67,8 @@ qx.Class.define('app.Config', {
       event: '@FARegular/f073',
       delete: '@FASolid/f2ed',
       edit: '@FARegular/f044',
-      share: '@FASolid/f1e0'
+      share: '@FASolid/f1e0',
+      back: '@FASolid/f104'
     },
 
     init: function () {

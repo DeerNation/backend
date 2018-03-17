@@ -25,3 +25,20 @@ code {
     direction: ltr;
     unicode-bidi: embed;
 }
+
+/* calendar overrides */
+#calendar {
+    font-family: Roboto, Arial, sans-serif;
+}
+@media only screen and (max-width: 600px) {
+
+    #calendar .fc-month-view .fc-body .fc-title {
+        font-size: .8em;
+        font-weight: bold;
+        line-height: 1.1;
+    }
+
+    #calendar .fc-month-view .fc-body .fc-time {
+        display: none;
+    }
+}

@@ -30,7 +30,9 @@ qx.Class.define('app.ui.form.ActivityItem', {
     // create child-controls in the right order
     this._createChildControl('author-icon')
     this._createChildControl('authorName')
-    this._createChildControl('authorRoles')
+    if (app.Config.target !== 'mobile') {
+      this._createChildControl('authorRoles')
+    }
     this._createChildControl('published')
 
     this.getContentElement().addClass('activity')
@@ -151,31 +153,37 @@ qx.Class.define('app.ui.form.ActivityItem', {
       this._bindPropertyToChildControl(author, 'color', 'author-icon', 'backgroundColor', null, old)
 
       this._bindPropertyToChildControl(author, 'name', 'authorName', 'value', null, old)
-      this._bindPropertyToChildControl(author, 'username', 'authorUsername', 'value', {
-        converter: function (value) {
-          return '@' + value
-        }
-      }, old)
 
-      const roles = this.getAuthorRoles()
       let isOwner = false
-      roles.removeAll()
-      if (app.Model.getInstance().getSelectedSubscription() &&
-        app.Model.getInstance().getSelectedSubscription().getChannel().getOwnerId() === author.getId()) {
-        isOwner = true
-        roles.push(this.tr('Owner'))
-      }
-      if (author.getType() === 'Bot') {
-        roles.push(this.tr('Bot').toUpperCase())
-      } else if (author.getType() === 'Server') {
-        roles.push(this.tr('Server'))
+      if (app.Config.target !== 'mobile') {
+        this._bindPropertyToChildControl(author, 'username', 'authorUsername', 'value', {
+          converter: function (value) {
+            return '@' + value
+          }
+        }, old)
+
+        const roles = this.getAuthorRoles()
+        roles.removeAll()
+        if (app.Model.getInstance().getSelectedSubscription() &&
+          app.Model.getInstance().getSelectedSubscription().getChannel().getOwnerId() === author.getId()) {
+          isOwner = true
+          roles.push(this.tr('Owner'))
+        }
+        if (author.getType() === 'Bot') {
+          roles.push(this.tr('Bot').toUpperCase())
+        } else if (author.getType() === 'Server') {
+          roles.push(this.tr('Server'))
+        } else {
+          roles.unshift(author.getRole())
+        }
+        if (roles.getLength() > 0) {
+          this.getChildControl('authorRoles').show()
+        } else {
+          this.getChildControl('authorRoles').exclude()
+        }
       } else {
-        roles.unshift(author.getRole())
-      }
-      if (roles.getLength() > 0) {
-        this.getChildControl('authorRoles').show()
-      } else {
-        this.getChildControl('authorRoles').exclude()
+        isOwner = app.Model.getInstance().getSelectedSubscription() &&
+          app.Model.getInstance().getSelectedSubscription().getChannel().getOwnerId() === author.getId()
       }
       if (app.Model.getInstance().getActor()) {
         this.setDeletable(isOwner || app.Model.getInstance().getActor().isAdmin() || author.getId() === app.Model.getInstance().getActor().getId())

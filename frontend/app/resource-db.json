@@ -28461,6 +28461,30 @@
         "doNotCopy": false,
         "resource": "resourcePath"
       },
+      "js/fullcalendar/fullcalendar.min.css": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/fullcalendar.min.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/fullcalendar.print.min.css": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/fullcalendar/gcal.min.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/jquery-3.3.1.min.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
+      "js/moment.min.js": {
+        "doNotCopy": false,
+        "resource": "resourcePath"
+      },
       "js/fullcalendar/CHANGELOG.txt": {
         "doNotCopy": false,
         "resource": "resourcePath"
@@ -28481,27 +28505,11 @@
         "doNotCopy": false,
         "resource": "resourcePath"
       },
-      "js/fullcalendar/fullcalendar.min.css": {
-        "doNotCopy": false,
-        "resource": "resourcePath"
-      },
-      "js/fullcalendar/fullcalendar.min.js": {
-        "doNotCopy": false,
-        "resource": "resourcePath"
-      },
       "js/fullcalendar/fullcalendar.print.css": {
         "doNotCopy": false,
         "resource": "resourcePath"
       },
-      "js/fullcalendar/fullcalendar.print.min.css": {
-        "doNotCopy": false,
-        "resource": "resourcePath"
-      },
       "js/fullcalendar/gcal.js": {
-        "doNotCopy": false,
-        "resource": "resourcePath"
-      },
-      "js/fullcalendar/gcal.min.js": {
         "doNotCopy": false,
         "resource": "resourcePath"
       },
@@ -28857,11 +28865,11 @@
         "doNotCopy": false,
         "resource": "resourcePath"
       },
-      "js/fullcalendar/demos/js/theme-chooser.js": {
+      "js/fullcalendar/demos/json/events.json": {
         "doNotCopy": false,
         "resource": "resourcePath"
       },
-      "js/fullcalendar/demos/json/events.json": {
+      "js/fullcalendar/demos/js/theme-chooser.js": {
         "doNotCopy": false,
         "resource": "resourcePath"
       },
@@ -28874,14 +28882,6 @@
         "resource": "resourcePath"
       },
       "js/fullcalendar/demos/php/utils.php": {
-        "doNotCopy": false,
-        "resource": "resourcePath"
-      },
-      "js/jquery-3.3.1.min.js": {
-        "doNotCopy": false,
-        "resource": "resourcePath"
-      },
-      "js/moment.min.js": {
         "doNotCopy": false,
         "resource": "resourcePath"
       }
