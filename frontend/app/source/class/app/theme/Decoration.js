@@ -71,6 +71,25 @@ qx.Theme.define('app.theme.Decoration',
           backgroundColor: 'category-bg',
           shadowBlurRadius: 3
         }
+      },
+
+      'flat-button-h': {
+        style: {
+          width: [0, 1, 0, 1],
+          color: 'button-border'
+        }
+      },
+      'flat-button-h-first': {
+        style: {
+          width: [0, 1, 0, 0],
+          color: 'button-border'
+        }
+      },
+      'flat-button-h-last': {
+        style: {
+          width: [0, 0, 0, 1],
+          color: 'button-border'
+        }
       }
     }
   })

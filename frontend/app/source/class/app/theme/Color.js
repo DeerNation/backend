@@ -40,6 +40,9 @@ qx.Theme.define('app.theme.Color',
       // activity items
       'event-default-bg': 'rgb(15, 108, 0)',
       'hovered': '#EFEFEF',
-      'link-color': 'rgb(19, 103, 154)'
+      'link-color': 'rgb(19, 103, 154)',
+
+      // buttons
+      'button-border': 'rgba(68, 68, 68, 0.1)'
     }
   })

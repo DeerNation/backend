@@ -173,6 +173,10 @@ qx.Class.define('app.ui.channel.Messages', {
 
         case 'login-hint':
           control = new qx.ui.basic.Label(this.tr('To enter this channel you need a user account. Please login or register yourself.'))
+          control.set({
+            rich: true,
+            wrap: true
+          })
           control.addListener('tap', () => {
             app.io.Socket.getInstance().login().then(loggedIn => {
               if (loggedIn) {

@@ -348,6 +348,7 @@ msgstr "Um diesen Kanal betreten zu können, benötigen Sie ein Benutzerkonto. B
 #: app/ui/renderer/Event.js:202 app/ui/renderer/Event.js:213
 #: app/ui/renderer/Event.js:212 app/ui/renderer/Event.js:217
 #: app/ui/renderer/Event.js:221 app/ui/renderer/Event.js:229
+#: app/ui/renderer/Event.js:244 app/ui/renderer/Event.js:256
 msgid "Share"
 msgstr "teilen"
 
@@ -356,6 +357,7 @@ msgstr "teilen"
 #: app/ui/renderer/Event.js:207 app/ui/renderer/Event.js:221
 #: app/ui/renderer/Event.js:220 app/ui/renderer/Event.js:225
 #: app/ui/renderer/Event.js:229 app/ui/renderer/Event.js:237
+#: app/ui/renderer/Event.js:252 app/ui/renderer/Event.js:264
 msgid "Edit"
 msgstr "Bearbeiten"
 
@@ -364,6 +366,7 @@ msgstr "Bearbeiten"
 #: app/ui/renderer/Event.js:212 app/ui/renderer/Event.js:229
 #: app/ui/renderer/Event.js:228 app/ui/renderer/Event.js:233
 #: app/ui/renderer/Event.js:237 app/ui/renderer/Event.js:245
+#: app/ui/renderer/Event.js:260 app/ui/renderer/Event.js:272
 msgid "Delete"
 msgstr "löschen"
 
@@ -372,10 +375,10 @@ msgstr "löschen"
 msgid "Select channel"
 msgstr "Kanal auswählen"
 
-#: app/ui/renderer/Event.js:131
+#: app/ui/renderer/Event.js:131 app/ui/renderer/Event.js:133
 msgid "all-day"
 msgstr "ganztägig"
 
-#: app/ui/renderer/Event.js:131
+#: app/ui/renderer/Event.js:131 app/ui/renderer/Event.js:133
 msgid "%1 o'clock"
 msgstr "%1 Uhr"

@@ -525,7 +525,10 @@ qx.Theme.define('app.theme.Appearance',
       'main/channel/header/favorite': {
         style: function (states) {
           return {
-            textColor: states.enabled ? 'favorite' : 'lightgrey'
+            textColor: states.enabled ? 'favorite' : 'lightgrey',
+            width: 50,
+            height: 50,
+            center: true
           }
         }
       },
@@ -535,6 +538,15 @@ qx.Theme.define('app.theme.Appearance',
           return {
             textColor: 'lightgrey',
             margin: 8
+          }
+        }
+      },
+
+      'main/channel/login-hint': {
+        style: function () {
+          return {
+            padding: [0, 10],
+            textAlign: 'center'
           }
         }
       },

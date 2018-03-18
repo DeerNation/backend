@@ -28,11 +28,13 @@ qx.Class.define('app.ui.form.ActivityItem', {
     this.setAuthorRoles(new qx.data.Array())
 
     // create child-controls in the right order
-    this._createChildControl('author-icon')
-    this._createChildControl('authorName')
     if (app.Config.target !== 'mobile') {
-      this._createChildControl('authorRoles')
+      this._createChildControl('author-icon')
     }
+    this._createChildControl('authorName')
+    // if (app.Config.target !== 'mobile') {
+    //   this._createChildControl('authorRoles')
+    // }
     this._createChildControl('published')
 
     this.getContentElement().addClass('activity')
@@ -149,18 +151,20 @@ qx.Class.define('app.ui.form.ActivityItem', {
 
     // property apply
     _applyAuthor: function (author, old) {
-      this._bindPropertyToChildControl(author, 'name', 'author-icon', 'title', null, old)
-      this._bindPropertyToChildControl(author, 'color', 'author-icon', 'backgroundColor', null, old)
-
       this._bindPropertyToChildControl(author, 'name', 'authorName', 'value', null, old)
+      if (app.Config.target !== 'mobile') {
+        this._bindPropertyToChildControl(author, 'name', 'author-icon', 'title', null, old)
 
-      // let isOwner = false
-      // if (app.Config.target !== 'mobile') {
-      this._bindPropertyToChildControl(author, 'username', 'authorUsername', 'value', {
-        converter: function (value) {
-          return '@' + value
-        }
-      }, old)
+        this._bindPropertyToChildControl(author, 'color', 'author-icon', 'backgroundColor', null, old)
+
+        // let isOwner = false
+        // if (app.Config.target !== 'mobile') {
+        this._bindPropertyToChildControl(author, 'username', 'authorUsername', 'value', {
+          converter: function (value) {
+            return '@' + value
+          }
+        }, old)
+      }
 
       // const roles = this.getAuthorRoles()
       // roles.removeAll()
@@ -198,12 +202,14 @@ qx.Class.define('app.ui.form.ActivityItem', {
 
       switch (id) {
         case 'container':
-          layout = new qx.ui.layout.Grid(20, 0)
+          layout = new qx.ui.layout.Grid(app.Config.target !== 'mobile' ? 20 : 0, 0)
           layout.setColumnFlex(1, 1)
           layout.setRowFlex(1, 1)
           layout.setColumnAlign(0, 'center', 'top')
           layout.setColumnAlign(1, 'left', 'top')
-          layout.setColumnWidth(0, 60)
+          if (app.Config.target !== 'mobile') {
+            layout.setColumnWidth(0, 60)
+          }
           control = new qx.ui.container.Composite(layout)
           this._add(control, {edge: 1})
           break
@@ -223,6 +229,9 @@ qx.Class.define('app.ui.form.ActivityItem', {
 
         case 'author-details':
           control = new qx.ui.container.Composite(new qx.ui.layout.VBox(2))
+          if (app.Config.target === 'mobile') {
+            control.exclude()
+          }
           this.getChildControl('container').add(control, {row: 0, column: 0, rowSpan: 2})
           break
 

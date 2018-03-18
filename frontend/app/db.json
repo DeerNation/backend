@@ -329,7 +329,7 @@
       }
     },
     "app.theme.Color": {
-      "mtime": "2018-03-07T19:56:51.699Z",
+      "mtime": "2018-03-18T08:46:57.827Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -345,7 +345,7 @@
       "implement": []
     },
     "app.theme.Decoration": {
-      "mtime": "2018-03-17T16:02:54.959Z",
+      "mtime": "2018-03-18T08:43:08.989Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -390,7 +390,7 @@
       }
     },
     "app.theme.Appearance": {
-      "mtime": "2018-03-17T17:13:56.347Z",
+      "mtime": "2018-03-18T09:23:46.091Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -13642,7 +13642,7 @@
       "implement": []
     },
     "app.ui.form.ActivityItem": {
-      "mtime": "2018-03-17T15:52:47.819Z",
+      "mtime": "2018-03-17T20:19:49.844Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13712,7 +13712,7 @@
       ]
     },
     "app.Config": {
-      "mtime": "2018-03-17T17:11:35.292Z",
+      "mtime": "2018-03-17T18:23:50.832Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14570,7 +14570,7 @@
       "implement": []
     },
     "app.ui.ChannelHeader": {
-      "mtime": "2018-03-15T17:02:48.911Z",
+      "mtime": "2018-03-18T09:27:23.917Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -14581,15 +14581,16 @@
           "load": true,
           "construct": true
         },
-        "qx.ui.layout.HBox": {
+        "qx.ui.layout.Grid": {
+          "construct": true
+        },
+        "app.Config": {
           "construct": true
         },
         "app.model.Subscription": {},
         "app.model.Channel": {},
-        "app.Config": {},
         "qx.ui.form.Button": {},
         "qx.core.Init": {},
-        "qx.ui.basic.Image": {},
         "qx.ui.basic.Atom": {},
         "qx.ui.basic.Label": {},
         "qx.ui.core.LayoutItem": {
@@ -15106,7 +15107,7 @@
       "implement": []
     },
     "app.ui.renderer.Event": {
-      "mtime": "2018-03-17T17:35:07.061Z",
+      "mtime": "2018-03-18T08:54:14.224Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -15134,10 +15135,11 @@
         "qx.ui.layout.VBox": {},
         "qx.ui.container.Composite": {},
         "app.ui.basic.Label": {},
+        "qx.ui.basic.Atom": {},
+        "app.Config": {},
         "qx.ui.layout.Flow": {},
         "app.ui.toolbar.ToolBar": {},
         "qx.ui.toolbar.Button": {},
-        "app.Config": {},
         "qx.ui.core.LayoutItem": {
           "load": true
         },
@@ -15167,23 +15169,23 @@
       "translations": [
         {
           "msgid": "all-day",
-          "lineNo": 131
+          "lineNo": 133
         },
         {
           "msgid": "%1 o'clock",
-          "lineNo": 131
+          "lineNo": 133
         },
         {
           "msgid": "Share",
-          "lineNo": 229
+          "lineNo": 256
         },
         {
           "msgid": "Edit",
-          "lineNo": 237
+          "lineNo": 264
         },
         {
           "msgid": "Delete",
-          "lineNo": 245
+          "lineNo": 272
         }
       ]
     },
@@ -15235,7 +15237,7 @@
       ]
     },
     "app.ui.form.MBindPropertyToChildControl": {
-      "mtime": "2018-02-10T16:26:56.456Z",
+      "mtime": "2018-03-17T18:19:59.806Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Mixin": {
@@ -15475,7 +15477,7 @@
       "implement": []
     },
     "app.mobile.theme.Appearance": {
-      "mtime": "2018-03-15T17:41:10.603Z",
+      "mtime": "2018-03-18T09:28:47.857Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -16332,7 +16334,7 @@
       "implement": []
     },
     "app.ui.channel.Messages": {
-      "mtime": "2018-03-17T14:33:09.079Z",
+      "mtime": "2018-03-18T09:07:22.480Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -16409,7 +16411,7 @@
       ]
     },
     "app.ui.channel.Events": {
-      "mtime": "2018-03-17T17:33:39.766Z",
+      "mtime": "2018-03-18T09:01:30.478Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -16435,6 +16437,7 @@
         },
         "qx.ui.popup.Popup": {},
         "qx.ui.layout.Grow": {},
+        "qx.bom.Viewport": {},
         "app.ui.renderer.Event": {},
         "qx.data.Array": {
           "load": true

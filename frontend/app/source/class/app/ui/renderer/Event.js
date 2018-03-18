@@ -22,7 +22,7 @@ qx.Class.define('app.ui.renderer.Event', {
     layout.setColumnFlex(1, 1)
     this._setLayout(layout)
 
-    const cc = ['date-sheet', 'time', 'location', 'categories']
+    const cc = ['date-sheet', 'time', 'organizer', 'location', 'categories']
     cc.forEach(this._createChildControl, this)
     this.__monthFormat = new qx.util.format.DateFormat('MMM')
     this.__dayFormat = new qx.util.format.DateFormat('d')
@@ -95,6 +95,7 @@ qx.Class.define('app.ui.renderer.Event', {
           content.removeRelatedBindings(this.getChildControl('title'))
           content.removeRelatedBindings(this.getChildControl('day'))
           content.removeRelatedBindings(this.getChildControl('month'))
+          content.removeRelatedBindings(this.getChildControl('organizer'))
           content.removeRelatedBindings(this.getChildControl('location'))
           content.removeRelatedBindings(this.getChildControl('description'))
           content.removeRelatedBindings(this.getChildControl('title'))
@@ -102,6 +103,7 @@ qx.Class.define('app.ui.renderer.Event', {
       }
       if (value) {
         const content = value.getContentObject()
+        console.log(content)
         if (content) {
           let control = this.getChildControl('title')
           this._bindPropertyToChildControl(content, 'name', 'title', 'value', {
@@ -126,20 +128,28 @@ qx.Class.define('app.ui.renderer.Event', {
             }.bind(this)
           }, old && old.getContentObject())
 
-          this._bindPropertyToChildControl(content, 'start', 'time', 'value', {
+          this._bindPropertyToChildControl(content, 'start', 'time', 'label', {
             converter: function (value) {
               return content.isAllDay() ? this.tr('all-day') : this.tr('%1 o\'clock', this.__timeFormat.format(value))
             }.bind(this)
           }, old && old.getContentObject())
 
-          this._bindPropertyToChildControl(content, 'location', 'location', 'value', null, old && old.getContentObject())
-          this._bindPropertyToChildControl(content, 'description', 'description', 'value', null, old && old.getContentObject())
+          this._bindPropertyToChildControl(content, 'organizer', 'organizer', 'label', null, old && old.getContentObject(), true)
+          this._bindPropertyToChildControl(content, 'location', 'location', 'label', null, old && old.getContentObject(), true)
+          this._bindPropertyToChildControl(content, 'description', 'description', 'value', null, old && old.getContentObject(), true)
 
           if (!this.__catController) {
             this.__catController = new qx.data.controller.List(content.getCategories(), this.getChildControl('categories'), '')
             this.__catController.setDelegate({
               configureItem: function (item) {
                 item.setAppearance('category')
+              },
+              bindItem: function (controller, item, index) {
+                controller.bindProperty('', 'label', {
+                  converter: function (value) {
+                    return '#' + value
+                  }
+                }, item, index)
               }
             })
           } else {
@@ -198,7 +208,20 @@ qx.Class.define('app.ui.renderer.Event', {
           break
 
         case 'location':
-          control = new app.ui.basic.Label()
+          control = new qx.ui.basic.Atom(null, app.Config.icons.location + '/16')
+          control.getChildControl('label').set({
+            rich: true,
+            wrap: true
+          })
+          this.getChildControl('details').add(control)
+          break
+
+        case 'organizer':
+          control = new qx.ui.basic.Atom(null, app.Config.icons.organizer + '/16')
+          control.getChildControl('label').set({
+            rich: true,
+            wrap: true
+          })
           this.getChildControl('details').add(control)
           break
 
@@ -208,12 +231,16 @@ qx.Class.define('app.ui.renderer.Event', {
           break
 
         case 'time':
-          control = new app.ui.basic.Label()
+          control = new qx.ui.basic.Atom(null, app.Config.icons.time + '/16')
           this.getChildControl('details').add(control)
           break
 
         case 'description':
           control = new app.ui.basic.Label()
+          control.set({
+            rich: true,
+            wrap: true
+          })
           this._add(control, {row: 2, column: 1})
           break
 

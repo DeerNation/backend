@@ -7,14 +7,23 @@ msgid "Uhr"
 msgstr ""
 
 #: app/ui/renderer/Event.js:229 app/ui/renderer/Event.js:231
+#: app/ui/renderer/Event.js:236 app/ui/renderer/Event.js:242
+#: app/ui/renderer/Event.js:243 app/ui/renderer/Event.js:244
+#: app/ui/renderer/Event.js:256
 msgid "Share"
 msgstr ""
 
 #: app/ui/renderer/Event.js:237 app/ui/renderer/Event.js:239
+#: app/ui/renderer/Event.js:244 app/ui/renderer/Event.js:250
+#: app/ui/renderer/Event.js:251 app/ui/renderer/Event.js:252
+#: app/ui/renderer/Event.js:264
 msgid "Edit"
 msgstr ""
 
 #: app/ui/renderer/Event.js:245 app/ui/renderer/Event.js:247
+#: app/ui/renderer/Event.js:252 app/ui/renderer/Event.js:258
+#: app/ui/renderer/Event.js:259 app/ui/renderer/Event.js:260
+#: app/ui/renderer/Event.js:272
 msgid "Delete"
 msgstr ""
 
@@ -184,10 +193,32 @@ msgstr ""
 msgid "allday"
 msgstr ""
 
-#: app/ui/renderer/Event.js:131
+#: app/ui/renderer/Event.js:131 app/ui/renderer/Event.js:133
+#: app/ui/renderer/Event.js:132
 msgid "all-day"
 msgstr ""
 
-#: app/ui/renderer/Event.js:131
+#: app/ui/renderer/Event.js:131 app/ui/renderer/Event.js:133
+#: app/ui/renderer/Event.js:132
 msgid "%1 o'clock"
+msgstr ""
+
+#: qx/ui/form/validation/Manager.js:37
+msgid "This field is required"
+msgstr ""
+
+#: qx/ui/control/DateChooser.js:258
+msgid "Last year"
+msgstr ""
+
+#: qx/ui/control/DateChooser.js:270
+msgid "Last month"
+msgstr ""
+
+#: qx/ui/control/DateChooser.js:282
+msgid "Next month"
+msgstr ""
+
+#: qx/ui/control/DateChooser.js:294
+msgid "Next year"
 msgstr ""

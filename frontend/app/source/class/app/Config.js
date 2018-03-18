@@ -68,7 +68,10 @@ qx.Class.define('app.Config', {
       delete: '@Material/delete',
       edit: '@Material/mode_edit',
       share: '@Material/share',
-      back: '@Material/chevron_left'
+      back: '@Material/chevron_left',
+      location: '@Material/location_on',
+      organizer: '@Material/recent_actors',
+      time: '@Material/access_time'
     },
 
     init: function () {

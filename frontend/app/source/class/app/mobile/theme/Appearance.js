@@ -32,18 +32,60 @@ qx.Theme.define('app.mobile.theme.Appearance', {
     'main/channel/header': {
       style: function () {
         return {
-          minHeight: 50,
-          padding: [0, 10, 0, 0],
-          backgroundColor: '#EEEEEE'
+          height: 50,
+          padding: 0,
+          backgroundColor: '#EEEEEE',
+          marginBottom: 8
+        }
+      }
+    },
+
+    'main/channel/header/title': {
+      style: function () {
+        return {
+          margin: 0,
+          allowGrowY: false,
+          gap: 4,
+          center: true
+        }
+      }
+    },
+    'main/channel/header/description': {
+      style: function () {
+        return {
+          textColor: 'lightgrey',
+          margin: 0
         }
       }
     },
 
     'main/channel/header/back-button': {
       style: function (states) {
+        let dec = 'flat-button-h'
+        if (states.first) {
+          dec += '-first'
+        } else if (states.last) {
+          dec += '-last'
+        }
         return {
           textColor: 'lightgrey',
-          backgroundColor: states.pressed ? 'lightgrey' : 'transparent'
+          backgroundColor: states.pressed ? 'lightgrey' : 'transparent',
+          decorator: dec,
+          height: 50,
+          width: 50,
+          center: true
+        }
+      }
+    },
+
+    'main/channel/header/more-button': 'main/channel/header/back-button',
+    'main/channel/header/favorite': {
+      include: 'main/channel/header/back-button',
+      alias: 'main/channel/header/back-button',
+
+      style: function (states) {
+        return {
+          textColor: states.enabled ? 'favorite' : 'lightgrey'
         }
       }
     }

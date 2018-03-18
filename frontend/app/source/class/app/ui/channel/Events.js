@@ -37,6 +37,12 @@ qx.Class.define('app.ui.channel.Events', {
     _applySubscription: function (subscription, oldSubscription) {
       this.base(arguments, subscription, oldSubscription)
       this.addListenerOnce('subscriptionApplied', () => {
+        // currently we can only share activities in other channel and we need to be logged in for that
+        if (app.Model.getInstance().getActor()) {
+          this.getChildControl('renderer').getChildControl('button-share').show()
+        } else {
+          this.getChildControl('renderer').getChildControl('button-share').exclude()
+        }
         if (this.isAllowed('d')) {
           this.getChildControl('renderer').getChildControl('button-delete').show()
         } else {
@@ -221,6 +227,8 @@ qx.Class.define('app.ui.channel.Events', {
 
         case 'popup':
           control = new qx.ui.popup.Popup(new qx.ui.layout.Grow())
+          control.setMaxWidth(qx.bom.Viewport.getWidth() - 20)
+          control.setMaxHeight(qx.bom.Viewport.getHeight() - 20)
           break
 
         case 'renderer':
