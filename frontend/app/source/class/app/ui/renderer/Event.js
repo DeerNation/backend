@@ -103,7 +103,6 @@ qx.Class.define('app.ui.renderer.Event', {
       }
       if (value) {
         const content = value.getContentObject()
-        console.log(content)
         if (content) {
           let control = this.getChildControl('title')
           this._bindPropertyToChildControl(content, 'name', 'title', 'value', {

@@ -88,6 +88,73 @@ qx.Theme.define('app.mobile.theme.Appearance', {
           textColor: states.enabled ? 'favorite' : 'lightgrey'
         }
       }
+    },
+
+    'channel-listitem': {
+      include: 'listitem',
+      alias: 'listitem',
+
+      style: function () {
+        return {
+          padding: [0, 18, 0, 18],
+          height: 50,
+          font: 'channel',
+          textColor: 'inherit'
+        }
+      }
+    },
+
+    'channel-listitem/icon': {
+      include: 'main/menu/actor-icon',
+      alias: 'main/menu/actor-icon',
+
+      style: function () {
+        return {
+          font: 'channel',
+          width: 40,
+          height: 40,
+          maxWidth: 40,
+          maxHeight: 40,
+          marginRight: 8,
+          show: 'label',
+          decorator: 'rounded',
+          textColor: 'white',
+          center: true
+        }
+      }
+    },
+
+    'channel-listitem/type': {
+      style: function () {
+        return {
+          width: 20,
+          height: 20,
+          scale: true,
+          margin: [0, 4, 0, 8]
+        }
+      }
+    },
+
+    'activity-listitem': {
+      include: 'listitem',
+      alias: 'listitem',
+      style: function (states) {
+        return {
+          padding: 0,
+          backgroundColor: states.hovered || states.selected ? 'hovered' : null,
+          textColor: undefined
+        }
+      }
+    },
+
+    'activity-listitem/container': {
+      style: function () {
+        return {
+          padding: 10,
+          margin: [10, 10, 10, 20],
+          decorator: 'activity-bubble'
+        }
+      }
     }
 
     // 'splitpane/menu/favorite-button': {

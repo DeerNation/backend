@@ -90,6 +90,19 @@ qx.Theme.define('app.theme.Decoration',
           width: [0, 0, 0, 1],
           color: 'button-border'
         }
+      },
+
+      'activity-bubble': {
+        style: {
+          color: 'lightgrey',
+          width: 1,
+          backgroundColor: 'white',
+          radius: 10,
+          shadowBlurRadius: 4,
+          shadowVerticalLength: 2,
+          shadowColor: 'rgba(0, 0, 0, 0.2)',
+          bubble: ['left', 30, 20]
+        }
       }
     }
   })

@@ -55,6 +55,8 @@ module.exports = function (socket, scServer, callback) {
       await acl.check(req.socket.authToken, req.channel, acl.action.ENTER)
       next()
     } catch (e) {
+      logger.error(e)
+      console.log(next)
       next(i18n.__('You are not authorized to subscribe to #%s', req.channel))
     }
   })

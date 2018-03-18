@@ -71,6 +71,8 @@ qx.Class.define('app.Application', {
     __init: function () {
       app.Config.init()
 
+      qx.Class.patch(qx.ui.decoration.Decorator, app.ui.decoration.MSpeechBubble)
+
       // install service worker (not working in app context)
       if (qx.core.Environment.get('app.cordova')) {
         // use push plugin
@@ -108,6 +110,7 @@ qx.Class.define('app.Application', {
 
       // Document is the application root
       let doc = this.getRoot()
+      doc.setBackgroundColor('background')
 
       doc.add(main, {edge: 0})
     },

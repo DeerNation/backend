@@ -474,7 +474,8 @@ qx.Theme.define('app.theme.Appearance',
 
         style: function () {
           return {
-            decorator: null
+            decorator: null,
+            backgroundColor: 'transparent'
           }
         }
       },

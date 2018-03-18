@@ -1,7 +1,7 @@
 {
   "classInfo": {
     "app.Application": {
-      "mtime": "2018-02-23T17:11:23.510Z",
+      "mtime": "2018-03-18T10:56:58.432Z",
       "libraryName": "app",
       "dependsOn": {
         "app.ui.Main": {
@@ -22,6 +22,8 @@
         "qx.log.appender.Console": {},
         "qx.util.DynamicScriptLoader": {},
         "app.Config": {},
+        "qx.ui.decoration.Decorator": {},
+        "app.ui.decoration.MSpeechBubble": {},
         "app.io.PushPlugin": {},
         "app.io.ServiceWorkerHandler": {},
         "qx.util.ResourceManager": {},
@@ -329,7 +331,7 @@
       }
     },
     "app.theme.Color": {
-      "mtime": "2018-03-18T08:46:57.827Z",
+      "mtime": "2018-03-18T10:29:00.413Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -345,7 +347,7 @@
       "implement": []
     },
     "app.theme.Decoration": {
-      "mtime": "2018-03-18T08:43:08.989Z",
+      "mtime": "2018-03-18T13:58:50.983Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -390,7 +392,7 @@
       }
     },
     "app.theme.Appearance": {
-      "mtime": "2018-03-18T09:23:46.091Z",
+      "mtime": "2018-03-18T10:26:21.094Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -15107,7 +15109,7 @@
       "implement": []
     },
     "app.ui.renderer.Event": {
-      "mtime": "2018-03-18T08:54:14.224Z",
+      "mtime": "2018-03-18T11:04:40.956Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -15169,23 +15171,23 @@
       "translations": [
         {
           "msgid": "all-day",
-          "lineNo": 133
+          "lineNo": 132
         },
         {
           "msgid": "%1 o'clock",
-          "lineNo": 133
+          "lineNo": 132
         },
         {
           "msgid": "Share",
-          "lineNo": 256
+          "lineNo": 255
         },
         {
           "msgid": "Edit",
-          "lineNo": 264
+          "lineNo": 263
         },
         {
           "msgid": "Delete",
-          "lineNo": 272
+          "lineNo": 271
         }
       ]
     },
@@ -15461,7 +15463,7 @@
       "implement": []
     },
     "app.mobile.theme.Font": {
-      "mtime": "2018-02-11T09:13:23.596Z",
+      "mtime": "2018-03-18T09:35:45.234Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -15477,7 +15479,7 @@
       "implement": []
     },
     "app.mobile.theme.Appearance": {
-      "mtime": "2018-03-18T09:28:47.857Z",
+      "mtime": "2018-03-18T11:55:40.745Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -16969,6 +16971,20 @@
           }
         }
       }
+    },
+    "app.ui.decoration.MSpeechBubble": {
+      "mtime": "2018-03-18T14:06:32.218Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "qx.Mixin": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.theme.manager.Color": {}
+      },
+      "extends": null,
+      "include": [],
+      "implement": []
     }
   }
 }
