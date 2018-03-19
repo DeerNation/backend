@@ -501,6 +501,7 @@ qx.Theme.define('app.theme.Appearance',
       'main/channel/header/title': {
         style: function () {
           return {
+            textColor: 'lightgrey',
             margin: 8,
             gap: 4
           }
@@ -511,14 +512,6 @@ qx.Theme.define('app.theme.Appearance',
         style: function () {
           return {
             font: 'channel'
-          }
-        }
-      },
-
-      'main/channel/header/title/icon': {
-        style: function () {
-          return {
-            textColor: 'lightgrey'
           }
         }
       },
@@ -537,7 +530,6 @@ qx.Theme.define('app.theme.Appearance',
       'main/channel/header/description': {
         style: function () {
           return {
-            textColor: 'lightgrey',
             margin: 8
           }
         }

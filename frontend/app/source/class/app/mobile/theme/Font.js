@@ -14,8 +14,7 @@ qx.Theme.define('app.mobile.theme.Font', {
     'channel': {
       size: 20,
       family: ['Roboto', 'Arial', 'sans-serif'],
-      color: 'menu-text',
-      lineHeight: 2.0
+      color: 'menu-text'
     }
   }
 })

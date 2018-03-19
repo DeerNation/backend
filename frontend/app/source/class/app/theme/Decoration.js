@@ -92,7 +92,7 @@ qx.Theme.define('app.theme.Decoration',
         }
       },
 
-      'activity-bubble': {
+      'activity-bubble-left': {
         style: {
           color: 'lightgrey',
           width: 1,
@@ -101,7 +101,17 @@ qx.Theme.define('app.theme.Decoration',
           shadowBlurRadius: 4,
           shadowVerticalLength: 2,
           shadowColor: 'rgba(0, 0, 0, 0.2)',
-          bubble: ['left', 30, 20]
+          bubble: ['left', 20, 20],
+          bubbleShape: 'second-missing'
+        }
+      },
+
+      'activity-bubble-right': {
+        include: 'activity-bubble-left',
+
+        style: {
+          backgroundColor: 'bg-own-message',
+          bubble: ['right', 20, 20]
         }
       }
     }

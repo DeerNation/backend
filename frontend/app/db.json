@@ -331,7 +331,7 @@
       }
     },
     "app.theme.Color": {
-      "mtime": "2018-03-18T10:29:00.413Z",
+      "mtime": "2018-03-19T19:47:36.583Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -347,7 +347,7 @@
       "implement": []
     },
     "app.theme.Decoration": {
-      "mtime": "2018-03-18T13:58:50.983Z",
+      "mtime": "2018-03-19T19:37:30.107Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -363,7 +363,7 @@
       "implement": []
     },
     "app.theme.Font": {
-      "mtime": "2018-03-17T16:27:18.994Z",
+      "mtime": "2018-03-19T17:29:15.501Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -392,7 +392,7 @@
       }
     },
     "app.theme.Appearance": {
-      "mtime": "2018-03-18T10:26:21.094Z",
+      "mtime": "2018-03-19T17:32:10.372Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -13644,7 +13644,7 @@
       "implement": []
     },
     "app.ui.form.ActivityItem": {
-      "mtime": "2018-03-17T20:19:49.844Z",
+      "mtime": "2018-03-19T19:06:56.984Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13664,13 +13664,13 @@
         "qx.ui.layout.Canvas": {
           "construct": true
         },
+        "app.Config": {
+          "construct": true
+        },
         "qx.util.format.DateFormat": {
           "construct": true
         },
         "qx.data.Array": {
-          "construct": true
-        },
-        "app.Config": {
           "construct": true
         },
         "app.model.activity.Registry": {},
@@ -15431,7 +15431,7 @@
       }
     },
     "app.mobile.theme.Color": {
-      "mtime": "2018-02-11T09:23:52.069Z",
+      "mtime": "2018-03-19T17:21:36.116Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -15463,7 +15463,7 @@
       "implement": []
     },
     "app.mobile.theme.Font": {
-      "mtime": "2018-03-18T09:35:45.234Z",
+      "mtime": "2018-03-19T17:29:18.489Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -15479,7 +15479,7 @@
       "implement": []
     },
     "app.mobile.theme.Appearance": {
-      "mtime": "2018-03-18T11:55:40.745Z",
+      "mtime": "2018-03-19T19:31:09.702Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -16973,13 +16973,14 @@
       }
     },
     "app.ui.decoration.MSpeechBubble": {
-      "mtime": "2018-03-18T14:06:32.218Z",
+      "mtime": "2018-03-19T19:34:15.368Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Mixin": {
           "load": true,
           "usage": "dynamic"
         },
+        "qx.lang.Type": {},
         "qx.theme.manager.Color": {}
       },
       "extends": null,

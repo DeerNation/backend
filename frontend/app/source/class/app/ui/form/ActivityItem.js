@@ -20,8 +20,10 @@ qx.Class.define('app.ui.form.ActivityItem', {
     this._setLayout(new qx.ui.layout.Canvas())
     this.__renderers = {}
 
-    this.addListener('pointerover', this._onPointerOver, this)
-    this.addListener('pointerout', this._onPointerOut, this)
+    if (app.Config.target !== 'desktop') {
+      this.addListener('pointerover', this._onPointerOver, this)
+      this.addListener('pointerout', this._onPointerOut, this)
+    }
 
     this.__dateFormat = new qx.util.format.DateFormat('H:mm')
 
@@ -137,10 +139,12 @@ qx.Class.define('app.ui.form.ActivityItem', {
 
     // property apply
     _applyDeletable: function (value) {
-      if (value) {
-        this.getChildControl('delete-button').show()
-      } else {
-        this.getChildControl('delete-button').exclude()
+      if (app.Config.target === 'desktop') {
+        if (value) {
+          this.getChildControl('delete-button').show()
+        } else {
+          this.getChildControl('delete-button').exclude()
+        }
       }
     },
 
@@ -189,6 +193,11 @@ qx.Class.define('app.ui.form.ActivityItem', {
       const isOwner = app.Model.getInstance().getSelectedSubscription() &&
         app.Model.getInstance().getSelectedSubscription().getChannel().getOwnerId() === author.getId()
       // }
+      if (isOwner) {
+        this.addState('owner')
+      } else {
+        this.removeState('owner')
+      }
       if (app.Model.getInstance().getActor()) {
         this.setDeletable(isOwner || app.Model.getInstance().getActor().isAdmin() || author.getId() === app.Model.getInstance().getActor().getId())
       } else {
@@ -310,7 +319,8 @@ qx.Class.define('app.ui.form.ActivityItem', {
       focused: true,
       hovered: true,
       selected: true,
-      dragover: true
+      dragover: true,
+      owner: true
     },
 
     /**
@@ -331,7 +341,9 @@ qx.Class.define('app.ui.form.ActivityItem', {
   },
 
   destruct: function () {
-    this.removeListener('pointerover', this._onPointerOver, this)
-    this.removeListener('pointerout', this._onPointerOut, this)
+    if (app.Config.target !== 'desktop') {
+      this.removeListener('pointerover', this._onPointerOver, this)
+      this.removeListener('pointerout', this._onPointerOut, this)
+    }
   }
 })

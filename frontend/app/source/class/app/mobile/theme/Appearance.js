@@ -34,8 +34,9 @@ qx.Theme.define('app.mobile.theme.Appearance', {
         return {
           height: 50,
           padding: 0,
-          backgroundColor: '#EEEEEE',
-          marginBottom: 8
+          backgroundColor: 'menu-background',
+          marginBottom: 8,
+          textColor: 'menu-text'
         }
       }
     },
@@ -44,16 +45,23 @@ qx.Theme.define('app.mobile.theme.Appearance', {
       style: function () {
         return {
           margin: 0,
+          padding: [4, 10, 0, 10],
           allowGrowY: false,
           gap: 4,
           center: true
         }
       }
     },
+    'main/channel/header/title/label': {
+      style: function () {
+        return {
+          font: 'channel'
+        }
+      }
+    },
     'main/channel/header/description': {
       style: function () {
         return {
-          textColor: 'lightgrey',
           margin: 0
         }
       }
@@ -68,7 +76,6 @@ qx.Theme.define('app.mobile.theme.Appearance', {
           dec += '-last'
         }
         return {
-          textColor: 'lightgrey',
           backgroundColor: states.pressed ? 'lightgrey' : 'transparent',
           decorator: dec,
           height: 50,
@@ -138,21 +145,21 @@ qx.Theme.define('app.mobile.theme.Appearance', {
     'activity-listitem': {
       include: 'listitem',
       alias: 'listitem',
-      style: function (states) {
+      style: function () {
         return {
           padding: 0,
-          backgroundColor: states.hovered || states.selected ? 'hovered' : null,
-          textColor: undefined
+          textColor: undefined,
+          backgroundColor: null
         }
       }
     },
 
     'activity-listitem/container': {
-      style: function () {
+      style: function (states) {
         return {
           padding: 10,
-          margin: [10, 10, 10, 20],
-          decorator: 'activity-bubble'
+          margin: states.owner ? [10, 20, 10, 10] : [10, 10, 10, 20],
+          decorator: 'activity-bubble-' + (states.owner ? 'right' : 'left')
         }
       }
     }
