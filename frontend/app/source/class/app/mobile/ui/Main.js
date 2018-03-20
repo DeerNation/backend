@@ -16,7 +16,7 @@ qx.Class.define('app.mobile.ui.Main', {
   construct: function () {
     this.base(arguments)
     this._createChildControl('menu')
-    this._createChildControl('channel')
+    this.__currentPageName = 'menu'
 
     app.Model.getInstance().addListener('changedSelectedSubscription', this._onSelectedSubscription, this)
     this.setMaxWidth(qx.bom.Viewport.getWidth())
@@ -44,6 +44,7 @@ qx.Class.define('app.mobile.ui.Main', {
   */
   members: {
     __lid: null,
+    __currentPageName: null,
 
     /**
      * Show Channel page on stack if subscription is selected, or the menu if not
@@ -58,9 +59,51 @@ qx.Class.define('app.mobile.ui.Main', {
       if (newView) {
         const control = this.getChildControl(newView)
         control.setSubscription(ev.getData())
-        this.setSelection([control])
+        this.showPage(newView, true)
       } else {
-        this.setSelection([this.getChildControl('menu')])
+        this.showPage('menu', true)
+      }
+    },
+
+    showPage: function (pageName, animate) {
+      if (this.__currentPageName === pageName) {
+        return
+      }
+      if (!animate) {
+        this.setSelection([this.getChildControl(pageName)])
+      } else {
+        let animationOut = app.util.Animation.SLIDE_LEFT_OUT
+        let animationIn = app.util.Animation.SLIDE_LEFT_IN
+        if (pageName === 'menu') {
+          animationOut = app.util.Animation.SLIDE_RIGHT_OUT
+          animationIn = app.util.Animation.SLIDE_RIGHT_IN
+        }
+        const currentPage = this.getChildControl(this.__currentPageName)
+        const page = this.getChildControl(pageName)
+
+        qx.bom.AnimationFrame.request(function() {
+          qx.bom.element.Animation.animate(currentPage.getContentElement().getDomElement(), animationOut)
+        })
+
+        const startAnimation = () => {
+          qx.bom.AnimationFrame.request(() => {
+            const animIn = qx.bom.element.Animation.animate(page.getContentElement().getDomElement(), animationIn)
+            this.debug('animating page ' + page.classname + ' in')
+            animIn.on('end', () => {
+              this.__currentPageName = pageName
+              this.setSelection([page])
+              this.debug('page ' + page.classname + ' animation ended')
+            })
+          })
+        }
+
+        if (!page.isVisible()) {
+          this.debug('waiting for page ' + page.classname + ' to appear')
+          page.addListenerOnce('appear', startAnimation, this)
+          page.show()
+        } else {
+          startAnimation()
+        }
       }
     },
 

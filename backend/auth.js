@@ -53,10 +53,9 @@ module.exports = function (socket, scServer, callback) {
   scServer.addMiddleware(scServer.MIDDLEWARE_SUBSCRIBE, async function (req, next) {
     try {
       await acl.check(req.socket.authToken, req.channel, acl.action.ENTER)
-      next()
+      next && next()
     } catch (e) {
       logger.error(e)
-      console.log(next)
       next(i18n.__('You are not authorized to subscribe to #%s', req.channel))
     }
   })
@@ -64,7 +63,7 @@ module.exports = function (socket, scServer, callback) {
   scServer.addMiddleware(scServer.MIDDLEWARE_PUBLISH_IN, async function (req, next) {
     try {
       await acl.check(req.socket.authToken, req.channel, acl.action.PUBLISH)
-      next()
+      next && next()
     } catch (e) {
       next(i18n.__('You are not authorized to publish in #%s', req.channel))
     }

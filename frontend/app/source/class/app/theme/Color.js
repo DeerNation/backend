@@ -23,7 +23,7 @@ qx.Theme.define('app.theme.Color',
       'favorite': 'rgb(252, 179, 22)',
       'category-bg': 'rgba(200, 200, 200, 0.6)',
       'background': '#F5F0EB',
-      'bg-own-message': '#D8DBD8',
+      'bg-own-message': '#eeeeee',
 
       // channel-bar
       'dark-form-item-bg': 'rgb(31, 35, 41)',

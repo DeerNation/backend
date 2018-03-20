@@ -158,8 +158,8 @@ qx.Theme.define('app.mobile.theme.Appearance', {
       style: function (states) {
         return {
           padding: 10,
-          margin: states.owner ? [10, 20, 10, 10] : [10, 10, 10, 20],
-          decorator: 'activity-bubble-' + (states.owner ? 'right' : 'left')
+          margin: states.own ? [10, 20, 10, 10] : [10, 10, 10, 20],
+          decorator: 'activity-bubble-' + (states.own ? 'right' : 'left')
         }
       }
     }

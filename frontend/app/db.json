@@ -331,7 +331,7 @@
       }
     },
     "app.theme.Color": {
-      "mtime": "2018-03-19T19:47:36.583Z",
+      "mtime": "2018-03-19T20:19:31.376Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -13644,7 +13644,7 @@
       "implement": []
     },
     "app.ui.form.ActivityItem": {
-      "mtime": "2018-03-19T19:06:56.984Z",
+      "mtime": "2018-03-20T16:56:52.722Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -13675,6 +13675,7 @@
         },
         "app.model.activity.Registry": {},
         "app.Model": {},
+        "qx.core.Init": {},
         "qx.ui.layout.Grid": {},
         "qx.ui.container.Composite": {},
         "app.ui.basic.AvatarIcon": {},
@@ -15479,7 +15480,7 @@
       "implement": []
     },
     "app.mobile.theme.Appearance": {
-      "mtime": "2018-03-19T19:31:09.702Z",
+      "mtime": "2018-03-19T20:05:57.922Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Theme": {
@@ -15619,7 +15620,7 @@
       ]
     },
     "app.mobile.ui.Main": {
-      "mtime": "2018-03-10T15:07:37.165Z",
+      "mtime": "2018-03-20T18:29:55.089Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -15639,6 +15640,9 @@
         "qx.core.Init": {
           "construct": true
         },
+        "app.util.Animation": {},
+        "qx.bom.AnimationFrame": {},
+        "qx.bom.element.Animation": {},
         "app.mobile.ui.Menu": {},
         "app.ui.channel.Messages": {},
         "app.ui.channel.Events": {},
@@ -16973,7 +16977,7 @@
       }
     },
     "app.ui.decoration.MSpeechBubble": {
-      "mtime": "2018-03-19T19:34:15.368Z",
+      "mtime": "2018-03-19T20:07:47.165Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Mixin": {
@@ -16982,6 +16986,19 @@
         },
         "qx.lang.Type": {},
         "qx.theme.manager.Color": {}
+      },
+      "extends": null,
+      "include": [],
+      "implement": []
+    },
+    "app.util.Animation": {
+      "mtime": "2018-03-20T18:32:44.520Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        }
       },
       "extends": null,
       "include": [],

@@ -215,7 +215,6 @@ qx.Mixin.define('app.ui.decoration.MSpeechBubble', {
           // copy shadow settings
           styles[':before'] = outerStyle
         }
-        console.log(styles)
         styles.overflow = 'visible !important'
       }
     }

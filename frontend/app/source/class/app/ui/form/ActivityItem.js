@@ -33,6 +33,10 @@ qx.Class.define('app.ui.form.ActivityItem', {
     if (app.Config.target !== 'mobile') {
       this._createChildControl('author-icon')
     }
+    if (app.Config.target !== 'desktop') {
+      this.addListener('longtap', this._onLongtap, this)
+    }
+
     this._createChildControl('authorName')
     // if (app.Config.target !== 'mobile') {
     //   this._createChildControl('authorRoles')
@@ -133,6 +137,13 @@ qx.Class.define('app.ui.form.ActivityItem', {
           }
           container.setSelection([renderer])
         }
+        if (app.Model.getInstance().getActor() && app.Model.getInstance().getActor().getId() === value.getActorId()) {
+          this.addState('own')
+        } else {
+          this.removeState('own')
+        }
+      } else {
+        this.removeState('own')
       }
       this.getChildControl('overlay').exclude()
     },
@@ -193,16 +204,20 @@ qx.Class.define('app.ui.form.ActivityItem', {
       const isOwner = app.Model.getInstance().getSelectedSubscription() &&
         app.Model.getInstance().getSelectedSubscription().getChannel().getOwnerId() === author.getId()
       // }
-      if (isOwner) {
-        this.addState('owner')
-      } else {
-        this.removeState('owner')
-      }
       if (app.Model.getInstance().getActor()) {
         this.setDeletable(isOwner || app.Model.getInstance().getActor().isAdmin() || author.getId() === app.Model.getInstance().getActor().getId())
       } else {
         this.setDeletable(false)
       }
+    },
+
+    /**
+     * Open context menu in header on touch devices
+     * @private
+     */
+    _onLongtap: function () {
+      const mainView = qx.core.Init.getApplication().getMain()
+
     },
 
     // overridden
@@ -320,7 +335,7 @@ qx.Class.define('app.ui.form.ActivityItem', {
       hovered: true,
       selected: true,
       dragover: true,
-      owner: true
+      own: true
     },
 
     /**
