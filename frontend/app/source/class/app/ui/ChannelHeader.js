@@ -17,13 +17,14 @@ qx.Class.define('app.ui.ChannelHeader', {
     this.base(arguments)
     const layout = new qx.ui.layout.Grid()
     this._setLayout(layout)
-    layout.setColumnFlex(2, 1)
     layout.setColumnAlign(1, 'center', 'middle')
     layout.setColumnAlign(2, 'center', 'middle')
-
     if (app.Config.target === 'mobile') {
+      layout.setColumnFlex(2, 1)
       this._createChildControl('back-button')
-      // this._createChildControl('more-button')
+      // this._createChildControl('more-button'
+    } else {
+      layout.setColumnAlign(3, 'left', 'middle')
     }
   },
 
@@ -134,7 +135,7 @@ qx.Class.define('app.ui.ChannelHeader', {
 
         case 'description':
           control = new qx.ui.basic.Label()
-          this._add(control, {row: app.Config.target === 'mobile' ? 1 : 0, column: 2})
+          this._add(control, {row: app.Config.target === 'mobile' ? 1 : 0, column: app.Config.target === 'mobile' ? 2 : 3})
           break
       }
       return control || this.base(arguments, id, hash)

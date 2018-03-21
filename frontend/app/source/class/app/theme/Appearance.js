@@ -493,7 +493,7 @@ qx.Theme.define('app.theme.Appearance',
           return {
             minHeight: 50,
             padding: [0, 20],
-            backgroundColor: '#EEEEEE'
+            backgroundColor: 'rgba(47, 52, 61, 0.2)'
           }
         }
       },
@@ -501,7 +501,6 @@ qx.Theme.define('app.theme.Appearance',
       'main/channel/header/title': {
         style: function () {
           return {
-            textColor: 'lightgrey',
             margin: 8,
             gap: 4
           }
@@ -516,11 +515,18 @@ qx.Theme.define('app.theme.Appearance',
         }
       },
 
+      'main/channel/header/title/icon': {
+        style: function () {
+          return {
+            textColor: 'lightgrey'
+          }
+        }
+      },
+
       'main/channel/header/favorite': {
         style: function (states) {
           return {
             textColor: states.enabled ? 'favorite' : 'lightgrey',
-            width: 50,
             height: 50,
             center: true
           }
@@ -530,6 +536,7 @@ qx.Theme.define('app.theme.Appearance',
       'main/channel/header/description': {
         style: function () {
           return {
+            textColor: 'lightgrey',
             margin: 8
           }
         }
