@@ -111,7 +111,9 @@ class WebhookHandler {
         let message = req.body
         if (message.hasOwnProperty('entry') && message.hasOwnProperty('object') && webhook.type === 'facebook') {
           // currently only log facebooks hooks to collect some example data
-          fs.appendFile('facebook-data.txt', JSON.stringify(message) + '\n\n')
+          this._transformFacebookData(message).forEach(activity => {
+            channelHandler.publish(authToken, webhook.channel, activity)
+          })
           res.sendStatus(200)
         } else {
           const isPublished = await channelHandler.publish(authToken, webhook.channel, message)
@@ -131,14 +133,21 @@ class WebhookHandler {
     }
   }
 
-  async _handleFacebookData (authToken, webhook, message) {
+  /**
+   * Transform facebooks webhook data into an array of activities
+   * @param message {Map} facebooks feed webhook subscription data
+   * @returns {Array}
+   * @protected
+   */
+  _transformFacebookData (message) {
     if (message.object === 'page') {
+      let activities = []
       message.entry.changes.forEach(async (change) => {
         if (change.field === 'feed') {
           switch (change.value.item) {
             case 'share':
               if (change.value.verb === 'add') {
-                return {
+                activities.push({
                   type: 'Message',
                   content: {
                     message: change.value.message,
@@ -149,12 +158,17 @@ class WebhookHandler {
                     id: change.value.post_id,
                     original: change
                   }
-                }
+                })
               }
               break
           }
         }
       })
+      if (activities.length === 0) {
+        // save unhandled data to file for later usage/analysis
+        fs.appendFile('facebook-data.txt', JSON.stringify(message) + '\n\n')
+      }
+      return activities
     }
   }
 }
