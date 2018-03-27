@@ -130,6 +130,33 @@ class WebhookHandler {
       res.sendStatus(400)
     }
   }
+
+  async _handleFacebookData (authToken, webhook, message) {
+    if (message.object === 'page') {
+      message.entry.changes.forEach(async (change) => {
+        if (change.field === 'feed') {
+          switch (change.value.item) {
+            case 'share':
+              if (change.value.verb === 'add') {
+                return {
+                  type: 'Message',
+                  content: {
+                    message: change.value.message,
+                    link: change.value.link
+                  },
+                  external: {
+                    type: 'facebook',
+                    id: change.value.post_id,
+                    original: change
+                  }
+                }
+              }
+              break
+          }
+        }
+      })
+    }
+  }
 }
 
 module.exports = WebhookHandler

@@ -59,6 +59,9 @@
       "properties": {
         "message": {
           "type": "string"
+        },
+        "link": {
+          "type": "string"
         }
       },
       "required": ["message"],

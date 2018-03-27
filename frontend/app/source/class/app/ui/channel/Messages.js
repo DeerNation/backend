@@ -135,12 +135,8 @@ qx.Class.define('app.ui.channel.Messages', {
       let control
       switch (id) {
         case 'list':
-          control = new qx.ui.list.List(this.getActivities())
+          control = new app.ui.list.ChatList(this.getActivities())
           control.setVariableItemHeight(true)
-          const deferredScroll = qx.util.Function.debounce(() => {
-            control.scrollToY(control.getPane().getScrollMaxY())
-          }, 100)
-          this.getActivities().addListener('changeLength', deferredScroll, this)
           control.getSelection().addListener('change', this._onSelection, this)
           this.__applyListDelegate(control)
           this._addAt(control, 1, {flex: 1})

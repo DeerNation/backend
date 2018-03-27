@@ -136,7 +136,12 @@ class Schema {
             published: type.date(),
             actorId: type.string(),
             hash: type.string(),
-            ref: type.string()
+            ref: type.string(),
+            external: {
+              type: type.string(),
+              id: type.string(),
+              original: type.object()
+            }
           },
           filters: {
             pre: mustBeLoggedIn
