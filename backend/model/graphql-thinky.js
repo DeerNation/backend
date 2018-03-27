@@ -27,6 +27,9 @@ class GqlHandler {
       fields: () => ({
         message: {
           type: GraphQLString
+        },
+        link: {
+          type: GraphQLString
         }
       })
     })

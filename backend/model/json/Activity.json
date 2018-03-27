@@ -52,6 +52,21 @@
         "share",
         "reply"
       ]
+    },
+    "external": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "original": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
     }
   },
   "contentTypes": {
