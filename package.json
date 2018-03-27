@@ -62,8 +62,9 @@
     "lint": "standard --verbose | snazzy",
     "compile-frontend-source": "cd frontend/app && qx compile && cd ../../",
     "compile-frontend-build": "cd frontend/app && qx compile --target=build && cd ../../",
+    "compile-frontend-app": "cd frontend/app && CORDOVA=1 qx compile --target=build && cd ../../",
     "test": "ENV=dev DATABASE_HOST=172.17.0.2 nyc --reporter=html --reporter=text-summary mocha --recursive",
-    "deploy-mobile": "npm run compile-frontend-build && cd app/ && cordova run android --device && cd ../"
+    "deploy-mobile": "npm run compile-frontend-app && cd app/ && cordova run android --device && cd ../"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.2",

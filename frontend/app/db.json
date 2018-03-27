@@ -9925,7 +9925,7 @@
       }
     },
     "qx.ui.virtual.core.Pane": {
-      "mtime": "2018-01-27T22:11:00.493Z",
+      "mtime": "2018-03-27T17:17:41.466Z",
       "libraryName": "qx",
       "dependsOn": {
         "qx.Class": {
@@ -9942,27 +9942,13 @@
         "qx.ui.container.Composite": {
           "construct": true
         },
-        "qx.core.Environment": {
-          "load": true
-        },
+        "qx.core.Environment": {},
         "qx.ui.virtual.core.ILayer": {},
         "qx.event.Timer": {},
         "qx.ui.virtual.core.CellEvent": {},
         "qx.lang.Array": {},
         "qx.ui.core.queue.Widget": {},
         "qx.ui.core.LayoutItem": {
-          "load": true
-        },
-        "qx.core.Object": {
-          "load": true
-        },
-        "qx.theme.manager.Meta": {
-          "load": true
-        },
-        "qx.core.ObjectRegistry": {
-          "load": true
-        },
-        "qx.core.IDisposable": {
           "load": true
         }
       },
@@ -16340,7 +16326,7 @@
       "implement": []
     },
     "app.ui.channel.Messages": {
-      "mtime": "2018-03-18T09:07:22.480Z",
+      "mtime": "2018-03-24T13:37:46.138Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -16367,10 +16353,7 @@
           "construct": true,
           "load": true
         },
-        "qx.ui.list.List": {},
-        "qx.util.Function": {
-          "load": true
-        },
+        "app.ui.list.ChatList": {},
         "qx.ui.virtual.behavior.Prefetch": {},
         "qx.ui.container.Stack": {},
         "app.model.activity.Registry": {},
@@ -16384,6 +16367,9 @@
         "qx.event.message.Bus": {
           "load": true
         },
+        "qx.util.Function": {
+          "load": true
+        },
         "qx.core.Object": {
           "load": true
         },
@@ -16395,15 +16381,6 @@
         },
         "qx.ui.core.LayoutItem": {
           "load": true
-        },
-        "qx.core.ObjectRegistry": {
-          "load": true
-        },
-        "qx.core.IDisposable": {
-          "load": true
-        },
-        "qx.theme.manager.Meta": {
-          "load": true
         }
       },
       "extends": "app.ui.channel.AbstractChannel",
@@ -16412,7 +16389,7 @@
       "translations": [
         {
           "msgid": "To enter this channel you need a user account. Please login or register yourself.",
-          "lineNo": 175
+          "lineNo": 171
         }
       ]
     },
@@ -16912,7 +16889,7 @@
       ]
     },
     "app.io.GraphQL": {
-      "mtime": "2018-03-12T21:22:31.259Z",
+      "mtime": "2018-03-24T12:04:56.435Z",
       "libraryName": "app",
       "dependsOn": {
         "qx.Class": {
@@ -17001,6 +16978,72 @@
         }
       },
       "extends": null,
+      "include": [],
+      "implement": []
+    },
+    "app.ui.list.ChatList": {
+      "mtime": "2018-03-24T13:32:29.668Z",
+      "libraryName": "app",
+      "dependsOn": {
+        "qx.Class": {
+          "load": true,
+          "usage": "dynamic"
+        },
+        "qx.ui.list.List": {
+          "load": true,
+          "construct": true
+        },
+        "qx.ui.core.queue.Widget": {},
+        "qx.util.DeferredCall": {},
+        "qx.bom.AnimationFrame": {},
+        "qx.event.Timer": {},
+        "qx.ui.virtual.core.Scroller": {
+          "load": true
+        },
+        "qx.data.Array": {
+          "load": true
+        },
+        "qx.ui.core.scroll.AbstractScrollArea": {
+          "load": true
+        },
+        "qx.ui.virtual.core.Pane": {
+          "load": true
+        },
+        "qx.core.Environment": {
+          "load": true
+        },
+        "qx.bom.client.Scroll": {
+          "load": true
+        },
+        "qx.core.Object": {
+          "load": true
+        },
+        "qx.lang.Array": {
+          "load": true
+        },
+        "qx.ui.core.Widget": {
+          "load": true
+        },
+        "qx.ui.layout.Canvas": {
+          "load": true
+        },
+        "qx.ui.layout.Grid": {
+          "load": true
+        },
+        "qx.ui.virtual.core.Axis": {
+          "load": true
+        },
+        "qx.ui.container.Composite": {
+          "load": true
+        },
+        "qx.core.ObjectRegistry": {
+          "load": true
+        },
+        "qx.core.IDisposable": {
+          "load": true
+        }
+      },
+      "extends": "qx.ui.list.List",
       "include": [],
       "implement": []
     }

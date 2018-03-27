@@ -15,8 +15,7 @@
       "type": "build",
       "outputPath": "build-output",
       "environment": {
-        "qx.globalErrorHandling": false,
-        "app.cordova": true
+        "qx.globalErrorHandling": false
       }
     }
   ],
