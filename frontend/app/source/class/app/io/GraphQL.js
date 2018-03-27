@@ -41,7 +41,7 @@ qx.Class.define('app.io.GraphQL', {
         if (err) {
           console.error(err)
         } else {
-          console.log(res)
+          // console.log(res)
         }
       })
     }
