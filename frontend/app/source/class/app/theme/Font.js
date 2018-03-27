@@ -98,49 +98,5 @@ qx.Theme.define('app.theme.Font', {
         }
       ]
     }
-
-    //
-    // 'FARegular': {
-    //   size: 40,
-    //   lineHeight: 1,
-    //   comparisonString: '\uf2b9\uf2bb\uf2bb\uf358',
-    //   family: ['FARegular'],
-    //   sources: [
-    //     {
-    //       family: 'FARegular',
-    //       source: [
-    //         'app/icons/fontawesome/fa-regular-400.ttf'
-    //       ]
-    //     }
-    //   ]
-    // },
-    // 'FASolid': {
-    //   size: 40,
-    //   lineHeight: 1,
-    //   comparisonString: '\uf2b9\uf2bb\uf2bb\uf358',
-    //   family: ['FASolid'],
-    //   sources: [
-    //     {
-    //       family: 'FASolid',
-    //       source: [
-    //         'app/icons/fontawesome/fa-solid-900.ttf'
-    //       ]
-    //     }
-    //   ]
-    // },
-    // 'FABrands': {
-    //   size: 40,
-    //   lineHeight: 1,
-    //   comparisonString: '\uf368\uf369\uf170\uf36d',
-    //   family: ['FABrands'],
-    //   sources: [
-    //     {
-    //       family: 'FABrands',
-    //       source: [
-    //         'app/icons/fontawesome/fa-brands-400.ttf'
-    //       ]
-    //     }
-    //   ]
-    // }
   }
 })
