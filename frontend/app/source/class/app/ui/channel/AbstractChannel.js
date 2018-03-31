@@ -492,17 +492,28 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
      */
     _onActivityAction: function (ev) {
       const data = ev instanceof qx.event.type.Event ? ev.getData() : ev
-      if (data.activity) {
-        switch (data.action) {
-          case 'delete':
-            this.getSelectedActivities.forEach(this._deleteActivity, this)
-            break
+      switch (data.action) {
+        case 'delete':
+          this.getSelectedActivities().forEach(this._deleteActivity, this)
+          break
 
-          case 'share':
-            this._shareActivity(this.getSelectedActivities())
-            break
-        }
+        case 'share':
+          this._shareActivity(this.getSelectedActivities())
+          break
       }
+      this._leaveSelectionMode()
+    },
+
+    /**
+     * Leave selection mode entered by longpress. unmarks all selected activities
+     * and shows the ChannelHeader.
+     * @protected
+     */
+    _leaveSelectionMode: function () {
+      this.getSelectedActivities().removeAll().forEach(act => {
+        act.setMarked(false)
+      })
+      this.getChildControl('header-stack').setSelection([this.getChildControl('header')])
     },
 
     // overridden
@@ -559,10 +570,7 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
         case 'back-button':
           control = new qx.ui.toolbar.Button(this.tr('Back'), app.Config.icons.back)
           control.addListener('execute', () => {
-            this.getSelectedActivities().removeAll().forEach(act => {
-              act.setMarked(false)
-            })
-            this.getChildControl('header-stack').setSelection([this.getChildControl('header')])
+            this._leaveSelectionMode()
           })
           control.addState('first')
           break
