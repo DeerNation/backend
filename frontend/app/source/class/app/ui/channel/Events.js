@@ -56,6 +56,13 @@ qx.Class.define('app.ui.channel.Events', {
       })
     },
 
+    // property apply
+    _applyActivities: function () {
+      if (this.__calendar) {
+        this.__calendar.fullCalendar('refetchEvents')
+      }
+    },
+
     /**
      * Refresh calendar events
      * @private
@@ -127,7 +134,6 @@ qx.Class.define('app.ui.channel.Events', {
         this.getActivities().some(act => {
           if (act.getId() === calEvent.id) {
             this.getChildControl('renderer').setModel(act)
-            this.setSelectedActivity(act)
             return true
           }
         })
