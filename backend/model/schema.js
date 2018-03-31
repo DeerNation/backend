@@ -89,13 +89,11 @@ class Schema {
             pre: mustBeOwner
           }
         },
-        Token: {
+        System: {
           fields: {
             id: type.string(),
-            actorId: type.string(),
-            jwt: type.string(),
-            lastLogin: type.date().default(new Date()),
-            clientData: type.object()
+            key: type.string(),
+            value: type.string()
           },
           filters: {
             pre: mustBeOwner
@@ -345,10 +343,6 @@ class Schema {
     // 1-n: Firebase can only have one actor
     m.Actor.hasMany(m.Firebase, 'firebase', 'id', 'actorId')
     m.Firebase.belongsTo(m.Actor, 'actor', 'actorId', 'id')
-
-    // 1-n: Token can only have one actor
-    m.Actor.hasMany(m.Token, 'Token', 'id', 'actorId')
-    m.Token.belongsTo(m.Actor, 'actor', 'actorId', 'id')
 
     // 1-n: a Channel has exactly one owner
     m.Actor.hasMany(m.Channel, 'channels', 'id', 'ownerId')
