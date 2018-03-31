@@ -118,6 +118,12 @@ qx.Class.define('app.model.Activity', {
     refType: {
       check: ['reply', 'share'],
       nullable: true
+    },
+
+    marked: {
+      check: 'Boolean',
+      init: false,
+      event: 'changeMarked'
     }
   },
 

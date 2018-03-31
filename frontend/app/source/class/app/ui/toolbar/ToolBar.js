@@ -42,11 +42,24 @@ qx.Class.define('app.ui.toolbar.ToolBar', {
     _applyOrientation: function (value) {
       switch (value) {
         case 'horizontal':
-          this._setLayout(new qx.ui.layout.HBox())
+          this._setLayout(new qx.ui.layout.HBox(0, 'center'))
+          this._getLayout().setAlignY('middle')
           break
         case 'vertical':
           this._setLayout(new qx.ui.layout.VBox())
+          this._getLayout().setAlignX('center')
           break
+      }
+    },
+
+    // overridden
+    _applyShow: function(value) {
+      const children = this._getChildren()
+      for (let i = 0, l = children.length; i < l; i++) {
+        console.log(children)
+        if (children[i].setShow && !children[i].getUserData('showOverride')) {
+          children[i].setShow(value)
+        }
       }
     },
 

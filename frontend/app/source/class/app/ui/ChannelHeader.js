@@ -77,7 +77,7 @@ qx.Class.define('app.ui.ChannelHeader', {
           })
           this.getChildControl('favorite').show()
         } else {
-          this.getChildControl('favorite').exclude()
+          this.getChildControl('favorite').hide()
         }
       }
     },

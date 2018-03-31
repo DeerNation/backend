@@ -236,12 +236,15 @@ qx.Class.define('app.ui.channel.Messages', {
 
         configureItem: function (item) {
           item.addListener('tap', this._toggleSelection, this)
+          item.addListener('activityAction', this._onActivityAction, this)
+          item.addListener('longtap', this._onActivityContext, this)
         }.bind(this),
 
         bindItem: function (controller, item, index) {
           controller.bindProperty('', 'model', null, item, index)
           controller.bindProperty('published', 'published', null, item, index)
           controller.bindProperty('actor', 'author', null, item, index)
+          controller.bindProperty('marked', 'marked', null, item, index)
         },
 
         group: function (model) {

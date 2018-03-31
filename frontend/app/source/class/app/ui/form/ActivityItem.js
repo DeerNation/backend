@@ -33,9 +33,6 @@ qx.Class.define('app.ui.form.ActivityItem', {
     if (app.Config.target !== 'mobile') {
       this._createChildControl('author-icon')
     }
-    if (app.Config.target !== 'desktop') {
-      this.addListener('longtap', this._onLongtap, this)
-    }
 
     this._createChildControl('authorName')
     // if (app.Config.target !== 'mobile') {
@@ -54,7 +51,8 @@ qx.Class.define('app.ui.form.ActivityItem', {
   */
   events: {
     /** (Fired by {@link qx.ui.form.List}) */
-    'action': 'qx.event.type.Event'
+    'action': 'qx.event.type.Event',
+    'activityAction': 'qx.event.type.Data'
   },
 
   /*
@@ -96,6 +94,12 @@ qx.Class.define('app.ui.form.ActivityItem', {
       check: 'Boolean',
       init: false,
       apply: '_applyDeletable'
+    },
+
+    marked: {
+      check: 'Boolean',
+      init: false,
+      apply: '_applyMarked'
     }
   },
 
@@ -115,6 +119,15 @@ qx.Class.define('app.ui.form.ActivityItem', {
         this.__renderers[type] = new (app.model.activity.Registry.getRendererClass(type))()
       }
       return this.__renderers[type]
+    },
+
+    // property apply
+    _applyMarked: function (value) {
+      if (value) {
+        this.addState('marked')
+      } else {
+        this.removeState('marked')
+      }
     },
 
     // apply method
@@ -211,15 +224,6 @@ qx.Class.define('app.ui.form.ActivityItem', {
       }
     },
 
-    /**
-     * Open context menu in header on touch devices
-     * @private
-     */
-    _onLongtap: function () {
-      const mainView = qx.core.Init.getApplication().getMain()
-
-    },
-
     // overridden
     _createChildControlImpl: function (id, hash) {
       let control, layout
@@ -310,14 +314,9 @@ qx.Class.define('app.ui.form.ActivityItem', {
         case 'delete-button':
           control = new qx.ui.form.Button(null, app.Config.icons.delete + '/12')
           control.addListener('execute', () => {
-            app.io.Rpc.getProxy().deleteActivity(this.getModel().getId()).then(res => {
-              if (res === true) {
-                this.debug('activity as been deleted')
-              } else {
-                this.error(res)
-              }
-            }).catch(err => {
-              this.error(err)
+            this.fireDataEvent('activityAction', {
+              action: 'd',
+              activity: this.getModel()
             })
           })
           this.getChildControl('overlay').add(control)
@@ -335,7 +334,8 @@ qx.Class.define('app.ui.form.ActivityItem', {
       hovered: true,
       selected: true,
       dragover: true,
-      own: true
+      own: true,
+      marked: true
     },
 
     /**

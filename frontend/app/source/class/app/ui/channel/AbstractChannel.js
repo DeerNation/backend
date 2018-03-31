@@ -17,6 +17,7 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
   construct: function () {
     this.base(arguments)
     this.addListener('swipe', this._onSwipe, this)
+    this.setSelectedActivities(new qx.data.Array())
 
     qx.event.message.Bus.subscribe('channel.activities.delete', this._onActivityDelete, this)
 
@@ -59,6 +60,11 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
       init: null,
       event: 'changeActivities',
       apply: '_applyActivities'
+    },
+
+    selectedActivities: {
+      check: 'qx.data.Array',
+      init: null
     },
 
     /**
@@ -185,7 +191,7 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
      * @protected
      */
     _deleteActivity: function (ev) {
-      const activity = ev.getData()
+      const activity = ev instanceof app.model.Activity ? ev : ev.getData()
       if (this.isAllowed('d')) {
         app.io.Rpc.getProxy().deleteActivity(activity.getId()).then(res => {
           if (res === true) {
@@ -204,6 +210,7 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
     /**
      * Check is action is allowed in target
      * @param action {String} single action to check
+     * @param target {app.model.Activity} activity the action should be checked for
      */
     isAllowed: function (action, target) {
       let acls, targetOwnerId
@@ -230,13 +237,17 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
     },
 
     /**
-     * Share an activity (content) with other apps (only works in app context)
+     * Share an activity (content) with other apps (only works in app context) or on other channels
+     * @param data {app.model.Activity|qx.data.Array|Event}
      * @protected
      */
-    _shareActivity: function (ev) {
-      const activity = ev.getData()
+    _shareActivity: function (data) {
+      let activities = (data instanceof app.model.Activity || data instanceof qx.data.Array) ? data : data.getData()
+      if (!qx.lang.Type.isArray(activities)) {
+        activities = [activities]
+      }
       if (app.Config.isApp) {
-        // TODO
+        // TODO: implement sharing in app context
       } else {
         // share in another channel, show channel selection
         const dialog = new qx.ui.window.Window(this.tr('Select channel'), app.Config.icons.public + '/20')
@@ -258,19 +269,24 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
         dialog.add(list)
         list.getSelection().addListenerOnce('change', () => {
           const selection = list.getSelection()
-          console.log(selection)
+          let message
+
           if (selection.getLength() === 1) {
             const channel = selection.getItem(0).getChannel()
-            const message = {
-              type: activity.getType(),
-              content: activity.getContent(),
-              ref: activity.getId(),
-              refType: 'share'
-            }
-            if (activity.getTitle()) {
-              message.title = activity.getTitle()
-            }
-            app.io.Rpc.getProxy().publish(channel.getId(), message).then(() => {
+            const promises = []
+            activities.forEach(activity => {
+              message = {
+                type: activity.getType(),
+                content: activity.getContent(),
+                ref: activity.getId(),
+                refType: 'share'
+              }
+              if (activity.getTitle()) {
+                message.title = activity.getTitle()
+              }
+              promises.push(app.io.Rpc.getProxy().publish(channel.getId(), message))
+            })
+            Promise.all(promises).then(() => {
               // open the channel
               dialog.close()
               app.ui.Menu.getInstance().getChildControl('list').getSelection().replace([selection.getItem(0)])
@@ -433,10 +449,71 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
     _applyActivities: function (value) {
     },
 
+    /**
+     * Show context menu for selected activity
+     * @param ev
+     * @private
+     */
+    _onActivityContext: function (ev) {
+      let activity
+      if (ev instanceof qx.event.type.Event && ev.getType() === 'longtap') {
+        activity = ev.getCurrentTarget().getModel()
+      } else {
+        activity = ev.getData()
+      }
+      const selectedActivities = this.getSelectedActivities()
+      if (!selectedActivities.includes(activity)) {
+        selectedActivities.push(activity)
+      }
+      activity.setMarked(true)
+      const bar = this.getChildControl('context-bar')
+      // update button states
+      const deleteable = selectedActivities.filter((act) => {
+        return this.isAllowed('d', act)
+      })
+      if (deleteable.length === 0) {
+        this.getChildControl('delete-button').exclude()
+      } else {
+        this.getChildControl('delete-button').show()
+      }
+      if (!this.hasChildControl('share-button')) {
+        this._createChildControl('share-button')
+      }
+
+      this.getChildControl('header-stack').setSelection([bar])
+
+      // TODO enter simple selection mode for list (tap -> (de-)select)
+    },
+
+    /**
+     * Handle actions fired from ActiivityItems , e.g. delete, share, ...
+     * @param ev {Event}
+     * @protected
+     */
+    _onActivityAction: function (ev) {
+      const data = ev instanceof qx.event.type.Event ? ev.getData() : ev
+      if (data.activity) {
+        switch (data.action) {
+          case 'delete':
+            this.getSelectedActivities.forEach(this._deleteActivity, this)
+            break
+
+          case 'share':
+            this._shareActivity(this.getSelectedActivities())
+            break
+        }
+      }
+    },
+
     // overridden
     _createChildControlImpl: function (id, hash) {
       let control
       switch (id) {
+        case 'header-stack':
+          control = new qx.ui.container.Stack()
+          this._addAt(control, 0)
+          break
+
         case 'header':
           control = new app.ui.ChannelHeader()
           if (this.getSubscription()) {
@@ -444,7 +521,78 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
           } else {
             control.exclude()
           }
-          this._addAt(control, 0)
+          this.getChildControl('header-stack').add(control)
+          break
+
+        case 'context-bar':
+          control = new app.ui.toolbar.ToolBar()
+          control.set({
+            show: 'icon'
+          })
+          control.exclude()
+          const back = this.getChildControl('back-button')
+          control.add(back)
+          control.add(this.getChildControl('selection-counter'))
+          this.getChildControl('selection-counter').setShow('label')
+          control.addSpacer()
+          this.getChildControl('header-stack').add(control)
+          break
+
+        case 'selection-counter':
+          control = new qx.ui.basic.Atom('' + this.getSelectedActivities().length)
+          control.setUserData('showOverride', true)
+          if (this.getSelectedActivities().length === 0) {
+            control.exclude()
+          } else {
+            control.show()
+          }
+          this.getSelectedActivities().addListener('changeLength', (ev) => {
+            control.setLabel('' + ev.getData())
+            if (ev.getData() === 0) {
+              control.exclude()
+            } else {
+              control.show()
+            }
+          })
+          break
+
+        case 'back-button':
+          control = new qx.ui.toolbar.Button(this.tr('Back'), app.Config.icons.back)
+          control.addListener('execute', () => {
+            this.getSelectedActivities().removeAll().forEach(act => {
+              act.setMarked(false)
+            })
+            this.getChildControl('header-stack').setSelection([this.getChildControl('header')])
+          })
+          control.addState('first')
+          break
+
+        case 'delete-button':
+          control = new qx.ui.toolbar.Button(this.tr('Delete'), app.Config.icons.delete + '/22')
+          control.addListener('execute', () => {
+            this._onActivityAction({
+              action: 'delete'
+            })
+          })
+          this.getChildControl('context-bar').add(control)
+          break
+
+        case 'share-button':
+          control = new qx.ui.toolbar.Button(this.tr('Share'), app.Config.icons.share + '/22')
+          control.addListener('execute', () => {
+            this._onActivityAction({
+              action: 'share'
+            })
+          })
+          if (app.Config.target === 'desktop') {
+            // on desktop we can only share in other channels, the user has to be logged in to do that
+            app.Model.getInstance().bind('actor', control, 'enabled', {
+              converter: function (value) {
+                return !!value
+              }
+            })
+          }
+          this.getChildControl('context-bar').add(control)
           break
 
         case 'status-bar':

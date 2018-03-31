@@ -51,7 +51,13 @@ qx.Theme.define('app.theme.Appearance',
       },
       'app-toolbar-button': {
         include: 'toolbar-button',
-        alias: 'toolbar-button'
+        alias: 'toolbar-button',
+
+        style: function () {
+          return {
+            decorator: undefined
+          }
+        }
       },
       'activity-listitem': {
         include: 'listitem',
@@ -538,6 +544,24 @@ qx.Theme.define('app.theme.Appearance',
           return {
             textColor: 'lightgrey',
             margin: 8
+          }
+        }
+      },
+
+      'main/channel/context-bar': 'main/channel/header',
+      'main/channel/back-button': 'app-toolbar-button',
+      'main/channel/delete-button': 'app-toolbar-button',
+      'main/channel/share-button': 'app-toolbar-button',
+      'main/channel/selection-counter': {
+        include: 'atom',
+        alias: 'atom',
+
+        style: function () {
+          return {
+            font: 'sidebar-actor-icon',
+            center: true,
+            width: 50,
+            height: 50
           }
         }
       },

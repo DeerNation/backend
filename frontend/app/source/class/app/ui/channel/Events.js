@@ -124,9 +124,10 @@ qx.Class.define('app.ui.channel.Events', {
     _onEventClick: function (calEvent, jsEvent, view) {
       const popup = this.getChildControl('popup')
       if (popup.getVisibility() !== 'visible') {
-        this.getActivities().forEach(act => {
+        this.getActivities().some(act => {
           if (act.getId() === calEvent.id) {
             this.getChildControl('renderer').setModel(act)
+            this.setSelectedActivity(act)
             return true
           }
         })

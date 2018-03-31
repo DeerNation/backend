@@ -85,6 +85,10 @@ qx.Theme.define('app.mobile.theme.Appearance', {
       }
     },
 
+    'main/channel/back-button': 'main/channel/header/back-button',
+    'main/channel/delete-button': 'main/channel/header/back-button',
+    'main/channel/share-button': 'main/channel/header/back-button',
+
     'main/channel/header/more-button': 'main/channel/header/back-button',
     'main/channel/header/favorite': {
       include: 'main/channel/header/back-button',
@@ -145,11 +149,11 @@ qx.Theme.define('app.mobile.theme.Appearance', {
     'activity-listitem': {
       include: 'listitem',
       alias: 'listitem',
-      style: function () {
+      style: function (states) {
         return {
           padding: 0,
           textColor: undefined,
-          backgroundColor: null
+          backgroundColor: states.marked ? 'background-selected' : null
         }
       }
     },
