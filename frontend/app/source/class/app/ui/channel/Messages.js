@@ -7,6 +7,7 @@
 
 qx.Class.define('app.ui.channel.Messages', {
   extend: app.ui.channel.AbstractChannel,
+  include: qx.ui.core.MBlocker,
 
   /*
   ******************************************************
@@ -19,8 +20,14 @@ qx.Class.define('app.ui.channel.Messages', {
 
     this.__dateFormat = new qx.util.format.DateFormat(qx.locale.Date.getDateFormat('long'))
 
-    this._createChildControl('list')
+    const list = this.getChildControl('list')
     this._createChildControl('status-bar')
+
+    list.getChildControl('throbber').show()
+
+    this._debouncedUnblock = qx.util.Function.debounce(() => {
+      list.getChildControl('throbber').exclude()
+    }, 250)
 
     const selectUp = new qx.ui.command.Command('Up')
     const selectDown = new qx.ui.command.Command('Down')
@@ -47,16 +54,19 @@ qx.Class.define('app.ui.channel.Messages', {
     // property apply
     _applySubscription: function (subscription, oldSubscription) {
       this.base(arguments, subscription, oldSubscription)
-      if (subscription) {
-        this.getChildControl('message-field').setModel(subscription.getChannel())
-        // this.getChildControl('message-field').show()
-      }
+      this.debug('subscription applied')
     },
 
     // property apply
     _applyActivities: function (value) {
+      this.debug('activities applied')
       if (this.hasChildControl('list')) {
         this.getChildControl('list').setModel(value)
+        this.getChildControl('list').addListener('changeBottomReached', (ev) => {
+          if (ev.getData()) {
+            this._debouncedUnblock()
+          }
+        })
       }
     },
 
@@ -135,7 +145,7 @@ qx.Class.define('app.ui.channel.Messages', {
       let control
       switch (id) {
         case 'list':
-          control = new app.ui.list.ChatList(this.getActivities())
+          control = new app.ui.list.ChatList()
           control.setVariableItemHeight(true)
           control.getSelection().addListener('change', this._onSelection, this)
           this.__applyListDelegate(control)

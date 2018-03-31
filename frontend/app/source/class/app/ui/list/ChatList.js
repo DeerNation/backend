@@ -3,8 +3,6 @@
  * This behaviour is active when the user scrolls to the bottom of the list (which is done automatically on initial loading)
  * and gets inactive if the user scrolls up.
  *
- * For performance issues this list is build from bottom to top (reverse to the qx.ui.list.List)
- *
  * @author Tobias Bräutigam <tbraeutigam@gmail.com>
  * @since 2018
  */
@@ -19,9 +17,6 @@ qx.Class.define('app.ui.list.ChatList', {
   */
   construct: function (model) {
     this.base(arguments, model)
-    // this._deferredScroll = qx.util.Function.debounce(() => {
-    //   this.getPane().scrollRowIntoView(this.getModel().length - 1)
-    // }, 100)
     this.__jobs = {}
     this.__enableScrollWatcher(true)
 
@@ -41,6 +36,12 @@ qx.Class.define('app.ui.list.ChatList', {
       check: 'Boolean',
       init: true,
       apply: '_applyAutoScroll'
+    },
+
+    bottomReached: {
+      check: 'Boolean',
+      init: false,
+      event: 'changeBottomReached'
     }
   },
 
@@ -51,7 +52,6 @@ qx.Class.define('app.ui.list.ChatList', {
   */
   members: {
     __jobs: null,
-    __bottomReached: false,
     _frid: null,
 
     // property apply
@@ -80,7 +80,7 @@ qx.Class.define('app.ui.list.ChatList', {
 
     __onScrollY: function (ev) {
       if (this.isAutoScroll()) {
-        if (!this.__bottomReached) {
+        if (!this.isBottomReached()) {
           return
         }
         if (this.getScrollY() < this.getPane().getScrollMaxY()) {
@@ -100,7 +100,6 @@ qx.Class.define('app.ui.list.ChatList', {
     },
 
     _deferredScroll: function () {
-      console.log('deferred scroll')
       this.__jobs._deferredScroll = 1
       qx.ui.core.queue.Widget.add(this)
     },
@@ -112,38 +111,62 @@ qx.Class.define('app.ui.list.ChatList', {
     },
 
     // overridden
+    _createChildControlImpl: function (id, hash) {
+      let control
+      switch (id) {
+        case 'throbber':
+          control = new app.ui.Throbber()
+          control.exclude()
+          control.bind('visibility', this.getChildControl('pane'), 'visibility', {
+            converter: function (value) {
+              return ['hidden', 'excluded'].indexOf(value) >= 0 ? 'visible' : 'hidden'
+            }
+          })
+          control.setZIndex(100000)
+          let bounds = this.getBounds()
+          if (bounds) {
+            control.setUserBounds(0, 0, bounds.width, bounds.height)
+          } else {
+            control.setUserBounds(0, 0, 0, 0)
+          }
+          this.addListener('resize', (ev) => {
+            const size = ev.getData()
+            control.setUserBounds(0, 0, size.width, size.height)
+          })
+          this._add(control)
+          break
+      }
+      return control || this.base(arguments, id, hash)
+    },
+
+    // overridden
     syncWidget: function () {
       if (this.__jobs._deferredScroll) {
         if (this._frid) {
           return
         }
-        new qx.util.DeferredCall(() => {
-          const scrollMax = this.getPane().getScrollMaxY()
-          const oldScrollTop = this.getPane().getScrollY()
-          if (this.__bottomReached === null && oldScrollTop === scrollMax) {
-            this.__bottomReached = true
-          }
-          if (!this.isAutoScroll() || oldScrollTop === scrollMax) {
-            return
-          }
-          // console.log('BEFORE: Max:', scrollMax, 'Current:', oldScrollTop)
-          this.getPane().setScrollY(scrollMax)
-          this._frid = qx.bom.AnimationFrame.request(() => {
-            this._frid = null
-            const scrollTop = this.getPane().getScrollY()
-            // console.log('AFTER: Max:', scrollMax, 'Current:', scrollTop)
-            if (this.__bottomReached === null && scrollTop === scrollMax) {
-              this.__bottomReached = true
-            }
+        const scrollMax = this.getPane().getScrollMaxY()
+        const oldScrollTop = this.getPane().getScrollY()
+        this.setBottomReached(oldScrollTop === scrollMax)
 
-            if (scrollMax > scrollTop) {
-              // try again
-              // console.log('re-timing')
-              qx.event.Timer.once(this._deferredScroll, this, 100)
-            }
-            this.fireDataEvent('scrollY', scrollTop, oldScrollTop)
-          })
-        }, this).schedule()
+        if (!this.isAutoScroll() || this.isBottomReached()) {
+          return
+        }
+        // console.log('BEFORE: Max:', scrollMax, 'Current:', oldScrollTop)
+        this.getPane().setScrollY(scrollMax)
+        this._frid = qx.bom.AnimationFrame.request(() => {
+          this._frid = null
+          const scrollTop = this.getPane().getScrollY()
+          // console.log('AFTER: Max:', scrollMax, 'Current:', scrollTop)
+          this.setBottomReached(scrollTop === scrollMax)
+
+          if (scrollMax > scrollTop) {
+            // try again
+            // console.log('re-timing')
+            qx.event.Timer.once(this._deferredScroll, this, 100)
+          }
+          this.fireDataEvent('scrollY', scrollTop, oldScrollTop)
+        })
       }
       this.__jobs = {}
     }

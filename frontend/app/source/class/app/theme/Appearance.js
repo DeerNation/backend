@@ -626,6 +626,21 @@ qx.Theme.define('app.theme.Appearance',
             decorator: null
           }
         }
+      },
+
+      'throbber': {
+        style: function (states) {
+          console.log(states)
+          return {
+            textColor: 'lightgrey',
+            backgroundColor: states.blocking ? 'rgba(0,0,0,0.1)' : 'transparent',
+            opacity: 0.5,
+            show: 'icon',
+            size: 30,
+            zIndex: 10000,
+            center: true
+          }
+        }
       }
     }
   })

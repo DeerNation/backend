@@ -16,7 +16,6 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
   */
   construct: function () {
     this.base(arguments)
-    this.setActivities(new qx.data.Array())
     this.addListener('swipe', this._onSwipe, this)
 
     qx.event.message.Bus.subscribe('channel.activities.delete', this._onActivityDelete, this)
@@ -120,6 +119,10 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
         this.__currentSCChannel = socket.getScChannel(subscription.getChannelId())
         // get all messages published on this channel (aka the history)
         let activities = this.getActivities()
+        const initial = (activities === null)
+        if (initial) {
+          activities = new qx.data.Array()
+        }
         Promise.all([
           app.io.Rpc.getProxy().getAllowedActions(subscription.getChannelId()),
           app.io.Rpc.getProxy().getAllowedActions(subscription.getChannelId() + '.activities')
@@ -136,12 +139,19 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
                 }
               })
               activities.replace(newActivities)
-              this.fireEvent('refresh')
+              if (initial === true) {
+                this.setActivities(activities)
+              } else {
+                this.fireEvent('refresh')
+              }
               this._subscribeToChannel(subscription.getChannel())
               this.fireEvent('subscriptionApplied')
             })
           } else {
             activities.removeAll()
+            if (initial === true) {
+              this.setActivities(activities)
+            }
             this.fireEvent('subscriptionApplied')
           }
         })

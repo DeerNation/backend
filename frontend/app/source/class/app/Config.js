@@ -71,7 +71,8 @@ qx.Class.define('app.Config', {
       back: '@Material/chevron_left',
       location: '@Material/location_on',
       organizer: '@Material/recent_actors',
-      time: '@Material/access_time'
+      time: '@Material/access_time',
+      refresh: '@Material/refresh'
     },
 
     init: function () {

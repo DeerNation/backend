@@ -68,7 +68,7 @@ qx.Class.define('app.ui.channel.Events', {
 
     _getEvents: function (start, end, timezone, callback) {
       let events = []
-      if (!this.getSubscription()) {
+      if (!this.getSubscription() || !this.getActivities()) {
         callback(events)
         return
       }
