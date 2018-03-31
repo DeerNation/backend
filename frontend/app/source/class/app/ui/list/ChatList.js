@@ -117,11 +117,7 @@ qx.Class.define('app.ui.list.ChatList', {
         case 'throbber':
           control = new app.ui.Throbber()
           control.exclude()
-          control.bind('visibility', this.getChildControl('pane'), 'visibility', {
-            converter: function (value) {
-              return ['hidden', 'excluded'].indexOf(value) >= 0 ? 'visible' : 'hidden'
-            }
-          })
+          control.addState('blocking')
           control.setZIndex(100000)
           let bounds = this.getBounds()
           if (bounds) {
@@ -147,18 +143,18 @@ qx.Class.define('app.ui.list.ChatList', {
         }
         const scrollMax = this.getPane().getScrollMaxY()
         const oldScrollTop = this.getPane().getScrollY()
-        this.setBottomReached(oldScrollTop === scrollMax)
+        this.setBottomReached(scrollMax > 0 && oldScrollTop === scrollMax)
 
+        // console.log('BEFORE: Max:', scrollMax, 'Current:', oldScrollTop)
         if (!this.isAutoScroll() || this.isBottomReached()) {
           return
         }
-        // console.log('BEFORE: Max:', scrollMax, 'Current:', oldScrollTop)
         this.getPane().setScrollY(scrollMax)
         this._frid = qx.bom.AnimationFrame.request(() => {
           this._frid = null
           const scrollTop = this.getPane().getScrollY()
           // console.log('AFTER: Max:', scrollMax, 'Current:', scrollTop)
-          this.setBottomReached(scrollTop === scrollMax)
+          this.setBottomReached(scrollMax > 0 && scrollTop === scrollMax)
 
           if (scrollMax > scrollTop) {
             // try again

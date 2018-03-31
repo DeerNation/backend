@@ -654,11 +654,9 @@ qx.Theme.define('app.theme.Appearance',
 
       'throbber': {
         style: function (states) {
-          console.log(states)
           return {
             textColor: 'lightgrey',
-            backgroundColor: states.blocking ? 'rgba(0,0,0,0.1)' : 'transparent',
-            opacity: 0.5,
+            backgroundColor: states.blocking ? 'rgba(255,255,255,0.95)' : 'transparent',
             show: 'icon',
             size: 30,
             zIndex: 10000,
