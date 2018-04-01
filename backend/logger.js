@@ -7,7 +7,7 @@
 
 const { format, transports, loggers } = require('winston')
 const { combine, timestamp, label, printf, colorize, align, splat } = format
-const maxModuleLength = 20
+const maxModuleLength = 25
 
 const myFormat = printf(info => {
   return `${info.timestamp.replace(/[T|Z]/g, ' ')} [${info.label}] ${info.level}: ${info.message}`

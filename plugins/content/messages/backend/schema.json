@@ -1,0 +1,14 @@
+{
+  "Message": {
+    "properties": {
+      "message": {
+        "type": "string"
+      },
+      "link": {
+        "type": "string"
+      }
+    },
+    "required": ["message"],
+    "additionalProperties": false
+  }
+}

@@ -19,8 +19,6 @@
     "content": {
       "type": "object",
       "oneOf": [
-        { "$ref": "#/contentTypes/Message" },
-        { "$ref": "#/contentTypes/Event" }
       ]
     },
     "title": {
@@ -70,48 +68,5 @@
     }
   },
   "contentTypes": {
-    "Message": {
-      "properties": {
-        "message": {
-          "type": "string"
-        },
-        "link": {
-          "type": "string"
-        }
-      },
-      "required": ["message"],
-      "additionalProperties": false
-    },
-    "Event": {
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "location": {
-          "type": "string"
-        },
-        "start": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "end": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "categories": {
-          "type": "array",
-          "items": { "type": "string" },
-          "uniqueItems": true
-        },
-        "organizer": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        }
-      },
-      "required": ["start", "name"],
-      "additionalProperties": false
-    }
   }
 }

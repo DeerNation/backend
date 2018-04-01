@@ -1,0 +1,32 @@
+{
+  "info" : 
+  {
+    "name" : "Message content plugin",
+
+    "summary" : "Plugin for simple messages as content for Activities",
+    
+    "homepage" : "http://app.hirschberg-sauerland.de/",
+
+    "license" : "MIT",
+    "authors" : 
+    [
+      {
+        "name" : "Tobias Bräutigam (peuter)",
+        "email" : "tbraeutigam@gmail.com"
+      }
+    ],
+
+    "version" : "master"
+  },
+
+  "provides" :
+  {
+    "encoding"    : "utf-8",
+    "id"          : "Message",
+    "defaultType" : true,
+    "jsonSchema"  : "backend/schema.json",
+    "graphQlType" : "backend/graphqlType.js",
+    "type"        : "contentPlugin"
+  }
+}
+

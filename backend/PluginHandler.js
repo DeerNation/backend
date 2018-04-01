@@ -1,0 +1,75 @@
+/**
+ * PluginHandler
+ *
+ * @author Tobias Bräutigam <tbraeutigam@gmail.com>
+ * @since 2018
+ */
+const logger = require('./logger')(__filename)
+const path = require('path')
+const glob = require('glob')
+const fs = require('fs')
+const schemaHandler = require('./model/JsonSchemaHandler')
+const graphQL = require('./model/graphql-thinky')
+const schema = require('./model/schema')
+
+class PluginHandler {
+  constructor () {
+    this._paths = [path.join(__dirname, '..', 'plugins', 'content')]
+    logger.debug('using plugin paths: %s', this._paths)
+  }
+
+  /**
+   * Read existing plugins and register them in the right places
+   */
+  init () {
+    this._paths.forEach(pluginPath => {
+      const manifests = glob.sync(pluginPath + '/*/Manifest.json')
+      manifests.forEach(manifestPath => {
+        this._importPlugin(JSON.parse(fs.readFileSync(manifestPath, 'utf8')), path.dirname(manifestPath))
+      })
+    })
+  }
+
+  _importPlugin (manifest, pluginDir) {
+    switch (manifest.provides.type) {
+      case 'contentPlugin':
+        this._importContentPlugin(manifest, pluginDir)
+        break
+      default:
+        logger.error('Unhandled plugin type: %s', manifest.provides.type)
+        break
+    }
+  }
+
+  _importContentPlugin (manifest, pluginDir) {
+    if (!manifest.provides.hasOwnProperty('id')) {
+      throw Error('Not id found in content plugin manifest')
+    }
+    const id = manifest.provides.id
+    // register content type for activity schema
+    schema.registerContentType(id, manifest.provides.hasOwnProperty('defaultType') && manifest.provides.defaultType === true)
+
+    // read JSON schemo for Activity content
+    const schemaFile = path.join(pluginDir, manifest.provides.jsonSchema)
+    if (!fs.existsSync(schemaFile)) {
+      logger.error('JSON Schema file not found: %s', schemaFile)
+    } else {
+      const contentSchema = JSON.parse(fs.readFileSync(schemaFile, 'utf8'))
+      schemaHandler.registerActivityContent(contentSchema)
+    }
+
+    // read graphql type
+    if (manifest.provides.hasOwnProperty('graphQlType')) {
+      const graphQlTypeFile = path.join(pluginDir, manifest.provides.graphQlType)
+      if (!fs.existsSync(graphQlTypeFile)) {
+        logger.error('GraphQL type file not found: %s', graphQlTypeFile)
+      } else {
+        const {graphQlType, qglTypeResolver} = require(graphQlTypeFile)
+        graphQL.registerContentType(graphQlType, qglTypeResolver)
+      }
+    }
+  }
+}
+
+const handler = new PluginHandler()
+module.exports = handler

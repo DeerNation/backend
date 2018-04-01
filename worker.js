@@ -16,6 +16,7 @@ const rpcServer = require('./backend/rpc')
 const pushNotifications = require('./backend/notification')
 const graphqlThinky = require('./backend/model/graphql-thinky')
 const graphqlHTTP = require('express-graphql')
+const pluginHandler = require('./backend/PluginHandler')
 // const scCodecMinBin = require('sc-codec-min-bin')
 
 class Worker extends SCWorker {
@@ -24,6 +25,8 @@ class Worker extends SCWorker {
     let environment = this.options.environment
     const serverId = this.options.serverId
     console.log('ServerId:', serverId)
+
+    pluginHandler.init()
 
     let app = express()
 

@@ -12,6 +12,18 @@ const defaultData = require('./default-data')
 class Schema {
   constructor () {
     this.__crud = null
+    this.__contentTypes = []
+    this._defaultContentType = null
+  }
+
+  registerContentType (name, isDefault) {
+    if (!this.__contentTypes.includes(name)) {
+      logger.debug('registering content type %s (default: %s)', name, !!isDefault)
+      this.__contentTypes.push(name)
+    }
+    if (isDefault === true) {
+      this._defaultContentType = name
+    }
   }
 
   getModels () {
@@ -125,7 +137,7 @@ class Schema {
         Activity: {
           fields: {
             id: type.string(),
-            type: type.string().enum('Message', 'Event').default('Message'),
+            type: type.string().enum(this.__contentTypes).default(this._defaultContentType),
             channelId: type.string(),
             content: type.object().allowExtra(true),
             title: type.string(),

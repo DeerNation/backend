@@ -15,6 +15,21 @@ class GqlHandler {
     this._schema = null
     this._query = null
     this._types = {}
+    this._contentTypeResolvers = []
+    this._contentType = new GraphQLUnionType({
+      name: 'content',
+      types: [],
+      resolveType (value) {
+        let type = null
+        this._contentTypeResolvers.some(tuple => {
+          if (tuple[0](value)) {
+            type = tuple[1]
+            return true
+          }
+        })
+        return type
+      }
+    })
   }
 
   init (thinky) {
@@ -22,57 +37,15 @@ class GqlHandler {
     // create models
     this._types.Activity = this._graphqlThinky.createModelType('Activity')
     const fields = this._types.Activity.getFields()
-    const MessageType = new GraphQLObjectType({
-      name: 'Message',
-      fields: () => ({
-        message: {
-          type: GraphQLString
-        },
-        link: {
-          type: GraphQLString
-        }
-      })
-    })
-    const EventType = new GraphQLObjectType({
-      name: 'Event',
-      fields: () => ({
-        name: {
-          type: GraphQLString
-        },
-        location: {
-          type: GraphQLString
-        },
-        start: {
-          type: GraphQLString
-        },
-        end: {
-          type: GraphQLString
-        },
-        categories: {
-          type: new GraphQLList(GraphQLString)
-        },
-        organizer: {
-          type: GraphQLString
-        },
-        description: {
-          type: GraphQLString
-        }
-      })
-    })
-    const ContentType = new GraphQLUnionType({
-      name: 'content',
-      types: [MessageType, EventType],
-      resolveType (value) {
-        if (value.hasOwnProperty('message')) {
-          return MessageType
-        }
-        if (value.hasOwnProperty('start')) {
-          return EventType
-        }
-        return null
-      }
-    })
-    fields.content = {type: ContentType, name: 'content', isDeprecated: false, args: []}
+    fields.content = {type: this._contentType, name: 'content', isDeprecated: false, args: []}
+  }
+
+  registerContentType (newContentType, resolver) {
+    const types = this._contentType.getTypes()
+    if (!types.includes(newContentType)) {
+      types.push(newContentType)
+      this._contentTypeResolvers.push([resolver, newContentType])
+    }
   }
 
   prepareClientError (res) {

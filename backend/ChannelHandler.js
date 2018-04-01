@@ -11,14 +11,13 @@ const logger = require('./logger')(__filename)
 const pushNotifications = require('./notification')
 const i18n = require('i18n')
 const Ajv = require('ajv')
-const ActivitySchema = require('./model/json/Activity.json')
+const schemaHandler = require('./model/JsonSchemaHandler')
 
 class ChannelHandler {
   constructor () {
     this.server = null
     this.model = null
     this.ajv = new Ajv({allErrors: true})
-    this.validateActivity = this.ajv.compile(ActivitySchema)
   }
 
   init (scServer) {
@@ -63,6 +62,13 @@ class ChannelHandler {
     })
   }
 
+  validate (message) {
+    if (!this.validateActivity) {
+      this.validateActivity = this.ajv.compile(schemaHandler.getSchema('Activity'))
+    }
+    return this.validateActivity(message)
+  }
+
   async publish (authToken, channelId, message) {
     if (!this.model) {
       this.model = schema.getModel('Activity')
@@ -74,7 +80,7 @@ class ChannelHandler {
     }, message)
 
     // only allow valid activities to be published
-    if (!this.validateActivity(message)) {
+    if (!this.validate(message)) {
       logger.error('\nNo valid activity: \n  * %s\n-------\n  %o', this.validateActivity.errors.map(x => {
         switch (x.keyword) {
           case 'additionalProperties':
