@@ -62,16 +62,26 @@ qx.Class.define('app.plugins.message.Renderer', {
           converter: function (value) {
             if (value) {
               control.show()
-              return value
             } else {
               control.exclude()
-              return value
             }
+            return value
           }
         })
         const content = value.getContentObject()
         if (content) {
           content.bind('displayMessage', this.getChildControl('message'), 'value')
+          control = this.getChildControl('link')
+          content.bind('link', control, 'value', {
+            converter: function (value) {
+              if (value) {
+                control.show()
+              } else {
+                control.exclude()
+              }
+              return value
+            }
+          })
         }
         value.addListener('changedTitleUrl', this._onChangedTitleUrl, this)
         this._onChangedTitleUrl()
@@ -112,6 +122,11 @@ qx.Class.define('app.plugins.message.Renderer', {
         case 'message':
           control = new app.ui.basic.Label()
           this._addAt(control, 1, {flex: 1})
+          break
+
+        case 'link':
+          control = new app.ui.basic.Label()
+          this._addAt(control, 1)
           break
       }
       return control || this.base(arguments, id, hash)

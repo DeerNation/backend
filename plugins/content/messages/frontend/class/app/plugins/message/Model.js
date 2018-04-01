@@ -29,6 +29,12 @@ qx.Class.define('app.plugins.message.Model', {
       check: 'String',
       nullable: true,
       event: 'changedDisplayMessage'
+    },
+
+    link: {
+      check: 'String',
+      nullable: true,
+      event: 'changeLink'
     }
   },
 

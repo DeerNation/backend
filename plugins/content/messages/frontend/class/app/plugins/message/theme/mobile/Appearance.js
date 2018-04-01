@@ -56,6 +56,14 @@ qx.Theme.define('app.plugins.message.theme.mobile.Appearance', {
       }
     },
 
+    'channel-view/header/title/icon': {
+      style: function () {
+        return {
+          textColor: 'inherit'
+        }
+      }
+    },
+
     'channel-view/back-button': 'channel-view/header/back-button',
     'channel-view/delete-button': 'channel-view/header/back-button',
     'channel-view/share-button': 'channel-view/header/back-button',
