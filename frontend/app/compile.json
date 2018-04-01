@@ -33,7 +33,7 @@
       "class": "app.Application",
       "theme": "app.theme.Theme",
       "name": "app",
-      "include": ["app.model.activity.*"]
+      "include": ["app.plugins.*"]
     }
   ],
 

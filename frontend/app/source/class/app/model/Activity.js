@@ -155,7 +155,7 @@ qx.Class.define('app.model.Activity', {
         // property not ready
         return
       }
-      const Clazz = qx.Class.getByName('app.model.activity.content.' + this.getType())
+      const Clazz = app.model.activity.Registry.getModelClass(this.getType())
       qx.core.Assert.assertNotNull(Clazz)
       const content = this.getContentObject()
       if (content instanceof Clazz) {

@@ -1,11 +1,11 @@
 /**
- * Message
+ * Message renderer
  *
  * @author Tobias Bräutigam <tbraeutigam@gmail.com>
  * @since 2018
  */
 
-qx.Class.define('app.ui.renderer.Message', {
+qx.Class.define('app.plugins.message.Renderer', {
   extend: qx.ui.core.Widget,
   implement: app.ui.renderer.IRenderer,
 

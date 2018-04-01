@@ -5,7 +5,7 @@
  * @since 2018
  */
 
-qx.Class.define('app.ui.form.Event', {
+qx.Class.define('app.plugins.event.Form', {
   extend: qx.ui.core.Widget,
   implement: [qx.ui.form.IModel],
 

@@ -1,12 +1,12 @@
 /**
- * Message
+ * Message model
  *
  * @author Tobias Bräutigam <tbraeutigam@gmail.com>
  * @since 2018
  * @require(app.model.activity.Registry)
  */
 
-qx.Class.define('app.model.activity.content.Message', {
+qx.Class.define('app.plugins.message.Model', {
   extend: app.model.activity.content.AbstractActivityContent,
 
   /*
@@ -42,9 +42,5 @@ qx.Class.define('app.model.activity.content.Message', {
     _applyMessage: function (value) {
       this.setDisplayMessage(app.data.converter.Markdown.convert(value))
     }
-  },
-
-  defer: function (statics) {
-    app.model.activity.Registry.getInstance().register('message', statics, app.ui.renderer.Message, app.ui.form.MessageField)
   }
 })

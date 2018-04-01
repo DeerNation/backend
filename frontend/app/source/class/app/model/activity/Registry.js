@@ -61,6 +61,7 @@ qx.Class.define('app.model.activity.Registry', {
     },
 
     getModelClass: function (type) {
+      type = type.toLowerCase()
       qx.core.Assert.assertKeyInMap(type, this.__registry)
       return this.__registry[type].modelClass
     },

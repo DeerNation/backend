@@ -5,7 +5,7 @@
  * @since 2018
  * @ignore($)
  */
-qx.Class.define('app.ui.channel.Events', {
+qx.Class.define('app.plugins.event.Calendar', {
   extend: app.ui.channel.AbstractChannel,
 
   /*
@@ -24,6 +24,19 @@ qx.Class.define('app.ui.channel.Events', {
 
     this.__qxEvent = new qx.event.type.Pointer()
   },
+
+  /*
+  ******************************************************
+    PROPERTIES
+  ******************************************************
+  */
+  properties: {
+    appearance: {
+      refine: true,
+      init: 'calendar-view'
+    }
+  },
+
 
   /*
   ******************************************************
@@ -239,7 +252,7 @@ qx.Class.define('app.ui.channel.Events', {
           break
 
         case 'renderer':
-          control = new app.ui.renderer.Event('popup')
+          control = new app.plugins.event.Renderer('popup')
           control.addListener('delete', (ev) => {
             this._deleteActivity(ev)
             this.getChildControl('popup').hide()

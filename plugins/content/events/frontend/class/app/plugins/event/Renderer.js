@@ -5,7 +5,7 @@
  * @since 2018
  */
 
-qx.Class.define('app.ui.renderer.Event', {
+qx.Class.define('app.plugins.event.Renderer', {
   extend: qx.ui.core.Widget,
   implement: app.ui.renderer.IRenderer,
   include: app.ui.form.MBindPropertyToChildControl,

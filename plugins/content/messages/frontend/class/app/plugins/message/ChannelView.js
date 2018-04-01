@@ -1,11 +1,11 @@
 /**
- * The main menu on the left side, showing the current Actor, his subscribed channels and more.
+ * Shows all messages in a channel.
  *
  * @author tobiasb
  * @since 2018
  */
 
-qx.Class.define('app.ui.channel.Messages', {
+qx.Class.define('app.plugins.message.ChannelView', {
   extend: app.ui.channel.AbstractChannel,
   include: qx.ui.core.MBlocker,
 
@@ -38,6 +38,18 @@ qx.Class.define('app.ui.channel.Messages', {
 
     this.__writingUsers = new qx.data.Array()
     this.__writingUserTimers = {}
+  },
+
+  /*
+  ******************************************************
+    PROPERTIES
+  ******************************************************
+  */
+  properties: {
+    appearance: {
+      refine: true,
+      init: 'channel-view'
+    }
   },
 
   /*

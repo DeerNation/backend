@@ -15,8 +15,7 @@ qx.Class.define('app.mobile.ui.Main', {
   */
   construct: function () {
     this.base(arguments)
-    this._createChildControl('menu')
-    this.__currentPageName = 'menu'
+    this.__currentPage = this.getChildControl('menu')
 
     app.Model.getInstance().addListener('changedSelectedSubscription', this._onSelectedSubscription, this)
     this.setMaxWidth(qx.bom.Viewport.getWidth())
@@ -44,7 +43,7 @@ qx.Class.define('app.mobile.ui.Main', {
   */
   members: {
     __lid: null,
-    __currentPageName: null,
+    __currentPage: null,
 
     /**
      * Show Channel page on stack if subscription is selected, or the menu if not
@@ -54,32 +53,35 @@ qx.Class.define('app.mobile.ui.Main', {
       let newView = ev.getData() ? ev.getData().getChannel().getView() : null
       let oldView = ev.getOldData() ? ev.getOldData().getChannel().getView() : null
       if (oldView && oldView !== newView) {
-        this.getChildControl(oldView).resetSubscription()
+        app.plugins.Registry.getViewInstance(oldView).resetSubscription()
       }
       if (newView) {
-        const control = this.getChildControl(newView)
-        control.setSubscription(ev.getData())
-        this.showPage(newView, true)
+        const viewConfig = app.plugins.Registry.getViewConfig(newView)
+        if (!viewConfig.instance) {
+          viewConfig.instance = new viewConfig.Clazz()
+          this.add(viewConfig.instance)
+        }
+        viewConfig.instance.setSubscription(ev.getData())
+        this.showPage(viewConfig.instance, true)
       } else {
-        this.showPage('menu', true)
+        this.showPage(this.getChildControl('menu'), true)
       }
     },
 
-    showPage: function (pageName, animate) {
-      if (this.__currentPageName === pageName) {
+    showPage: function (page, animate) {
+      if (this.__currentPage === page) {
         return
       }
       if (!animate) {
-        this.setSelection([this.getChildControl(pageName)])
+        this.setSelection([page])
       } else {
         let animationOut = app.util.Animation.SLIDE_LEFT_OUT
         let animationIn = app.util.Animation.SLIDE_LEFT_IN
-        if (pageName === 'menu') {
+        if (page instanceof app.mobile.ui.Menu) {
           animationOut = app.util.Animation.SLIDE_RIGHT_OUT
           animationIn = app.util.Animation.SLIDE_RIGHT_IN
         }
-        const currentPage = this.getChildControl(this.__currentPageName)
-        const page = this.getChildControl(pageName)
+        const currentPage = this.__currentPage
 
         qx.bom.AnimationFrame.request(function() {
           qx.bom.element.Animation.animate(currentPage.getContentElement().getDomElement(), animationOut)
@@ -90,7 +92,7 @@ qx.Class.define('app.mobile.ui.Main', {
             const animIn = qx.bom.element.Animation.animate(page.getContentElement().getDomElement(), animationIn)
             this.debug('animating page ' + page.classname + ' in')
             animIn.on('end', () => {
-              this.__currentPageName = pageName
+              this.__currentPage = page
               this.setSelection([page])
               this.debug('page ' + page.classname + ' animation ended')
             })
@@ -116,15 +118,15 @@ qx.Class.define('app.mobile.ui.Main', {
           this.add(control)
           break
 
-        case 'channel':
-          control = new app.ui.channel.Messages()
-          this.add(control)
-          break
-
-        case 'calendar':
-          control = new app.ui.channel.Events()
-          this.add(control)
-          break
+        // case 'channel':
+        //   control = new app.ui.channel.Messages()
+        //   this.add(control)
+        //   break
+        //
+        // case 'calendar':
+        //   control = new app.ui.channel.Events()
+        //   this.add(control)
+        //   break
       }
       return control || this.base(arguments, id, hash)
     }
@@ -141,5 +143,6 @@ qx.Class.define('app.mobile.ui.Main', {
       qx.core.Init.getApplication().getRoot().removeListenerById(this.__lid)
       this.__lid = null
     }
+    this._disposeObjects('__currentPage')
   }
 })

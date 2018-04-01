@@ -5,7 +5,7 @@
  * @since 2018
  */
 
-qx.Class.define('app.ui.form.MessageField', {
+qx.Class.define('app.plugins.message.MessageField', {
   extend: qx.ui.core.Widget,
   implement: [qx.ui.form.IModel],
 

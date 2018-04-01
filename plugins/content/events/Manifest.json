@@ -23,6 +23,10 @@
   {
     "encoding"    : "utf-8",
     "id"          : "Event",
+    "namespace"   : "app.plugins.event",
+    "class"       : "frontend/class",
+    "resource"    : "frontend/resource",
+    "translation" : "frontend/translation",
     "jsonSchema"  : "backend/schema.json",
     "graphQlType" : "backend/graphqlType.js",
     "type"        : "contentPlugin"

@@ -31,6 +31,7 @@ qx.Class.define('app.ui.Main', {
       maxHeight: 0
     })
   },
+
   /*
  ******************************************************
    PROPERTIES
@@ -55,7 +56,9 @@ qx.Class.define('app.ui.Main', {
     },
 
     show: {
-      check: ['channel', 'calendar'],
+      check: function (value) {
+        return app.plugins.Registry.hasView(value)
+      },
       init: 'channel',
       apply: '_applyShow'
     }
@@ -67,14 +70,17 @@ qx.Class.define('app.ui.Main', {
   ******************************************************
   */
   members: {
+
     // property apply
     _applySubscription: function (subscription, oldSubscription) {
       if (subscription) {
         const channel = subscription.getChannel()
-        if (channel.getView() === 'calendar') {
-          this.setShow('calendar')
-          this.getChildControl('calendar').setSubscription(subscription)
+        const viewName = channel.getView()
+        if (app.plugins.Registry.hasView(viewName)) {
+          this.setShow(viewName)
+          app.plugins.Registry.getViewInstance(viewName).setSubscription(subscription)
         } else {
+          // channel view is the default
           this.setShow('channel')
           this.getChildControl('channel').setSubscription(subscription)
         }
@@ -84,10 +90,15 @@ qx.Class.define('app.ui.Main', {
     // property apply
     _applyShow: function (value, old) {
       if (old) {
-        this.getChildControl(old).resetSubscription()
+        app.plugins.Registry.getViewInstance(old).resetSubscription()
       }
       if (value) {
-        this.getChildControl('channel-stack').setSelection([this.getChildControl(value)])
+        const viewConfig = app.plugins.Registry.getViewConfig(value)
+        if (!viewConfig.instance) {
+          viewConfig.instance = new viewConfig.Clazz()
+          this.getChildControl('channel-stack').add(viewConfig.instance)
+        }
+        this.getChildControl('channel-stack').setSelection([viewConfig.instance])
       }
     },
 
@@ -105,15 +116,15 @@ qx.Class.define('app.ui.Main', {
           this.add(control, 1)
           break
 
-        case 'channel':
-          control = new app.ui.channel.Messages()
-          this.getChildControl('channel-stack').add(control)
-          break
-
-        case 'calendar':
-          control = new app.ui.channel.Events()
-          this.getChildControl('channel-stack').add(control)
-          break
+        // case 'channel':
+        //   control = new app.ui.channel.Messages()
+        //   this.getChildControl('channel-stack').add(control)
+        //   break
+        //
+        // case 'calendar':
+        //   control = new app.ui.channel.Events()
+        //   this.getChildControl('channel-stack').add(control)
+        //   break
       }
       return control || this.base(arguments, id, hash)
     }

@@ -6,7 +6,7 @@
  * @require(app.model.activity.Registry)
  */
 
-qx.Class.define('app.model.activity.content.Event', {
+qx.Class.define('app.plugins.event.Model', {
   extend: app.model.activity.content.AbstractActivityContent,
 
   /*
@@ -80,9 +80,5 @@ qx.Class.define('app.model.activity.content.Event', {
           this.getStart().getHours() === 0 && this.getEnd().getHours() === 0)
       }
     }
-  },
-
-  defer: function (statics) {
-    app.model.activity.Registry.getInstance().register('event', statics, app.ui.renderer.Event, app.ui.form.Event)
   }
 })

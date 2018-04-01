@@ -24,6 +24,10 @@
     "encoding"    : "utf-8",
     "id"          : "Message",
     "defaultType" : true,
+    "namespace"   : "app.plugins.message",
+    "class"       : "frontend/class",
+    "resource"    : "frontend/resource",
+    "translation" : "frontend/translation",
     "jsonSchema"  : "backend/schema.json",
     "graphQlType" : "backend/graphqlType.js",
     "type"        : "contentPlugin"
