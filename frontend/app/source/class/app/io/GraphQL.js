@@ -35,15 +35,15 @@ qx.Class.define('app.io.GraphQL', {
           }
         }
       }`
-      app.io.Socket.getInstance().emit('graphql', {
-        query: query
-      }, (err, res) => {
-        if (err) {
-          console.error(err)
-        } else {
-          // console.log(res)
-        }
-      })
+      // app.io.Socket.getInstance().emit('graphql', {
+      //   query: query
+      // }, (err, res) => {
+      //   if (err) {
+      //     console.error(err)
+      //   } else {
+      //     // console.log(res)
+      //   }
+      // })
     }
   }
 })
