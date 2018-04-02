@@ -15,8 +15,6 @@ qx.Class.define('app.plugins.message.Main', {
       model: app.plugins.message.Model,
       renderer: app.plugins.message.Renderer,
       form: app.plugins.message.MessageField,
-      channelView: app.plugins.message.ChannelView,
-      viewName: 'channel',
       theme: [
         {
           target: app.theme,

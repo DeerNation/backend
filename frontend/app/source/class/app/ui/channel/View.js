@@ -1,11 +1,11 @@
 /**
- * Shows all messages in a channel.
+ * Shows all activities in a channel.
  *
  * @author tobiasb
  * @since 2018
  */
 
-qx.Class.define('app.plugins.message.ChannelView', {
+qx.Class.define('app.ui.channel.View', {
   extend: app.ui.channel.AbstractChannel,
   include: qx.ui.core.MBlocker,
 
@@ -294,5 +294,9 @@ qx.Class.define('app.plugins.message.ChannelView', {
     this._disposeMap('__writingUserTimers')
     this._disposeObjects('_prefetcher')
     this._prefetcher = null
+  },
+
+  defer: function (statics) {
+    app.plugins.Registry.registerView('channel', statics)
   }
 })

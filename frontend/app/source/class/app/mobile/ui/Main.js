@@ -3,6 +3,7 @@
  *
  * @author tobiasb
  * @since 2018
+ * @require(app.ui.channel.View)
  */
 
 qx.Class.define('app.mobile.ui.Main', {

@@ -5,6 +5,7 @@
  * @since 2018
  * @require(app.ui.Menu)
  * @require(app.mobile.ui.Menu)
+ * @require(app.ui.channel.View)
  */
 
 qx.Class.define('app.ui.Main', {
