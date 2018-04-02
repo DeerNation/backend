@@ -51,6 +51,10 @@ qx.Class.define('app.plugins.message.MessageField', {
   ******************************************************
   */
   properties: {
+    appearance: {
+      refine: true,
+      init: 'message-editor'
+    },
     model: {
       nullable: true,
       event: 'changeModel',

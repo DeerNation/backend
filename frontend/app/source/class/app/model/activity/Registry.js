@@ -25,6 +25,9 @@ qx.Class.define('app.model.activity.Registry', {
   ******************************************************
   */
   statics: {
+    DEFAULT_TYPE: 'message',
+    __formInstances: {},
+
     // shortcut
     getRendererClass: function (type) {
       return this.getInstance().getRendererClass(type)
@@ -33,6 +36,13 @@ qx.Class.define('app.model.activity.Registry', {
     // shortcut
     getFormClass: function (type) {
       return this.getInstance().getFormClass(type)
+    },
+
+    getForm: function (type) {
+      if (!this.__formInstances.hasOwnProperty(type)) {
+        this.__formInstances[type] = new (this.getFormClass(type))()
+      }
+      return this.__formInstances[type]
     },
 
     // shortcut

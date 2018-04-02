@@ -18,14 +18,12 @@ qx.Theme.define('app.plugins.message.theme.Appearance', {
     },
     'message-activity/message': 'message-activity/title',
 
-
-
     /*
     ---------------------------------------------------------------------------
      ACTIVITY EDITOR
     ---------------------------------------------------------------------------
     */
-    'channel-view/message-field/textfield': {
+    'message-editor/textfield': {
       style: function () {
         return {
           decorator: 'form-field',

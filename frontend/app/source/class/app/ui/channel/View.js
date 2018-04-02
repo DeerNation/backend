@@ -136,7 +136,13 @@ qx.Class.define('app.ui.channel.View', {
     // overridden
     _handleSubscribed: function (isSubscribed) {
       if (isSubscribed) {
-        this.getChildControl('editor-container').setSelection([this.getChildControl('message-field')])
+        // show default
+        const form = app.model.activity.Registry.getForm(app.model.activity.Registry.DEFAULT_TYPE)
+        if (!this.getChildControl('editor-container').getChildren().includes(form)) {
+          this.getChildControl('editor-container').add(form)
+          this.bind('subscription.channel', form, 'model')
+        }
+        this.getChildControl('editor-container').setSelection([form])
       } else {
         this.getChildControl('editor-container').resetSelection()
       }
@@ -181,14 +187,6 @@ qx.Class.define('app.ui.channel.View', {
           this._addAt(control, 3)
           break
 
-        case 'message-field':
-          control = new (app.model.activity.Registry.getFormClass('message'))()
-          if (this.getSubscription()) {
-            control.setModel(this.getSubscription().getChannel())
-          }
-          this.getChildControl('editor-container').add(control)
-          break
-
         case 'login-hint':
           control = new qx.ui.basic.Label(this.tr('To enter this channel you need a user account. Please login or register yourself.'))
           control.set({
@@ -215,7 +213,7 @@ qx.Class.define('app.ui.channel.View', {
      */
     _onSelection: function () {
       const selection = this.getChildControl('list').getSelection()
-      // TODO handle other Activity types
+      const container = this.getChildControl('editor-container')
       if (selection.getLength() === 1) {
         const activity = selection.getItem(0)
         const actor = app.Model.getInstance().getActor()
@@ -223,18 +221,24 @@ qx.Class.define('app.ui.channel.View', {
             activity.getActorId() === actor.getId() ||
             this.getSubscription().getChannel().getOwnerId() === actor.getId()
         )) {
-          switch (activity.getType()) {
-            case 'Message':
-              this.getChildControl('message-field').setActivity(activity)
-              break
-
-            case 'Event':
-              this.error('Not implemented')
-              break
+          const form = app.model.activity.Registry.getForm(activity.getType())
+          if (!form) {
+            throw new Error(this.tr('No editor specified for content type %1', activity.getType()))
           }
+          if (!container.getChildren().includes(form)) {
+            if (this.getSubscription()) {
+              this.bind('subscription.channel', form, 'model')
+            }
+            container.add(form)
+          }
+          form.setActivity(activity)
+          container.setSelection([form])
         }
       } else {
-        this.getChildControl('message-field').resetActivity()
+        const currentEditor = container.getSelection().length > 0 ? container.getSelection()[0] : null
+        if (currentEditor) {
+          currentEditor.resetActivity()
+        }
       }
     },
 

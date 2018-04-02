@@ -32,6 +32,12 @@ qx.Class.define('app.plugins.event.Form', {
       nullable: true,
       event: 'changeModel',
       dereference: true
+    },
+
+    activity: {
+      check: 'app.model.Activity',
+      nullable: true,
+      apply: '_applyActivity'
     }
   },
 
