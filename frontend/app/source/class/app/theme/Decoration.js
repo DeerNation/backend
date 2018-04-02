@@ -41,13 +41,6 @@ qx.Theme.define('app.theme.Decoration',
         }
       },
 
-      'form-field': {
-        style: {
-          color: 'menu-text',
-          width: 1
-        }
-      },
-
       'flat-button-h': {
         style: {
           width: [0, 1, 0, 1],
@@ -71,7 +64,7 @@ qx.Theme.define('app.theme.Decoration',
         style: {
           color: 'lightgrey',
           width: 1,
-          backgroundColor: 'white',
+          backgroundColor: 'bg-message',
           radius: 10,
           shadowBlurRadius: 4,
           shadowVerticalLength: 2,

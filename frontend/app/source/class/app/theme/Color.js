@@ -25,6 +25,8 @@ qx.Theme.define('app.theme.Color',
       'background': '#F5F0EB',
       'bg-own-message': '#eeeeee',
 
+      'bg-message': 'white',
+
       // channel-bar
       'dark-form-item-bg': 'rgb(31, 35, 41)',
 

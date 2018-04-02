@@ -3,7 +3,8 @@ qx.Theme.define('app.plugins.message.theme.Decoration', {
     'form-field': {
       style: {
         color: 'menu-text',
-        width: 1
+        width: 1,
+        backgroundColor: 'bg-own-message'
       }
     }
   }
