@@ -19,12 +19,12 @@ module.exports = function (grunt) {
           linebreak: true,
           process: function (filepath) {
             var filename = filepath.match(/\/([^/]*)$/)[1]
-            if (filename === '__init__.js') { return '' }
+            // if (filename === '__init__.js') { return '' }
 
-            return grunt.template.process('/* DeerNation\n' +
-              ' * \n' +
+            return grunt.template.process('/* DeerNation community project\n' +
+              ' *\n' +
               ' * copyright (c) 2017-<%= grunt.template.today("yyyy") %>, Tobias Braeutigam.\n' +
-              ' * \n' +
+              ' *\n' +
               ' * This program is free software; you can redistribute it and/or modify it\n' +
               ' * under the terms of the GNU General Public License as published by the Free\n' +
               ' * Software Foundation; either version 3 of the License, or (at your option)\n' +
@@ -38,7 +38,7 @@ module.exports = function (grunt) {
               ' * You should have received a copy of the GNU General Public License along\n' +
               ' * with this program; if not, write to the Free Software Foundation, Inc.,\n' +
               ' * 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA\n' +
-              ' */\n', {
+              ' */', {
               data: {
                 filename: filename,
                 version: pkg.version
