@@ -6,8 +6,7 @@
  */
 
 qx.Class.define('app.plugins.message.MessageField', {
-  extend: qx.ui.core.Widget,
-  implement: [qx.ui.form.IModel],
+  extend: app.plugins.AbstractContentForm,
 
   /*
   ******************************************************
@@ -54,17 +53,6 @@ qx.Class.define('app.plugins.message.MessageField', {
     appearance: {
       refine: true,
       init: 'message-editor'
-    },
-    model: {
-      nullable: true,
-      event: 'changeModel',
-      dereference: true
-    },
-
-    activity: {
-      check: 'app.model.Activity',
-      nullable: true,
-      apply: '_applyActivity'
     }
   },
 
@@ -78,40 +66,15 @@ qx.Class.define('app.plugins.message.MessageField', {
     __sendCommand: null,
 
     postMessage: async function () {
-      if (this.getModel()) {
-        // TODO: show spinner during message sending
-        this.getChildControl('textfield').setEnabled(false)
-        if (this.getActivity()) {
-          // update message in existing activity
-          try {
-            await app.io.Rpc.getProxy().updateObjectProperty('Activity',
-              this.getActivity().getId(),
-              {
-                content: {
-                  message: this.getChildControl('textfield').getValue()
-                }
-              })
-            this.getChildControl('textfield').setEnabled(true)
-            this.resetActivity()
-          } catch (err) {
-            this.getChildControl('textfield').setEnabled(true)
-            this.error(err)
-          }
-        } else {
-          try {
-            await app.io.Rpc.getProxy().publish(this.getModel().getId(), {
-              type: 'Message',
-              content: {
-                message: this.getChildControl('textfield').getValue()
-              }
-            })
-            this.getChildControl('textfield').setEnabled(true)
-            this.getChildControl('textfield').resetValue()
-          } catch (err) {
-            this.getChildControl('textfield').setEnabled(true)
-            this.error(err)
-          }
-        }
+      await this.base(arguments)
+      this.getChildControl('textfield').setEnabled(true)
+      this.getChildControl('textfield').resetValue()
+    },
+
+    // overridden
+    _createContent: function () {
+      return {
+        message: this.getChildControl('textfield').getValue()
       }
     },
 
@@ -122,27 +85,6 @@ qx.Class.define('app.plugins.message.MessageField', {
       } else {
         this.getChildControl('textfield').resetValue()
       }
-    },
-
-    _sendWrite: function () {
-      app.io.Socket.getInstance().publish(this.getModel().getId(), {
-        a: 'i',
-        c: {
-          type: 'write',
-          uid: app.Model.getInstance().getActor().getUsername()
-        }
-      })
-    },
-
-    _sendWriteEnd: function () {
-      app.io.Socket.getInstance().publish(this.getModel().getId(), {
-        a: 'i',
-        c: {
-          type: 'write',
-          uid: app.Model.getInstance().getActor().getUsername(),
-          done: true
-        }
-      })
     },
 
     // overridden
@@ -164,11 +106,6 @@ qx.Class.define('app.plugins.message.MessageField', {
           control.addListener('focusin', this._sendWrite, this)
           control.addListener('focusout', this._sendWriteEnd, this)
           control.addListener('input', this._sendWrite, this)
-          break
-
-        case 'send-button':
-          control = new qx.ui.form.Button(null, app.Config.icons.plus + '/20', this.__sendCommand)
-          this._addAt(control, 2)
           break
       }
       return control || this.base(arguments, id, hash)

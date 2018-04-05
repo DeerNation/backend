@@ -156,15 +156,23 @@ qx.Class.define('app.ui.channel.View', {
     _handleSubscribed: function (isSubscribed) {
       if (isSubscribed) {
         // show default
-        const form = app.model.activity.Registry.getForm(app.model.activity.Registry.DEFAULT_TYPE)
-        if (!this.getChildControl('editor-container').getChildren().includes(form)) {
-          this.getChildControl('editor-container').add(form)
-          this.bind('subscription.channel', form, 'model')
+        if (this.isReady()) {
+          this._initForm()
+        } else {
+          this.addListenerOnce('changeReady', this._initForm, this)
         }
-        this.getChildControl('editor-container').setSelection([form])
       } else {
         this.getChildControl('editor-container').resetSelection()
       }
+    },
+
+    _initForm: function () {
+      const form = app.model.activity.Registry.getForm(app.model.activity.Registry.DEFAULT_TYPE)
+      if (!this.getChildControl('editor-container').getChildren().includes(form)) {
+        this.getChildControl('editor-container').add(form)
+        this.bind('subscription.channel', form, 'channel')
+      }
+      this.getChildControl('editor-container').setSelection([form])
     },
 
     // overridden
@@ -246,7 +254,7 @@ qx.Class.define('app.ui.channel.View', {
           }
           if (!container.getChildren().includes(form)) {
             if (this.getSubscription()) {
-              this.bind('subscription.channel', form, 'model')
+              this.bind('subscription.channel', form, 'channel')
             }
             container.add(form)
           }

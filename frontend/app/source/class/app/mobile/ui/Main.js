@@ -103,7 +103,7 @@ qx.Class.define('app.mobile.ui.Main', {
         }
         const currentPage = this.__currentPage
 
-        qx.bom.AnimationFrame.request(function() {
+        qx.bom.AnimationFrame.request(() => {
           qx.bom.element.Animation.animate(currentPage.getContentElement().getDomElement(), animationOut)
         })
 
@@ -115,6 +115,7 @@ qx.Class.define('app.mobile.ui.Main', {
               this.__currentPage = page
               this.setSelection([page])
               this.debug('page ' + page.classname + ' animation ended')
+              page.setReady(true)
             })
           })
         }
@@ -137,16 +138,6 @@ qx.Class.define('app.mobile.ui.Main', {
           control = app.mobile.ui.Menu.getInstance()
           this.add(control)
           break
-
-        // case 'channel':
-        //   control = new app.ui.channel.Messages()
-        //   this.add(control)
-        //   break
-        //
-        // case 'calendar':
-        //   control = new app.ui.channel.Events()
-        //   this.add(control)
-        //   break
       }
       return control || this.base(arguments, id, hash)
     }

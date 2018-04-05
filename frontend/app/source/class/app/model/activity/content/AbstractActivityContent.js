@@ -18,7 +18,7 @@
  */
 
 /**
- * Activity
+ * Base class for all activity content classes.
  *
  * @author tobiasb
  * @since 2018

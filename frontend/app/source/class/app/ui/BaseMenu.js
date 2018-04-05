@@ -53,6 +53,10 @@ qx.Class.define('app.ui.BaseMenu', {
       check: 'app.model.Actor',
       nullable: true,
       apply: '_applyActor'
+    },
+    ready: {
+      check: 'Boolean',
+      init: false
     }
   },
 

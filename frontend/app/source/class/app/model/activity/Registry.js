@@ -80,7 +80,7 @@ qx.Class.define('app.model.activity.Registry', {
 
     register: function (type, modelClass, rendererClass, formClass) {
       qx.core.Assert.assertTrue(qx.Class.isSubClassOf(modelClass, app.model.activity.content.AbstractActivityContent))
-      qx.core.Assert.assertInterface(formClass, qx.ui.form.IModel)
+      qx.core.Assert.assertTrue(qx.Class.isSubClassOf(formClass, app.plugins.AbstractContentForm))
       qx.core.Assert.assertInterface(rendererClass, app.ui.renderer.IRenderer)
       this.__registry[type] = {
         modelClass: modelClass,
@@ -96,11 +96,13 @@ qx.Class.define('app.model.activity.Registry', {
     },
 
     getRendererClass: function (type) {
+      type = type.toLowerCase()
       qx.core.Assert.assertKeyInMap(type, this.__registry)
       return this.__registry[type].rendererClass
     },
 
     getFormClass: function (type) {
+      type = type.toLowerCase()
       qx.core.Assert.assertKeyInMap(type, this.__registry)
       return this.__registry[type].formClass
     }

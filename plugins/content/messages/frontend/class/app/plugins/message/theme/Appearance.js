@@ -29,7 +29,8 @@ qx.Theme.define('app.plugins.message.theme.Appearance', {
           decorator: 'form-field',
           margin: 4,
           padding: 10,
-          font: 'message'
+          font: 'message',
+          maxHeight: 100
         }
       }
     }

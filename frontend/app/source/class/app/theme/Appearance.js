@@ -553,6 +553,15 @@ qx.Theme.define('app.theme.Appearance',
             textAlign: 'center'
           }
         }
+      },
+
+      'channel-view/editor-container': {
+        style: function () {
+          return {
+            decorator: 'activity-group',
+            paddingTop: 8
+          }
+        }
       }
     }
   })

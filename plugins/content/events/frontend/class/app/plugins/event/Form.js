@@ -6,8 +6,7 @@
  */
 
 qx.Class.define('app.plugins.event.Form', {
-  extend: qx.ui.core.Widget,
-  implement: [qx.ui.form.IModel],
+  extend: app.plugins.AbstractContentForm,
 
   /*
   ******************************************************
@@ -16,10 +15,7 @@ qx.Class.define('app.plugins.event.Form', {
   */
   construct: function () {
     this.base(arguments)
-    this._setLayout(new qx.ui.layout.HBox())
-
-    // this._createChildControl('textfield')
-    // this._createChildControl('send-button')
+    this._setLayout(new qx.ui.layout.VBox())
   },
 
   /*
@@ -28,16 +24,14 @@ qx.Class.define('app.plugins.event.Form', {
   ******************************************************
   */
   properties: {
-    model: {
-      nullable: true,
-      event: 'changeModel',
-      dereference: true
+    appearance: {
+      refine: true,
+      init: 'event-editor'
     },
 
-    activity: {
-      check: 'app.model.Activity',
-      nullable: true,
-      apply: '_applyActivity'
+    type: {
+      refine: true,
+      init: 'Event'
     }
   },
 
@@ -48,13 +42,31 @@ qx.Class.define('app.plugins.event.Form', {
   */
   members: {
 
-    postEvent: function () {
-      if (this.getChannel()) {
-        app.io.Rpc.getProxy().publish(this.getModel().getId(), {
-          type: 'Message',
-          content: {
-            title: this.getChildControl('title').getValue()
-          }
+    // overridden
+    _createContent: function () {
+      return {
+        name: this.getChildControl('name').getValue(),
+        start: this.getChildControl('start').getValue()
+      }
+    },
+
+    // property apply
+    _applyActivity: function (value, old) {
+      const mappings = ['name', 'start', 'end', 'organizer']
+      if (old) {
+        const oldEvent = old.getContentObject()
+        mappings.forEach(name => {
+          oldEvent.removeRelatedBindings(this.getChildControl(name))
+        })
+      }
+      if (value) {
+        const event = value.getContentObject()
+        mappings.forEach(name => {
+          event.bind(name, this.getChildControl(name), 'value')
+        })
+      } else {
+        mappings.forEach(name => {
+          this.getChildControl(name).resetValue()
         })
       }
     },
@@ -63,15 +75,31 @@ qx.Class.define('app.plugins.event.Form', {
     _createChildControlImpl: function (id, hash) {
       let control
       switch (id) {
-        case 'title':
-          control = new qx.ui.form.TextField()
-          this._add(control)
+        case 'form':
+          control = new qx.ui.form.Form()
+          this._add(new qx.ui.form.renderer.Single(control), {flex: 1})
           break
 
-        case 'send-button':
-          control = new qx.ui.form.Button(null, app.Config.icons.plus + '/20')
-          control.addListener('execute', this.postEvent, this)
-          this._add(control)
+        case 'name':
+          control = new qx.ui.form.TextField()
+          control.setRequired(true)
+          this.getChildControl('form').add(control, this.tr('What'))
+          break
+
+        case 'organizer':
+          control = new qx.ui.form.TextField()
+          this.getChildControl('form').add(control, this.tr('Who'))
+          break
+
+        case 'start':
+          control = new qx.ui.form.DateField()
+          control.setRequired(true)
+          this.getChildControl('form').add(control, this.tr('Start'))
+          break
+
+        case 'end':
+          control = new qx.ui.form.DateField()
+          this.getChildControl('form').add(control, this.tr('End'))
           break
       }
       return control || this.base(arguments, id, hash)

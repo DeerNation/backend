@@ -100,6 +100,11 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
     channelActivitiesAcls: {
       check: 'Object',
       nullable: true
+    },
+    ready: {
+      check: 'Boolean',
+      init: false,
+      event: 'changeReady'
     }
   },
 
@@ -471,7 +476,7 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
     /**
      * Show context menu for selected activity
      * @param ev
-     * @private
+     * @protected
      */
     _onActivityContext: function (ev) {
       let activity
