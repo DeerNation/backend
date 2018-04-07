@@ -111,7 +111,6 @@ class ChannelHandler {
 
   _mergePublication (activity, publication) {
     return Object.assign({
-      actorId: publication.actorId,
       channelId: publication.channelId,
       master: publication.master,
       published: publication.published
@@ -135,7 +134,8 @@ class ChannelHandler {
       message = await this.model.get(message).run()
     } else {
       message = Object.assign({
-        hash: hash(message.content)
+        hash: hash(message.content),
+        actorId: authToken.user
       }, message)
 
       // only allow valid activities to be published

@@ -63,7 +63,7 @@ class Schema {
   }
 
   getVersion () {
-    return '0.1.0'
+    return '0.1.1'
   }
 
   create (worker, callback) {
@@ -167,6 +167,7 @@ class Schema {
             titleUrl: type.string(),
             created: type.date().default(new Date()),
             hash: type.string(),
+            actorId: type.string(),
             ref: type.string(),
             external: {
               type: type.string(),

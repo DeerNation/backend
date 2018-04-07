@@ -21,6 +21,9 @@
     "title": {
       "type": "string"
     },
+    "actorId": {
+      "type": "string"
+    },
     "titleUrl": {
       "type": "string",
       "format": "uri"

@@ -15,13 +15,15 @@ class DbMigration {
 
     // migrations
     this.__migrations = {
-      '0.0.1-0.1.0': [this.migrate001To010]
+      '0.0.1-0.1.0': [this.migrate001To010],
+      '0.1.0-0.1.1': [this.migrate010To011]
     }
   }
 
   async run () {
     const entry = await this.schema.getModel('System').filter({key: 'schemaVersion'}).run()
-    this.dbSchemaVersion = entry ? entry.value : '0.0.1'
+    this.dbSchemaVersion = entry.length ? entry[0].value : '0.0.1'
+    logger.info('comparing schema versions %s, %s', this.currentSchemaVersion, this.dbSchemaVersion)
 
     if (semver.gt(this.currentSchemaVersion, this.dbSchemaVersion)) {
       // we need to migrate, check if we have a migration method for this
@@ -60,6 +62,21 @@ class DbMigration {
     entry.value = '0.1.0'
     this.schema.getModel('System').update(entry, {conflict: 'update'})
     logger.info('successfully migrated schema from 0.0.1 to 0.1.0')
+  }
+
+  async migrate010To011 () {
+    logger.info('running migrate010To011')
+    const activityModel = this.schema.getModel('Activity')
+    const publicationModel = this.schema.getModel('Publication')
+    const publications = await publicationModel.filter({master: true}).run()
+    publications.forEach(async (publication) => {
+      const activity = await activityModel.get(publication.activityId).run()
+      await activity.merge({actorId: publication.actorId}).save()
+    })
+    const entry = await this.schema.getModel('System').filter({key: 'schemaVersion'}).run()
+    entry.value = '0.1.1'
+    this.schema.getModel('System').update(entry, {conflict: 'update'})
+    logger.info('successfully migrated schema from 0.1.0 to 0.1.1')
   }
 }
 module.exports = DbMigration
