@@ -36,6 +36,7 @@ class ChannelHandler {
   constructor () {
     this.server = null
     this.model = null
+    this.pubModel = null
     this.ajv = new Ajv({allErrors: true})
   }
 
@@ -47,7 +48,11 @@ class ChannelHandler {
     if (!this.model) {
       this.model = schema.getModel('Activity')
     }
-    this.model.changes().then(this._onChange.bind(this))
+    if (!this.pubModel) {
+      this.pubModel = schema.getModel('Publication')
+    }
+    this.model.changes().then(this._onActivityChange.bind(this))
+    this.pubModel.changes().then(this._onPublicationChange.bind(this))
 
     rpcHandler.registerRPCEndpoints({
       publish: {
@@ -57,28 +62,60 @@ class ChannelHandler {
     })
   }
 
-  _onChange (feed) {
-    feed.each((err, message) => {
+  _onActivityChange (feed) {
+    feed.each(async (err, activity) => {
       if (err) {
         logger.error(err)
         return
       }
-      const channel = message.channelId
+      if (activity.isSaved() === true && activity.getOldValue() !== null) {
+        // updated activity, publish on all channels
+        const publications = await this.pubModel.filter({'activityId': activity.id}).run()
+        publications.forEach(pub => {
+          logger.debug('updated activity on channel %s: %s', pub.channelId, activity.id)
+          let message = this._mergePublication(activity, pub)
+          this.server.exchange.publish(pub.channelId, {a: 'u', c: message})
+        })
+      }
+    })
+  }
 
-      if (message.isSaved() === false) {
+  _onPublicationChange (feed) {
+    feed.each(async (err, publication) => {
+      if (err) {
+        logger.error(err)
+        return
+      }
+      const channel = publication.channelId
+      let activity, message
+
+      if (publication.isSaved() === false) {
         // deleted activity
-        logger.debug('deleted activity on channel %s: %s', channel, message.id)
-        this.server.exchange.publish(channel, {a: 'd', c: message.id})
-      } else if (message.getOldValue() === null) {
+        logger.debug('deleted activity on channel %s: %s', channel, publication.activityId)
+        this.server.exchange.publish(channel, {a: 'd', c: publication.activityId})
+      } else if (publication.getOldValue() === null) {
         // new activity
-        logger.debug('new activity on channel %s: %s', channel, message.id)
+        activity = await this.model.get(publication.activityId)
+        message = this._mergePublication(activity, publication)
+        logger.debug('new activity on channel %s: %s', channel, publication.activityId)
         this.server.exchange.publish(channel, {a: 'a', c: message})
       } else {
         // updated activity
-        logger.debug('updated activity on channel %s: %s', channel, message.id)
+        activity = await this.model.get(publication.activityId)
+        message = this._mergePublication(activity, publication)
+        logger.debug('updated activity on channel %s: %s', channel, publication.activityId)
         this.server.exchange.publish(channel, {a: 'u', c: message})
       }
     })
+  }
+
+  _mergePublication (activity, publication) {
+    return Object.assign({
+      actorId: publication.actorId,
+      channelId: publication.channelId,
+      master: publication.master,
+      published: publication.published
+    }, activity)
   }
 
   validate (message) {
@@ -133,7 +170,6 @@ class ChannelHandler {
       this.model.save(message)
       publication.activityId = message.id
       schema.getModel('Publication').save(publication)
-
     }
     const channel = await schema.getModel('Channel').get(channelId).run()
     const actor = await schema.getModel('Actor').get(authToken.user).run()

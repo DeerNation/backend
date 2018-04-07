@@ -293,22 +293,12 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
         dialog.add(list)
         list.getSelection().addListenerOnce('change', () => {
           const selection = list.getSelection()
-          let message
 
           if (selection.getLength() === 1) {
             const channel = selection.getItem(0).getChannel()
             const promises = []
             activities.forEach(activity => {
-              message = {
-                type: activity.getType(),
-                content: activity.getContent(),
-                ref: activity.getId(),
-                refType: 'share'
-              }
-              if (activity.getTitle()) {
-                message.title = activity.getTitle()
-              }
-              promises.push(app.io.Rpc.getProxy().publish(channel.getId(), message))
+              promises.push(app.io.Rpc.getProxy().publish(channel.getId(), activity.getId()))
             })
             Promise.all(promises).then(() => {
               // open the channel

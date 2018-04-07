@@ -1,5 +1,5 @@
 /**
- * migrations
+ * Database schema migrations. Please note that the migration scripts must be idempotent!
  *
  * @author Tobias Bräutigam <tbraeutigam@gmail.com>
  * @since 2018
