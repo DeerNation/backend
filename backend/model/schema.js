@@ -27,6 +27,7 @@ const scCrudRethink = require('sc-crud-rethink')
 const logger = require('../logger')(__filename)
 const i18n = require('i18n')
 const defaultData = require('./default-data')
+const Migrator = require('./migrations')
 
 class Schema {
   constructor () {
@@ -59,6 +60,10 @@ class Schema {
 
   getCrud () {
     return this.__crud
+  }
+
+  getVersion () {
+    return '0.1.0'
   }
 
   create (worker, callback) {
@@ -157,13 +162,10 @@ class Schema {
           fields: {
             id: type.string(),
             type: type.string().enum(this.__contentTypes).default(this._defaultContentType),
-            channelId: type.string(),
             content: type.object().allowExtra(true),
             title: type.string(),
             titleUrl: type.string(),
             created: type.date().default(new Date()),
-            published: type.date(),
-            actorId: type.string(),
             hash: type.string(),
             ref: type.string(),
             external: {
@@ -171,6 +173,17 @@ class Schema {
               id: type.string(),
               original: type.object()
             }
+          }
+        },
+
+        Publication: {
+          fields: {
+            id: type.string(),
+            actorId: type.string(),
+            channelId: type.string(),
+            activityId: type.string(),
+            published: type.date(),
+            master: type.boolean()
           },
           filters: {
             pre: mustBeLoggedIn
@@ -205,7 +218,8 @@ class Schema {
             ownerId: type.string(),
             color: type.string(),
             typeIcon: type.string(),
-            view: type.string().enum('calendar', 'channel').default('channel')
+            view: type.string().default('channel'),
+            allowedActivityTypes: type.array()
           },
           views: {
             publicChannels: {
@@ -345,9 +359,10 @@ class Schema {
     const m = crudOptions.models
 
     // create indices
-    m.Activity.ensureIndex('content.start')
+    // m.Activity.ensureIndex('content.start')
     m.Firebase.ensureIndex('actorId')
     m.Firebase.ensureIndex('token')
+    m.Publication.ensureIndex('channelId')
 
     // create relations
 
@@ -355,17 +370,21 @@ class Schema {
     m.Activity.hasAndBelongsToMany(m.Attachment, 'attachments', 'id', 'attachmentId')
     m.Attachment.hasAndBelongsToMany(m.Activity, 'event', 'attachmentId', 'id')
 
-    // 1-n: An Activity can have only one creator (of type Actor), an Actor can be the creator of many Activities
-    // m.Actor.hasMany(m.Event, 'createdEvents', 'id', 'creatorId')
-    // m.Event.belongsTo(m.Actor, 'creator', 'creatorId', 'id')
+    // 1-n: a Publication has only one activity
+    m.Activity.hasMany(m.Publication, 'publications', 'id', 'activityId')
+    m.Publication.belongsTo(m.Activity, 'activity', 'activityId', 'id')
+
+    // 1-n: a Publication can only have one actor
+    m.Actor.hasMany(m.Publication, 'publications', 'id', 'actorId')
+    m.Publication.belongsTo(m.Actor, 'actor', 'actorId', 'id')
+
+    // 1-n: a Publication can only have one channel
+    m.Channel.hasMany(m.Publication, 'publications', 'id', 'channelId')
+    m.Publication.belongsTo(m.Channel, 'channel', 'channelId', 'id')
 
     // 1-n: An webhook can have only one actor
     m.Actor.hasMany(m.Webhook, 'webhooks', 'id', 'actorId')
     m.Webhook.belongsTo(m.Actor, 'actor', 'actorId', 'id')
-
-    // 1-n: a Activity can only have one actor
-    m.Actor.hasMany(m.Activity, 'activities', 'id', 'actorId')
-    m.Activity.belongsTo(m.Actor, 'actor', 'actorId', 'id')
 
     // 1-1: Actor<->Config relation
     m.Actor.hasOne(m.Config, 'config', 'id', 'actorId')
@@ -402,6 +421,11 @@ class Schema {
       })
     }
     this.__crud = crud
+
+    // run migration scripts
+    const migrator = new Migrator(this)
+    migrator.run()
+
     return crud
   }
 }

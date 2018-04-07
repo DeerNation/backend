@@ -16,32 +16,6 @@ qx.Class.define('app.plugins.message.MessageField', {
   construct: function () {
     this.base(arguments)
     this._setLayout(new qx.ui.layout.HBox())
-
-    // this._createChildControl('emojis')
-    const field = this.getChildControl('textfield')
-    let group = this._editCommandGroup = new qx.ui.command.Group()
-
-    const newLine = new qx.ui.command.Command('Shift+Enter')
-    const send = this.__sendCommand = new qx.ui.command.Command('Enter')
-    send.addListener('execute', this.postMessage, this)
-    newLine.addListener('execute', () => {
-      const start = field.getTextSelectionStart()
-      const end = field.getTextSelectionEnd()
-      let parts = [field.getValue().substring(0, start), field.getValue().substring(end)]
-      field.setValue(parts.join('\n'))
-      field.setTextSelection(start + 1, start + 1)
-    })
-    group.add('newline', newLine)
-    group.add('send', send)
-    field.addListener('focusin', () => {
-      group.setActive(true)
-    })
-
-    field.addListener('focusout', () => {
-      group.setActive(false)
-    })
-
-    this._createChildControl('send-button')
   },
 
   /*
@@ -62,10 +36,39 @@ qx.Class.define('app.plugins.message.MessageField', {
   ******************************************************
   */
   members: {
-    _editCommandGroup: null,
-    __sendCommand: null,
 
-    postMessage: async function () {
+    // overridden
+    _initView: function () {
+      // this._createChildControl('emojis')
+      const field = this.getChildControl('textfield')
+      const group = this.getCommandGroup()
+
+      const newLine = new qx.ui.command.Command('Shift+Enter')
+      newLine.addListener('execute', () => {
+        const start = field.getTextSelectionStart()
+        const end = field.getTextSelectionEnd()
+        let parts = [field.getValue().substring(0, start), field.getValue().substring(end)]
+        field.setValue(parts.join('\n'))
+        field.setTextSelection(start + 1, start + 1)
+      })
+      group.add('newline', newLine)
+
+      field.addListener('focusin', () => {
+        group.setActive(true)
+      })
+
+      field.addListener('focusout', () => {
+        group.setActive(false)
+      })
+
+      this.base(arguments)
+    },
+
+    // overridden
+    _maintainCommandGroupState: function () {
+    },
+
+    _postActivity: async function () {
       await this.base(arguments)
       this.getChildControl('textfield').setEnabled(true)
       this.getChildControl('textfield').resetValue()

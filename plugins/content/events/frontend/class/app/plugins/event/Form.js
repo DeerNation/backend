@@ -14,6 +14,7 @@ qx.Class.define('app.plugins.event.Form', {
   ******************************************************
   */
   construct: function () {
+    this.__mappings = ['name', 'start', 'end', 'organizer']
     this.base(arguments)
     this._setLayout(new qx.ui.layout.VBox())
   },
@@ -41,31 +42,38 @@ qx.Class.define('app.plugins.event.Form', {
   ******************************************************
   */
   members: {
+    __mappings: null,
+
+    // overridden
+    _initView: function () {
+      this.__mappings.forEach(this._createChildControl, this)
+      this.base(arguments)
+    },
 
     // overridden
     _createContent: function () {
-      return {
-        name: this.getChildControl('name').getValue(),
-        start: this.getChildControl('start').getValue()
-      }
+      const content = {}
+      this.__mappings.forEach(name => {
+        content[name] = this.getChildControl(name).getValue()
+      })
+      return content
     },
 
     // property apply
     _applyActivity: function (value, old) {
-      const mappings = ['name', 'start', 'end', 'organizer']
       if (old) {
         const oldEvent = old.getContentObject()
-        mappings.forEach(name => {
+        this.__mappings.forEach(name => {
           oldEvent.removeRelatedBindings(this.getChildControl(name))
         })
       }
       if (value) {
         const event = value.getContentObject()
-        mappings.forEach(name => {
+        this.__mappings.forEach(name => {
           event.bind(name, this.getChildControl(name), 'value')
         })
       } else {
-        mappings.forEach(name => {
+        this.__mappings.forEach(name => {
           this.getChildControl(name).resetValue()
         })
       }

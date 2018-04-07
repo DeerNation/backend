@@ -90,6 +90,26 @@ qx.Theme.define('app.theme.Decoration',
           backgroundColor: 'bg-own-message',
           bubble: ['right', 20, 20]
         }
+      },
+
+      'add-button': {
+        style: {
+          radius: 60,
+          backgroundColor: 'menu-background'
+        }
+      },
+
+      /*
+      ---------------------------------------------------------------------------
+        FORM ELEMENTS
+      ---------------------------------------------------------------------------
+       */
+      'textfield': {
+        style: {
+          color: 'lightgrey',
+          backgroundColor: 'white',
+          width: 2
+        }
       }
     }
   })

@@ -116,6 +116,14 @@ qx.Class.define('app.model.Activity', {
       init: null
     },
 
+    /**
+     * Determines if this activity is the initial master publication
+     */
+    master: {
+      check: 'Boolean',
+      init: false
+    },
+
     actor: {
       check: 'app.model.Actor',
       init: null,

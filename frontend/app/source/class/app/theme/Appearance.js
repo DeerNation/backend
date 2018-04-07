@@ -187,6 +187,47 @@ qx.Theme.define('app.theme.Appearance',
 
       /*
       ---------------------------------------------------------------------------
+        FORM ELEMENTS
+      ---------------------------------------------------------------------------
+      */
+      'app-textfield': {
+        include: 'textfield',
+        alias: 'textfield',
+
+        style: function () {
+          return {
+            padding: [4, 8],
+            decorator: 'textfield'
+          }
+        }
+      },
+
+      'app-datefield': {
+        include: 'datefield',
+        alias: 'datefield',
+
+        style: function () {
+          return {
+            padding: [4, 8],
+            decorator: 'textfield'
+          }
+        }
+      },
+
+      'app-datefield/button': {
+        alias: 'datefield/button',
+        include: 'datefield/button',
+
+        style: function () {
+          return {
+            icon: '@Material/date_range/16',
+            textColor: 'menu-text'
+          }
+        }
+      },
+
+      /*
+      ---------------------------------------------------------------------------
         SIDEBAR
       ---------------------------------------------------------------------------
       */
@@ -454,6 +495,7 @@ qx.Theme.define('app.theme.Appearance',
        CHANNEL VIEW
       ---------------------------------------------------------------------------
       */
+      'channel-view': {},
       'channel-view/list': {
         include: 'list',
         alias: 'list',
@@ -560,6 +602,17 @@ qx.Theme.define('app.theme.Appearance',
           return {
             decorator: 'activity-group',
             paddingTop: 8
+          }
+        }
+      },
+
+      'channel-view/add-button': {
+        style: function () {
+          return {
+            decorator: 'add-button',
+            textColor: 'menu-text',
+            show: 'icon',
+            center: true
           }
         }
       }

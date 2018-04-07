@@ -13,9 +13,6 @@
         "Event"
       ]
     },
-    "channelId": {
-      "type": "string"
-    },
     "content": {
       "type": "object",
       "oneOf": [
@@ -31,13 +28,6 @@
     "created": {
       "type": "string",
       "format": "date-time"
-    },
-    "published": {
-      "type": "string",
-      "format": "date-time"
-    },
-    "actorId": {
-      "type": "string"
     },
     "hash": {
       "type": "string"

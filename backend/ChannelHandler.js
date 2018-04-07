@@ -92,66 +92,82 @@ class ChannelHandler {
     if (!this.model) {
       this.model = schema.getModel('Activity')
     }
-    message = Object.assign({
-      channelId: channelId,
-      hash: hash(message.content),
-      actorId: authToken.user
-    }, message)
 
-    // only allow valid activities to be published
-    if (!this.validate(message)) {
-      logger.error('\nNo valid activity: \n  * %s\n-------\n  %o', this.validateActivity.errors.map(x => {
-        switch (x.keyword) {
-          case 'additionalProperties':
-            return `${x.message}: '${x.params.additionalProperty}' [${x.schemaPath}]`
+    if (typeof message === 'string') {
+      // publish existing message in channel
+      message = await this.model.get(message).run()
+    } else {
+      message = Object.assign({
+        hash: hash(message.content)
+      }, message)
 
-          default:
-            return `${x.message} [${x.schemaPath}]`
-        }
-      }).join('\n  * '), message)
-      return false
+      // only allow valid activities to be published
+      if (!this.validate(message)) {
+        logger.error('\nNo valid activity: \n  * %s\n-------\n  %o', this.validateActivity.errors.map(x => {
+          switch (x.keyword) {
+            case 'additionalProperties':
+              return `${x.message}: '${x.params.additionalProperty}' [${x.schemaPath}]`
+
+            default:
+              return `${x.message} [${x.schemaPath}]`
+          }
+        }).join('\n  * '), message)
+        return false
+      }
     }
-    if (!message.hasOwnProperty('published') || !message.published) {
-      message.published = new Date()
-    }
+    // if (!message.hasOwnProperty('published') || !message.published) {
+    //   message.published = new Date()
+    // }
     const exists = !!message.id
-    this.model.save(message, {conflict: 'update'})
+    const publication = {
+      channelId: channelId,
+      actorId: authToken.user,
+      published: new Date(),
+      master: !exists
+    }
+    if (exists) {
+      // only add new publication of activity in channel
+      publication.activityId = message.id
+      schema.getModel('Publication').save(publication)
+    } else {
+      this.model.save(message)
+      publication.activityId = message.id
+      schema.getModel('Publication').save(publication)
 
-    if (!exists) {
-      // only send notifications for new activities
-      const channel = await schema.getModel('Channel').get(channelId).run()
-      const actor = await schema.getModel('Actor').get(authToken.user).run()
-      let options = {
-        image: 'www/build-output/resource/app/App-Logo.png',
-        channelId: channelId,
-        style: 'inbox',
-        summaryText: i18n.__({
-          phrase: 'There are %n% new messages',
-          locale: actor.locale
-        })
-      }
-      let phrase, content
+    }
+    const channel = await schema.getModel('Channel').get(channelId).run()
+    const actor = await schema.getModel('Actor').get(authToken.user).run()
+    let options = {
+      image: 'www/build-output/resource/app/App-Logo.png',
+      channelId: channelId,
+      style: 'inbox',
+      summaryText: i18n.__({
+        phrase: 'There are %n% new messages',
+        locale: actor.locale
+      })
+    }
+    let phrase, content
 
-      switch (message.type.toLowerCase()) {
-        case 'event':
-          phrase = 'New event in %s'
-          content = message.content.description
-          break
+    // TODO: move code to plugins
+    switch (message.type.toLowerCase()) {
+      case 'event':
+        phrase = 'New event in %s'
+        content = message.content.description
+        break
 
-        case 'message':
-          phrase = 'New message in %s'
-          content = message.content.message
-          break
+      case 'message':
+        phrase = 'New message in %s'
+        content = message.content.message
+        break
+    }
+    if (content) {
+      if (content.length > 40) {
+        content = content.substring(0, 40) + '...'
       }
-      if (content) {
-        if (content.length > 40) {
-          content = content.substring(0, 40) + '...'
-        }
-        pushNotifications.publish(channelId, i18n.__({
-          phrase: phrase,
-          locale: actor.locale
-        }, channel.title), content, options)
-      }
+      pushNotifications.publish(channelId, i18n.__({
+        phrase: phrase,
+        locale: actor.locale
+      }, channel.title), content, options)
     }
   }
 }

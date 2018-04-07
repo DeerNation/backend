@@ -99,6 +99,12 @@ qx.Theme.define('app.plugins.event.theme.Appearance', {
           textColor: 'info-font'
         }
       }
-    }
+    },
+
+    'event-editor/name': 'app-textfield',
+    'event-editor/start': 'app-datefield',
+    'event-editor/end': 'app-datefield',
+    'event-editor/organizer': 'app-textfield',
+    'event-editor/location': 'app-textfield'
   }
 })

@@ -89,6 +89,14 @@ qx.Class.define('app.model.activity.Registry', {
       }
     },
 
+    /**
+     * Returns the registeres content type names
+     * @returns {string[]}
+     */
+    getTypes: function () {
+      return Object.keys(this.__registry)
+    },
+
     getModelClass: function (type) {
       type = type.toLowerCase()
       qx.core.Assert.assertKeyInMap(type, this.__registry)

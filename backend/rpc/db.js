@@ -54,11 +54,14 @@ async function getChannels (authToken) {
 async function getChannelActivities (authToken, channel, from) {
   await acl.check(authToken, channel, acl.action.READ)
   const r = schema.getR()
-  let filter = r.row('channelId').eq(channel).and(r.row.hasFields('actorId'))
+  let filter = r.row('left')('channelId').eq(channel).and(r.row('left').hasFields('actorId'))
   if (from) {
-    filter.and(r.row('published').ge(from))
+    filter.and(r.row('left')('published').ge(from))
   }
-  return schema.getModel('Activity').filter(filter).orderBy(r.asc('published')).run()
+  const map = function (entry) {
+    return entry('right').merge(entry('left').without(['id', 'activityId']))
+  }
+  return schema.getModel('Publication').eqJoin('activityId', r.table('Activity')).filter(filter).map(map).orderBy(r.asc('published')).run()
 }
 
 async function getActors (authToken) {

@@ -41,6 +41,7 @@ qx.Class.define('app.ui.channel.View', {
 
     const list = this.getChildControl('list')
     this._createChildControl('status-bar')
+    this._createChildControl('add-button')
 
     list.getChildControl('throbber').show()
 
@@ -68,6 +69,13 @@ qx.Class.define('app.ui.channel.View', {
     appearance: {
       refine: true,
       init: 'channel-view'
+    },
+
+    addButtonSize: {
+      check: 'Number',
+      init: 60,
+      themeable: true,
+      apply: '_applyButtonSize'
     }
   },
 
@@ -84,8 +92,16 @@ qx.Class.define('app.ui.channel.View', {
 
     // property apply
     _applySubscription: function (subscription, oldSubscription) {
+      this.addListenerOnce('subscriptionApplied', () => {
+        this.debug('subscription applied')
+        // check user permission to publish messages in this channel
+        if (this.isAllowed('p')) {
+          this.getChildControl('add-button').show()
+        } else {
+          this.getChildControl('add-button').exclude()
+        }
+      })
       this.base(arguments, subscription, oldSubscription)
-      this.debug('subscription applied')
     },
 
     // property apply
@@ -98,6 +114,13 @@ qx.Class.define('app.ui.channel.View', {
             this._debouncedUnblock()
           }
         })
+      }
+    },
+
+    // property apply
+    _applyButtonSize: function () {
+      if (this.getBounds()) {
+        this._onResize()
       }
     },
 
@@ -156,11 +179,11 @@ qx.Class.define('app.ui.channel.View', {
     _handleSubscribed: function (isSubscribed) {
       if (isSubscribed) {
         // show default
-        if (this.isReady()) {
-          this._initForm()
-        } else {
-          this.addListenerOnce('changeReady', this._initForm, this)
-        }
+        // if (this.isReady()) {
+        //   this._initForm()
+        // } else {
+        //   this.addListenerOnce('changeReady', this._initForm, this)
+        // }
       } else {
         this.getChildControl('editor-container').resetSelection()
       }
@@ -230,8 +253,35 @@ qx.Class.define('app.ui.channel.View', {
           })
           this.getChildControl('editor-container').add(control)
           break
+
+        case 'add-button':
+          control = new qx.ui.form.Button('', app.Config.icons.plus + '/30')
+          if (this.getBounds()) {
+            this._onResize()
+          } else {
+            control.setUserBounds(0, 0, 0, 0)
+            this.addListenerOnce('appear', this._onResize, this)
+          }
+          this._add(control)
+          control.addListener('execute', this._onAddActivity, this)
+          this.addListener('resize', this._onResize, this)
+          break
       }
       return control || this.base(arguments, id, hash)
+    },
+
+    /**
+     * Open the activity type selector
+     * @private
+     */
+    _onAddActivity: function () {
+
+    },
+
+    _onResize: function () {
+      const bounds = this.getBounds()
+      const size = this.getAddButtonSize()
+      this.getChildControl('add-button').setUserBounds(bounds.width - size - 10, bounds.height - size - 10, size, size)
     },
 
     /**

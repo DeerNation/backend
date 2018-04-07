@@ -127,8 +127,15 @@ qx.Class.define('app.model.Channel', {
     },
 
     view: {
-      check: ['channel', 'calendar'],
+      check: function (value) {
+        return app.plugins.Registry.hasView(value)
+      },
       init: 'channel'
+    },
+
+    allowedActivityTypes: {
+      check: 'Array',
+      nullable: true
     }
   },
 

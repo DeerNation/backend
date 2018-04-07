@@ -15,6 +15,8 @@ qx.Class.define('app.plugins.AbstractContentForm', {
   */
   construct: function () {
     this.base(arguments)
+    this.setCommandGroup(new qx.ui.command.Group())
+    this._initView()
   },
 
   /*
@@ -43,6 +45,12 @@ qx.Class.define('app.plugins.AbstractContentForm', {
     type: {
       check: 'String',
       init: 'Message'
+    },
+
+    commandGroup: {
+      check: 'qx.ui.command.Group',
+      nullable: true,
+      apply: '_applyCommandGroup'
     }
   },
 
@@ -52,6 +60,33 @@ qx.Class.define('app.plugins.AbstractContentForm', {
   ******************************************************
   */
   members: {
+    _editCommandGroup: null,
+    __sendCommand: null,
+
+    /**
+     * Initialize the widgets
+     * @protected
+     */
+    _initView: function () {
+      this._createChildControl('send-button')
+    },
+
+    // property apply
+    _applyCommandGroup: function (value, old) {
+      if (old && !value) {
+        this.removeListener('disappear', this._maintainCommandGroupState, this)
+        this.removeListener('appear', this._maintainCommandGroupState, this)
+      }
+
+      if (value) {
+        this.addListener('disappear', this._maintainCommandGroupState, this)
+        this.addListener('appear', this._maintainCommandGroupState, this)
+      }
+    },
+
+    _maintainCommandGroupState: function () {
+      this.getCommandGroup().setActive(this.isVisible())
+    },
 
     /**
      * Sends the currently edited activity to the backend.
@@ -68,14 +103,12 @@ qx.Class.define('app.plugins.AbstractContentForm', {
               {
                 content: this._createContent()
               })
-            this.getChildControl('textfield').setEnabled(true)
             this.resetActivity()
           } catch (err) {
-            this.getChildControl('textfield').setEnabled(true)
             this.error(err)
           }
         } else {
-          return app.io.Rpc.getProxy().publish(this.getModel().getId(), {
+          return app.io.Rpc.getProxy().publish(this.getChannel().getId(), {
             type: this.getType(),
             content: this._createContent()
           })
@@ -134,7 +167,9 @@ qx.Class.define('app.plugins.AbstractContentForm', {
       let control
       switch (id) {
         case 'send-button':
-          control = new qx.ui.form.Button(null, app.Config.icons.plus + '/20')
+          const command = new qx.ui.command.Command('Enter')
+          this.getCommandGroup().add('send', command)
+          control = new qx.ui.form.Button(null, app.Config.icons.plus + '/20', command)
           control.addListener('execute', this._postActivity, this)
           this._add(control)
           break

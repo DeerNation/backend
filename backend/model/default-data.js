@@ -84,7 +84,8 @@ module.exports = {
       ownerId: '0e4a6f6f-cc0c-4aa5-951a-fcfc480dd05a',
       color: '#CC5525',
       typeIcon: 'event',
-      view: 'calendar'
+      view: 'calendar',
+      allowedActivityTypes: ['event']
     }
   ],
   Subscription: [
