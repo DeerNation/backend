@@ -157,10 +157,6 @@ qx.Class.define('app.plugins.event.Calendar', {
       return false
     },
 
-    _editActivity: function () {
-      // TODO: open editor for event
-    },
-
     /**
      * Handle event resize events which are fired after an event has been changed in duration
      * @param event {Object} calendar event which has been changed

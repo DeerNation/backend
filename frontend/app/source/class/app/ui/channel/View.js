@@ -215,7 +215,6 @@ qx.Class.define('app.ui.channel.View', {
         case 'list':
           control = new app.ui.list.ChatList()
           control.setVariableItemHeight(true)
-          control.getSelection().addListener('change', this._onSelection, this)
           this.__applyListDelegate(control)
           this._addAt(control, 1, {flex: 1})
 
@@ -284,38 +283,13 @@ qx.Class.define('app.ui.channel.View', {
       this.getChildControl('add-button').setUserBounds(bounds.width - size - 10, bounds.height - size - 10, size, size)
     },
 
-    /**
-     * Handle activity selections
-     * @protected
-     */
-    _onSelection: function () {
-      const selection = this.getChildControl('list').getSelection()
-      const container = this.getChildControl('editor-container')
-      if (selection.getLength() === 1) {
-        const activity = selection.getItem(0)
-        const actor = app.Model.getInstance().getActor()
-        if (actor && (actor.isAdmin() ||
-            activity.getActorId() === actor.getId() ||
-            this.getSubscription().getChannel().getOwnerId() === actor.getId()
-        )) {
-          const form = app.model.activity.Registry.getForm(activity.getType())
-          if (!form) {
-            throw new Error(this.tr('No editor specified for content type %1', activity.getType()))
-          }
-          if (!container.getChildren().includes(form)) {
-            if (this.getSubscription()) {
-              this.bind('subscription.channel', form, 'channel')
-            }
-            container.add(form)
-          }
-          form.setActivity(activity)
-          container.setSelection([form])
-        }
+    // property apply, overridden
+    _applyInSelectionMode: function (value, old) {
+      this.base(arguments, value, old)
+      if (value) {
+        this.getChildControl('add-button').exclude()
       } else {
-        const currentEditor = container.getSelection().length > 0 ? container.getSelection()[0] : null
-        if (currentEditor) {
-          currentEditor.resetActivity()
-        }
+        this.getChildControl('add-button').show()
       }
     },
 

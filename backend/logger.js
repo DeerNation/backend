@@ -59,7 +59,7 @@ module.exports = function (fileName) {
     let parts = fileName.replace(/[/]/g, '.').split('.')
     parts.pop()
     // remove filetype
-    const start = Math.max(parts.indexOf('hirschberg') + 1, 0)
+    const start = Math.max(parts.indexOf('backend'), 0)
     let module = parts.slice(start).join('.')
 
     let labelString = module

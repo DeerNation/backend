@@ -574,6 +574,7 @@ qx.Theme.define('app.theme.Appearance',
       'channel-view/back-button': 'app-toolbar-button',
       'channel-view/delete-button': 'app-toolbar-button',
       'channel-view/share-button': 'app-toolbar-button',
+      'channel-view/edit-button': 'app-toolbar-button',
       'channel-view/selection-counter': {
         include: 'atom',
         alias: 'atom',

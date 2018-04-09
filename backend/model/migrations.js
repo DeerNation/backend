@@ -16,7 +16,8 @@ class DbMigration {
     // migrations
     this.__migrations = {
       '0.0.1-0.1.0': [this.migrate001To010],
-      '0.1.0-0.1.1': [this.migrate010To011]
+      '0.1.0-0.1.1': [this.migrate010To011],
+      '0.0.1-0.1.1': [this.migrate001To010, this.migrate010To011]
     }
   }
 

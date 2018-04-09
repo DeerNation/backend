@@ -105,6 +105,15 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
       check: 'Boolean',
       init: false,
       event: 'changeReady'
+    },
+
+    /**
+     * View is in activity selection mode (show context toolbar etc.)
+     */
+    inSelectionMode: {
+      check: 'Boolean',
+      init: false,
+      apply: '_applyInSelectionMode'
     }
   },
 
@@ -257,6 +266,7 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
       } else if (this.getSubscription() instanceof app.model.Subscription && this.getSubscription().getChannelId() === target.getChannelId()) {
         actionType = 'memberActions'
       }
+      this.debug(`checking ${actionType} acls for ${action} in ${acls[actionType]}`)
       return acls[actionType].includes(action)
     },
 
@@ -313,7 +323,16 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
     },
 
     /**
-     * Handler for channel watching
+     * Open Activity editor
+     * @param activity {app.model.Activity}
+     * @proctected
+     */
+    _editActivity: function (activity) {
+      // TODO: open editor for activity
+    },
+
+    /**
+     * Handler for channel updates, called on every new publishes message in this channel.
      *
      * @param payload {Object} incoming data
      * @protected
@@ -480,7 +499,11 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
         selectedActivities.push(activity)
       }
       activity.setMarked(true)
-      const bar = this.getChildControl('context-bar')
+      if (selectedActivities.length === 1 && this.isAllowed('u', selectedActivities.getItem(0))) {
+        this.getChildControl('edit-button').show()
+      } else {
+        this.getChildControl('edit-button').exclude()
+      }
       // update button states
       const deleteable = selectedActivities.filter((act) => {
         return this.isAllowed('d', act)
@@ -493,9 +516,7 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
       if (!this.hasChildControl('share-button')) {
         this._createChildControl('share-button')
       }
-
-      this.getChildControl('header-stack').setSelection([bar])
-
+      this.setInSelectionMode(true)
       // TODO enter simple selection mode for list (tap -> (de-)select)
     },
 
@@ -514,20 +535,32 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
         case 'share':
           this._shareActivity(this.getSelectedActivities())
           break
+
+        case 'edit':
+          // we can edit only one activity so we take the first one
+          this._editActivity(this.getSelectedActivities().getItem(0))
+          break
+
+        default:
+          this.debug('activity action %1 not implemented', data.action)
+          break
       }
-      this._leaveSelectionMode()
+      this.setInSelectionMode(false)
     },
 
     /**
-     * Leave selection mode entered by longpress. unmarks all selected activities
-     * and shows the ChannelHeader.
-     * @protected
+     * handle inSelectionMode changes
      */
-    _leaveSelectionMode: function () {
-      this.getSelectedActivities().removeAll().forEach(act => {
-        act.setMarked(false)
-      })
-      this.getChildControl('header-stack').setSelection([this.getChildControl('header')])
+    // property apply
+    _applyInSelectionMode: function (value) {
+      if (value) {
+        this.getChildControl('header-stack').setSelection([this.getChildControl('context-bar')])
+      } else {
+        this.getSelectedActivities().removeAll().forEach(act => {
+          act.setMarked(false)
+        })
+        this.getChildControl('header-stack').setSelection([this.getChildControl('header')])
+      }
     },
 
     // overridden
@@ -584,7 +617,7 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
         case 'back-button':
           control = new qx.ui.toolbar.Button(this.tr('Back'), app.Config.icons.back)
           control.addListener('execute', () => {
-            this._leaveSelectionMode()
+            this.setInSelectionMode(false)
           })
           control.addState('first')
           break
@@ -594,6 +627,16 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
           control.addListener('execute', () => {
             this._onActivityAction({
               action: 'delete'
+            })
+          })
+          this.getChildControl('context-bar').add(control)
+          break
+
+        case 'edit-button':
+          control = new qx.ui.toolbar.Button(this.tr('Edit'), app.Config.icons.edit + '/22')
+          control.addListener('execute', () => {
+            this._onActivityAction({
+              action: 'edit'
             })
           })
           this.getChildControl('context-bar').add(control)
