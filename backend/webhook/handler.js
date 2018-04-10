@@ -161,30 +161,36 @@ class WebhookHandler {
   _transformFacebookData (message) {
     let activities = []
     if (message.object === 'page') {
-      message.entry.forEach(entryItem => {
-        entryItem.forEach(async (change) => {
-          if (change.field === 'feed') {
-            switch (change.value.item) {
-              case 'share':
-                if (change.value.verb === 'add') {
-                  activities.push({
-                    type: 'Message',
-                    content: {
-                      message: change.value.message,
-                      link: change.value.link
-                    },
-                    external: {
-                      type: 'facebook',
-                      id: change.value.post_id,
-                      original: change
-                    }
-                  })
-                }
-                break
+      try {
+        message.entry.forEach(entryItem => {
+          entryItem.forEach(async (change) => {
+            if (change.field === 'feed') {
+              switch (change.value.item) {
+                case 'share':
+                  if (change.value.verb === 'add') {
+                    activities.push({
+                      type: 'Message',
+                      content: {
+                        message: change.value.message,
+                        link: change.value.link
+                      },
+                      external: {
+                        type: 'facebook',
+                        id: change.value.post_id,
+                        original: change
+                      }
+                    })
+                  }
+                  break
+              }
             }
-          }
+          })
         })
-      })
+      } catch (e) {
+        logger.error(e)
+        fs.appendFile('facebook-data.txt', JSON.stringify(message) + '\n\n')
+        return
+      }
     }
     if (activities.length === 0) {
       // save unhandled data to file for later usage/analysis
