@@ -163,7 +163,7 @@ class WebhookHandler {
     if (message.object === 'page') {
       try {
         message.entry.forEach(entryItem => {
-          entryItem.forEach(async (change) => {
+          entryItem.changes.forEach(async (change) => {
             if (change.field === 'feed') {
               switch (change.value.item) {
                 case 'share':
@@ -188,13 +188,13 @@ class WebhookHandler {
         })
       } catch (e) {
         logger.error(e)
-        fs.appendFile('facebook-data.txt', JSON.stringify(message) + '\n\n')
+        fs.appendFile('facebook-data.txt', JSON.stringify(message, null, 2) + '\n\n')
         return
       }
     }
     if (activities.length === 0) {
       // save unhandled data to file for later usage/analysis
-      fs.appendFile('facebook-data.txt', JSON.stringify(message) + '\n\n')
+      fs.appendFile('facebook-data.txt', JSON.stringify(message, null, 2) + '\n\n')
     }
     return activities
   }
