@@ -61,7 +61,7 @@ class DbMigration {
     await activityModel.replace(r.row.without(['actorId', 'channelId', 'published'])).run()
     const entry = await this.schema.getModel('System').filter({key: 'schemaVersion'}).run()
     entry.value = '0.1.0'
-    this.schema.getModel('System').update(entry, {conflict: 'update'})
+    this.schema.getModel('System').update(entry)
     logger.info('successfully migrated schema from 0.0.1 to 0.1.0')
   }
 
@@ -76,7 +76,7 @@ class DbMigration {
     })
     const entry = await this.schema.getModel('System').filter({key: 'schemaVersion'}).run()
     entry.value = '0.1.1'
-    this.schema.getModel('System').update(entry, {conflict: 'update'})
+    this.schema.getModel('System').update(entry)
     logger.info('successfully migrated schema from 0.1.0 to 0.1.1')
   }
 }
