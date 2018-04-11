@@ -168,18 +168,24 @@ class WebhookHandler {
               switch (change.value.item) {
                 case 'share':
                   if (change.value.verb === 'add') {
-                    activities.push({
-                      type: 'Message',
-                      content: {
-                        message: change.value.message,
-                        link: change.value.link
-                      },
-                      external: {
-                        type: 'facebook',
-                        id: change.value.post_id,
-                        original: change
-                      }
-                    })
+                    const content = {}
+                    if (change.value.message) {
+                      content.message = change.value.message
+                    }
+                    if (change.value.link) {
+                      content.link = change.value.link
+                    }
+                    if (Object.keys(content).length > 0) {
+                      activities.push({
+                        type: 'Message',
+                        content: content,
+                        external: {
+                          type: 'facebook',
+                          id: change.value.post_id,
+                          original: change
+                        }
+                      })
+                    }
                   }
                   break
               }
