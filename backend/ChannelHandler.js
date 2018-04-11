@@ -38,6 +38,7 @@ class ChannelHandler {
     this.model = null
     this.pubModel = null
     this.ajv = new Ajv({allErrors: true})
+    this._notificationHandlers = {}
   }
 
   init (scServer) {
@@ -60,6 +61,10 @@ class ChannelHandler {
         context: this
       }
     })
+  }
+
+  registerNotificationHandler (type, handler) {
+    this._notificationHandlers[type] = handler
   }
 
   _onActivityChange (feed) {
@@ -182,28 +187,22 @@ class ChannelHandler {
         locale: actor.locale
       })
     }
-    let phrase, content
 
-    // TODO: move code to plugins
-    switch (message.type.toLowerCase()) {
-      case 'event':
-        phrase = 'New event in %s'
-        content = message.content.description
-        break
+    if (this._notificationHandlers.hasOwnProperty(message.type.toLowerCase())) {
+      const handler = this._notificationHandlers[message.type.toLowerCase()]
+      let {phrase, content} = handler(message)
 
-      case 'message':
-        phrase = 'New message in %s'
-        content = message.content.message
-        break
-    }
-    if (content) {
-      if (content.length > 40) {
-        content = content.substring(0, 40) + '...'
+      if (content) {
+        if (content.length > 40) {
+          content = content.substring(0, 40) + '...'
+        }
+        pushNotifications.publish(channelId, i18n.__({
+          phrase: phrase,
+          locale: actor.locale
+        }, channel.title), content, options)
       }
-      pushNotifications.publish(channelId, i18n.__({
-        phrase: phrase,
-        locale: actor.locale
-      }, channel.title), content, options)
+    } else {
+      logger.error('no notification handler registered for content type:', message.type)
     }
   }
 }

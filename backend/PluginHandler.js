@@ -30,6 +30,7 @@ const fs = require('fs')
 const schemaHandler = require('./model/JsonSchemaHandler')
 const graphQL = require('./model/graphql-thinky')
 const schema = require('./model/schema')
+const channelHandler = require('./ChannelHandler')
 
 class PluginHandler {
   constructor () {
@@ -86,6 +87,11 @@ class PluginHandler {
         const {graphQlType, qglTypeResolver} = require(graphQlTypeFile)
         graphQL.registerContentType(graphQlType, qglTypeResolver)
       }
+    }
+
+    if (manifest.provides.hasOwnProperty('notification')) {
+      const notificationFile = path.join(pluginDir, manifest.provides.graphQlType)
+      channelHandler.registerNotificationHandler(require(notificationFile))
     }
   }
 }
