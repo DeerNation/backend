@@ -57,7 +57,7 @@
     "start": "ENV=production node server.js",
     "predev": "cd frontend/app && qx compile --watch &",
     "dev": "ENV=dev node server.js",
-    "backend": "ENV=dev DATABASE_HOST=172.17.0.2 node server.js",
+    "backend": "ENV=dev DATABASE_HOST=172.17.0.2 node --trace-warnings server.js",
     "frontend": "ENV=dev cd frontend/app && qx serve",
     "postdev": "killall -9 qx",
     "start:docker": "node dockerwait.js && node ${SOCKETCLUSTER_MASTER_CONTROLLER:-server.js}",
