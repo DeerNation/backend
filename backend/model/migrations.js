@@ -47,7 +47,7 @@ class DbMigration {
     const r = this.schema.getR()
     const activityModel = this.schema.getModel('Activity')
     const publicationModel = this.schema.getModel('Publication')
-    const activities = await activityModel.filter(r.row.hasFields(['actorId', 'channelId', 'published'])).run()
+    const activities = await activityModel.filter(r.row.hasFields(['channelId', 'published'])).run()
     activities.forEach(async (activity) => {
       await publicationModel.save({
         actorId: activity.actorId,
@@ -58,10 +58,10 @@ class DbMigration {
       })
     })
     // delete keys
-    await activityModel.replace(r.row.without(['actorId', 'channelId', 'published'])).run()
-    const entry = await this.schema.getModel('System').filter({key: 'schemaVersion'}).run()
+    await activityModel.replace(r.row.without(['channelId', 'published'])).run()
+    const entry = await this.schema.getModel('System').filter({key: 'schemaVersion'}).run()[0]
     entry.value = '0.1.0'
-    this.schema.getModel('System').update(entry)
+    entry.save()
     logger.info('successfully migrated schema from 0.0.1 to 0.1.0')
   }
 
@@ -74,9 +74,9 @@ class DbMigration {
       const activity = await activityModel.get(publication.activityId).run()
       await activity.merge({actorId: publication.actorId}).save()
     })
-    const entry = await this.schema.getModel('System').filter({key: 'schemaVersion'}).run()
+    const entry = await this.schema.getModel('System').filter({key: 'schemaVersion'}).run()[0]
     entry.value = '0.1.1'
-    this.schema.getModel('System').update(entry)
+    entry.save()
     logger.info('successfully migrated schema from 0.1.0 to 0.1.1')
   }
 }
