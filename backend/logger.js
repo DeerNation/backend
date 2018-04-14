@@ -29,7 +29,7 @@ const { combine, timestamp, printf, colorize, align, splat } = format
 const maxModuleLength = 25
 
 const myFormat = printf(info => {
-  return `${info.timestamp.replace(/[T|Z]/g, ' ')}${info.level} - ${info.message}`
+  return info.timestamp.replace(/[T|Z]/g, '') + ' ' + info.level.toUpperCase().padEnd(5) + ' - ' + info.message
 })
 
 const defaultLoggerConfig = {
@@ -54,7 +54,7 @@ if (process.env.ENV === 'dev') {
 if (process.env.ENV === 'dev') {
   // console.log(module, config)
   defaultLoggerConfig.format = combine(
-    colorize({all: true}),
+    colorize({message: true}),
     splat(),
     timestamp(),
     myFormat
@@ -104,8 +104,8 @@ module.exports = function (fileName) {
     error: function (msg, vars) {
       logger.error(`[${labelString}]: ${msg}`, vars)
     },
-    warning: function (msg, vars) {
-      logger.warning(`[${labelString}]: ${msg}`, vars)
+    warn: function (msg, vars) {
+      logger.warn(`[${labelString}]: ${msg}`, vars)
     }
   }
 }
