@@ -209,6 +209,25 @@ class Schema {
           }
         },
 
+        LinkMetadata: {
+          fields: {
+            id: type.string(),
+            url: type.string(),
+            title: type.string(),
+            description: type.string(),
+            image: type.string(),
+            date: type.date(),
+            lang: type.string(),
+            logo: type.string(),
+            publisher: type.string(),
+            video: type.string(),
+            fetched: type.date().default(new Date())
+          },
+          filters: {
+            pre: mustBeLoggedIn
+          }
+        },
+
         Channel: {
           fields: {
             id: type.string(),
@@ -364,6 +383,7 @@ class Schema {
     m.Firebase.ensureIndex('actorId')
     m.Firebase.ensureIndex('token')
     m.Publication.ensureIndex('channelId')
+    m.LinkMetadata.ensureIndex('url')
 
     // create relations
 

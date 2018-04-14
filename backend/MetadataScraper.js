@@ -26,12 +26,10 @@
 const logger = require('./logger')(__filename)
 const metascraper = require('metascraper')
 const got = require('got')
+const schema = require('./model/schema')
+const {hash} = require('./util')
 
 class MetadataScraper {
-  constructor () {
-    this.__cache = {}
-  }
-
   init (app) {
     app.get('/meta/*', this._handleGet.bind(this))
   }
@@ -51,21 +49,30 @@ class MetadataScraper {
     // remove meta
     parts.shift()
 
-    // get webhook ID
-    const targetUrl = parts.join('/')
+    // allow CORS
+    res.header('Access-Control-Allow-Origin', '*')
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+
+    let targetUrl = parts.join('/')
     if (!targetUrl) {
       res.sendStatus(404)
     } else {
-      res.header('Access-Control-Allow-Origin', '*')
-      res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
-      // TODO: cache must be moved from memory to database
-      if (this.__cache.hasOwnProperty(targetUrl)) {
-        res.json(this.__cache[targetUrl])
-      } else {
+      if (targetUrl.endsWith(('/'))) {
+        // remove trailing slash
+        targetUrl = targetUrl.substring(0, targetUrl.length - 1)
+      }
+      const urlHash = hash(targetUrl)
+      try {
+        const cached = await schema.getModel('LinkMetadata').get(urlHash).run()
+        res.json(cached)
+      } catch (e) {
         logger.debug('incoming scraper request for url: "%s"', targetUrl)
         const {body: html, url} = await got(targetUrl)
         const metadata = await metascraper({html, url})
-        this.__cache[targetUrl] = metadata
+        schema.getModel('LinkMetadata').save(Object.assign(metadata, {
+          id: urlHash,
+          fetched: new Date()
+        }), {conflict: 'replace'})
         res.json(metadata)
       }
     }
