@@ -90,8 +90,8 @@ class PluginHandler {
     }
 
     if (manifest.provides.hasOwnProperty('notification')) {
-      const notificationFile = path.join(pluginDir, manifest.provides.graphQlType)
-      channelHandler.registerNotificationHandler(require(notificationFile))
+      const notificationFile = path.join(pluginDir, manifest.provides.notification)
+      channelHandler.registerNotificationHandler(id, require(notificationFile))
     }
   }
 }
