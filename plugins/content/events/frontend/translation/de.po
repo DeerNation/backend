@@ -1,0 +1,7 @@
+#: app/ui/renderer/Event.js:132 app/plugins/event/Renderer.js:132
+msgid "all-day"
+msgstr "ganztägig"
+
+#: app/ui/renderer/Event.js:132 app/plugins/event/Renderer.js:132
+msgid "%1 o'clock"
+msgstr "%1 Uhr"
