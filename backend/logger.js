@@ -95,17 +95,17 @@ module.exports = function (fileName) {
   labelString = `${labelString}`.padStart(maxModuleLength, '.')
 
   return {
-    info: function (msg, vars) {
-      logger.info(`[${labelString}]: ${msg}`, vars)
+    info: function (msg, ...vars) {
+      logger.info(`[${labelString}]: ${msg}`, ...vars)
     },
-    debug: function (msg, vars) {
-      logger.debug(`[${labelString}]: ${msg}`, vars)
+    debug: function (msg, ...vars) {
+      logger.debug(`[${labelString}]: ${msg}`, ...vars)
     },
-    error: function (msg, vars) {
-      logger.error(`[${labelString}]: ${msg}`, vars)
+    error: function (msg, ...vars) {
+      logger.error(`[${labelString}]: ${msg}`, ...vars)
     },
-    warn: function (msg, vars) {
-      logger.warn(`[${labelString}]: ${msg}`, vars)
+    warn: function (msg, ...vars) {
+      logger.warn(`[${labelString}]: ${msg}`, ...vars)
     }
   }
 }
