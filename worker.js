@@ -17,6 +17,7 @@ const pushNotifications = require('./backend/notification')
 const graphqlThinky = require('./backend/model/graphql-thinky')
 const graphqlHTTP = require('express-graphql')
 const pluginHandler = require('./backend/PluginHandler')
+const MetadataScraper = require('./backend/MetadataScraper')
 // const scCodecMinBin = require('sc-codec-min-bin')
 
 class Worker extends SCWorker {
@@ -87,6 +88,10 @@ class Worker extends SCWorker {
     // activate Webhookhandler
     const webhookHandler = new WebhookHandler()
     webhookHandler.init(app, scServer)
+
+    // activate scraper
+    const metadataScraper = new MetadataScraper()
+    metadataScraper.init(app)
 
     // Add GET /health-check express route
     healthChecker.attach(this, app)

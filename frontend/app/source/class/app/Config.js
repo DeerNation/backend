@@ -68,6 +68,10 @@ qx.Class.define('app.Config', {
       }
     },
 
+    getBackendUrl: function () {
+      return 'http' + (this.socket.secure ? 's' : '' + '://') + this.socket.hostname + ':' + this.socket.port
+    },
+
     icons: {
       favorite: '@Material/star',
       noFavorite: '@Material/star_border',

@@ -54,7 +54,8 @@
       "js/jquery-3.3.1.min.js",
       "js/moment.min.js",
       "js/fullcalendar/fullcalendar.min.js",
-      "js/fullcalendar/locale/de.js"
+      "js/fullcalendar/locale/de.js",
+      "js/page-metadata-parser.bundle.js"
     ],
     "css": [
       "css/style.css",
