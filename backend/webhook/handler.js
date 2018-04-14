@@ -126,7 +126,7 @@ class WebhookHandler {
         // TODO: add encryption to incoming messages and verification with signature
         const authToken = {user: webhook.actorId}
         await acl.check(authToken, webhook.channel, acl.action.PUBLISH, 'member')
-        logger.debug('channel: %s, message: %o', result[0].channel, req.body)
+        logger.debug('channel: %s, message: %o', webhook.channel, req.body)
         let message = req.body
         if (message.hasOwnProperty('entry') && message.hasOwnProperty('object') && webhook.type === 'facebook') {
           // currently only log facebooks hooks to collect some example data
