@@ -64,7 +64,8 @@ class ChannelHandler {
   }
 
   registerNotificationHandler (type, handler) {
-    this._notificationHandlers[type] = handler
+    logger.debug('registering notification handler for content type: ' + type)
+    this._notificationHandlers[type.toLowerCase()] = handler
   }
 
   _onActivityChange (feed) {
@@ -167,14 +168,16 @@ class ChannelHandler {
       published: new Date(),
       master: !exists
     }
+    const type = message.type.toLowerCase()
+
     if (exists) {
       // only add new publication of activity in channel
       publication.activityId = message.id
-      schema.getModel('Publication').save(publication)
+      await schema.getModel('Publication').save(publication)
     } else {
-      this.model.save(message)
+      await this.model.save(message)
       publication.activityId = message.id
-      schema.getModel('Publication').save(publication)
+      await schema.getModel('Publication').save(publication)
     }
     const channel = await schema.getModel('Channel').get(channelId).run()
     const actor = await schema.getModel('Actor').get(authToken.user).run()
@@ -188,8 +191,8 @@ class ChannelHandler {
       })
     }
 
-    if (this._notificationHandlers.hasOwnProperty(message.type.toLowerCase())) {
-      const handler = this._notificationHandlers[message.type.toLowerCase()]
+    if (this._notificationHandlers.hasOwnProperty(type)) {
+      const handler = this._notificationHandlers[type]
       let {phrase, content} = handler(message)
 
       if (content) {
@@ -202,7 +205,7 @@ class ChannelHandler {
         }, channel.title), content, options)
       }
     } else {
-      logger.error('no notification handler registered for content type:', message.type)
+      logger.error('no notification handler registered for content type:' + type)
     }
   }
 }
