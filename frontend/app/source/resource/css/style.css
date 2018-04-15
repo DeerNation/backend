@@ -6,6 +6,36 @@ p { margin: 0 }
     font-weight: normal;
 }
 
+.activity blockquote {
+    background-color: #dadada;
+    border-radius: 10px;
+    margin: 0;
+    color: #888;
+    position: relative;
+}
+
+.activity blockquote p {
+    padding: 10px 20px;
+}
+
+.activity blockquote p:before {
+    content: "”";
+    font-size: 30px;
+    color: #AAA;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+}
+
+.activity blockquote p:after {
+    content: "„";
+    font-size: 30px;
+    color: #AAA;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+}
+
 code {
     color: #333333;
     border: 1px solid #cccccc;

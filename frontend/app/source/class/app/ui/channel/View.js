@@ -274,7 +274,12 @@ qx.Class.define('app.ui.channel.View', {
      * @private
      */
     _onAddActivity: function () {
-
+      this._initForm()
+      this.getChildControl('add-button').exclude()
+      this.getChildControl('editor-container').getSelection()[0].addListenerOnce('done', () => {
+        this.getChildControl('add-button').show()
+        this.getChildControl('editor-container').exclude()
+      })
     },
 
     _onResize: function () {

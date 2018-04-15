@@ -56,6 +56,15 @@ qx.Class.define('app.plugins.AbstractContentForm', {
 
   /*
   ******************************************************
+    EVENTS
+  ******************************************************
+  */
+  events: {
+    'done': 'qx.event.type.Event'
+  },
+
+  /*
+  ******************************************************
     MEMBERS
   ******************************************************
   */
@@ -104,15 +113,19 @@ qx.Class.define('app.plugins.AbstractContentForm', {
                 content: this._createContent()
               })
             this.resetActivity()
+            this.fireEvent('done')
           } catch (err) {
             this.error(err)
           }
         } else {
-          return app.io.Rpc.getProxy().publish(this.getChannel().getId(), {
+          await app.io.Rpc.getProxy().publish(this.getChannel().getId(), {
             type: this.getType(),
             content: this._createContent()
           })
+          this.fireEvent('done')
         }
+      } else {
+        this.fireEvent('done')
       }
     },
 

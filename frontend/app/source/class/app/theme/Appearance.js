@@ -131,6 +131,7 @@ qx.Theme.define('app.theme.Appearance',
         style: function () {
           return {
             font: 'bold',
+            textColor: 'menu-text',
             alignY: 'middle',
             paddingRight: 4
           }

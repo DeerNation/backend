@@ -11,12 +11,21 @@ qx.Theme.define('app.plugins.message.theme.Appearance', {
       alias: 'label',
       style: function (states) {
         return {
-          textColor: states.link ? 'link-color' : 'inherit',
-          cursor: states.link ? 'pointer' : 'default'
+          textColor: states.link ? 'link-color' : 'black',
+          cursor: states.link ? 'pointer' : 'default',
+          font: 'activity-title'
         }
       }
     },
-    'message-activity/message': 'message-activity/title',
+    'message-activity/message': {
+      include: 'message-activity/title',
+
+      style: function () {
+        return {
+          font: 'message'
+        }
+      }
+    },
 
     /*
     ---------------------------------------------------------------------------
