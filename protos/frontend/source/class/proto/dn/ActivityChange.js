@@ -1,28 +1,25 @@
 
 /**
- * ActivityChange class generated from protobuf definition "protos/api.proto".
- * *
- ActivityChange messages are the messages sent in a channel.
- They contain either an update for an activity or an internal
- status update for the channel, like a currently writing user state.
+ * ActivityChange class generated from protobuf definition "api.proto".
+ * ActivityChange messages are the messages sent in a channel.
+ * They contain either an update for an activity or an internal
+ * status update for the channel, like a currently writing user state.
  * auto-generated code PLEASE DO NOT EDIT!
- */  
-
+ */
 qx.Class.define('proto.dn.ActivityChange', {
   extend: proto.core.BaseMessage,
-  
+
   /*
   *****************************************************************************
      CONSTRUCTOR
   *****************************************************************************
   */
   construct: function (props) {
-    this.__oneOfs = [];
-    this.__oneOfs[0] = ['activity', 'writing'];
-    this.base(arguments, props);
+    this.__oneOfs = []
+    this.__oneOfs[0] = ['activity', 'writing']
+    this.base(arguments, props)
   },
-  
-  
+
   /*
   *****************************************************************************
      STATICS
@@ -39,7 +36,6 @@ qx.Class.define('proto.dn.ActivityChange', {
       DELETE: 2,
       INTERNAL: 3
     },
-    
     /**
      * Serializes the given message to binary data (in protobuf wire
      * format), writing to the given BinaryWriter.
@@ -48,47 +44,44 @@ qx.Class.define('proto.dn.ActivityChange', {
      * @suppress {unusedLocalVariables} f is only used for nested messages
      */
     serializeBinaryToWriter: function (message, writer) {
-      var f = undefined;
-
-      f = message.getType();
+      var f = message.getType()
       if (f !== 0.0) {
-         writer.writeEnum(
-           1,
-           f
-        );
+        writer.writeEnum(
+          1,
+          f
+        )
       }
 
-      f = message.getActivity();
+      f = message.getActivity()
       if (f != null) {
         writer.writeMessage(
           2,
           f,
           proto.dn.model.Activity.serializeBinaryToWriter
-        );
+        )
       }
-      
-      f = message.getWriting();
+
+      f = message.getWriting()
       if (f != null) {
         writer.writeMessage(
           3,
           f,
           proto.dn.WritingUser.serializeBinaryToWriter
-        );
+        )
       }
-      
     },
-    
+
     /**
      * Deserializes binary data (in protobuf wire format).
      * @param bytes {jspb.ByteSource} The bytes to deserialize.
      * @return {proto.dn.ActivityChange}
      */
     deserializeBinary: function (bytes) {
-      var reader = new jspb.BinaryReader(bytes);
-      var msg = new proto.dn.ActivityChange();
-      return proto.dn.ActivityChange.deserializeBinaryFromReader(msg, reader);
+      var reader = new jspb.BinaryReader(bytes)
+      var msg = new proto.dn.ActivityChange()
+      return proto.dn.ActivityChange.deserializeBinaryFromReader(msg, reader)
     },
-    
+
     /**
      * Deserializes binary data (in protobuf wire format) from the
      * given reader into the given message object.
@@ -97,42 +90,37 @@ qx.Class.define('proto.dn.ActivityChange', {
      * @return {proto.dn.ActivityChange}
      */
     deserializeBinaryFromReader: function (msg, reader) {
-      msg.setDeserialized(true);
+      msg.setDeserialized(true)
       while (reader.nextField()) {
         if (reader.isEndGroup()) {
-          break;
+          break
         }
-        var value;
-        var field = reader.getFieldNumber();
+        var value
+        var field = reader.getFieldNumber()
         switch (field) {
-
           case 1:
-            value = reader.readEnum();
-            msg.setType(value);
-            break;
-
+            value = reader.readEnum()
+            msg.setType(value)
+            break
           case 2:
-            value = new proto.dn.model.Activity;
-            reader.readMessage(value, proto.dn.model.Activity.deserializeBinaryFromReader);
-            msg.setActivity(value);
-            break;
-          
+            value = new proto.dn.model.Activity()
+            reader.readMessage(value, proto.dn.model.Activity.deserializeBinaryFromReader)
+            msg.setActivity(value)
+            break
           case 3:
-            value = new proto.dn.WritingUser;
-            reader.readMessage(value, proto.dn.WritingUser.deserializeBinaryFromReader);
-            msg.setWriting(value);
-            break;
-          
+            value = new proto.dn.WritingUser()
+            reader.readMessage(value, proto.dn.WritingUser.deserializeBinaryFromReader)
+            msg.setWriting(value)
+            break
           default:
-            reader.skipField();
-            break;
+            reader.skipField()
+            break
         }
       }
-      return msg;
-          
+      return msg
     }
   },
-  
+
   /*
   *****************************************************************************
      PROPERTIES
@@ -166,7 +154,6 @@ qx.Class.define('proto.dn.ActivityChange', {
       apply: '_applyOneOf0'
     },
 
-    
     /**
      * oneOfIndex: 0
      */
@@ -176,7 +163,7 @@ qx.Class.define('proto.dn.ActivityChange', {
       event: 'changeContent'
     }
   },
-  
+
   /*
   *****************************************************************************
      MEMBERS
@@ -190,24 +177,25 @@ qx.Class.define('proto.dn.ActivityChange', {
     // oneOf property apply
     _applyOneOf0: function (value, old, name) {
       if (value !== null) {
-        this.setContent(value);
+        this.setContent(value)
       }
-      
+
       // reset all other values
       this.__oneOfs[0].forEach(function (prop) {
         if (prop !== name) {
-          this.reset(prop);
+          this.reset(prop)
         }
       }, this)
     },
 
     setOneOfContent: function (obj) {
-      var type = obj.basename.toLowerCase();
+      var type = obj.basename.toLowerCase()
       if (this.__oneOfs[0].includes(type)) {
-        this.set(type, obj);
+        this.set(type, obj)
       } else {
-        throw new Error('type ' + type + ' is invalid for content, allowed types are: ' + this.__oneOfs[0].join(', '));
+        throw new Error('type ' + type + ' is invalid for content, allowed types are: ' + this.__oneOfs[0].join(', '))
       }
-    }    
+    }
   }
+
 })

@@ -1,23 +1,29 @@
 
 /**
- * Event class generated from protobuf definition "protos/model.proto".
- * *
- An Event is a date related activity with a start and end date.
+ * Event class generated from protobuf definition "model.proto".
+ * An Event is a date related activity with a start and end date.
  * auto-generated code PLEASE DO NOT EDIT!
- */  
-
+ */
 qx.Class.define('proto.dn.model.Event', {
   extend: proto.core.BaseMessage,
-  
-  
+
+  /*
+  *****************************************************************************
+     CONSTRUCTOR
+  *****************************************************************************
+  */
+  construct: function (props) {
+    this.initCategories(new qx.data.Array())
+    this.base(arguments, props)
+  },
+
   /*
   *****************************************************************************
      STATICS
   *****************************************************************************
   */
   statics: {
-    
-    
+
     /**
      * Serializes the given message to binary data (in protobuf wire
      * format), writing to the given BinaryWriter.
@@ -26,37 +32,68 @@ qx.Class.define('proto.dn.model.Event', {
      * @suppress {unusedLocalVariables} f is only used for nested messages
      */
     serializeBinaryToWriter: function (message, writer) {
-      var f = undefined;
-
-      f = message.getTitle();
+      var f = message.getName()
       if (f.length > 0) {
-         writer.writeString(
-           1,
-           f
-        );
+        writer.writeString(
+          1,
+          f
+        )
       }
-
-      f = message.getDescription();
+      f = message.getLocation()
       if (f.length > 0) {
-         writer.writeString(
-           2,
-           f
-        );
+        writer.writeString(
+          2,
+          f
+        )
       }
-
+      f = message.getStart()
+      if (f.length > 0) {
+        writer.writeString(
+          3,
+          f
+        )
+      }
+      f = message.getEnd()
+      if (f.length > 0) {
+        writer.writeString(
+          4,
+          f
+        )
+      }
+      f = message.getCategories()
+      if (f.length > 0) {
+        writer.writeRepeatedString(
+          5,
+          f
+        )
+      }
+      f = message.getOrganizer()
+      if (f.length > 0) {
+        writer.writeString(
+          6,
+          f
+        )
+      }
+      f = message.getDescription()
+      if (f.length > 0) {
+        writer.writeString(
+          7,
+          f
+        )
+      }
     },
-    
+
     /**
      * Deserializes binary data (in protobuf wire format).
      * @param bytes {jspb.ByteSource} The bytes to deserialize.
      * @return {proto.dn.model.Event}
      */
     deserializeBinary: function (bytes) {
-      var reader = new jspb.BinaryReader(bytes);
-      var msg = new proto.dn.model.Event();
-      return proto.dn.model.Event.deserializeBinaryFromReader(msg, reader);
+      var reader = new jspb.BinaryReader(bytes)
+      var msg = new proto.dn.model.Event()
+      return proto.dn.model.Event.deserializeBinaryFromReader(msg, reader)
     },
-    
+
     /**
      * Deserializes binary data (in protobuf wire format) from the
      * given reader into the given message object.
@@ -65,35 +102,51 @@ qx.Class.define('proto.dn.model.Event', {
      * @return {proto.dn.model.Event}
      */
     deserializeBinaryFromReader: function (msg, reader) {
-      msg.setDeserialized(true);
+      msg.setDeserialized(true)
       while (reader.nextField()) {
         if (reader.isEndGroup()) {
-          break;
+          break
         }
-        var value;
-        var field = reader.getFieldNumber();
+        var value
+        var field = reader.getFieldNumber()
         switch (field) {
-
           case 1:
-            value = reader.readString();
-            msg.setTitle(value);
-            break;
-
+            value = reader.readString()
+            msg.setName(value)
+            break
           case 2:
-            value = reader.readString();
-            msg.setDescription(value);
-            break;
-
+            value = reader.readString()
+            msg.setLocation(value)
+            break
+          case 3:
+            value = reader.readString()
+            msg.setStart(value)
+            break
+          case 4:
+            value = reader.readString()
+            msg.setEnd(value)
+            break
+          case 5:
+            value = reader.readString()
+            msg.getCategories().push(value)
+            break
+          case 6:
+            value = reader.readString()
+            msg.setOrganizer(value)
+            break
+          case 7:
+            value = reader.readString()
+            msg.setDescription(value)
+            break
           default:
-            reader.skipField();
-            break;
+            reader.skipField()
+            break
         }
       }
-      return msg;
-          
+      return msg
     }
   },
-  
+
   /*
   *****************************************************************************
      PROPERTIES
@@ -101,11 +154,48 @@ qx.Class.define('proto.dn.model.Event', {
   */
   properties: {
 
-    title: {
+    name: {
       check: 'String',
       init: '',
       nullable: false,
-      event: 'changeTitle'
+      event: 'changeName'
+    },
+
+    location: {
+      check: 'String',
+      init: '',
+      nullable: false,
+      event: 'changeLocation'
+    },
+
+    start: {
+      check: 'String',
+      init: '',
+      nullable: false,
+      event: 'changeStart'
+    },
+
+    end: {
+      check: 'String',
+      init: '',
+      nullable: false,
+      event: 'changeEnd'
+    },
+
+    /**
+     * @type {qx.data.Array} array of {@link String}
+     */
+    categories: {
+      check: 'qx.data.Array',
+      deferredInit: true,
+      event: 'changeCategories'
+    },
+
+    organizer: {
+      check: 'String',
+      init: '',
+      nullable: false,
+      event: 'changeOrganizer'
     },
 
     description: {
@@ -114,14 +204,5 @@ qx.Class.define('proto.dn.model.Event', {
       nullable: false,
       event: 'changeDescription'
     }
-  },
-  
-  /*
-  *****************************************************************************
-     MEMBERS
-  *****************************************************************************
-  */
-  members: {
-    
   }
 })

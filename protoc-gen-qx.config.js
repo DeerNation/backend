@@ -7,5 +7,6 @@ module.exports = {
     }
   },
   skipDeps: ['grpc-web-client.js'],
-  skipDepLoadingFallback: true
+  skipDepLoadingFallback: true,
+  withoutSemi: true
 }

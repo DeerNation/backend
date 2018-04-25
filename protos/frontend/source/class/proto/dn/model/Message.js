@@ -1,24 +1,21 @@
 
 /**
- * Message class generated from protobuf definition "protos/model.proto".
- * *
- A Message is the basic activity content type: a simple message that can contain
- anything encoded in a markdown notation.
+ * Message class generated from protobuf definition "model.proto".
+ * A Message is the basic activity content type: a simple message that can contain
+ * anything encoded in a markdown notation.
  * auto-generated code PLEASE DO NOT EDIT!
- */  
-
+ */
 qx.Class.define('proto.dn.model.Message', {
   extend: proto.core.BaseMessage,
-  
-  
+
+
   /*
   *****************************************************************************
      STATICS
   *****************************************************************************
   */
   statics: {
-    
-    
+
     /**
      * Serializes the given message to binary data (in protobuf wire
      * format), writing to the given BinaryWriter.
@@ -27,37 +24,33 @@ qx.Class.define('proto.dn.model.Message', {
      * @suppress {unusedLocalVariables} f is only used for nested messages
      */
     serializeBinaryToWriter: function (message, writer) {
-      var f = undefined;
-
-      f = message.getMessage();
+      var f = message.getMessage()
       if (f.length > 0) {
-         writer.writeString(
-           1,
-           f
-        );
+        writer.writeString(
+          1,
+          f
+        )
       }
-
-      f = message.getLink();
+      f = message.getLink()
       if (f.length > 0) {
-         writer.writeString(
-           2,
-           f
-        );
+        writer.writeString(
+          2,
+          f
+        )
       }
-
     },
-    
+
     /**
      * Deserializes binary data (in protobuf wire format).
      * @param bytes {jspb.ByteSource} The bytes to deserialize.
      * @return {proto.dn.model.Message}
      */
     deserializeBinary: function (bytes) {
-      var reader = new jspb.BinaryReader(bytes);
-      var msg = new proto.dn.model.Message();
-      return proto.dn.model.Message.deserializeBinaryFromReader(msg, reader);
+      var reader = new jspb.BinaryReader(bytes)
+      var msg = new proto.dn.model.Message()
+      return proto.dn.model.Message.deserializeBinaryFromReader(msg, reader)
     },
-    
+
     /**
      * Deserializes binary data (in protobuf wire format) from the
      * given reader into the given message object.
@@ -66,35 +59,31 @@ qx.Class.define('proto.dn.model.Message', {
      * @return {proto.dn.model.Message}
      */
     deserializeBinaryFromReader: function (msg, reader) {
-      msg.setDeserialized(true);
+      msg.setDeserialized(true)
       while (reader.nextField()) {
         if (reader.isEndGroup()) {
-          break;
+          break
         }
-        var value;
-        var field = reader.getFieldNumber();
+        var value
+        var field = reader.getFieldNumber()
         switch (field) {
-
           case 1:
-            value = reader.readString();
-            msg.setMessage(value);
-            break;
-
+            value = reader.readString()
+            msg.setMessage(value)
+            break
           case 2:
-            value = reader.readString();
-            msg.setLink(value);
-            break;
-
+            value = reader.readString()
+            msg.setLink(value)
+            break
           default:
-            reader.skipField();
-            break;
+            reader.skipField()
+            break
         }
       }
-      return msg;
-          
+      return msg
     }
   },
-  
+
   /*
   *****************************************************************************
      PROPERTIES
@@ -115,14 +104,5 @@ qx.Class.define('proto.dn.model.Message', {
       nullable: false,
       event: 'changeLink'
     }
-  },
-  
-  /*
-  *****************************************************************************
-     MEMBERS
-  *****************************************************************************
-  */
-  members: {
-    
   }
 })

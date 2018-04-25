@@ -74,7 +74,12 @@ async function getActivities (authToken, request) {
   const map = function (entry) {
     return entry('right').without(['created', 'title', 'titleUrl']).merge(entry('left').without(['id', 'activityId', 'actorId', 'published']))
   }
-  return schema.getModel('Publication').eqJoin('activityId', r.table('Activity')).filter(filter).map(map).orderBy(r.asc('published')).run()
+  const activities = await schema.getModel('Publication').eqJoin('activityId', r.table('Activity')).filter(filter).map(map).orderBy(r.asc('published')).run()
+  activities.forEach(act => {
+    act[act.type.toLowerCase()] = act.content
+    delete act.content
+  })
+  return activities
 }
 
 async function getActors (authToken) {

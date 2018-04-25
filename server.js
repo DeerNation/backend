@@ -99,7 +99,11 @@ let start = function () {
     logger.info(`   !! The sc-hot-reboot plugin is watching for code changes in the ${__dirname} directory`)
     scHotReboot.attach(socketCluster, {
       cwd: __dirname,
-      ignored: ['public', 'node_modules', 'README.md', 'Dockerfile', 'server.js', 'broker.js', /[/\\]\./, '*.log', 'frontend', 'app', 'nohup.out']
+      ignored: ['public', 'node_modules', 'README.md',
+        'Dockerfile', 'server.js', 'broker.js', /[/\\]\./,
+        '*.log', 'frontend', 'app', 'nohup.out',
+        'protos/frontend'
+      ]
     })
   }
 }
