@@ -1,0 +1,15 @@
+{
+  "info": {},
+  "provides": {
+    "namespace"   : "proto",
+    "encoding"    : "utf-8",
+    "class"       : "source/class",
+    "resource"    : "source/resource",
+    "type"        : "library"
+  },
+   "externalResources": {
+      "script": [
+        "proto/google-protobuf.js"
+      ]
+   }
+}

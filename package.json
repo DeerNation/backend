@@ -17,9 +17,11 @@
     "express": "^4.16.3",
     "express-graphql": "^0.6.12",
     "glob": "^7.1.2",
+    "google-protobuf": "^3.5.0",
     "got": "^8.3.0",
     "graphql": "^0.13.2",
     "graphql-thinky": "^0.4.0-rc-3",
+    "grpc": "^1.10.1",
     "i18n": "^0.8.3",
     "ical": "^0.5.0",
     "metascraper": "^3.10.4",
@@ -68,7 +70,8 @@
     "compile-frontend-build": "cd frontend/app && qx compile --target=build && cd ../../",
     "compile-frontend-app": "cd frontend/app && CORDOVA=1 qx compile --target=build && cd ../../",
     "test": "ENV=dev DATABASE_HOST=172.17.0.2 nyc --reporter=html --reporter=text-summary mocha --recursive",
-    "deploy-mobile": "npm run compile-frontend-app && cd app/ && cordova run android --device && cd ../"
+    "deploy-mobile": "npm run compile-frontend-app && cd app/ && cordova run android --device && cd ../",
+    "protoc": "protoc --qx_out=protos/frontend protos/*.proto"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.2",
@@ -99,7 +102,8 @@
       "frontend/app/build-output/**",
       "frontend/app/source-output/**",
       "frontend/app/contrib/**",
-      "frontend/app/source/resource/js/**"
+      "frontend/app/source/resource/js/**",
+      "protos/**"
     ],
     "globals": [
       "app",
@@ -111,7 +115,9 @@
       "firebase",
       "PushNotification",
       "scCodecMinBin",
-      "$"
+      "$",
+      "proto",
+      "jspb"
     ]
   }
 }

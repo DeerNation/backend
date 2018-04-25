@@ -1,0 +1,46 @@
+syntax = "proto3";
+package dn;
+//import "google/protobuf/timestamp.proto";
+import "model.proto";
+
+service Com {
+    /**
+     * Subscribe to a channel and receive updates for it
+     */
+    rpc subscribe(Channel) returns (stream ActivityChange);
+    rpc getActivities(Channel) returns (dn.model.Activities);
+}
+
+message Channel {
+    string id = 1;
+    string date = 2;
+}
+
+/**
+ * ActivityChange messages are the messages sent in a channel.
+ * They contain either an update for an activity or an internal
+ * status update for the channel, like a currently writing user state.
+ */
+message ActivityChange {
+    enum Type {
+        ADD = 0;
+        UPDATE = 1;
+        DELETE = 2;
+        INTERNAL = 3;
+    }
+    Type type = 1;
+    oneof  content {
+        dn.model.Activity activity = 2;
+        WritingUser writing = 3;
+    }
+}
+
+/**
+ * User currently writing in channel status.
+ */
+message WritingUser {
+    // user ID
+    string uid = 1;
+    // true if the user is currently writing, false if he has stopped writing
+    bool done = 2;
+}

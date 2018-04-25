@@ -9,9 +9,10 @@ p { margin: 0 }
 .activity blockquote {
     background-color: #dadada;
     border-radius: 10px;
-    margin: 0;
+    margin: 0 0 10px 0;
     color: #888;
     position: relative;
+    display: inline-block;
 }
 
 .activity blockquote p {

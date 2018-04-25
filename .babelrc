@@ -10,6 +10,7 @@
   },
   "ignore": [
     "app/**/*.js",
-    "frontend/**/*.js"
+    "frontend/**/*.js",
+    "protos/**/*.js"
   ]
 }

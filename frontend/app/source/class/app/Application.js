@@ -132,6 +132,18 @@ qx.Class.define('app.Application', {
       doc.setBackgroundColor('background')
 
       doc.add(main, {edge: 0})
+      this.test()
+    },
+
+    test: function () {
+      const service = new proto.dn.Com(this.__socket)
+      service.getActivities(new proto.dn.Channel({
+        id: 'hbg.channel.news.public'
+      })).then(activities => {
+        console.log(activities)
+      }).catch(err => {
+        console.error(err)
+      })
     },
 
     getMain: function () {

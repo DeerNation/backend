@@ -44,6 +44,8 @@ qx.Class.define('app.io.Socket', {
     this.__wampClient = new wampSocketCluster()
     this.__wampClient.upgradeToWAMP(this.__socket)
 
+    app.api.GrpcClient.getInstance().upgradeToGrpcClient(this.__socket)
+
     app.io.Rpc.setSocket(this.__socket)
 
     this.__socket.on('error', function (err) {
@@ -197,6 +199,14 @@ qx.Class.define('app.io.Socket', {
 
     emit: function (channel, payload, callback) {
       return this.__socket.emit(channel, payload, callback)
+    },
+
+    unary: function (service, config) {
+      return this.__socket.unary(service, config)
+    },
+
+    invoke: function (service, config, callback) {
+      return this.__socket.invoke(service, config, callback)
     },
 
     publish: function (channel, payload) {

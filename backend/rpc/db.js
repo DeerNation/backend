@@ -64,6 +64,19 @@ async function getChannelActivities (authToken, channel, from) {
   return schema.getModel('Publication').eqJoin('activityId', r.table('Activity')).filter(filter).map(map).orderBy(r.asc('published')).run()
 }
 
+async function getActivities (authToken, request) {
+  // await acl.check(authToken, request.id, acl.action.READ)
+  const r = schema.getR()
+  let filter = r.row('left')('channelId').eq(request.id).and(r.row('right').hasFields('actorId'))
+  if (request.date) {
+    filter.and(r.row('left')('published').ge(request.date))
+  }
+  const map = function (entry) {
+    return entry('right').without(['created', 'title', 'titleUrl']).merge(entry('left').without(['id', 'activityId', 'actorId', 'published']))
+  }
+  return schema.getModel('Publication').eqJoin('activityId', r.table('Activity')).filter(filter).map(map).orderBy(r.asc('published')).run()
+}
+
 async function getActors (authToken) {
   await acl.check(authToken, config.domain + '.object.Actor', acl.action.READ)
   return schema.getModel('Actor').pluck('id', 'name', 'username', 'type', 'role', 'online', 'status', 'color').run()
@@ -278,5 +291,6 @@ module.exports = {
   getObject: getObject,
   updateObjectProperty: updateObjectProperty,
   setFirebaseToken: setFirebaseToken,
-  deleteActivity: deleteActivity
+  deleteActivity: deleteActivity,
+  getActivities: getActivities
 }

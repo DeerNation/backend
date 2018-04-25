@@ -39,6 +39,7 @@
 
   "libraries": [
     "../qooxdoo/framework",
-    "."
+    ".",
+    "../../protos/frontend"
   ]
 }

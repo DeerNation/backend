@@ -18,7 +18,6 @@ const graphqlThinky = require('./backend/model/graphql-thinky')
 const graphqlHTTP = require('express-graphql')
 const pluginHandler = require('./backend/PluginHandler')
 const MetadataScraper = require('./backend/MetadataScraper')
-// const scCodecMinBin = require('sc-codec-min-bin')
 
 class Worker extends SCWorker {
   run () {
@@ -41,7 +40,6 @@ class Worker extends SCWorker {
 
     let httpServer = this.httpServer
     let scServer = this.scServer
-    // scServer.setCodecEngine(scCodecMinBin)
 
     channelHandler.init(this.scServer)
 

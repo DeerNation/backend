@@ -1,0 +1,86 @@
+syntax = "proto3";
+//import "google/protobuf/timestamp.proto";
+package dn.model;
+
+/**
+ * A List of activities
+ */
+message Activities {
+    repeated Activity activities = 1;
+}
+
+/**
+* An Activity is everything that can be published in a channel.
+* it contains of some metadata and the content of a certain type.
+*/
+message Activity {
+    // UUID od the entry
+    string id = 1;
+    // content type
+    string type = 2;
+    // time of creation
+    string created = 3;
+    // content hash
+    string hash = 4;
+    // UUID of the actor
+    string actorId = 5;
+    // this activity might by originated by an external source, e.g. a facebook feed entry
+    ExternalRef ref = 6;
+    string channelId = 7;
+    bool master = 8;
+    string published = 9;
+    // content of the activity
+    oneof content {
+        Message message = 20;
+        Event event = 21;
+    }
+}
+
+/**
+ * Reference to an external source, e.g. a facebook feed entry, an external website, etc.
+ */
+message ExternalRef {
+    string type = 1;
+    string id = 2;
+    string original = 3;
+}
+
+/**
+ * A Publication describes the relation of an activity that has been published
+ * by an acton in a channel.
+ */
+message Publication {
+    // UUID of this entry
+    string id = 1;
+    // UUID of the actor
+    string actorId = 2;
+    // channel id
+    string channelId = 3;
+    // UUID of the activity
+    string activityId = 4;
+    // pubishing time
+    string published = 5;
+    // true if this is the initial pubishing of the activity
+    // false if it e.g. has been published by a share in another channel, probably by another actor
+    bool master = 6;
+}
+
+/**
+ * A Message is the basic activity content type: a simple message that can contain
+ * anything encoded in a markdown notation.
+ */
+message Message {
+    // message content
+    string message = 1;
+    // optional url
+    string link = 2;
+}
+
+/**
+ * An Event is a date related activity with a start and end date.
+ *
+ */
+message Event {
+    string title = 1;
+    string description = 2;
+}

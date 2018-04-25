@@ -27,6 +27,11 @@ const WAMPServer = require('wamp-socket-cluster/WAMPServer')
 const dbModule = require('./db')
 const acl = require('../acl')
 const config = require('../config')
+const path = require('path')
+const PROTO_PATH = path.join(__dirname, '/../../protos/api.proto')
+const grpc = require('grpc')
+const dn = grpc.load(PROTO_PATH).dn
+const grpcServer = require('./grpc')
 
 class RpcServer {
   constructor () {
@@ -38,6 +43,11 @@ class RpcServer {
   upgradeToWAMP (socket) {
     this.socket = socket
     this.rpcServer.upgradeToWAMP(socket)
+    grpcServer.upgradeToGrpc(socket)
+
+    grpcServer.addService(dn.Com, {
+      getActivities: dbModule.getActivities
+    })
   }
 
   registerRPCEndpoints (endpoints) {
