@@ -7,7 +7,6 @@
 qx.Class.define('proto.dn.ChannelRequest', {
   extend: proto.core.BaseMessage,
 
-
   /*
   *****************************************************************************
      STATICS

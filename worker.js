@@ -12,13 +12,16 @@ const cron = require('node-cron')
 const logger = require('./backend/logger')(__filename)
 const WebhookHandler = require('./backend/webhook/handler')
 const channelHandler = require('./backend/ChannelHandler')
-const rpcServer = require('./backend/rpc')
+// const rpcServer = require('./backend/rpc')
 const pushNotifications = require('./backend/notification')
 const graphqlThinky = require('./backend/model/graphql-thinky')
 const graphqlHTTP = require('express-graphql')
 const pluginHandler = require('./backend/PluginHandler')
 const MetadataScraper = require('./backend/MetadataScraper')
-const dgraphClient = require('./backend/model/dgraph')
+const grpcServer = require('./backend/rpc/grpc')
+const dgraphService = require('./backend/model/dgraph').dgraphService
+const grpc = require('grpc')
+const dn = grpc.load({root: __dirname, file: path.join('protos', 'api.proto')}).dn
 
 class Worker extends SCWorker {
   run () {
@@ -120,7 +123,9 @@ class Worker extends SCWorker {
         auth(socket, scServer, pushNotifications.syncTopicSubscriptions.bind(pushNotifications, serverId))
       }
 
-      rpcServer.upgradeToWAMP(socket)
+      logger.debug('initializing gRPC')
+      grpcServer.upgradeToGrpc(socket)
+      grpcServer.addService(dn.Com, dgraphService)
 
       graphqlThinky.attach(socket)
 

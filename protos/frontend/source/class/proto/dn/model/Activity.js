@@ -8,7 +8,6 @@
 qx.Class.define('proto.dn.model.Activity', {
   extend: proto.core.BaseMessage,
 
-
   /*
   *****************************************************************************
      STATICS
@@ -17,7 +16,6 @@ qx.Class.define('proto.dn.model.Activity', {
   statics: {
     // array with oneOf property groups
     ONEOFS: [],
-        
     /**
      * Returns the allowed type for the oneOf field 'content'.
      * @returns {Array} array of type names as string
@@ -268,7 +266,6 @@ qx.Class.define('proto.dn.model.Activity', {
   *****************************************************************************
   */
   members: {
-    
     // oneOf property apply
     _applyOneOf0: function (value, old, name) {
       if (value !== null) {
@@ -282,7 +279,6 @@ qx.Class.define('proto.dn.model.Activity', {
         }
       }, this)
     },
-    
     /**
      * Set value for oneOf field 'content'. Tries to detect the object type and call the correct setter.
      * @param obj {Object}

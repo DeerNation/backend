@@ -7,7 +7,6 @@
 qx.Class.define('proto.dn.Uid', {
   extend: proto.core.BaseMessage,
 
-
   /*
   *****************************************************************************
      STATICS

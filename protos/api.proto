@@ -6,14 +6,6 @@ import "protos/model.proto";
 
 service Com {
     /**
-     * Subscribe to a channel and receive updates for it
-     */
-    rpc subscribe(ChannelRequest) returns (stream ActivityChange);
-    rpc getPublications(ChannelRequest) returns (dn.model.Publications);
-    rpc publish(dn.model.Publication) returns (Response);
-//    rpc getSubscriptions(Uid) returns (dn.model.Subscriptions);
-
-    /**
      * Retuns the complete model for the currently authenticated user.
      * The model contains:
      *  - the current actor (including its subscriptions)
@@ -28,6 +20,43 @@ service Com {
     rpc getChannelModel(ChannelRequest) returns (ChannelModel);
 
     rpc setFirebaseToken(Token) returns (Response);
+
+    // ----------------------------------------------
+    // CRUD
+    // ----------------------------------------------
+
+    rpc createObject(Object) returns (Response);
+    rpc readObject(Uid) returns (Object);
+    rpc updateObject(Object) returns (Response);
+    rpc deleteObject(Object) returns (Response);
+
+    // ----------------------------------------------
+    // Stream requests
+    // ----------------------------------------------
+
+    // All changes the needed for live updating the GUI for the curren user
+    rpc listenForUpdates(Empty) returns (stream ActorChanges);
+}
+
+/**
+ * Actor related changes (new subscriptions, other actors/states)
+ */
+message ActorChanges {
+    enum Type {
+        ADD = 0;
+        UPDATE = 1;
+        DELETE = 2;
+    }
+    Type type = 1;
+    repeated dn.model.Subscription subscription = 2;
+    repeated dn.model.Actor actor = 3;
+}
+
+message Object {
+    oneof content {
+        dn.model.Activity activity = 1;
+        dn.model.Actor actor = 2;
+    }
 }
 
 message Model {
@@ -80,6 +109,7 @@ message Response {
     enum Code {
         OK = 0;
         ERROR = 1;
+        FORBIDDEN = 2;
     }
     Code code = 1;
     string message = 2;

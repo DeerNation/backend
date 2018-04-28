@@ -7,7 +7,6 @@
 qx.Class.define('proto.dn.Empty', {
   extend: proto.core.BaseMessage,
 
-
   /*
   *****************************************************************************
      STATICS
@@ -43,7 +42,7 @@ qx.Class.define('proto.dn.Empty', {
      * @return {proto.dn.Empty}
      */
     deserializeBinaryFromReader: function (msg, reader) {
-      
+
     }
   },
 

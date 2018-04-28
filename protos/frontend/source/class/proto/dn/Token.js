@@ -7,7 +7,6 @@
 qx.Class.define('proto.dn.Token', {
   extend: proto.core.BaseMessage,
 
-
   /*
   *****************************************************************************
      STATICS

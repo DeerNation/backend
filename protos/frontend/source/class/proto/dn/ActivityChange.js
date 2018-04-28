@@ -9,7 +9,6 @@
 qx.Class.define('proto.dn.ActivityChange', {
   extend: proto.core.BaseMessage,
 
-
   /*
   *****************************************************************************
      STATICS
@@ -18,7 +17,6 @@ qx.Class.define('proto.dn.ActivityChange', {
   statics: {
     // array with oneOf property groups
     ONEOFS: [],
-    
     /**
      * @enum
      */
@@ -28,7 +26,6 @@ qx.Class.define('proto.dn.ActivityChange', {
       DELETE: 2,
       INTERNAL: 3
     },
-        
     /**
      * Returns the allowed type for the oneOf field 'content'.
      * @returns {Array} array of type names as string
@@ -168,7 +165,6 @@ qx.Class.define('proto.dn.ActivityChange', {
   *****************************************************************************
   */
   members: {
-    
     // oneOf property apply
     _applyOneOf0: function (value, old, name) {
       if (value !== null) {
@@ -182,7 +178,6 @@ qx.Class.define('proto.dn.ActivityChange', {
         }
       }, this)
     },
-    
     /**
      * Set value for oneOf field 'content'. Tries to detect the object type and call the correct setter.
      * @param obj {Object}

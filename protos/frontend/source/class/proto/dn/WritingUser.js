@@ -7,7 +7,6 @@
 qx.Class.define('proto.dn.WritingUser', {
   extend: proto.core.BaseMessage,
 
-
   /*
   *****************************************************************************
      STATICS

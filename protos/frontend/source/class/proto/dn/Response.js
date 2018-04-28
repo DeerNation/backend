@@ -7,20 +7,19 @@
 qx.Class.define('proto.dn.Response', {
   extend: proto.core.BaseMessage,
 
-
   /*
   *****************************************************************************
      STATICS
   *****************************************************************************
   */
   statics: {
-    
     /**
      * @enum
      */
     Code: {
       OK: 0,
-      ERROR: 1
+      ERROR: 1,
+      FORBIDDEN: 2
     },
     /**
      * Serializes the given message to binary data (in protobuf wire

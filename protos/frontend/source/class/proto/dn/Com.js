@@ -16,66 +16,13 @@ qx.Class.define('proto.dn.Com', {
     serviceName: 'dn.Com',
 
     /**
-     * Subscribe to a channel and receive updates for it
-     * @param payload {proto.dn.ChannelRequest}
-     * @param callback {Function} onMessage callback
-     * @param context {Object} onMessage callback context
-     * @returns {Promise} resolves to {proto.dn.ActivityChange} 
-     */
-    subscribe: function (payload, callback, context) {
-      qx.core.Assert.assertInstance(payload, proto.dn.ChannelRequest)
-      return this._call(payload, {
-        methodName: 'subscribe',
-        service: this,
-        requestStream: false,
-        responseStream: true,
-        requestType: proto.dn.ChannelRequest,
-        responseType: proto.dn.ActivityChange
-      }, callback, context)
-    },
-
-    /**
-     *
-     * @param payload {proto.dn.ChannelRequest}
-     * @returns {Promise} resolves to {proto.dn.model.Publications} 
-     */
-    getPublications: function (payload) {
-      qx.core.Assert.assertInstance(payload, proto.dn.ChannelRequest)
-      return this._call(payload, {
-        methodName: 'getPublications',
-        service: this,
-        requestStream: false,
-        responseStream: false,
-        requestType: proto.dn.ChannelRequest,
-        responseType: proto.dn.model.Publications
-      })
-    },
-
-    /**
-     *
-     * @param payload {proto.dn.model.Publication}
-     * @returns {Promise} resolves to {proto.dn.Response} 
-     */
-    publish: function (payload) {
-      qx.core.Assert.assertInstance(payload, proto.dn.model.Publication)
-      return this._call(payload, {
-        methodName: 'publish',
-        service: this,
-        requestStream: false,
-        responseStream: false,
-        requestType: proto.dn.model.Publication,
-        responseType: proto.dn.Response
-      })
-    },
-
-    /**
      * Retuns the complete model for the currently authenticated user.
      * The model contains:
      * - the current actor (including its subscriptions)
      * - all other Actors
      * - all public channels
      * @param payload {proto.dn.Empty}
-     * @returns {Promise} resolves to {proto.dn.Model} 
+     * @returns {Promise} resolves to {proto.dn.Model}
      */
     getModel: function (payload) {
       qx.core.Assert.assertInstance(payload, proto.dn.Empty)
@@ -92,7 +39,7 @@ qx.Class.define('proto.dn.Com', {
     /**
      * Returns the complete data needed to show the channels content.
      * @param payload {proto.dn.ChannelRequest}
-     * @returns {Promise} resolves to {proto.dn.ChannelModel} 
+     * @returns {Promise} resolves to {proto.dn.ChannelModel}
      */
     getChannelModel: function (payload) {
       qx.core.Assert.assertInstance(payload, proto.dn.ChannelRequest)
@@ -109,7 +56,7 @@ qx.Class.define('proto.dn.Com', {
     /**
      *
      * @param payload {proto.dn.Token}
-     * @returns {Promise} resolves to {proto.dn.Response} 
+     * @returns {Promise} resolves to {proto.dn.Response}
      */
     setFirebaseToken: function (payload) {
       qx.core.Assert.assertInstance(payload, proto.dn.Token)
@@ -121,6 +68,93 @@ qx.Class.define('proto.dn.Com', {
         requestType: proto.dn.Token,
         responseType: proto.dn.Response
       })
+    },
+
+    /**
+     *
+     * @param payload {proto.dn.Object}
+     * @returns {Promise} resolves to {proto.dn.Response}
+     */
+    createObject: function (payload) {
+      qx.core.Assert.assertInstance(payload, proto.dn.Object)
+      return this._call(payload, {
+        methodName: 'createObject',
+        service: this,
+        requestStream: false,
+        responseStream: false,
+        requestType: proto.dn.Object,
+        responseType: proto.dn.Response
+      })
+    },
+
+    /**
+     *
+     * @param payload {proto.dn.Uid}
+     * @returns {Promise} resolves to {proto.dn.Object}
+     */
+    readObject: function (payload) {
+      qx.core.Assert.assertInstance(payload, proto.dn.Uid)
+      return this._call(payload, {
+        methodName: 'readObject',
+        service: this,
+        requestStream: false,
+        responseStream: false,
+        requestType: proto.dn.Uid,
+        responseType: proto.dn.Object
+      })
+    },
+
+    /**
+     *
+     * @param payload {proto.dn.Object}
+     * @returns {Promise} resolves to {proto.dn.Response}
+     */
+    updateObject: function (payload) {
+      qx.core.Assert.assertInstance(payload, proto.dn.Object)
+      return this._call(payload, {
+        methodName: 'updateObject',
+        service: this,
+        requestStream: false,
+        responseStream: false,
+        requestType: proto.dn.Object,
+        responseType: proto.dn.Response
+      })
+    },
+
+    /**
+     *
+     * @param payload {proto.dn.Object}
+     * @returns {Promise} resolves to {proto.dn.Response}
+     */
+    deleteObject: function (payload) {
+      qx.core.Assert.assertInstance(payload, proto.dn.Object)
+      return this._call(payload, {
+        methodName: 'deleteObject',
+        service: this,
+        requestStream: false,
+        responseStream: false,
+        requestType: proto.dn.Object,
+        responseType: proto.dn.Response
+      })
+    },
+
+    /**
+     * All changes the needed for live updating the GUI for the curren user
+     * @param payload {proto.dn.Empty}
+     * @param callback {Function} onMessage callback
+     * @param context {Object} onMessage callback context
+     * @returns {Promise} resolves to {proto.dn.ActorChanges}
+     */
+    listenForUpdates: function (payload, callback, context) {
+      qx.core.Assert.assertInstance(payload, proto.dn.Empty)
+      return this._call(payload, {
+        methodName: 'listenForUpdates',
+        service: this,
+        requestStream: false,
+        responseStream: true,
+        requestType: proto.dn.Empty,
+        responseType: proto.dn.ActorChanges
+      }, callback, context)
     }
   }
 })

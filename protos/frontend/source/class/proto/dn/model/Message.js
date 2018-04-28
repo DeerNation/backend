@@ -9,7 +9,6 @@ qx.Class.define('proto.dn.model.Message', {
   extend: proto.core.BaseMessage,
   include: [app.plugins.message.MMessage],
 
-
   /*
   *****************************************************************************
      STATICS

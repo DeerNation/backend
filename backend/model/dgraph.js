@@ -9,6 +9,7 @@ const grpc = require('grpc')
 const acl = require('../acl')
 const defaultData = require('./default-graph-data')
 const logger = require('../logger')(__filename)
+const config = require('../config')
 
 const clientStub = new dgraph.DgraphClientStub(
   'localhost:9080',
@@ -69,34 +70,10 @@ async function fillDb () {
 
 fillDb()
 
+/**
+ * dn.Com service implementation
+ */
 class DgraphService {
-//   async getSubscriptions (authToken, request) {
-//     await acl.check(authToken, config.domain + '.object.Subscription', acl.action.READ)
-//     const query = `query actor($a: string) {
-//   actor(func: uid($a)) {
-//     subscriptions : ~actor {
-//       uid
-//       channel {
-//         uid
-//         id
-//         type
-//         title
-//         description
-//         color
-//         favorite
-//       }
-//     }
-//   }
-// }`
-//     const res = await dgraphClient.newTxn().queryWithVars(query, {$a: request.uid})
-//     const subscriptions = res.getJson().actor[0]['~actor']
-//     subscriptions.forEach(sub => {
-//       sub.channel = sub.channel[0]
-//     })
-//     console.log(subscriptions)
-//     return subscriptions
-//   }
-
   async getModel (authToken) {
     let addQuery = ''
     if (authToken && authToken.user) {
@@ -180,7 +157,6 @@ class DgraphService {
     result.channelActions = await acl.getAllowedActions(authToken, request.channelId)
     result.activityActions = await acl.getAllowedActions(authToken, request.channelId + '.activities')
 
-    console.log(request, result)
     if (result.activityActions.actions.includes('r')) {
       const query = `query channelModel($a: string) {
        channel(func: uid($a)) {
@@ -249,6 +225,138 @@ class DgraphService {
       return attemp[0].uid
     }
     return false
+  }
+
+  // --------------------------------------------------------------
+  //  CRUD operations
+  // --------------------------------------------------------------
+  async readObject (authToken, request) {
+    const query = `query read($a: string) {
+        object(func: uid($a)) {
+            expand(_all_)
+        }
+    }`
+    const res = await dgraphClient.newTxn().queryWithVars(query, {$a: request.uid})
+    const object = res.getJson().object[0]
+    if (!object) {
+      return {}
+    }
+    const response = {}
+    await acl.check(authToken, config.domain + '.object.' + object.baseName, acl.action.READ)
+    response[object.baseName.toLowerCase()] = object
+    delete object.baseName
+    return response
+  }
+
+  async __crudChecks (authToken, request, action, uidNeeded) {
+    if (uidNeeded === true && !request.content.uid) {
+      return {
+        code: 1,
+        message: 'uid needed to identify the object'
+      }
+    } else if (uidNeeded === false && request.content.uid) {
+      return {
+        code: 1,
+        message: 'the data must not contain an uid'
+      }
+    }
+    let type = ''
+    Object.keys(request).some(prop => {
+      if (prop !== 'content') {
+        type = prop
+        return true
+      }
+    })
+    if (!type) {
+      return {
+        code: 1,
+        message: 'no object type found in data'
+      }
+    }
+    try {
+      await acl.check(authToken, config.domain + '.object.' + type.substring(0, 1).toUpperCase() + type.substring(1), action)
+    } catch (e) {
+      return {
+        code: 2,
+        message: '' + e
+      }
+    }
+    return true
+  }
+
+  async updateObject (authToken, request) {
+    const checkResult = this.__crudChecks(authToken, request, acl.action.UPDATE, true)
+    if (checkResult !== true) {
+      return checkResult
+    }
+    const txn = dgraphClient.newTxn()
+    try {
+      const mu = new dgraph.Mutation()
+      mu.setSetJson(request.content)
+      await txn.mutate(mu)
+      await txn.commit()
+      return {
+        code: 0
+      }
+    } catch (e) {
+      logger.error(e)
+      return {
+        code: 1,
+        message: '' + e
+      }
+    } finally {
+      await txn.discard()
+    }
+  }
+
+  async createObject (authToken, request) {
+    const checkResult = this.__crudChecks(authToken, request, acl.action.CREATE, false)
+    if (checkResult !== true) {
+      return checkResult
+    }
+    const txn = dgraphClient.newTxn()
+    try {
+      const mu = new dgraph.Mutation()
+      mu.setSetJson(request.content)
+      await txn.mutate(mu)
+      await txn.commit()
+      return {
+        code: 0
+      }
+    } catch (e) {
+      logger.error(e)
+      return {
+        code: 1,
+        message: '' + e
+      }
+    } finally {
+      await txn.discard()
+    }
+  }
+
+  async deleteObject (authToken, request) {
+    const checkResult = this.__crudChecks(authToken, request, acl.action.DELETE, true)
+    if (checkResult !== true) {
+      return checkResult
+    }
+    const txn = dgraphClient.newTxn()
+    try {
+      const mu = new dgraph.Mutation()
+      mu.setDeleteJson(request.content)
+      await txn.mutate(mu)
+      await txn.commit()
+      return {
+        code: 0
+      }
+    } catch (e) {
+      logger.error(e)
+      return {
+        code: 1,
+        message: '' + e
+      }
+    } finally {
+      await txn.discard()
+    }
   }
 }
 

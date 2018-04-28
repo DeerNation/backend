@@ -8,7 +8,6 @@ qx.Class.define('proto.dn.model.Subscription', {
   extend: proto.core.BaseMessage,
   include: [app.api.MSubscription],
 
-
   /*
   *****************************************************************************
      STATICS

@@ -38,8 +38,10 @@ qx.Class.define('app.api.GrpcClient', {
           socket.emit('/' + service.service.serviceName + '/' + service.methodName, config.request.serializeBinary(), (err, res) => {
             if (err) {
               reject(err)
-            } else {
+            } else if (res.data) {
               resolve(service.responseType.deserializeBinary(res.data))
+            } else {
+              resolve()
             }
           })
         })

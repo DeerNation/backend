@@ -33,7 +33,7 @@ qx.Class.define('app.plugins.AbstractContentForm', {
     },
 
     activity: {
-      check: 'app.model.Activity',
+      check: 'proto.dn.model.Activity',
       nullable: true,
       apply: '_applyActivity',
       dereference: true
