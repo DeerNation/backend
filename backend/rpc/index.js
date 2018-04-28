@@ -28,9 +28,8 @@ const dbModule = require('./db')
 const acl = require('../acl')
 const config = require('../config')
 const path = require('path')
-const PROTO_PATH = path.join(__dirname, '/../../protos/api.proto')
 const grpc = require('grpc')
-const dn = grpc.load(PROTO_PATH).dn
+const dn = grpc.load({root: path.join(__dirname, '..', '..'), file: path.join('protos', 'api.proto')}).dn
 const grpcServer = require('./grpc')
 const {dgraphService} = require('../model/dgraph')
 

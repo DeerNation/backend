@@ -1,6 +1,6 @@
 
 /**
- * Publications class generated from protobuf definition "model.proto".
+ * Publications class generated from protobuf definition "protos/model.proto".
  * A List of publications
  * auto-generated code PLEASE DO NOT EDIT!
  */

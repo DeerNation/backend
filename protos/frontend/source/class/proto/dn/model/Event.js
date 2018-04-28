@@ -1,11 +1,12 @@
 
 /**
- * Event class generated from protobuf definition "model.proto".
+ * Event class generated from protobuf definition "protos/model.proto".
  * An Event is a date related activity with a start and end date.
  * auto-generated code PLEASE DO NOT EDIT!
  */
 qx.Class.define('proto.dn.model.Event', {
   extend: proto.core.BaseMessage,
+  include: [app.plugins.event.MEvent],
 
   /*
   *****************************************************************************
@@ -31,52 +32,59 @@ qx.Class.define('proto.dn.model.Event', {
      * @suppress {unusedLocalVariables} f is only used for nested messages
      */
     serializeBinaryToWriter: function (message, writer) {
-      var f = message.getName()
+      var f = message.getUid()
       if (f.length > 0) {
         writer.writeString(
           1,
           f
         )
       }
-      f = message.getLocation()
+      f = message.getName()
       if (f.length > 0) {
         writer.writeString(
           2,
           f
         )
       }
-      f = message.getStart()
+      f = message.getLocation()
       if (f.length > 0) {
         writer.writeString(
           3,
           f
         )
       }
-      f = message.getEnd()
+      f = message.getStart()
       if (f.length > 0) {
         writer.writeString(
           4,
           f
         )
       }
+      f = message.getEnd()
+      if (f.length > 0) {
+        writer.writeString(
+          5,
+          f
+        )
+      }
       f = message.getCategories()
       if (f.length > 0) {
         writer.writeRepeatedString(
-          5,
+          6,
           f
         )
       }
       f = message.getOrganizer()
       if (f.length > 0) {
         writer.writeString(
-          6,
+          7,
           f
         )
       }
       f = message.getDescription()
       if (f.length > 0) {
         writer.writeString(
-          7,
+          8,
           f
         )
       }
@@ -111,29 +119,33 @@ qx.Class.define('proto.dn.model.Event', {
         switch (field) {
           case 1:
             value = reader.readString()
-            msg.setName(value)
+            msg.setUid(value)
             break
           case 2:
             value = reader.readString()
-            msg.setLocation(value)
+            msg.setName(value)
             break
           case 3:
             value = reader.readString()
-            msg.setStart(value)
+            msg.setLocation(value)
             break
           case 4:
             value = reader.readString()
-            msg.setEnd(value)
+            msg.setStart(value)
             break
           case 5:
             value = reader.readString()
-            msg.getCategories().push(value)
+            msg.setEnd(value)
             break
           case 6:
             value = reader.readString()
-            msg.setOrganizer(value)
+            msg.getCategories().push(value)
             break
           case 7:
+            value = reader.readString()
+            msg.setOrganizer(value)
+            break
+          case 8:
             value = reader.readString()
             msg.setDescription(value)
             break
@@ -153,6 +165,13 @@ qx.Class.define('proto.dn.model.Event', {
   */
   properties: {
 
+    uid: {
+      check: 'String',
+      init: '',
+      nullable: false,
+      event: 'changeUid'
+    },
+
     name: {
       check: 'String',
       init: '',
@@ -168,17 +187,19 @@ qx.Class.define('proto.dn.model.Event', {
     },
 
     start: {
-      check: 'String',
+      check: 'Date',
       init: '',
       nullable: false,
-      event: 'changeStart'
+      event: 'changeStart',
+      transform: '_toDate'
     },
 
     end: {
-      check: 'String',
+      check: 'Date',
       init: '',
       nullable: false,
-      event: 'changeEnd'
+      event: 'changeEnd',
+      transform: '_toDate'
     },
 
     /**

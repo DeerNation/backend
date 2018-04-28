@@ -320,7 +320,7 @@ qx.Class.define('app.ui.channel.View', {
         },
 
         group: function (model) {
-          const date = model.getPublished() || model.getCreated()
+          const date = model.getPublished() || model.getActivity().getCreated()
           return date ? dateFormat.format(date) : null
         },
 
@@ -337,8 +337,8 @@ qx.Class.define('app.ui.channel.View', {
         // },
 
         sorter: function (a, b) {
-          const adate = a.getPublished() || a.getCreated()
-          const bdate = b.getPublished() || b.getCreated()
+          const adate = a.getPublished() || a.getActivity().getCreated()
+          const bdate = b.getPublished() || b.getActivity().getCreated()
           return adate.getTime() - bdate.getTime()
         }
       })

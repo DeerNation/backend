@@ -7,7 +7,7 @@
 const createNotification = (message) => {
   return {
     phrase: 'New message in %s',
-    content: message.content.message
+    content: message.content.content
   }
 }
 

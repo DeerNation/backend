@@ -1,6 +1,6 @@
 
 /**
- * ExternalRef class generated from protobuf definition "model.proto".
+ * ExternalRef class generated from protobuf definition "protos/model.proto".
  * Reference to an external source, e.g. a facebook feed entry, an external website, etc.
  * auto-generated code PLEASE DO NOT EDIT!
  */

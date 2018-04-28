@@ -1,6 +1,6 @@
 
 /**
- * Subscription class generated from protobuf definition "model.proto".
+ * Subscription class generated from protobuf definition "protos/model.proto".
  *
  * auto-generated code PLEASE DO NOT EDIT!
  */
@@ -24,8 +24,8 @@ qx.Class.define('proto.dn.model.Subscription', {
      */
     serializeBinaryToWriter: function (message, writer) {
       var f = message.getUid()
-      if (f !== 0) {
-        writer.writeUint64String(
+      if (f.length > 0) {
+        writer.writeString(
           1,
           f
         )
@@ -83,7 +83,7 @@ qx.Class.define('proto.dn.model.Subscription', {
         var field = reader.getFieldNumber()
         switch (field) {
           case 1:
-            value = reader.readUint64String()
+            value = reader.readString()
             msg.setUid(value)
             break
           case 2:
@@ -118,10 +118,9 @@ qx.Class.define('proto.dn.model.Subscription', {
 
     uid: {
       check: 'String',
-      init: 0,
+      init: '',
       nullable: false,
-      event: 'changeUid',
-      transform: '_toString'
+      event: 'changeUid'
     },
 
     channel: {

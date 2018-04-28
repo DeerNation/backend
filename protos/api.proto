@@ -2,7 +2,7 @@ syntax = "proto3";
 package dn;
 //import "google/protobuf/timestamp.proto";
 //import "google/protobuf/empty.proto";
-import "model.proto";
+import "protos/model.proto";
 
 service Com {
     /**
@@ -47,7 +47,7 @@ message Model {
  */
 message ChannelModel {
     // publications in this channel
-    dn.model.Publications publications = 1;
+    repeated dn.model.Publication publications = 1;
     // allowed actions of the current user for this channel
     dn.model.AclActions channelActions = 2;
     // allowed actions of the current user for activities in this channel
@@ -60,14 +60,14 @@ message Token {
 }
 
 message Uid {
-    uint64 uid = 1;
+    string uid = 1;
 }
 
 message Empty {}
 
 message ChannelRequest {
     // UID of the channel
-    uint64 uid = 1;
+    string uid = 1;
     // channel name (as alternative to the uid)
     string channelId = 2;
     string date = 3;
@@ -109,7 +109,7 @@ message ActivityChange {
  */
 message WritingUser {
     // user ID
-    uint64 uid = 1;
+    string uid = 1;
     // true if the user is currently writing, false if he has stopped writing
     bool done = 2;
 }

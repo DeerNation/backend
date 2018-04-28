@@ -62,13 +62,13 @@ qx.Class.define('app.plugins.event.Form', {
     // property apply
     _applyActivity: function (value, old) {
       if (old) {
-        const oldEvent = old.getContentObject()
+        const oldEvent = old.getContent()
         this.__mappings.forEach(name => {
           oldEvent.removeRelatedBindings(this.getChildControl(name))
         })
       }
       if (value) {
-        const event = value.getContentObject()
+        const event = value.getContent()
         this.__mappings.forEach(name => {
           event.bind(name, this.getChildControl(name), 'value')
         })

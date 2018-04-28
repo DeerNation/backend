@@ -1,6 +1,6 @@
 
 /**
- * Activity class generated from protobuf definition "model.proto".
+ * Activity class generated from protobuf definition "protos/model.proto".
  * An Activity is everything that can be published in a channel.
  * it contains of some metadata and the content of a certain type.
  * auto-generated code PLEASE DO NOT EDIT!
@@ -34,8 +34,8 @@ qx.Class.define('proto.dn.model.Activity', {
      */
     serializeBinaryToWriter: function (message, writer) {
       var f = message.getUid()
-      if (f !== 0) {
-        writer.writeUint64String(
+      if (f.length > 0) {
+        writer.writeString(
           1,
           f
         )
@@ -130,7 +130,7 @@ qx.Class.define('proto.dn.model.Activity', {
         var field = reader.getFieldNumber()
         switch (field) {
           case 1:
-            value = reader.readUint64String()
+            value = reader.readString()
             msg.setUid(value)
             break
           case 3:
@@ -187,17 +187,17 @@ qx.Class.define('proto.dn.model.Activity', {
 
     uid: {
       check: 'String',
-      init: 0,
+      init: '',
       nullable: false,
-      event: 'changeUid',
-      transform: '_toString'
+      event: 'changeUid'
     },
 
     created: {
-      check: 'String',
+      check: 'Date',
       init: '',
       nullable: false,
-      event: 'changeCreated'
+      event: 'changeCreated',
+      transform: '_toDate'
     },
 
     hash: {
@@ -229,10 +229,11 @@ qx.Class.define('proto.dn.model.Activity', {
     },
 
     published: {
-      check: 'String',
+      check: 'Date',
       init: '',
       nullable: false,
-      event: 'changePublished'
+      event: 'changePublished',
+      transform: '_toDate'
     },
 
     message: {
@@ -255,7 +256,7 @@ qx.Class.define('proto.dn.model.Activity', {
      * oneOfIndex: 0
      */
     content: {
-      check: proto.core.BaseMessage,
+      check: 'proto.core.BaseMessage',
       init: null,
       event: 'changeContent'
     }

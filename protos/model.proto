@@ -1,5 +1,6 @@
 syntax = "proto3";
 //import "google/protobuf/timestamp.proto";
+import "node_modules/protoc-gen-qx/protos/extensions.proto";
 package dn.model;
 
 /**
@@ -24,7 +25,7 @@ message Actors {
 }
 
 message Subscription {
-    uint64 uid = 1;
+    string uid = 1;
     Channel channel = 2;
     Actor actor = 3;
     bool favorite = 4;
@@ -37,9 +38,9 @@ message Subscription {
 */
 message Activity {
     // UUID od the entry
-    uint64 uid = 1;
+    string uid = 1;
     // time of creation
-    string created = 3;
+    string created = 3 [(qx.date) = true];
     // content hash
     string hash = 4;
     // creator of this activity
@@ -47,7 +48,7 @@ message Activity {
     // this activity might by originated by an external source, e.g. a facebook feed entry
     ExternalRef ref = 6;
     bool master = 8;
-    string published = 9;
+    string published = 9 [(qx.date) = true];
     // content of the activity
     oneof content {
         Message message = 20;
@@ -70,7 +71,7 @@ message ExternalRef {
  */
 message Publication {
     // UUID of this entry
-    uint64 uid = 1;
+    string uid = 1;
     // The actor that created this publication
     Actor actor = 2;
     // The channel this publication has been published in
@@ -78,7 +79,7 @@ message Publication {
     // The activity content of this publication
     Activity activity = 4;
     // pubishing time
-    string published = 5;
+    string published = 5 [(qx.date) = true];
     // true if this is the initial pubishing of the activity
     // false if it e.g. has been published by a share in another channel, probably by another actor
     bool master = 6;
@@ -86,7 +87,7 @@ message Publication {
 
 message Channel {
     // DB UID
-    uint64 uid = 1;
+    string uid = 1;
     // Full channel name
     string id = 2;
     enum Type {
@@ -102,7 +103,7 @@ message Channel {
 
 message Actor {
     // UUID of this entry
-    uint64 uid = 1;
+    string uid = 1;
     enum Type {
         PERSON = 0;
         SERVER = 1;
@@ -125,23 +126,27 @@ message Actor {
  * anything encoded in a markdown notation.
  */
 message Message {
+    // UUID of this entry
+    string uid = 1;
     // message content
-    string message = 1;
+    string content = 2;
     // optional url
-    string link = 2;
+    string link = 3;
 }
 
 /**
  * An Event is a date related activity with a start and end date.
  */
 message Event {
-    string name = 1;
-    string location = 2;
-    string start = 3;
-    string end = 4;
-    repeated string categories = 5;
-    string organizer = 6;
-    string description = 7;
+    // UUID of this entry
+    string uid = 1;
+    string name = 2;
+    string location = 3;
+    string start = 4 [(qx.date) = true];
+    string end = 5 [(qx.date) = true];
+    repeated string categories = 6;
+    string organizer = 7;
+    string description = 8;
 }
 
 message AclActions {

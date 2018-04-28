@@ -7,7 +7,6 @@
 const dgraph = require('dgraph-js')
 const grpc = require('grpc')
 const acl = require('../acl')
-const config = require('../config')
 const defaultData = require('./default-graph-data')
 const logger = require('../logger')(__filename)
 
@@ -29,9 +28,12 @@ async function setSchema () {
 baseName: string @index(exact) .  
 actor: uid @reverse .
 roleTarget: uid @reverse .
+channel: uid @reverse .
 username: string @index(hash) @upsert .
 password: password .
 type: string @index(hash) .
+created: datetime .
+published: datetime .
 `
   const op = new dgraph.Operation()
   op.setSchema(schema)
@@ -109,7 +111,7 @@ class DgraphService {
         online
         status
         color
-        subscriptions : ~actor {
+        subscriptions : ~actor @filter(has(favorite)) {
           uid
           favorite
           viewedUntil
@@ -121,6 +123,9 @@ class DgraphService {
             description
             color
             favorite
+            owner {
+              uid
+            }
           }
         }
       }
@@ -144,6 +149,9 @@ class DgraphService {
       title
       description
       color
+      owner {
+        uid
+      }
     }
     }`
     const res = await dgraphClient.newTxn().query(query)
@@ -154,33 +162,62 @@ class DgraphService {
       model.me = model.me[0]
       model.me.subscriptions.forEach(sub => {
         sub.channel = sub.channel[0]
+        sub.channel.owner = sub.channel.owner[0]
       })
     }
+    model.publicChannels.forEach(chan => {
+      chan.owner = chan.owner[0]
+    })
     return model
   }
 
   async getChannelModel (authToken, request) {
-    console.log(authToken)
-    const result = {
-      channelActions: await acl.getAllowedActions(request.id),
-      activityActions: await acl.getAllowedActions(request.id + '.activities')
-    }
+    const result = {}
+    result.channelActions = await acl.getAllowedActions(authToken, request.channelId)
+    result.activityActions = await acl.getAllowedActions(authToken, request.channelId + '.activities')
+
     console.log(request, result)
     if (result.activityActions.actions.includes('r')) {
       const query = `query channelModel($a: string) {
-        channel(func: uid($a)) {
-          publications : ~actor @filter(has(activity) AND has(published)) {
+       channel(func: uid($a)) {
+        publications : ~channel (orderasc: published) @filter(has(published)) {
+          uid
+          published
+          master
+          activity {
             uid
-            activity {
-             _predicate_
+            hash
+            created
+            event {
+              uid
+              expand(_all_)
             }
-            published
-            master
+            message {
+              uid
+              expand(_all_)
+            }
+          }
+          actor {
+            uid
+            username
+            name
+            color
           }
         }
+      }
     }`
-      const res = await dgraphClient.newTxn().queryWithVars(query, {$a: request.id})
-      result.publications = res.getJson().publications
+      const res = await dgraphClient.newTxn().queryWithVars(query, {$a: request.uid})
+      result.publications = res.getJson().channel[0].publications
+      // normalize data
+      result.publications.forEach(pub => {
+        pub.activity = pub.activity[0]
+        pub.actor = pub.actor[0]
+        if (pub.activity.event) {
+          pub.activity.event = pub.activity.event[0]
+        } else if (pub.activity.message) {
+          pub.activity.message = pub.activity.message[0]
+        }
+      })
     }
     return result
   }

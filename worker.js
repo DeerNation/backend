@@ -58,7 +58,11 @@ class Worker extends SCWorker {
     app.use(bodyParser.json())
 
     // Create/Update RethinkDB schema
-    let crud = schema.create(this)
+    let crud = schema.create(this, () => {
+      // schema is ready
+      const transferChannelContent = require('./backend/convert')
+      transferChannelContent(schema)
+    })
 
     graphqlThinky.init(crud.thinky)
     if (environment === 'dev') {

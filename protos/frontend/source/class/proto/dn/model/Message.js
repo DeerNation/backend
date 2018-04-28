@@ -1,12 +1,13 @@
 
 /**
- * Message class generated from protobuf definition "model.proto".
+ * Message class generated from protobuf definition "protos/model.proto".
  * A Message is the basic activity content type: a simple message that can contain
  * anything encoded in a markdown notation.
  * auto-generated code PLEASE DO NOT EDIT!
  */
 qx.Class.define('proto.dn.model.Message', {
   extend: proto.core.BaseMessage,
+  include: [app.plugins.message.MMessage],
 
 
   /*
@@ -23,17 +24,24 @@ qx.Class.define('proto.dn.model.Message', {
      * @suppress {unusedLocalVariables} f is only used for nested messages
      */
     serializeBinaryToWriter: function (message, writer) {
-      var f = message.getMessage()
+      var f = message.getUid()
       if (f.length > 0) {
         writer.writeString(
           1,
           f
         )
       }
-      f = message.getLink()
+      f = message.getContent()
       if (f.length > 0) {
         writer.writeString(
           2,
+          f
+        )
+      }
+      f = message.getLink()
+      if (f.length > 0) {
+        writer.writeString(
+          3,
           f
         )
       }
@@ -68,9 +76,13 @@ qx.Class.define('proto.dn.model.Message', {
         switch (field) {
           case 1:
             value = reader.readString()
-            msg.setMessage(value)
+            msg.setUid(value)
             break
           case 2:
+            value = reader.readString()
+            msg.setContent(value)
+            break
+          case 3:
             value = reader.readString()
             msg.setLink(value)
             break
@@ -90,11 +102,18 @@ qx.Class.define('proto.dn.model.Message', {
   */
   properties: {
 
-    message: {
+    uid: {
       check: 'String',
       init: '',
       nullable: false,
-      event: 'changeMessage'
+      event: 'changeUid'
+    },
+
+    content: {
+      check: 'String',
+      init: '',
+      nullable: false,
+      event: 'changeContent'
     },
 
     link: {

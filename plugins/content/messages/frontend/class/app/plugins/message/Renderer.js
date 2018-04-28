@@ -70,31 +70,17 @@ qx.Class.define('app.plugins.message.Renderer', {
     // property apply
     _applyModel: function (value, old) {
       if (old) {
-        old.removeRelatedBindings(this.getChildControl('title'))
-        old.getContentObject() && old.getContentObject().removeRelatedBindings(this.getChildControl('message'))
-        old.removeListener('changedTitleUrl', this._onChangedTitleUrl, this)
+        old.getContent().removeRelatedBindings(this.getChildControl('message'))
+        old.getContent().removeRelatedBindings(this)
       }
       if (value) {
-        let control = this.getChildControl('title')
-        value.bind('displayTitle', this.getChildControl('title'), 'value', {
-          converter: function (value) {
-            if (value) {
-              control.show()
-            } else {
-              control.exclude()
-            }
-            return value
-          }
-        })
-        const content = value.getContentObject()
+        const content = value.getContent()
         if (content) {
           content.bind('displayMessage', this.getChildControl('message'), 'value')
           content.bind('link', this, 'link')
         } else {
           this.resetLink()
         }
-        value.addListener('changedTitleUrl', this._onChangedTitleUrl, this)
-        this._onChangedTitleUrl()
       } else {
         this.resetLink()
       }
@@ -119,6 +105,7 @@ qx.Class.define('app.plugins.message.Renderer', {
             this.setLinkMetadata(meta)
           }).catch(err => {
             this.error(err)
+            this.getChildControl('title').exclude()
           })
         }
       }
@@ -127,9 +114,11 @@ qx.Class.define('app.plugins.message.Renderer', {
     // property apply
     _applyLinkMetadata: function (value, old) {
       if (value) {
+        this.getChildControl('title').setValue(value.title || '')
         if (value.title) {
-          this.getChildControl('title').setValue(value.title)
           this.getChildControl('title').show()
+        } else {
+          this.getChildControl('title').exclude()
         }
         if (value.description) {
           this.getChildControl('message').setValue(value.description)
@@ -143,16 +132,7 @@ qx.Class.define('app.plugins.message.Renderer', {
         }
       } else {
         this.getChildControl('image').exclude()
-      }
-    },
-
-    _onChangedTitleUrl: function () {
-      if (this.getModel().getTitleUrl()) {
-        this.getChildControl('title').addState('link')
-        this.getChildControl('title').setToolTipText(this.getModel().getTitleUrl())
-      } else {
-        this.getChildControl('title').removeState('link')
-        this.getChildControl('title').resetToolTipText()
+        this.getChildControl('title').exclude()
       }
     },
 
@@ -161,8 +141,8 @@ qx.Class.define('app.plugins.message.Renderer', {
      * @protected
      */
     _onTitleTap: function () {
-      if (this.getModel().getTitleUrl()) {
-        window.open(this.getModel().getTitleUrl(), '_blank')
+      if (this.getLink()) {
+        window.open(this.getLink(), '_blank')
       }
     },
 

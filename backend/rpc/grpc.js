@@ -44,7 +44,7 @@ class GrpcServer {
   async _onRequest (path, data, response) {
     const service = this._services[path]
     const bytes = Uint8Array.from(Object.values(data))
-    console.log('executing ' + path)
+    logger.debug('executing ' + path)
     const result = await service.callback(this.socket.getAuthToken(), service.requestDeserialize(bytes))
     response(null, service.responseSerialize(result))
   }

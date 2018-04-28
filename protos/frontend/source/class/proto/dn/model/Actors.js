@@ -1,6 +1,6 @@
 
 /**
- * Actors class generated from protobuf definition "model.proto".
+ * Actors class generated from protobuf definition "protos/model.proto".
  * A List of subscriptions
  * auto-generated code PLEASE DO NOT EDIT!
  */

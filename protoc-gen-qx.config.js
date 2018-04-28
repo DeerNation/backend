@@ -15,6 +15,12 @@ module.exports = {
     },
     'proto.dn.model.Actor': {
       include: ['app.api.MActor']
+    },
+    'proto.dn.model.Message': {
+      include: ['app.plugins.message.MMessage']
+    },
+    'proto.dn.model.Event': {
+      include: ['app.plugins.event.MEvent']
     }
   },
   skipDeps: ['grpc-web-client.js'],

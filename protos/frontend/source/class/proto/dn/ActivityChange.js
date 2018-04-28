@@ -1,6 +1,6 @@
 
 /**
- * ActivityChange class generated from protobuf definition "api.proto".
+ * ActivityChange class generated from protobuf definition "protos/api.proto".
  * ActivityChange messages are the messages sent in a channel.
  * They contain either an update for an activity or an internal
  * status update for the channel, like a currently writing user state.
@@ -156,7 +156,7 @@ qx.Class.define('proto.dn.ActivityChange', {
      * oneOfIndex: 0
      */
     content: {
-      check: proto.core.BaseMessage,
+      check: 'proto.core.BaseMessage',
       init: null,
       event: 'changeContent'
     }

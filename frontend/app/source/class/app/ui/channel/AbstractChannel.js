@@ -72,7 +72,7 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
     },
 
     /**
-     * All Activities in this channel
+     * All Publications in this channel
      */
     activities: {
       check: 'qx.data.Array',
@@ -170,7 +170,7 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
           console.log(channelModel)
           this.setChannelAcls(channelModel.getChannelActions())
           this.setChannelActivitiesAcls(channelModel.getActivityActions())
-          activities.replace(channelModel.getPublications().map(x => x.getActivity()))
+          activities.replace(channelModel.getPublications())
           this.setActivities(activities)
           this.fireEvent('subscriptionApplied')
         })
@@ -182,7 +182,7 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
         //   this.setChannelActivitiesAcls(acls[1])
         //   if (this.getChannelActivitiesAcls().actions.includes('r')) {
         //     app.io.Rpc.getProxy().getChannelActivities(subscription.getChannelId(), subscription.getViewedUntil()).then(messages => {
-        //       const newActivities = app.model.Factory.createAll(messages, app.model.Activity, {
+        //       const newActivities = app.model.Factory.createAll(messages, proto.dn.model.Activity, {
         //         converter: function (model) {
         //           if (!model.published) {
         //             model.published = model.created
@@ -217,7 +217,7 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
     /**
      * Find activity by id
      * @param id {String} Activity ID
-     * @returns {app.model.Activity|null}
+     * @returns {proto.dn.model.Activity|null}
      * @protected
      */
     _findActivity: function (id) {
@@ -237,7 +237,7 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
      * @protected
      */
     _deleteActivity: function (ev) {
-      const activity = ev instanceof app.model.Activity ? ev : ev.getData()
+      const activity = ev instanceof proto.dn.model.Activity ? ev : ev.getData()
       if (this.isAllowed('d')) {
         app.io.Rpc.getProxy().deleteActivity(activity.getId()).then(res => {
           if (res === true) {
@@ -256,40 +256,40 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
     /**
      * Check is action is allowed in target
      * @param action {String} single action to check
-     * @param target {app.model.Activity} activity the action should be checked for
+     * @param target {proto.dn.model.Activity} activity the action should be checked for
      */
     isAllowed: function (action, target) {
       let acls, targetOwnerId
       if (!target) {
         target = this.getSubscription()
       }
-      if (target instanceof app.model.Activity) {
+      if (target instanceof proto.dn.model.Activity) {
         acls = this.getChannelActivitiesAcls()
-        targetOwnerId = target.getActorId()
+        targetOwnerId = target.getActor().getUid()
       } else if (target instanceof proto.dn.model.Subscription || target instanceof proto.dn.model.Channel) {
-        targetOwnerId = target.getChannel().getOwnerId()
+        targetOwnerId = target.getChannel().getOwner().getUid()
         acls = this.getChannelAcls()
       } else {
         this.error('unknown target type', target.classname)
         return false
       }
       let actionType = 'actions'
-      if (app.Model.getInstance().getActor() && targetOwnerId === app.Model.getInstance().getActor().getId()) {
+      if (app.Model.getInstance().getActor() && targetOwnerId === app.Model.getInstance().getActor().getUid()) {
         actionType = 'ownerActions'
       } else if (this.getSubscription() instanceof proto.dn.model.Subscription && this.getSubscription().getChannelId() === target.getChannelId()) {
         actionType = 'memberActions'
       }
-      this.debug(`checking ${actionType} acls for ${action} in ${acls[actionType]}`)
-      return acls[actionType].includes(action)
+      this.debug(`checking ${actionType} acls for ${action} in ${acls.get(actionType)}`)
+      return acls.get(actionType).includes(action)
     },
 
     /**
      * Share an activity (content) with other apps (only works in app context) or on other channels
-     * @param data {app.model.Activity|qx.data.Array|Event}
+     * @param data {proto.dn.model.Activity|qx.data.Array|Event}
      * @protected
      */
     _shareActivity: function (data) {
-      let activities = (data instanceof app.model.Activity || data instanceof qx.data.Array) ? data : data.getData()
+      let activities = (data instanceof proto.dn.model.Activity || data instanceof qx.data.Array) ? data : data.getData()
       if (!qx.lang.Type.isArray(activities)) {
         activities = [activities]
       }
@@ -337,7 +337,7 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
 
     /**
      * Open Activity editor
-     * @param activity {app.model.Activity}
+     * @param activity {proto.dn.model.Activity}
      * @proctected
      */
     _editActivity: function (activity) {
@@ -365,26 +365,26 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
 
           case 'u':
             // update
-            found = this._findActivity(payload.c.id)
+            found = this._findActivity(payload.c.getUid())
             if (found) {
-              this.debug('updating existing activity', payload.c.id)
-              found.set(payload.c)
+              this.debug('updating existing activity', payload.c.getUid())
+              found.set(qx.util.Serializer.toNativeObject(payload.c))
             } else {
               // add new activity
-              if (!payload.c.published) {
-                payload.c.published = payload.c.created
+              if (!payload.c.getPublished()) {
+                payload.c.setPublished(payload.c.getCreated())
               }
               this.debug('not activity to update found, creating new one')
-              this.getActivities().push(app.model.Factory.create(payload.c, app.model.Activity))
+              this.getActivities().push(payload.c)
             }
             this._debouncedFireEvent('refresh')
             break
 
           case 'a':
-            if (!payload.c.published) {
-              payload.c.published = payload.c.created
+            if (!payload.c.getPublished()) {
+              payload.c.setPublished(payload.c.getCreated())
             }
-            this.getActivities().push(app.model.Factory.create(payload.c, app.model.Activity))
+            this.getActivities().push(payload.c)
             this._debouncedFireEvent('refresh')
             break
 

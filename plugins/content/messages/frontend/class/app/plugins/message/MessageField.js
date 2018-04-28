@@ -77,14 +77,14 @@ qx.Class.define('app.plugins.message.MessageField', {
     // overridden
     _createContent: function () {
       return {
-        message: this.getChildControl('textfield').getValue()
+        content: this.getChildControl('textfield').getValue()
       }
     },
 
     // property apply
     _applyActivity: function (value) {
       if (value) {
-        this.getChildControl('textfield').setValue(value.getContent().message)
+        this.getChildControl('textfield').setValue(value.getContent().content)
       } else {
         this.getChildControl('textfield').resetValue()
       }

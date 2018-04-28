@@ -1,6 +1,6 @@
 
 /**
- * Uid class generated from protobuf definition "api.proto".
+ * Uid class generated from protobuf definition "protos/api.proto".
  *
  * auto-generated code PLEASE DO NOT EDIT!
  */
@@ -23,8 +23,8 @@ qx.Class.define('proto.dn.Uid', {
      */
     serializeBinaryToWriter: function (message, writer) {
       var f = message.getUid()
-      if (f !== 0) {
-        writer.writeUint64String(
+      if (f.length > 0) {
+        writer.writeString(
           1,
           f
         )
@@ -59,7 +59,7 @@ qx.Class.define('proto.dn.Uid', {
         var field = reader.getFieldNumber()
         switch (field) {
           case 1:
-            value = reader.readUint64String()
+            value = reader.readString()
             msg.setUid(value)
             break
           default:
@@ -80,10 +80,9 @@ qx.Class.define('proto.dn.Uid', {
 
     uid: {
       check: 'String',
-      init: 0,
+      init: '',
       nullable: false,
-      event: 'changeUid',
-      transform: '_toString'
+      event: 'changeUid'
     }
   }
 })

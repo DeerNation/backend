@@ -1,6 +1,6 @@
 
 /**
- * ChannelModel class generated from protobuf definition "api.proto".
+ * ChannelModel class generated from protobuf definition "protos/api.proto".
  * The ChannelModel contains:
  * - allowed actions for current user on channel
  * - allowed actions for current user on channel activities
@@ -10,6 +10,15 @@
 qx.Class.define('proto.dn.ChannelModel', {
   extend: proto.core.BaseMessage,
 
+  /*
+  *****************************************************************************
+     CONSTRUCTOR
+  *****************************************************************************
+  */
+  construct: function (props) {
+    this.initPublications(new qx.data.Array())
+    this.base(arguments, props)
+  },
 
   /*
   *****************************************************************************
@@ -25,12 +34,12 @@ qx.Class.define('proto.dn.ChannelModel', {
      * @suppress {unusedLocalVariables} f is only used for nested messages
      */
     serializeBinaryToWriter: function (message, writer) {
-      var f = message.getPublications()
+      var f = message.getPublications().toArray()
       if (f != null) {
-        writer.writeMessage(
+        writer.writeRepeatedMessage(
           1,
           f,
-          proto.dn.model.Publications.serializeBinaryToWriter
+          proto.dn.model.Publication.serializeBinaryToWriter
         )
       }
       f = message.getChannelActions()
@@ -79,9 +88,9 @@ qx.Class.define('proto.dn.ChannelModel', {
         var field = reader.getFieldNumber()
         switch (field) {
           case 1:
-            value = new proto.dn.model.Publications()
-            reader.readMessage(value, proto.dn.model.Publications.deserializeBinaryFromReader)
-            msg.setPublications(value)
+            value = new proto.dn.model.Publication()
+            reader.readMessage(value, proto.dn.model.Publication.deserializeBinaryFromReader)
+            msg.getPublications().push(value)
             break
           case 2:
             value = new proto.dn.model.AclActions()
@@ -109,10 +118,12 @@ qx.Class.define('proto.dn.ChannelModel', {
   */
   properties: {
 
+    /**
+     * @type {qx.data.Array} array of {@link proto.dn.model.Publication}
+     */
     publications: {
-      check: 'proto.dn.model.Publications',
-      init: null,
-      nullable: true,
+      check: 'qx.data.Array',
+      deferredInit: true,
       event: 'changePublications'
     },
 

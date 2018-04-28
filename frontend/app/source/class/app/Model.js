@@ -181,10 +181,10 @@ qx.Class.define('app.Model', {
         socket.addListener('changeAuthenticated', ev => {
           let payload = null
           if (ev.getData() === true) {
-            payload = {id: this.getActor().getId(), online: true}
+            payload = {id: this.getActor().getUid(), online: true}
           } else if (ev.getOldData() === true) {
             // we have been authenticated but not any more, tell the world
-            payload = {id: this.getActor().getId(), online: false}
+            payload = {id: this.getActor().getUid(), online: false}
           }
           if (payload) {
             socket.emit('$INT.users', payload)
@@ -216,7 +216,7 @@ qx.Class.define('app.Model', {
       //       this._onUpdate.bind(this, 'subscription')
       //     )
       //   } else if (this.getActor()) {
-      //     socket.unsubscribe('crud>mySubscriptions(' + qx.lang.Json.stringify({actorId: this.getActor().getid()}) + '):Subscription')
+      //     socket.unsubscribe('crud>mySubscriptions(' + qx.lang.Json.stringify({actorId: this.getActor().getUid()}) + '):Subscription')
       //     this.resetActor()
       //   }
       // })

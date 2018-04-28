@@ -92,7 +92,7 @@ qx.Class.define('app.ui.form.ActivityItem', {
     },
 
     author: {
-      check: 'app.model.Actor',
+      check: 'proto.dn.model.Actor',
       init: null,
       apply: '_applyAuthor'
     },
@@ -156,20 +156,20 @@ qx.Class.define('app.ui.form.ActivityItem', {
       }
       if (value) {
         const container = this.getChildControl('content-container')
-        const type = value.getType().toLowerCase()
+        const type = value.getActivity().getContent().basename.toLowerCase()
         const currentRenderer = container.getSelection().length === 1 ? container.getSelection()[0] : null
         if (currentRenderer && currentRenderer.getType() === type) {
           // shortcut: the renderer can handle the type, so we just update the model
-          currentRenderer.setModel(value)
+          currentRenderer.setModel(value.getActivity())
         } else {
           const renderer = this._getRenderer(type)
-          renderer.setModel(value)
+          renderer.setModel(value.getActivity())
           if (container.indexOf(renderer) === -1) {
             container.add(renderer)
           }
           container.setSelection([renderer])
         }
-        if (app.Model.getInstance().getActor() && app.Model.getInstance().getActor().getId() === value.getActorId()) {
+        if (app.Model.getInstance().getActor() && app.Model.getInstance().getActor().getUid() === value.getActor().getUid()) {
           this.addState('own')
         } else {
           this.removeState('own')
@@ -234,10 +234,10 @@ qx.Class.define('app.ui.form.ActivityItem', {
       // }
       // } else {
       const isOwner = app.Model.getInstance().getSelectedSubscription() &&
-        app.Model.getInstance().getSelectedSubscription().getChannel().getOwnerId() === author.getId()
+        app.Model.getInstance().getSelectedSubscription().getChannel().getOwner().getUid() === author.getUid()
       // }
       if (app.Model.getInstance().getActor()) {
-        this.setDeletable(isOwner || app.Model.getInstance().getActor().isAdmin() || author.getId() === app.Model.getInstance().getActor().getId())
+        this.setDeletable(isOwner || app.Model.getInstance().getActor().isAdmin() || author.getUid() === app.Model.getInstance().getActor().getUid())
       } else {
         this.setDeletable(false)
       }
@@ -335,7 +335,7 @@ qx.Class.define('app.ui.form.ActivityItem', {
           control.addListener('execute', () => {
             this.fireDataEvent('activityAction', {
               action: 'd',
-              activity: this.getModel()
+              activity: this.getModel().getActivity()
             })
           })
           this.getChildControl('overlay').add(control)

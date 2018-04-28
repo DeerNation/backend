@@ -206,8 +206,8 @@ module.exports = {
     {
       uid: '0x16',
       topic: 'hbg\\.channel\\..+\\.private',
-      memberActions: 'rlpf',
-      ownerActions: 'ei',
+      memberActions: 'rlp',
+      ownerActions: 'e',
       roleTarget: {uid: '0x12'}
     },
     {

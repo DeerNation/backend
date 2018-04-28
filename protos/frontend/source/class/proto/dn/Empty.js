@@ -1,6 +1,6 @@
 
 /**
- * Empty class generated from protobuf definition "api.proto".
+ * Empty class generated from protobuf definition "protos/api.proto".
  *
  * auto-generated code PLEASE DO NOT EDIT!
  */
