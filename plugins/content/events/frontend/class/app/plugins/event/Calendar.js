@@ -37,7 +37,6 @@ qx.Class.define('app.plugins.event.Calendar', {
     }
   },
 
-
   /*
   ******************************************************
     MEMBERS
@@ -101,14 +100,14 @@ qx.Class.define('app.plugins.event.Calendar', {
       const acls = this.getChannelActivitiesAcls()
 
       this.getActivities().forEach(act => {
-        if (act.getType() === 'Event') {
-          const event = act.getContent()
+        const event = act.getActivity().getEvent()
+        if (event) {
           if (event.getEnd() >= startDate && event.getStart() <= endDate) {
             // workaround for wrong allDay events
             const data = Object.assign({
               title: event.getName(),
-              id: act.getId()
-            }, act.getContent())
+              id: act.getUid()
+            }, event)
             // use the parsed date objects
             data.start = event.getStart()
             data.end = event.getEnd()
@@ -118,7 +117,7 @@ qx.Class.define('app.plugins.event.Calendar', {
             }
             let aclTypeToCheck = 'actions'
             if (actor) {
-              if (actor.getId() === data.id) {
+              if (actor.getUid() === data.id) {
                 aclTypeToCheck = 'ownerActions'
               } else if (channelRelation === 'member') {
                 aclTypeToCheck = 'memberActions'
@@ -130,7 +129,7 @@ qx.Class.define('app.plugins.event.Calendar', {
           }
         }
       })
-      console.log(events)
+      // console.log(events)
       callback(events)
     },
 

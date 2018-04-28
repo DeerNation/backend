@@ -8,6 +8,15 @@ qx.Class.define('proto.dn.model.Channel', {
   extend: proto.core.BaseMessage,
   include: [app.api.MChannel],
 
+  /*
+  *****************************************************************************
+     CONSTRUCTOR
+  *****************************************************************************
+  */
+  construct: function (props) {
+    this.initAllowedActivityTypes(new qx.data.Array())
+    this.base(arguments, props)
+  },
 
   /*
   *****************************************************************************
@@ -81,6 +90,20 @@ qx.Class.define('proto.dn.model.Channel', {
           f
         )
       }
+      f = message.getAllowedActivityTypes()
+      if (f.length > 0) {
+        writer.writeRepeatedString(
+          8,
+          f
+        )
+      }
+      f = message.getView()
+      if (f.length > 0) {
+        writer.writeString(
+          9,
+          f
+        )
+      }
     },
 
     /**
@@ -138,6 +161,14 @@ qx.Class.define('proto.dn.model.Channel', {
           case 7:
             value = reader.readString()
             msg.setColor(value)
+            break
+          case 8:
+            value = reader.readString()
+            msg.getAllowedActivityTypes().push(value)
+            break
+          case 9:
+            value = reader.readString()
+            msg.setView(value)
             break
           default:
             reader.skipField()
@@ -205,6 +236,22 @@ qx.Class.define('proto.dn.model.Channel', {
       init: '',
       nullable: false,
       event: 'changeColor'
+    },
+
+    /**
+     * @type {qx.data.Array} array of {@link String}
+     */
+    allowedActivityTypes: {
+      check: 'qx.data.Array',
+      deferredInit: true,
+      event: 'changeAllowedActivityTypes'
+    },
+
+    view: {
+      check: 'String',
+      init: '',
+      nullable: false,
+      event: 'changeView'
     }
   }
 })

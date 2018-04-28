@@ -123,6 +123,8 @@ class DgraphService {
             description
             color
             favorite
+            view
+            allowedActivityTypes
             owner {
               uid
             }
@@ -149,6 +151,8 @@ class DgraphService {
       title
       description
       color
+      view
+      allowedActivityTypes
       owner {
         uid
       }

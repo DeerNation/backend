@@ -42,18 +42,6 @@ qx.Mixin.define('app.api.MChannel', {
       check: 'String',
       nullable: true,
       event: 'changedIcon'
-    },
-
-    view: {
-      check: function (value) {
-        return app.plugins.Registry.hasView(value)
-      },
-      init: 'channel'
-    },
-
-    allowedActivityTypes: {
-      check: 'Array',
-      nullable: true
     }
   },
 

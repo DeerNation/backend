@@ -99,6 +99,8 @@ message Channel {
     string description = 5;
     Actor owner = 6;
     string color = 7;
+    repeated string allowedActivityTypes = 8;
+    string view = 9;
 }
 
 message Actor {

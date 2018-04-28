@@ -101,7 +101,7 @@ qx.Class.define('app.ui.Main', {
         } else {
           // channel view is the default
           this.setShow('channel')
-          this.getChildControl('channel').setSubscription(subscription)
+          app.plugins.Registry.getViewInstance('channel').setSubscription(subscription)
         }
       }
     },
