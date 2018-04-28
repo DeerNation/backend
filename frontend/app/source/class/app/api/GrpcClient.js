@@ -39,7 +39,6 @@ qx.Class.define('app.api.GrpcClient', {
             if (err) {
               reject(err)
             } else {
-              console.log(service.responseType)
               resolve(service.responseType.deserializeBinary(res.data))
             }
           })

@@ -69,7 +69,7 @@ qx.Class.define('app.plugins.event.Calendar', {
     },
 
     // property apply
-    _applyActivities: function () {
+    _applyPublications: function () {
       if (this.__calendar) {
         this.__calendar.fullCalendar('refetchEvents')
       }
@@ -87,7 +87,7 @@ qx.Class.define('app.plugins.event.Calendar', {
 
     _getEvents: function (start, end, timezone, callback) {
       let events = []
-      if (!this.getSubscription() || !this.getActivities()) {
+      if (!this.getSubscription() || !this.getPublications()) {
         callback(events)
         return
       }
@@ -99,7 +99,7 @@ qx.Class.define('app.plugins.event.Calendar', {
 
       const acls = this.getChannelActivitiesAcls()
 
-      this.getActivities().forEach(act => {
+      this.getPublications().forEach(act => {
         const event = act.getActivity().getEvent()
         if (event) {
           if (event.getEnd() >= startDate && event.getStart() <= endDate) {
@@ -143,7 +143,7 @@ qx.Class.define('app.plugins.event.Calendar', {
     _onEventClick: function (calEvent, jsEvent, view) {
       const popup = this.getChildControl('popup')
       if (popup.getVisibility() !== 'visible') {
-        this.getActivities().some(act => {
+        this.getPublications().some(act => {
           if (act.getId() === calEvent.id) {
             this.getChildControl('renderer').setModel(act)
             return true

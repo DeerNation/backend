@@ -105,8 +105,8 @@ qx.Class.define('app.ui.channel.View', {
     },
 
     // property apply
-    _applyActivities: function (value) {
-      this.debug('activities applied')
+    _applyPublications: function (value) {
+      this.debug('Publications applied')
       if (this.hasChildControl('list')) {
         this.getChildControl('list').setModel(value)
         this.getChildControl('list').addListener('changeBottomReached', (ev) => {
@@ -130,7 +130,7 @@ qx.Class.define('app.ui.channel.View', {
      */
     _onSelectUp: function () {
       const selection = this.getChildControl('list').getSelection().getItem(0)
-      const activities = this.getActivities()
+      const activities = this.getPublications()
       let index = selection ? activities.indexOf(selection) : activities.getLength() - 1
       if (index > 0) {
         index--
@@ -144,7 +144,7 @@ qx.Class.define('app.ui.channel.View', {
      */
     _onSelectDown: function () {
       const selection = this.getChildControl('list').getSelection().getItem(0)
-      const activities = this.getActivities()
+      const activities = this.getPublications()
       let index = selection ? activities.indexOf(selection) : activities.getLength() - 1
       if (index + 1 < activities.getLength()) {
         index++

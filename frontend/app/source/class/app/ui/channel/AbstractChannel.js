@@ -74,11 +74,11 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
     /**
      * All Publications in this channel
      */
-    activities: {
+    publications: {
       check: 'qx.data.Array',
       init: null,
-      event: 'changeActivities',
-      apply: '_applyActivities'
+      event: 'changePublications',
+      apply: '_applyPublications'
     },
 
     selectedActivities: {
@@ -140,7 +140,7 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
     _onActivityDelete: function (ev) {
       const activity = ev.getData()
       if (activity.getChannelId() === this.getSubscription().getChannelId()) {
-        this.getActivities().remove(activity)
+        this.getPublications().remove(activity)
       }
     },
 
@@ -157,56 +157,22 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
       if (subscription) {
         this.__currentSCChannel = socket.getScChannel(subscription.getChannel().getId())
         // get all messages published on this channel (aka the history)
-        let activities = this.getActivities()
-        const initial = (activities === null)
+        let publications = this.getPublications()
+        const initial = (publications === null)
         if (initial) {
-          activities = new qx.data.Array()
+          publications = new qx.data.Array()
         }
         const service = new proto.dn.Com(socket)
         service.getChannelModel(new proto.dn.ChannelRequest({
           uid: subscription.getChannel().getUid(),
           channelId: subscription.getChannel().getId()
         })).then(channelModel => {
-          console.log(channelModel)
           this.setChannelAcls(channelModel.getChannelActions())
           this.setChannelActivitiesAcls(channelModel.getActivityActions())
-          activities.replace(channelModel.getPublications())
-          this.setActivities(activities)
+          publications.replace(channelModel.getPublications())
+          this.setPublications(publications)
           this.fireEvent('subscriptionApplied')
         })
-        // Promise.all([
-        //   app.io.Rpc.getProxy().getAllowedActions(subscription.getChannelId()),
-        //   app.io.Rpc.getProxy().getAllowedActions(subscription.getChannelId() + '.activities')
-        // ]).then(acls => {
-        //   this.setChannelAcls(acls[0])
-        //   this.setChannelActivitiesAcls(acls[1])
-        //   if (this.getChannelActivitiesAcls().actions.includes('r')) {
-        //     app.io.Rpc.getProxy().getChannelActivities(subscription.getChannelId(), subscription.getViewedUntil()).then(messages => {
-        //       const newActivities = app.model.Factory.createAll(messages, proto.dn.model.Activity, {
-        //         converter: function (model) {
-        //           if (!model.published) {
-        //             model.published = model.created
-        //           }
-        //         }
-        //       })N
-        //       activities.replace(newActivities)
-        //       if (initial === true) {
-        //         this.setActivities(activities)
-        //       } else {
-        //         this.fireEvent('refresh')
-        //       }
-        //       this._subscribeToChannel(subscription.getChannel())
-        //       this.fireEvent('subscriptionApplied')
-        //     })
-        //   } else {
-        //     activities.removeAll()
-        //     if (initial === true) {
-        //       this.setActivities(activities)
-        //     }
-        //     this.fireEvent('subscriptionApplied')
-        //   }
-        // })
-
         this.getChildControl('header').setSubscription(subscription)
         this.getChildControl('header').show()
       } else {
@@ -222,7 +188,7 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
      */
     _findActivity: function (id) {
       let found = null
-      this.getActivities().some(act => {
+      this.getPublications().some(act => {
         if (act.getId() === id) {
           found = act
           return true
@@ -358,7 +324,7 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
             // delete
             found = this._findActivity(payload.c)
             if (found) {
-              this.getActivities().remove(found)
+              this.getPublications().remove(found)
             }
             this._debouncedFireEvent('refresh')
             break
@@ -375,7 +341,7 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
                 payload.c.setPublished(payload.c.getCreated())
               }
               this.debug('not activity to update found, creating new one')
-              this.getActivities().push(payload.c)
+              this.getPublications().push(payload.c)
             }
             this._debouncedFireEvent('refresh')
             break
@@ -384,7 +350,7 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
             if (!payload.c.getPublished()) {
               payload.c.setPublished(payload.c.getCreated())
             }
-            this.getActivities().push(payload.c)
+            this.getPublications().push(payload.c)
             this._debouncedFireEvent('refresh')
             break
 
@@ -492,7 +458,7 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
     },
 
     // property apply
-    _applyActivities: function (value) {
+    _applyPublications: function (value) {
     },
 
     /**
