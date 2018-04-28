@@ -18,6 +18,7 @@ const graphqlThinky = require('./backend/model/graphql-thinky')
 const graphqlHTTP = require('express-graphql')
 const pluginHandler = require('./backend/PluginHandler')
 const MetadataScraper = require('./backend/MetadataScraper')
+const dgraphClient = require('./backend/model/dgraph')
 
 class Worker extends SCWorker {
   run () {

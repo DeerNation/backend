@@ -32,6 +32,7 @@ const PROTO_PATH = path.join(__dirname, '/../../protos/api.proto')
 const grpc = require('grpc')
 const dn = grpc.load(PROTO_PATH).dn
 const grpcServer = require('./grpc')
+const {dgraphService} = require('../model/dgraph')
 
 class RpcServer {
   constructor () {
@@ -46,7 +47,10 @@ class RpcServer {
     grpcServer.upgradeToGrpc(socket)
 
     grpcServer.addService(dn.Com, {
-      getActivities: dbModule.getActivities
+      getPublications: dbModule.getActivities,
+      // getSubscriptions: dgraphService.getSubscriptions,
+      getModel: dgraphService.getModel,
+      getChannelModel: dgraphService.getChannelModel
     })
   }
 

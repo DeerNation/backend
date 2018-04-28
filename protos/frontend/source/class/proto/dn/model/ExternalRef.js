@@ -14,7 +14,6 @@ qx.Class.define('proto.dn.model.ExternalRef', {
   *****************************************************************************
   */
   statics: {
-
     /**
      * Serializes the given message to binary data (in protobuf wire
      * format), writing to the given BinaryWriter.

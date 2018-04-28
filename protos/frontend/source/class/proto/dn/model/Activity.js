@@ -8,16 +8,6 @@
 qx.Class.define('proto.dn.model.Activity', {
   extend: proto.core.BaseMessage,
 
-  /*
-  *****************************************************************************
-     CONSTRUCTOR
-  *****************************************************************************
-  */
-  construct: function (props) {
-    this.__oneOfs = []
-    this.__oneOfs[0] = ['message', 'event']
-    this.base(arguments, props)
-  },
 
   /*
   *****************************************************************************
@@ -25,7 +15,16 @@ qx.Class.define('proto.dn.model.Activity', {
   *****************************************************************************
   */
   statics: {
-
+    // array with oneOf property groups
+    ONEOFS: [],
+        
+    /**
+     * Returns the allowed type for the oneOf field 'content'.
+     * @returns {Array} array of type names as string
+     */
+    getAllowedTypesOfContent: function () {
+      return this.ONEOFS[0]
+    },
     /**
      * Serializes the given message to binary data (in protobuf wire
      * format), writing to the given BinaryWriter.
@@ -34,17 +33,10 @@ qx.Class.define('proto.dn.model.Activity', {
      * @suppress {unusedLocalVariables} f is only used for nested messages
      */
     serializeBinaryToWriter: function (message, writer) {
-      var f = message.getId()
-      if (f.length > 0) {
-        writer.writeString(
+      var f = message.getUid()
+      if (f !== 0) {
+        writer.writeUint64String(
           1,
-          f
-        )
-      }
-      f = message.getType()
-      if (f.length > 0) {
-        writer.writeString(
-          2,
           f
         )
       }
@@ -62,27 +54,20 @@ qx.Class.define('proto.dn.model.Activity', {
           f
         )
       }
-      f = message.getActorId()
-      if (f.length > 0) {
-        writer.writeString(
+      f = message.getActor()
+      if (f != null) {
+        writer.writeMessage(
           5,
-          f
+          f,
+          proto.dn.model.Actor.serializeBinaryToWriter
         )
       }
-
       f = message.getRef()
       if (f != null) {
         writer.writeMessage(
           6,
           f,
           proto.dn.model.ExternalRef.serializeBinaryToWriter
-        )
-      }
-      f = message.getChannelId()
-      if (f.length > 0) {
-        writer.writeString(
-          7,
-          f
         )
       }
       f = message.getMaster()
@@ -99,7 +84,6 @@ qx.Class.define('proto.dn.model.Activity', {
           f
         )
       }
-
       f = message.getMessage()
       if (f != null) {
         writer.writeMessage(
@@ -108,7 +92,6 @@ qx.Class.define('proto.dn.model.Activity', {
           proto.dn.model.Message.serializeBinaryToWriter
         )
       }
-
       f = message.getEvent()
       if (f != null) {
         writer.writeMessage(
@@ -147,12 +130,8 @@ qx.Class.define('proto.dn.model.Activity', {
         var field = reader.getFieldNumber()
         switch (field) {
           case 1:
-            value = reader.readString()
-            msg.setId(value)
-            break
-          case 2:
-            value = reader.readString()
-            msg.setType(value)
+            value = reader.readUint64String()
+            msg.setUid(value)
             break
           case 3:
             value = reader.readString()
@@ -163,17 +142,14 @@ qx.Class.define('proto.dn.model.Activity', {
             msg.setHash(value)
             break
           case 5:
-            value = reader.readString()
-            msg.setActorId(value)
+            value = new proto.dn.model.Actor()
+            reader.readMessage(value, proto.dn.model.Actor.deserializeBinaryFromReader)
+            msg.setActor(value)
             break
           case 6:
             value = new proto.dn.model.ExternalRef()
             reader.readMessage(value, proto.dn.model.ExternalRef.deserializeBinaryFromReader)
             msg.setRef(value)
-            break
-          case 7:
-            value = reader.readString()
-            msg.setChannelId(value)
             break
           case 8:
             value = reader.readBool()
@@ -209,18 +185,12 @@ qx.Class.define('proto.dn.model.Activity', {
   */
   properties: {
 
-    id: {
+    uid: {
       check: 'String',
-      init: '',
+      init: 0,
       nullable: false,
-      event: 'changeId'
-    },
-
-    type: {
-      check: 'String',
-      init: '',
-      nullable: false,
-      event: 'changeType'
+      event: 'changeUid',
+      transform: '_toString'
     },
 
     created: {
@@ -237,11 +207,11 @@ qx.Class.define('proto.dn.model.Activity', {
       event: 'changeHash'
     },
 
-    actorId: {
-      check: 'String',
-      init: '',
-      nullable: false,
-      event: 'changeActorId'
+    actor: {
+      check: 'proto.dn.model.Actor',
+      init: null,
+      nullable: true,
+      event: 'changeActor'
     },
 
     ref: {
@@ -249,13 +219,6 @@ qx.Class.define('proto.dn.model.Activity', {
       init: null,
       nullable: true,
       event: 'changeRef'
-    },
-
-    channelId: {
-      check: 'String',
-      init: '',
-      nullable: false,
-      event: 'changeChannelId'
     },
 
     master: {
@@ -292,7 +255,7 @@ qx.Class.define('proto.dn.model.Activity', {
      * oneOfIndex: 0
      */
     content: {
-      check: 'proto.core.BaseMessage',
+      check: proto.core.BaseMessage,
       init: null,
       event: 'changeContent'
     }
@@ -304,10 +267,7 @@ qx.Class.define('proto.dn.model.Activity', {
   *****************************************************************************
   */
   members: {
-
-    // array with oneOf property groups
-    __oneOfs: null,
-
+    
     // oneOf property apply
     _applyOneOf0: function (value, old, name) {
       if (value !== null) {
@@ -315,21 +275,28 @@ qx.Class.define('proto.dn.model.Activity', {
       }
 
       // reset all other values
-      this.__oneOfs[0].forEach(function (prop) {
+      proto.dn.model.Activity.ONEOFS[0].forEach(function (prop) {
         if (prop !== name) {
           this.reset(prop)
         }
       }, this)
     },
-
+    
+    /**
+     * Set value for oneOf field 'content'. Tries to detect the object type and call the correct setter.
+     * @param obj {Object}
+     */
     setOneOfContent: function (obj) {
       var type = obj.basename.toLowerCase()
-      if (this.__oneOfs[0].includes(type)) {
+      if (proto.dn.model.Activity.ONEOFS[0].includes(type)) {
         this.set(type, obj)
       } else {
-        throw new Error('type ' + type + ' is invalid for content, allowed types are: ' + this.__oneOfs[0].join(', '))
+        throw new Error('type ' + type + ' is invalid for content, allowed types are: ' + proto.dn.model.Activity.ONEOFS[0].join(', '))
       }
     }
-  }
+  },
 
+  defer: function (statics) {
+    statics.ONEOFS[0] = ['message', 'event']
+  }
 })

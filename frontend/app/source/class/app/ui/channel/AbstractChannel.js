@@ -64,7 +64,7 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
      */
     subscription: {
       check: function (value) {
-        return (value instanceof app.model.Subscription) || (value instanceof app.model.Channel)
+        return (value instanceof proto.dn.model.Subscription) || (value instanceof proto.dn.model.Channel)
       },
       nullable: true,
       event: 'changedSubscription',
@@ -155,45 +155,58 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
         }
       }
       if (subscription) {
-        this.__currentSCChannel = socket.getScChannel(subscription.getChannelId())
+        this.__currentSCChannel = socket.getScChannel(subscription.getChannel().getId())
         // get all messages published on this channel (aka the history)
         let activities = this.getActivities()
         const initial = (activities === null)
         if (initial) {
           activities = new qx.data.Array()
         }
-        Promise.all([
-          app.io.Rpc.getProxy().getAllowedActions(subscription.getChannelId()),
-          app.io.Rpc.getProxy().getAllowedActions(subscription.getChannelId() + '.activities')
-        ]).then(acls => {
-          this.setChannelAcls(acls[0])
-          this.setChannelActivitiesAcls(acls[1])
-          if (this.getChannelActivitiesAcls().actions.includes('r')) {
-            app.io.Rpc.getProxy().getChannelActivities(subscription.getChannelId(), subscription.getViewedUntil()).then(messages => {
-              const newActivities = app.model.Factory.createAll(messages, app.model.Activity, {
-                converter: function (model) {
-                  if (!model.published) {
-                    model.published = model.created
-                  }
-                }
-              })
-              activities.replace(newActivities)
-              if (initial === true) {
-                this.setActivities(activities)
-              } else {
-                this.fireEvent('refresh')
-              }
-              this._subscribeToChannel(subscription.getChannel())
-              this.fireEvent('subscriptionApplied')
-            })
-          } else {
-            activities.removeAll()
-            if (initial === true) {
-              this.setActivities(activities)
-            }
-            this.fireEvent('subscriptionApplied')
-          }
+        const service = new proto.dn.Com(socket)
+        service.getChannelModel(new proto.dn.ChannelRequest({
+          uid: subscription.getChannel().getUid(),
+          channelId: subscription.getChannel().getId()
+        })).then(channelModel => {
+          console.log(channelModel)
+          this.setChannelAcls(channelModel.getChannelActions())
+          this.setChannelActivitiesAcls(channelModel.getActivityActions())
+          activities.replace(channelModel.getPublications().map(x => x.getActivity()))
+          this.setActivities(activities)
+          this.fireEvent('subscriptionApplied')
         })
+        // Promise.all([
+        //   app.io.Rpc.getProxy().getAllowedActions(subscription.getChannelId()),
+        //   app.io.Rpc.getProxy().getAllowedActions(subscription.getChannelId() + '.activities')
+        // ]).then(acls => {
+        //   this.setChannelAcls(acls[0])
+        //   this.setChannelActivitiesAcls(acls[1])
+        //   if (this.getChannelActivitiesAcls().actions.includes('r')) {
+        //     app.io.Rpc.getProxy().getChannelActivities(subscription.getChannelId(), subscription.getViewedUntil()).then(messages => {
+        //       const newActivities = app.model.Factory.createAll(messages, app.model.Activity, {
+        //         converter: function (model) {
+        //           if (!model.published) {
+        //             model.published = model.created
+        //           }
+        //         }
+        //       })N
+        //       activities.replace(newActivities)
+        //       if (initial === true) {
+        //         this.setActivities(activities)
+        //       } else {
+        //         this.fireEvent('refresh')
+        //       }
+        //       this._subscribeToChannel(subscription.getChannel())
+        //       this.fireEvent('subscriptionApplied')
+        //     })
+        //   } else {
+        //     activities.removeAll()
+        //     if (initial === true) {
+        //       this.setActivities(activities)
+        //     }
+        //     this.fireEvent('subscriptionApplied')
+        //   }
+        // })
+
         this.getChildControl('header').setSubscription(subscription)
         this.getChildControl('header').show()
       } else {
@@ -253,7 +266,7 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
       if (target instanceof app.model.Activity) {
         acls = this.getChannelActivitiesAcls()
         targetOwnerId = target.getActorId()
-      } else if (target instanceof app.model.Subscription || target instanceof app.model.Channel) {
+      } else if (target instanceof proto.dn.model.Subscription || target instanceof proto.dn.model.Channel) {
         targetOwnerId = target.getChannel().getOwnerId()
         acls = this.getChannelAcls()
       } else {
@@ -263,7 +276,7 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
       let actionType = 'actions'
       if (app.Model.getInstance().getActor() && targetOwnerId === app.Model.getInstance().getActor().getId()) {
         actionType = 'ownerActions'
-      } else if (this.getSubscription() instanceof app.model.Subscription && this.getSubscription().getChannelId() === target.getChannelId()) {
+      } else if (this.getSubscription() instanceof proto.dn.model.Subscription && this.getSubscription().getChannelId() === target.getChannelId()) {
         actionType = 'memberActions'
       }
       this.debug(`checking ${actionType} acls for ${action} in ${acls[actionType]}`)
@@ -434,7 +447,7 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
 
     /**
      * Subscribe to the given channel if the user has the permission to to that.
-     * @param channel {app.model.Channel} channel to subscribe to
+     * @param channel {proto.dn.model.Channel} channel to subscribe to
      * @protected
      */
     _subscribeToChannel: function (channel) {

@@ -1,19 +1,88 @@
 syntax = "proto3";
 package dn;
 //import "google/protobuf/timestamp.proto";
+//import "google/protobuf/empty.proto";
 import "model.proto";
 
 service Com {
     /**
      * Subscribe to a channel and receive updates for it
      */
-    rpc subscribe(Channel) returns (stream ActivityChange);
-    rpc getActivities(Channel) returns (dn.model.Activities);
+    rpc subscribe(ChannelRequest) returns (stream ActivityChange);
+    rpc getPublications(ChannelRequest) returns (dn.model.Publications);
+    rpc publish(dn.model.Publication) returns (Response);
+//    rpc getSubscriptions(Uid) returns (dn.model.Subscriptions);
+
+    /**
+     * Retuns the complete model for the currently authenticated user.
+     * The model contains:
+     *  - the current actor (including its subscriptions)
+     *  - all other Actors
+     *  - all public channels
+     */
+    rpc getModel(Empty) returns (Model);
+
+    /**
+     * Returns the complete data needed to show the channels content.
+     */
+    rpc getChannelModel(ChannelRequest) returns (ChannelModel);
+
+    rpc setFirebaseToken(Token) returns (Response);
 }
 
-message Channel {
-    string id = 1;
-    string date = 2;
+message Model {
+    // the currently logged in Actor
+    dn.model.Actor me = 1;
+    // all available actors (e.g. for direct messaging)
+    repeated dn.model.Actor actors = 2;
+    // the public channels
+    repeated dn.model.Channel publicChannels = 4;
+}
+
+/**
+ * The ChannelModel contains:
+ *  - allowed actions for current user on channel
+ *  - allowed actions for current user on channel activities
+ *  - the channels publications
+ */
+message ChannelModel {
+    // publications in this channel
+    dn.model.Publications publications = 1;
+    // allowed actions of the current user for this channel
+    dn.model.AclActions channelActions = 2;
+    // allowed actions of the current user for activities in this channel
+    dn.model.AclActions activityActions = 3;
+}
+
+message Token {
+    string newToken = 1;
+    string oldToken = 2;
+}
+
+message Uid {
+    uint64 uid = 1;
+}
+
+message Empty {}
+
+message ChannelRequest {
+    // UID of the channel
+    uint64 uid = 1;
+    // channel name (as alternative to the uid)
+    string channelId = 2;
+    string date = 3;
+}
+
+/**
+ * Status response from backend
+ */
+message Response {
+    enum Code {
+        OK = 0;
+        ERROR = 1;
+    }
+    Code code = 1;
+    string message = 2;
 }
 
 /**
@@ -40,7 +109,7 @@ message ActivityChange {
  */
 message WritingUser {
     // user ID
-    string uid = 1;
+    uint64 uid = 1;
     // true if the user is currently writing, false if he has stopped writing
     bool done = 2;
 }

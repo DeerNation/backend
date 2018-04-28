@@ -36,6 +36,7 @@ qx.Class.define('app.model.AbstractModel', {
   construct: function (props) {
     this.base(arguments)
     if (props) {
+      delete props.baseName
       this._detachBackend = true
       this.set(props)
       this._detachBackend = false

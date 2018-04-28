@@ -3,10 +3,32 @@ syntax = "proto3";
 package dn.model;
 
 /**
- * A List of activities
+ * A List of publications
  */
-message Activities {
-    repeated Activity activities = 1;
+message Publications {
+    repeated Publication publications = 1;
+}
+
+/**
+ * A List of subscriptions
+ */
+message Subscriptions {
+    repeated Subscription subscriptions = 1;
+}
+
+/**
+ * A List of subscriptions
+ */
+message Actors {
+    repeated Actor actors = 1;
+}
+
+message Subscription {
+    uint64 uid = 1;
+    Channel channel = 2;
+    Actor actor = 3;
+    bool favorite = 4;
+    // TODO add notification settings
 }
 
 /**
@@ -15,18 +37,15 @@ message Activities {
 */
 message Activity {
     // UUID od the entry
-    string id = 1;
-    // content type
-    string type = 2;
+    uint64 uid = 1;
     // time of creation
     string created = 3;
     // content hash
     string hash = 4;
-    // UUID of the actor
-    string actorId = 5;
+    // creator of this activity
+    Actor actor = 5;
     // this activity might by originated by an external source, e.g. a facebook feed entry
     ExternalRef ref = 6;
-    string channelId = 7;
     bool master = 8;
     string published = 9;
     // content of the activity
@@ -51,18 +70,54 @@ message ExternalRef {
  */
 message Publication {
     // UUID of this entry
-    string id = 1;
-    // UUID of the actor
-    string actorId = 2;
-    // channel id
-    string channelId = 3;
-    // UUID of the activity
-    string activityId = 4;
+    uint64 uid = 1;
+    // The actor that created this publication
+    Actor actor = 2;
+    // The channel this publication has been published in
+    Channel channel = 3;
+    // The activity content of this publication
+    Activity activity = 4;
     // pubishing time
     string published = 5;
     // true if this is the initial pubishing of the activity
     // false if it e.g. has been published by a share in another channel, probably by another actor
     bool master = 6;
+}
+
+message Channel {
+    // DB UID
+    uint64 uid = 1;
+    // Full channel name
+    string id = 2;
+    enum Type {
+        PUBLIC = 0;
+        PRIVATE = 1;
+    }
+    Type type = 3;
+    string title = 4;
+    string description = 5;
+    Actor owner = 6;
+    string color = 7;
+}
+
+message Actor {
+    // UUID of this entry
+    uint64 uid = 1;
+    enum Type {
+        PERSON = 0;
+        SERVER = 1;
+        BOT = 2;
+    }
+    Type type = 2;
+    string username = 3;
+    string role = 4;
+    string name = 5;
+    string email = 6;
+    string color = 7;
+    string locale = 8;
+    repeated Subscription subscriptions = 9;
+    bool online = 10;
+    string status = 11;
 }
 
 /**
@@ -87,4 +142,10 @@ message Event {
     repeated string categories = 5;
     string organizer = 6;
     string description = 7;
+}
+
+message AclActions {
+    string actions = 1;
+    string memberActions = 2;
+    string ownerActions = 3;
 }

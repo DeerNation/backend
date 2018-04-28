@@ -107,6 +107,7 @@ qx.Class.define('app.Application', {
       if (app.Config.target === 'mobile') {
         qx.theme.manager.Meta.getInstance().setTheme(app.mobile.theme.Theme)
       }
+
       /*
      -------------------------------------------------------------------------
        Init socketcluster connection
@@ -115,35 +116,11 @@ qx.Class.define('app.Application', {
       this.__socket = app.io.Socket.getInstance()
       const main = this.__main = new (app.Config.getTargetClass('app.ui.Main'))()
 
-      // RPC test
-      // if (this.__socket.isAuthenticated()) {
-      //   app.Model.getInstance().init()
-      // } else {
-      //   const lid = this.__socket.addListener('changeAuthenticated', function (ev) {
-      //     if (ev.getData() === true) {
-      //       app.Model.getInstance().init()
-      //       this.__socket.removeListenerById(lid)
-      //     }
-      //   }, this)
-      // }
-
       // Document is the application root
       let doc = this.getRoot()
       doc.setBackgroundColor('background')
 
       doc.add(main, {edge: 0})
-      this.test()
-    },
-
-    test: function () {
-      const service = new proto.dn.Com(this.__socket)
-      service.getActivities(new proto.dn.Channel({
-        id: 'hbg.channel.news.public'
-      })).then(activities => {
-        console.log(activities)
-      }).catch(err => {
-        console.error(err)
-      })
     },
 
     getMain: function () {

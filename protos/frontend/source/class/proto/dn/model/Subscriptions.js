@@ -1,12 +1,21 @@
 
 /**
- * WritingUser class generated from protobuf definition "api.proto".
- * User currently writing in channel status.
+ * Subscriptions class generated from protobuf definition "model.proto".
+ * A List of subscriptions
  * auto-generated code PLEASE DO NOT EDIT!
  */
-qx.Class.define('proto.dn.WritingUser', {
+qx.Class.define('proto.dn.model.Subscriptions', {
   extend: proto.core.BaseMessage,
 
+  /*
+  *****************************************************************************
+     CONSTRUCTOR
+  *****************************************************************************
+  */
+  construct: function (props) {
+    this.initSubscriptions(new qx.data.Array())
+    this.base(arguments, props)
+  },
 
   /*
   *****************************************************************************
@@ -22,18 +31,12 @@ qx.Class.define('proto.dn.WritingUser', {
      * @suppress {unusedLocalVariables} f is only used for nested messages
      */
     serializeBinaryToWriter: function (message, writer) {
-      var f = message.getUid()
-      if (f !== 0) {
-        writer.writeUint64String(
-          1,
-          f
-        )
-      }
-      f = message.getDone()
+      var f = message.getSubscriptions().toArray()
       if (f != null) {
-        writer.writeBool(
-          2,
-          f
+        writer.writeRepeatedMessage(
+          1,
+          f,
+          proto.dn.model.Subscription.serializeBinaryToWriter
         )
       }
     },
@@ -41,20 +44,20 @@ qx.Class.define('proto.dn.WritingUser', {
     /**
      * Deserializes binary data (in protobuf wire format).
      * @param bytes {jspb.ByteSource} The bytes to deserialize.
-     * @return {proto.dn.WritingUser}
+     * @return {proto.dn.model.Subscriptions}
      */
     deserializeBinary: function (bytes) {
       var reader = new jspb.BinaryReader(bytes)
-      var msg = new proto.dn.WritingUser()
-      return proto.dn.WritingUser.deserializeBinaryFromReader(msg, reader)
+      var msg = new proto.dn.model.Subscriptions()
+      return proto.dn.model.Subscriptions.deserializeBinaryFromReader(msg, reader)
     },
 
     /**
      * Deserializes binary data (in protobuf wire format) from the
      * given reader into the given message object.
-     * @param msg {proto.dn.WritingUser} The message object to deserialize into.
+     * @param msg {proto.dn.model.Subscriptions} The message object to deserialize into.
      * @param reader {jspb.BinaryReader} The BinaryReader to use.
-     * @return {proto.dn.WritingUser}
+     * @return {proto.dn.model.Subscriptions}
      */
     deserializeBinaryFromReader: function (msg, reader) {
       msg.setDeserialized(true)
@@ -66,12 +69,9 @@ qx.Class.define('proto.dn.WritingUser', {
         var field = reader.getFieldNumber()
         switch (field) {
           case 1:
-            value = reader.readUint64String()
-            msg.setUid(value)
-            break
-          case 2:
-            value = reader.readBool()
-            msg.setDone(value)
+            value = new proto.dn.model.Subscription()
+            reader.readMessage(value, proto.dn.model.Subscription.deserializeBinaryFromReader)
+            msg.getSubscriptions().push(value)
             break
           default:
             reader.skipField()
@@ -89,19 +89,13 @@ qx.Class.define('proto.dn.WritingUser', {
   */
   properties: {
 
-    uid: {
-      check: 'String',
-      init: 0,
-      nullable: false,
-      event: 'changeUid',
-      transform: '_toString'
-    },
-
-    done: {
-      check: 'Boolean',
-      init: false,
-      nullable: false,
-      event: 'changeDone'
+    /**
+     * @type {qx.data.Array} array of {@link proto.dn.model.Subscription}
+     */
+    subscriptions: {
+      check: 'qx.data.Array',
+      deferredInit: true,
+      event: 'changeSubscriptions'
     }
   }
 })

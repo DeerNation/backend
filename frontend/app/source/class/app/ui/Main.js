@@ -67,7 +67,7 @@ qx.Class.define('app.ui.Main', {
      */
     subscription: {
       check: function (value) {
-        return (value instanceof app.model.Subscription) || (value instanceof app.model.Channel)
+        return (value instanceof proto.dn.model.Subscription) || (value instanceof proto.dn.model.Channel)
       },
       nullable: true,
       event: 'changedSubscription',

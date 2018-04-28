@@ -1,12 +1,12 @@
 
 /**
- * Publication class generated from protobuf definition "model.proto".
- * A Publication describes the relation of an activity that has been published
- * by an acton in a channel.
+ * Channel class generated from protobuf definition "model.proto".
+ *
  * auto-generated code PLEASE DO NOT EDIT!
  */
-qx.Class.define('proto.dn.model.Publication', {
+qx.Class.define('proto.dn.model.Channel', {
   extend: proto.core.BaseMessage,
+  include: [app.api.MChannel],
 
 
   /*
@@ -15,6 +15,14 @@ qx.Class.define('proto.dn.model.Publication', {
   *****************************************************************************
   */
   statics: {
+    
+    /**
+     * @enum
+     */
+    Type: {
+      PUBLIC: 0,
+      PRIVATE: 1
+    },
     /**
      * Serializes the given message to binary data (in protobuf wire
      * format), writing to the given BinaryWriter.
@@ -30,41 +38,46 @@ qx.Class.define('proto.dn.model.Publication', {
           f
         )
       }
-      f = message.getActor()
-      if (f != null) {
-        writer.writeMessage(
+      f = message.getId()
+      if (f.length > 0) {
+        writer.writeString(
           2,
-          f,
-          proto.dn.model.Actor.serializeBinaryToWriter
+          f
         )
       }
-      f = message.getChannel()
-      if (f != null) {
-        writer.writeMessage(
+      f = message.getType()
+      if (f !== 0.0) {
+        writer.writeEnum(
           3,
-          f,
-          proto.dn.model.Channel.serializeBinaryToWriter
+          f
         )
       }
-      f = message.getActivity()
-      if (f != null) {
-        writer.writeMessage(
+      f = message.getTitle()
+      if (f.length > 0) {
+        writer.writeString(
           4,
-          f,
-          proto.dn.model.Activity.serializeBinaryToWriter
+          f
         )
       }
-      f = message.getPublished()
+      f = message.getDescription()
       if (f.length > 0) {
         writer.writeString(
           5,
           f
         )
       }
-      f = message.getMaster()
+      f = message.getOwner()
       if (f != null) {
-        writer.writeBool(
+        writer.writeMessage(
           6,
+          f,
+          proto.dn.model.Actor.serializeBinaryToWriter
+        )
+      }
+      f = message.getColor()
+      if (f.length > 0) {
+        writer.writeString(
+          7,
           f
         )
       }
@@ -73,20 +86,20 @@ qx.Class.define('proto.dn.model.Publication', {
     /**
      * Deserializes binary data (in protobuf wire format).
      * @param bytes {jspb.ByteSource} The bytes to deserialize.
-     * @return {proto.dn.model.Publication}
+     * @return {proto.dn.model.Channel}
      */
     deserializeBinary: function (bytes) {
       var reader = new jspb.BinaryReader(bytes)
-      var msg = new proto.dn.model.Publication()
-      return proto.dn.model.Publication.deserializeBinaryFromReader(msg, reader)
+      var msg = new proto.dn.model.Channel()
+      return proto.dn.model.Channel.deserializeBinaryFromReader(msg, reader)
     },
 
     /**
      * Deserializes binary data (in protobuf wire format) from the
      * given reader into the given message object.
-     * @param msg {proto.dn.model.Publication} The message object to deserialize into.
+     * @param msg {proto.dn.model.Channel} The message object to deserialize into.
      * @param reader {jspb.BinaryReader} The BinaryReader to use.
-     * @return {proto.dn.model.Publication}
+     * @return {proto.dn.model.Channel}
      */
     deserializeBinaryFromReader: function (msg, reader) {
       msg.setDeserialized(true)
@@ -102,27 +115,29 @@ qx.Class.define('proto.dn.model.Publication', {
             msg.setUid(value)
             break
           case 2:
-            value = new proto.dn.model.Actor()
-            reader.readMessage(value, proto.dn.model.Actor.deserializeBinaryFromReader)
-            msg.setActor(value)
+            value = reader.readString()
+            msg.setId(value)
             break
           case 3:
-            value = new proto.dn.model.Channel()
-            reader.readMessage(value, proto.dn.model.Channel.deserializeBinaryFromReader)
-            msg.setChannel(value)
+            value = reader.readEnum()
+            msg.setType(value)
             break
           case 4:
-            value = new proto.dn.model.Activity()
-            reader.readMessage(value, proto.dn.model.Activity.deserializeBinaryFromReader)
-            msg.setActivity(value)
+            value = reader.readString()
+            msg.setTitle(value)
             break
           case 5:
             value = reader.readString()
-            msg.setPublished(value)
+            msg.setDescription(value)
             break
           case 6:
-            value = reader.readBool()
-            msg.setMaster(value)
+            value = new proto.dn.model.Actor()
+            reader.readMessage(value, proto.dn.model.Actor.deserializeBinaryFromReader)
+            msg.setOwner(value)
+            break
+          case 7:
+            value = reader.readString()
+            msg.setColor(value)
             break
           default:
             reader.skipField()
@@ -148,39 +163,49 @@ qx.Class.define('proto.dn.model.Publication', {
       transform: '_toString'
     },
 
-    actor: {
-      check: 'proto.dn.model.Actor',
-      init: null,
-      nullable: true,
-      event: 'changeActor'
-    },
-
-    channel: {
-      check: 'proto.dn.model.Channel',
-      init: null,
-      nullable: true,
-      event: 'changeChannel'
-    },
-
-    activity: {
-      check: 'proto.dn.model.Activity',
-      init: null,
-      nullable: true,
-      event: 'changeActivity'
-    },
-
-    published: {
+    id: {
       check: 'String',
       init: '',
       nullable: false,
-      event: 'changePublished'
+      event: 'changeId'
     },
 
-    master: {
-      check: 'Boolean',
-      init: false,
+    /**
+     * Enum of type {@link proto.dn.model.Channel.Type}
+     */
+    type: {
+      check: 'Number',
+      init: 0,
       nullable: false,
-      event: 'changeMaster'
+      event: 'changeType'
+    },
+
+    title: {
+      check: 'String',
+      init: '',
+      nullable: false,
+      event: 'changeTitle'
+    },
+
+    description: {
+      check: 'String',
+      init: '',
+      nullable: false,
+      event: 'changeDescription'
+    },
+
+    owner: {
+      check: 'proto.dn.model.Actor',
+      init: null,
+      nullable: true,
+      event: 'changeOwner'
+    },
+
+    color: {
+      check: 'String',
+      init: '',
+      nullable: false,
+      event: 'changeColor'
     }
   }
 })

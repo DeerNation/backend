@@ -26,7 +26,7 @@ qx.Class.define('app.plugins.AbstractContentForm', {
   */
   properties: {
     channel: {
-      check: 'app.model.Channel',
+      check: 'proto.dn.model.Channel',
       nullable: true,
       event: 'changeChannel',
       dereference: true

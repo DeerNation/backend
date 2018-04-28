@@ -62,10 +62,10 @@ qx.Class.define('app.ui.list.Subscriptions', {
             return qx.locale.Manager.tr('Favorites')
           }
           switch (subscription.getChannel().getType()) {
-            case 'PUBLIC':
+            case proto.dn.model.Channel.Type.PUBLIC:
               return qx.locale.Manager.tr('Channels')
 
-            case 'PRIVATE':
+            case proto.dn.Channel.Type.PRIVATE:
               return qx.locale.Manager.tr('Private channels')
           }
         },
@@ -87,8 +87,8 @@ qx.Class.define('app.ui.list.Subscriptions', {
             }
           } else if (b.isFavorite()) {
             return 1
-          } else if (a.getChannel().getType() === 'PUBLIC') {
-            if (b.getChannel().getType() === 'PUBLIC') {
+          } else if (a.getChannel().getType() === proto.dn.model.Channel.Type.PUBLIC) {
+            if (b.getChannel().getType() === proto.dn.model.Channel.Type.PUBLIC) {
               return a.getChannel().getTitle().localeCompare(b.getChannel().getTitle())
             } else {
               return -1

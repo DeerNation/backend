@@ -23,11 +23,11 @@
  * @author tobiasb
  * @since 2018
  */
-const bcrypt = require('bcryptjs')
 const logger = require('./logger')(__filename)
 const config = require('./config')
 const i18n = require('i18n')
 const acl = require('./acl')
+const {dgraphService} = require('./model/dgraph')
 
 module.exports = function (socket, scServer, callback) {
   socket.on('login', async function (credentials, respond) {
@@ -35,26 +35,19 @@ module.exports = function (socket, scServer, callback) {
     try {
       await acl.check(null, config.domain + '.rpc.login', acl.action.EXECUTE)
 
-      scServer.thinky.r.table('Actor').filter({username: credentials.username}).run((err, results) => {
-        if (err) {
-          logger.error('Error searching Actor: ', err)
-        }
-        const userRow = results[0]
-        let isValidLogin = userRow && bcrypt.compareSync(credentials.password, userRow.password)
-
-        if (isValidLogin) {
-          respond()
-
-          // This will give the client a token so that they won't
-          // have to login again if they lose their connection
-          // or revisit the app at a later time.
-          socket.setAuthToken({user: userRow.id})
-          callback && callback(userRow.id)
-        } else {
-          // Passing string as first argument indicates error
-          respond('Login failed')
-        }
-      })
+      const uid = await dgraphService.authenticate(credentials.username, credentials.password)
+      console.log(uid)
+      if (uid !== false) {
+        // This will give the client a token so that they won't
+        // have to login again if they lose their connection
+        // or revisit the app at a later time.
+        socket.setAuthToken({user: uid})
+        callback && callback(uid)
+        respond()
+      } else {
+        // Passing string as first argument indicates error
+        respond('Login failed')
+      }
     } catch (e) {
       respond(e)
     }

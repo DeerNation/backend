@@ -24,6 +24,7 @@
  * @since 2018
  */
 const schema = require('./model/schema')
+const dgraphClient = require('./model/dgraph').client
 const i18n = require('i18n')
 const logger = require('./logger')(__filename)
 
@@ -79,20 +80,56 @@ module.exports = {
     } else {
       // get roles for user
       let roles = ['guest']
-      if (userId) {
-        // get the actors main role
-        const mainRole = await schema.getModel('Actor').get(userId).run()
-        roles.push(mainRole.role)
-
-        // get all other roles the actor is associated to
-        const userRoles = await schema.getModel('ACLRole').filter(role => {
-          return role('members').contains(userId).and(role('id').eq(mainRole.role).not())
-        }).orderBy(r.asc('weight')).run()
-        userRoles.forEach(userRole => {
-          roles.push(userRole.id)
-        })
+      const fragment = `
+      fragment AclEntry {
+        topic
+        actions
+        ownerActions
+        memberActions
       }
-      if (roles.includes('admin')) {
+      `
+      let query = `
+      guestRole(func: eq(id, "guest")) @filter(eq(baseName, "ACLRole")) {
+        entries : ~roleTarget {
+          ...AclEntry
+        }
+      }
+      `
+      if (userId) {
+        query += `
+          adminRole(func: uid($a))  {
+            roles @filter(eq(id, "admin")) {
+              uid
+            }
+          }
+          
+          acl(func: uid($a)) {
+            roles (orderasc: weight) {
+              entries : ~roleTarget {
+                ...AclEntry
+              }
+            }
+          }
+        `
+        // // get the actors main role
+        // const mainRole = await schema.getModel('Actor').get(userId).run()
+        // roles.push(mainRole.role)
+        //
+        // // get all other roles the actor is associated to
+        // const userRoles = await schema.getModel('ACLRole').filter(role => {
+        //   return role('members').contains(userId).and(role('id').eq(mainRole.role).not())
+        // }).orderBy(r.asc('weight')).run()
+        // userRoles.forEach(userRole => {
+        //   roles.push(userRole.id)
+        // })
+      }
+      query = `query acl($a: string) {
+          ${query}
+        }` + fragment
+      const res = await dgraphClient.newTxn().queryWithVars(query, {$a: userId})
+      const model = res.getJson()
+      // console.log(JSON.stringify(model, null, 2))
+      if (model.adminRole.length > 0) {
         const all = Object.values(action).join('')
         acl = {
           actions: all,
@@ -102,12 +139,26 @@ module.exports = {
         this.__cache[cacheId] = acl
         return acl
       }
+
+      aclEntries = model.guestRole[0].entries.filter(entry => {
+        return (new RegExp(entry.topic)).test(topic)
+      })
+      if (model.acl.length > 0 && model.acl[0].roles.length > 0) {
+        model.acl[0].roles.forEach(role => {
+          role.entries.forEach(entry => {
+            if ((new RegExp(entry.topic)).test(topic)) {
+              aclEntries.push(entry)
+            }
+          })
+        })
+      }
+
       logger.debug('Roles: %s, Topic: %s, CacheID: %s', roles, topic, cacheId)
-      aclEntries = await schema.getModel('ACLEntry').filter(entry => {
-        return entry('targetType').eq('role')
-          .and(r.expr(roles).contains(entry('target')))
-          .and(r.expr(topic).match(entry('topic')))
-      }).run()
+      // aclEntries = await schema.getModel('ACLEntry').filter(entry => {
+      //   return entry('targetType').eq('role')
+      //     .and(r.expr(roles).contains(entry('target')))
+      //     .and(r.expr(topic).match(entry('topic')))
+      // }).run()
     }
     logger.debug('found ACL entries: %o', aclEntries)
 

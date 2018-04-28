@@ -1,11 +1,12 @@
 
 /**
- * Event class generated from protobuf definition "model.proto".
- * An Event is a date related activity with a start and end date.
+ * Actor class generated from protobuf definition "model.proto".
+ *
  * auto-generated code PLEASE DO NOT EDIT!
  */
-qx.Class.define('proto.dn.model.Event', {
+qx.Class.define('proto.dn.model.Actor', {
   extend: proto.core.BaseMessage,
+  include: [app.api.MActor],
 
   /*
   *****************************************************************************
@@ -13,7 +14,7 @@ qx.Class.define('proto.dn.model.Event', {
   *****************************************************************************
   */
   construct: function (props) {
-    this.initCategories(new qx.data.Array())
+    this.initSubscriptions(new qx.data.Array())
     this.base(arguments, props)
   },
 
@@ -23,6 +24,15 @@ qx.Class.define('proto.dn.model.Event', {
   *****************************************************************************
   */
   statics: {
+    
+    /**
+     * @enum
+     */
+    Type: {
+      PERSON: 0,
+      SERVER: 1,
+      BOT: 2
+    },
     /**
      * Serializes the given message to binary data (in protobuf wire
      * format), writing to the given BinaryWriter.
@@ -31,52 +41,81 @@ qx.Class.define('proto.dn.model.Event', {
      * @suppress {unusedLocalVariables} f is only used for nested messages
      */
     serializeBinaryToWriter: function (message, writer) {
-      var f = message.getName()
-      if (f.length > 0) {
-        writer.writeString(
+      var f = message.getUid()
+      if (f !== 0) {
+        writer.writeUint64String(
           1,
           f
         )
       }
-      f = message.getLocation()
-      if (f.length > 0) {
-        writer.writeString(
+      f = message.getType()
+      if (f !== 0.0) {
+        writer.writeEnum(
           2,
           f
         )
       }
-      f = message.getStart()
+      f = message.getUsername()
       if (f.length > 0) {
         writer.writeString(
           3,
           f
         )
       }
-      f = message.getEnd()
+      f = message.getRole()
       if (f.length > 0) {
         writer.writeString(
           4,
           f
         )
       }
-      f = message.getCategories()
+      f = message.getName()
       if (f.length > 0) {
-        writer.writeRepeatedString(
+        writer.writeString(
           5,
           f
         )
       }
-      f = message.getOrganizer()
+      f = message.getEmail()
       if (f.length > 0) {
         writer.writeString(
           6,
           f
         )
       }
-      f = message.getDescription()
+      f = message.getColor()
       if (f.length > 0) {
         writer.writeString(
           7,
+          f
+        )
+      }
+      f = message.getLocale()
+      if (f.length > 0) {
+        writer.writeString(
+          8,
+          f
+        )
+      }
+      f = message.getSubscriptions().toArray()
+      if (f != null) {
+        writer.writeRepeatedMessage(
+          9,
+          f,
+          proto.dn.model.Subscription.serializeBinaryToWriter
+        )
+      }
+      f = message.getOnline()
+      if (f != null) {
+        writer.writeBool(
+          10,
+          f
+        )
+      }
+      f = message.getStatus()
+      if (f.length > 0) {
+        writer.writeString(
+          11,
           f
         )
       }
@@ -85,20 +124,20 @@ qx.Class.define('proto.dn.model.Event', {
     /**
      * Deserializes binary data (in protobuf wire format).
      * @param bytes {jspb.ByteSource} The bytes to deserialize.
-     * @return {proto.dn.model.Event}
+     * @return {proto.dn.model.Actor}
      */
     deserializeBinary: function (bytes) {
       var reader = new jspb.BinaryReader(bytes)
-      var msg = new proto.dn.model.Event()
-      return proto.dn.model.Event.deserializeBinaryFromReader(msg, reader)
+      var msg = new proto.dn.model.Actor()
+      return proto.dn.model.Actor.deserializeBinaryFromReader(msg, reader)
     },
 
     /**
      * Deserializes binary data (in protobuf wire format) from the
      * given reader into the given message object.
-     * @param msg {proto.dn.model.Event} The message object to deserialize into.
+     * @param msg {proto.dn.model.Actor} The message object to deserialize into.
      * @param reader {jspb.BinaryReader} The BinaryReader to use.
-     * @return {proto.dn.model.Event}
+     * @return {proto.dn.model.Actor}
      */
     deserializeBinaryFromReader: function (msg, reader) {
       msg.setDeserialized(true)
@@ -110,32 +149,49 @@ qx.Class.define('proto.dn.model.Event', {
         var field = reader.getFieldNumber()
         switch (field) {
           case 1:
-            value = reader.readString()
-            msg.setName(value)
+            value = reader.readUint64String()
+            msg.setUid(value)
             break
           case 2:
-            value = reader.readString()
-            msg.setLocation(value)
+            value = reader.readEnum()
+            msg.setType(value)
             break
           case 3:
             value = reader.readString()
-            msg.setStart(value)
+            msg.setUsername(value)
             break
           case 4:
             value = reader.readString()
-            msg.setEnd(value)
+            msg.setRole(value)
             break
           case 5:
             value = reader.readString()
-            msg.getCategories().push(value)
+            msg.setName(value)
             break
           case 6:
             value = reader.readString()
-            msg.setOrganizer(value)
+            msg.setEmail(value)
             break
           case 7:
             value = reader.readString()
-            msg.setDescription(value)
+            msg.setColor(value)
+            break
+          case 8:
+            value = reader.readString()
+            msg.setLocale(value)
+            break
+          case 9:
+            value = new proto.dn.model.Subscription()
+            reader.readMessage(value, proto.dn.model.Subscription.deserializeBinaryFromReader)
+            msg.getSubscriptions().push(value)
+            break
+          case 10:
+            value = reader.readBool()
+            msg.setOnline(value)
+            break
+          case 11:
+            value = reader.readString()
+            msg.setStatus(value)
             break
           default:
             reader.skipField()
@@ -153,6 +209,38 @@ qx.Class.define('proto.dn.model.Event', {
   */
   properties: {
 
+    uid: {
+      check: 'String',
+      init: 0,
+      nullable: false,
+      event: 'changeUid',
+      transform: '_toString'
+    },
+
+    /**
+     * Enum of type {@link proto.dn.model.Actor.Type}
+     */
+    type: {
+      check: 'Number',
+      init: 0,
+      nullable: false,
+      event: 'changeType'
+    },
+
+    username: {
+      check: 'String',
+      init: '',
+      nullable: false,
+      event: 'changeUsername'
+    },
+
+    role: {
+      check: 'String',
+      init: '',
+      nullable: false,
+      event: 'changeRole'
+    },
+
     name: {
       check: 'String',
       init: '',
@@ -160,48 +248,48 @@ qx.Class.define('proto.dn.model.Event', {
       event: 'changeName'
     },
 
-    location: {
+    email: {
       check: 'String',
       init: '',
       nullable: false,
-      event: 'changeLocation'
+      event: 'changeEmail'
     },
 
-    start: {
+    color: {
       check: 'String',
       init: '',
       nullable: false,
-      event: 'changeStart'
+      event: 'changeColor'
     },
 
-    end: {
+    locale: {
       check: 'String',
       init: '',
       nullable: false,
-      event: 'changeEnd'
+      event: 'changeLocale'
     },
 
     /**
-     * @type {qx.data.Array} array of {@link String}
+     * @type {qx.data.Array} array of {@link proto.dn.model.Subscription}
      */
-    categories: {
+    subscriptions: {
       check: 'qx.data.Array',
       deferredInit: true,
-      event: 'changeCategories'
+      event: 'changeSubscriptions'
     },
 
-    organizer: {
+    online: {
+      check: 'Boolean',
+      init: false,
+      nullable: false,
+      event: 'changeOnline'
+    },
+
+    status: {
       check: 'String',
       init: '',
       nullable: false,
-      event: 'changeOrganizer'
-    },
-
-    description: {
-      check: 'String',
-      init: '',
-      nullable: false,
-      event: 'changeDescription'
+      event: 'changeStatus'
     }
   }
 })

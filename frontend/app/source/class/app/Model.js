@@ -106,7 +106,7 @@ qx.Class.define('app.Model', {
 
     selectedSubscription: {
       check: function (value) {
-        return (value instanceof app.model.Subscription) || (value instanceof app.model.Channel)
+        return (value instanceof proto.dn.model.Subscription) || (value instanceof proto.dn.model.Channel)
       },
       nullable: true,
       event: 'changedSelectedSubscription'
@@ -116,9 +116,10 @@ qx.Class.define('app.Model', {
      * The current user
      */
     actor: {
-      check: 'app.model.Actor',
+      check: 'proto.dn.model.Actor',
       nullable: true,
-      event: 'changedActor'
+      event: 'changedActor',
+      apply: '_applyActor'
     },
 
     actors: {
@@ -136,28 +137,46 @@ qx.Class.define('app.Model', {
     __subscribedChannels: null,
     __lookupCache: null,
 
+    _applyActor: function (value) {
+      if (value) {
+        value.setOnline(true)
+      }
+    },
+
     init: async function () {
       const socket = app.io.Socket.getInstance()
       const currentUserId = socket.getAuthToken() && socket.getAuthToken().user
       this.getChannels().removeAll()
       this.getSubscriptions().removeAll()
 
-      const actors = await app.io.Rpc.getProxy().getActors()
-      this.getActors().replace(app.model.Factory.createAll(actors, app.model.Actor, {
-        modelConverter: function (model) {
-          // look for current user
-          if (model.getId() === currentUserId) {
-            model.setOnline(true)
-            this.setActor(model)
-          }
-          return model
-        }.bind(this)
-      }))
+      const service = new proto.dn.Com(app.io.Socket.getInstance())
+      const model = await service.getModel(new proto.dn.Empty())
+      console.log(model)
+      this.getActors().replace(model.getActors())
+      this.getChannels().replace(model.getPublicChannels())
 
+      // TODO subscribe to changes on channels, subscriptions and actors
+
+      // const actors = await app.io.Rpc.getProxy().getActors()
+      // this.getActors().replace(app.model.Factory.createAll(actors, app.model.Actor, {
+      //   modelConverter: function (model) {
+      //     // look for current user
+      //     if (model.getId() === currentUserId) {
+      //       model.setOnline(true)
+      //       this.setActor(model)
+      //     }
+      //     return model
+      //   }.bind(this)
+      // }))
+      //
       if (currentUserId) {
+        this.setActor(model.getMe())
+        // model.getMe().bind('subscriptions', this, 'subscriptions')
+        this.getSubscriptions().replace(model.getMe().getSubscriptions())
+
         this.__subscribeAndWatchChannel('$INT.users', this._onIntUsersUpdate.bind(this))
         // as we can only get here when the user is online, tell the others
-        socket.emit('$INT.users', {id: this.getActor().getId(), online: true})
+        socket.emit('$INT.users', {id: this.getActor().getUid(), online: true})
 
         socket.addListener('changeAuthenticated', ev => {
           let payload = null
@@ -176,31 +195,31 @@ qx.Class.define('app.Model', {
       } else {
         socket.unsubscribe('$INT.users')
       }
-
-      app.io.Rpc.getProxy().getChannels().then(channels => {
-        this.getChannels().append(app.model.Factory.createAll(channels, app.model.Channel))
-
-        this.__subscribeAndWatchChannel('crud>publicChannels():Channel', this._onUpdate.bind(this, 'channel'))
-
-        if (currentUserId) {
-          return app.io.Rpc.getProxy().getSubscriptions()
-        } else {
-          return Promise.resolve([])
-        }
-      }).then(subs => {
-        this.getSubscriptions().append(app.model.Factory.createAll(subs, app.model.Subscription))
-
-        if (currentUserId) {
-        // now subscribe to changes
-          this.__subscribeAndWatchChannel(
-            'crud>mySubscriptions(' + qx.lang.Json.stringify({actorId: currentUserId}) + '):Subscription',
-            this._onUpdate.bind(this, 'subscription')
-          )
-        } else if (this.getActor()) {
-          socket.unsubscribe('crud>mySubscriptions(' + qx.lang.Json.stringify({actorId: this.getActor().getid()}) + '):Subscription')
-          this.resetActor()
-        }
-      })
+      //
+      // app.io.Rpc.getProxy().getChannels().then(channels => {
+      //   this.getChannels().append(app.model.Factory.createAll(channels, app.model.Channel))
+      //
+      //   this.__subscribeAndWatchChannel('crud>publicChannels():Channel', this._onUpdate.bind(this, 'channel'))
+      //
+      //   if (currentUserId) {
+      //     return app.io.Rpc.getProxy().getSubscriptions()
+      //   } else {
+      //     return Promise.resolve([])
+      //   }
+      // }).then(subs => {
+      //   this.getSubscriptions().append(app.model.Factory.createAll(subs, app.model.Subscription))
+      //
+      //   if (currentUserId) {
+      //   // now subscribe to changes
+      //     this.__subscribeAndWatchChannel(
+      //       'crud>mySubscriptions(' + qx.lang.Json.stringify({actorId: currentUserId}) + '):Subscription',
+      //       this._onUpdate.bind(this, 'subscription')
+      //     )
+      //   } else if (this.getActor()) {
+      //     socket.unsubscribe('crud>mySubscriptions(' + qx.lang.Json.stringify({actorId: this.getActor().getid()}) + '):Subscription')
+      //     this.resetActor()
+      //   }
+      // })
     },
 
     /**
@@ -353,7 +372,7 @@ qx.Class.define('app.Model', {
       }
       if (qx.Class.hasProperty(this.constructor, propertyName)) {
         target.some(entry => {
-          if (entry.getId() === id) {
+          if (entry.getUid() === id) {
             if (!this.__lookupCache[propertyName]) {
               this.__lookupCache[propertyName] = {}
             }

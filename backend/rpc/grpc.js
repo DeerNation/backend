@@ -14,21 +14,13 @@ class GrpcServer {
 
   upgradeToGrpc (socket) {
     this.socket = socket
-    // socket.on('raw', request => {
-    //   try {
-    //     request = JSON.parse(request)
-    //     console.log(event)
-    //   } catch (ex) {
-    //     return;
-    //   }
-    //   if (schemas.isValid(request, schemas.WAMPRequestSchema)) {
-    //     this.processWAMPRequest(request, socket);
-    //   } else {
-    //
-    //   }
-    // });
   }
 
+  /**
+   * Add gRPC service handler
+   * @param service {Object} service descriptions from proto file
+   * @param methods {Map} map of method names that handle the gRPC calls
+   */
   addService (service, methods) {
     Object.keys(service.service).forEach(name => {
       const rpc = service.service[name]

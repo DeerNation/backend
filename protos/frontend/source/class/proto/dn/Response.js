@@ -1,10 +1,10 @@
 
 /**
- * WritingUser class generated from protobuf definition "api.proto".
- * User currently writing in channel status.
+ * Response class generated from protobuf definition "api.proto".
+ * Status response from backend
  * auto-generated code PLEASE DO NOT EDIT!
  */
-qx.Class.define('proto.dn.WritingUser', {
+qx.Class.define('proto.dn.Response', {
   extend: proto.core.BaseMessage,
 
 
@@ -14,6 +14,14 @@ qx.Class.define('proto.dn.WritingUser', {
   *****************************************************************************
   */
   statics: {
+    
+    /**
+     * @enum
+     */
+    Code: {
+      OK: 0,
+      ERROR: 1
+    },
     /**
      * Serializes the given message to binary data (in protobuf wire
      * format), writing to the given BinaryWriter.
@@ -22,16 +30,16 @@ qx.Class.define('proto.dn.WritingUser', {
      * @suppress {unusedLocalVariables} f is only used for nested messages
      */
     serializeBinaryToWriter: function (message, writer) {
-      var f = message.getUid()
-      if (f !== 0) {
-        writer.writeUint64String(
+      var f = message.getCode()
+      if (f !== 0.0) {
+        writer.writeEnum(
           1,
           f
         )
       }
-      f = message.getDone()
-      if (f != null) {
-        writer.writeBool(
+      f = message.getMessage()
+      if (f.length > 0) {
+        writer.writeString(
           2,
           f
         )
@@ -41,20 +49,20 @@ qx.Class.define('proto.dn.WritingUser', {
     /**
      * Deserializes binary data (in protobuf wire format).
      * @param bytes {jspb.ByteSource} The bytes to deserialize.
-     * @return {proto.dn.WritingUser}
+     * @return {proto.dn.Response}
      */
     deserializeBinary: function (bytes) {
       var reader = new jspb.BinaryReader(bytes)
-      var msg = new proto.dn.WritingUser()
-      return proto.dn.WritingUser.deserializeBinaryFromReader(msg, reader)
+      var msg = new proto.dn.Response()
+      return proto.dn.Response.deserializeBinaryFromReader(msg, reader)
     },
 
     /**
      * Deserializes binary data (in protobuf wire format) from the
      * given reader into the given message object.
-     * @param msg {proto.dn.WritingUser} The message object to deserialize into.
+     * @param msg {proto.dn.Response} The message object to deserialize into.
      * @param reader {jspb.BinaryReader} The BinaryReader to use.
-     * @return {proto.dn.WritingUser}
+     * @return {proto.dn.Response}
      */
     deserializeBinaryFromReader: function (msg, reader) {
       msg.setDeserialized(true)
@@ -66,12 +74,12 @@ qx.Class.define('proto.dn.WritingUser', {
         var field = reader.getFieldNumber()
         switch (field) {
           case 1:
-            value = reader.readUint64String()
-            msg.setUid(value)
+            value = reader.readEnum()
+            msg.setCode(value)
             break
           case 2:
-            value = reader.readBool()
-            msg.setDone(value)
+            value = reader.readString()
+            msg.setMessage(value)
             break
           default:
             reader.skipField()
@@ -89,19 +97,21 @@ qx.Class.define('proto.dn.WritingUser', {
   */
   properties: {
 
-    uid: {
-      check: 'String',
+    /**
+     * Enum of type {@link proto.dn.Response.Code}
+     */
+    code: {
+      check: 'Number',
       init: 0,
       nullable: false,
-      event: 'changeUid',
-      transform: '_toString'
+      event: 'changeCode'
     },
 
-    done: {
-      check: 'Boolean',
-      init: false,
+    message: {
+      check: 'String',
+      init: '',
       nullable: false,
-      event: 'changeDone'
+      event: 'changeMessage'
     }
   }
 })

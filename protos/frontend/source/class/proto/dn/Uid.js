@@ -1,10 +1,10 @@
 
 /**
- * WritingUser class generated from protobuf definition "api.proto".
- * User currently writing in channel status.
+ * Uid class generated from protobuf definition "api.proto".
+ *
  * auto-generated code PLEASE DO NOT EDIT!
  */
-qx.Class.define('proto.dn.WritingUser', {
+qx.Class.define('proto.dn.Uid', {
   extend: proto.core.BaseMessage,
 
 
@@ -29,32 +29,25 @@ qx.Class.define('proto.dn.WritingUser', {
           f
         )
       }
-      f = message.getDone()
-      if (f != null) {
-        writer.writeBool(
-          2,
-          f
-        )
-      }
     },
 
     /**
      * Deserializes binary data (in protobuf wire format).
      * @param bytes {jspb.ByteSource} The bytes to deserialize.
-     * @return {proto.dn.WritingUser}
+     * @return {proto.dn.Uid}
      */
     deserializeBinary: function (bytes) {
       var reader = new jspb.BinaryReader(bytes)
-      var msg = new proto.dn.WritingUser()
-      return proto.dn.WritingUser.deserializeBinaryFromReader(msg, reader)
+      var msg = new proto.dn.Uid()
+      return proto.dn.Uid.deserializeBinaryFromReader(msg, reader)
     },
 
     /**
      * Deserializes binary data (in protobuf wire format) from the
      * given reader into the given message object.
-     * @param msg {proto.dn.WritingUser} The message object to deserialize into.
+     * @param msg {proto.dn.Uid} The message object to deserialize into.
      * @param reader {jspb.BinaryReader} The BinaryReader to use.
-     * @return {proto.dn.WritingUser}
+     * @return {proto.dn.Uid}
      */
     deserializeBinaryFromReader: function (msg, reader) {
       msg.setDeserialized(true)
@@ -68,10 +61,6 @@ qx.Class.define('proto.dn.WritingUser', {
           case 1:
             value = reader.readUint64String()
             msg.setUid(value)
-            break
-          case 2:
-            value = reader.readBool()
-            msg.setDone(value)
             break
           default:
             reader.skipField()
@@ -95,13 +84,6 @@ qx.Class.define('proto.dn.WritingUser', {
       nullable: false,
       event: 'changeUid',
       transform: '_toString'
-    },
-
-    done: {
-      check: 'Boolean',
-      init: false,
-      nullable: false,
-      event: 'changeDone'
     }
   }
 })

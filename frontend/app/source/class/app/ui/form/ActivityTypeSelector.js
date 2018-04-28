@@ -25,7 +25,7 @@ qx.Class.define('app.ui.form.ActivityTypeSelector', {
   */
   properties: {
     channel: {
-      check: 'app.model.Channel',
+      check: 'proto.dn.model.Channel',
       init: null
     }
   },

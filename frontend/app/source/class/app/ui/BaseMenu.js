@@ -50,7 +50,7 @@ qx.Class.define('app.ui.BaseMenu', {
      * Currently logged in Actor
      */
     actor: {
-      check: 'app.model.Actor',
+      check: 'proto.dn.model.Actor',
       nullable: true,
       apply: '_applyActor'
     },
@@ -91,15 +91,17 @@ qx.Class.define('app.ui.BaseMenu', {
         actorIconBox.add(value.getIcon())
         this.getChildControl('list').setModel(app.Model.getInstance().getSubscriptions())
         this.getChildControl('actor-container').show()
+        this.getChildControl('login-button').exclude()
       } else {
-        this.getChildControl('actor-container').hide()
+        this.getChildControl('actor-container').exclude()
+        this.getChildControl('login-button').show()
         this.getChildControl('list').setModel(app.Model.getInstance().getChannels())
       }
     },
 
     _onActorOnline: function () {
       const value = this.getActor().isOnline()
-      let status = this.getActor().getStatus()
+      let status = this.getActor().getStatus() || 'online'
       if (status === 'online') {
         if (value === false) {
           status = 'offline'
@@ -249,7 +251,7 @@ qx.Class.define('app.ui.BaseMenu', {
 
         case 'searchbar-container':
           control = new qx.ui.container.Composite(new qx.ui.layout.HBox())
-          this._addAt(control, 1)
+          this._addAt(control, 2)
           break
 
         case 'searchbox':
@@ -270,7 +272,7 @@ qx.Class.define('app.ui.BaseMenu', {
             ? app.Model.getInstance().getSubscriptions()
             : app.Model.getInstance().getChannels())
           control.getSelection().addListener('change', this._onSelection, this)
-          this._addAt(control, 2, {flex: 1})
+          this._addAt(control, 3, {flex: 1})
           break
 
         case 'logo':
@@ -281,10 +283,25 @@ qx.Class.define('app.ui.BaseMenu', {
             maxHeight: 65,
             scale: true
           })
-          this._addAt(control, 3)
+          this._addAt(control, 4)
+          break
+
+        case 'login-button':
+          control = new qx.ui.form.Button(this.tr('Login'))
+          control.exclude()
+          control.addListener('execute', this._onLogin, this)
+          this._addAt(control, 1)
           break
       }
       return control || this.base(arguments, id, hash)
+    },
+
+    _onLogin: function () {
+      if (app.io.Socket.getInstance().isAuthenticated()) {
+        app.io.Socket.getInstance().logout()
+      } else {
+        app.io.Socket.getInstance().login()
+      }
     }
   },
 

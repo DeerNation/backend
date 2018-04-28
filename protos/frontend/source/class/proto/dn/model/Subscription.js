@@ -1,11 +1,12 @@
 
 /**
- * WritingUser class generated from protobuf definition "api.proto".
- * User currently writing in channel status.
+ * Subscription class generated from protobuf definition "model.proto".
+ *
  * auto-generated code PLEASE DO NOT EDIT!
  */
-qx.Class.define('proto.dn.WritingUser', {
+qx.Class.define('proto.dn.model.Subscription', {
   extend: proto.core.BaseMessage,
+  include: [app.api.MSubscription],
 
 
   /*
@@ -29,10 +30,26 @@ qx.Class.define('proto.dn.WritingUser', {
           f
         )
       }
-      f = message.getDone()
+      f = message.getChannel()
+      if (f != null) {
+        writer.writeMessage(
+          2,
+          f,
+          proto.dn.model.Channel.serializeBinaryToWriter
+        )
+      }
+      f = message.getActor()
+      if (f != null) {
+        writer.writeMessage(
+          3,
+          f,
+          proto.dn.model.Actor.serializeBinaryToWriter
+        )
+      }
+      f = message.getFavorite()
       if (f != null) {
         writer.writeBool(
-          2,
+          4,
           f
         )
       }
@@ -41,20 +58,20 @@ qx.Class.define('proto.dn.WritingUser', {
     /**
      * Deserializes binary data (in protobuf wire format).
      * @param bytes {jspb.ByteSource} The bytes to deserialize.
-     * @return {proto.dn.WritingUser}
+     * @return {proto.dn.model.Subscription}
      */
     deserializeBinary: function (bytes) {
       var reader = new jspb.BinaryReader(bytes)
-      var msg = new proto.dn.WritingUser()
-      return proto.dn.WritingUser.deserializeBinaryFromReader(msg, reader)
+      var msg = new proto.dn.model.Subscription()
+      return proto.dn.model.Subscription.deserializeBinaryFromReader(msg, reader)
     },
 
     /**
      * Deserializes binary data (in protobuf wire format) from the
      * given reader into the given message object.
-     * @param msg {proto.dn.WritingUser} The message object to deserialize into.
+     * @param msg {proto.dn.model.Subscription} The message object to deserialize into.
      * @param reader {jspb.BinaryReader} The BinaryReader to use.
-     * @return {proto.dn.WritingUser}
+     * @return {proto.dn.model.Subscription}
      */
     deserializeBinaryFromReader: function (msg, reader) {
       msg.setDeserialized(true)
@@ -70,8 +87,18 @@ qx.Class.define('proto.dn.WritingUser', {
             msg.setUid(value)
             break
           case 2:
+            value = new proto.dn.model.Channel()
+            reader.readMessage(value, proto.dn.model.Channel.deserializeBinaryFromReader)
+            msg.setChannel(value)
+            break
+          case 3:
+            value = new proto.dn.model.Actor()
+            reader.readMessage(value, proto.dn.model.Actor.deserializeBinaryFromReader)
+            msg.setActor(value)
+            break
+          case 4:
             value = reader.readBool()
-            msg.setDone(value)
+            msg.setFavorite(value)
             break
           default:
             reader.skipField()
@@ -97,11 +124,25 @@ qx.Class.define('proto.dn.WritingUser', {
       transform: '_toString'
     },
 
-    done: {
+    channel: {
+      check: 'proto.dn.model.Channel',
+      init: null,
+      nullable: true,
+      event: 'changeChannel'
+    },
+
+    actor: {
+      check: 'proto.dn.model.Actor',
+      init: null,
+      nullable: true,
+      event: 'changeActor'
+    },
+
+    favorite: {
       check: 'Boolean',
       init: false,
       nullable: false,
-      event: 'changeDone'
+      event: 'changeFavorite'
     }
   }
 })
