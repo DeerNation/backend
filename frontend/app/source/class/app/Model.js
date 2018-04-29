@@ -136,6 +136,7 @@ qx.Class.define('app.Model', {
   members: {
     __subscribedChannels: null,
     __lookupCache: null,
+    __modelStream: null,
 
     _applyActor: function (value) {
       if (value) {
@@ -144,57 +145,13 @@ qx.Class.define('app.Model', {
     },
 
     init: async function () {
-      const socket = app.io.Socket.getInstance()
-      const currentUserId = socket.getAuthToken() && socket.getAuthToken().user
-      this.getChannels().removeAll()
-      this.getSubscriptions().removeAll()
-
       const service = new proto.dn.Com(app.io.Socket.getInstance())
-      const model = await service.getModel(new proto.dn.Empty())
-      console.log(model)
-      this.getActors().replace(model.getActors())
-      this.getChannels().replace(model.getPublicChannels())
+      const modelStream = this.__modelStream = await service.getModel(new proto.dn.Empty())
+      modelStream.addListener('message', this._onModelUpdate, this)
+      modelStream.addListener('error', (err) => {
+        this.error(err)
+      }, this)
 
-      // TODO subscribe to changes on channels, subscriptions and actors
-
-      // const actors = await app.io.Rpc.getProxy().getActors()
-      // this.getActors().replace(app.model.Factory.createAll(actors, app.model.Actor, {
-      //   modelConverter: function (model) {
-      //     // look for current user
-      //     if (model.getId() === currentUserId) {
-      //       model.setOnline(true)
-      //       this.setActor(model)
-      //     }
-      //     return model
-      //   }.bind(this)
-      // }))
-      //
-      if (currentUserId) {
-        this.setActor(model.getMe())
-        // model.getMe().bind('subscriptions', this, 'subscriptions')
-        this.getSubscriptions().replace(model.getMe().getSubscriptions())
-
-        this.__subscribeAndWatchChannel('$INT.users', this._onIntUsersUpdate.bind(this))
-        // as we can only get here when the user is online, tell the others
-        socket.emit('$INT.users', {id: this.getActor().getUid(), online: true})
-
-        socket.addListener('changeAuthenticated', ev => {
-          let payload = null
-          if (ev.getData() === true) {
-            payload = {id: this.getActor().getUid(), online: true}
-          } else if (ev.getOldData() === true) {
-            // we have been authenticated but not any more, tell the world
-            payload = {id: this.getActor().getUid(), online: false}
-          }
-          if (payload) {
-            socket.emit('$INT.users', payload)
-            // as we do not receive out own events, call the handler manually
-            this._onIntUsersUpdate(payload)
-          }
-        })
-      } else {
-        socket.unsubscribe('$INT.users')
-      }
       //
       // app.io.Rpc.getProxy().getChannels().then(channels => {
       //   this.getChannels().append(app.model.Factory.createAll(channels, app.model.Channel))
@@ -220,6 +177,140 @@ qx.Class.define('app.Model', {
       //     this.resetActor()
       //   }
       // })
+    },
+
+    /**
+     * Handle message on the getModel streaming channel
+     * @param ev {Event}
+     * @private
+     */
+    _onModelUpdate: function (ev) {
+      const update = ev.getData()
+
+      const socket = app.io.Socket.getInstance()
+      const currentUserId = socket.getAuthToken() && socket.getAuthToken().user
+
+      switch (update.getType()) {
+        case proto.dn.ChangeType.REPLACE:
+          this.getChannels().removeAll()
+          this.getSubscriptions().removeAll()
+          this.getActors().replace(update.getActors())
+          this.getChannels().replace(update.getPublicChannels())
+          if (currentUserId) {
+            this.setActor(update.getMe())
+            this.getSubscriptions().replace(update.getSubscriptions())
+
+            this.__subscribeAndWatchChannel('$INT.users', this._onIntUsersUpdate.bind(this))
+            // as we can only get here when the user is online, tell the others
+            socket.emit('$INT.users', {id: this.getActor().getUid(), online: true})
+
+            socket.addListener('changeAuthenticated', ev => {
+              let payload = null
+              if (ev.getData() === true) {
+                payload = {id: this.getActor().getUid(), online: true}
+              } else if (ev.getOldData() === true) {
+                // we have been authenticated but not any more, tell the world
+                payload = {id: this.getActor().getUid(), online: false}
+              }
+              if (payload) {
+                socket.emit('$INT.users', payload)
+                // as we do not receive out own events, call the handler manually
+                this._onIntUsersUpdate(payload)
+              }
+            })
+          } else {
+            socket.unsubscribe('$INT.users')
+          }
+          break
+
+        case proto.dn.ChangeType.UPDATE:
+          if (update.getMe() && this.getActor() && this.getActor().getUid() === update.getMe().getUid()) {
+            // changes for the current user
+            const changes = qx.util.Serializer.toNativeObject(update.getMe(), this.__serialize.bind(this))
+            if (Object.keys(changes).length > 0) {
+              // apply changes
+              this.debug(`applying changes to current actor: ${qx.lang.Json.stringify(changes, null, 2)}`)
+              this.getActor().set(changes)
+            }
+          }
+          ['subscriptions', 'actors', 'publicChannels'].forEach(type => {
+            const content = update.get(type)
+            if (content) {
+              const localType = type === 'publicChannels' ? 'channels' : type
+              content.forEach(entry => {
+                const existing = this.lookup(localType, entry.getUid())
+                if (existing) {
+                  const changes = qx.util.Serializer.toNativeObject(entry, this.__serialize.bind(this))
+                  if (Object.keys(changes).length > 0) {
+                    // apply changes
+                    this.debug(`applying changes to ${type} ${entry.getUid()}: ${qx.lang.Json.stringify(changes, null, 2)}`)
+                    existing.set(changes)
+                  }
+                }
+              })
+            }
+          })
+          break
+
+        case proto.dn.ChangeType.DELETE:
+          ['subscriptions', 'actors', 'publicChannels'].forEach(type => {
+            const content = update.get(type)
+            if (content) {
+              const localType = type === 'publicChannels' ? 'channels' : type
+              content.forEach(entry => {
+                const existing = this.lookup(localType, entry.getUid())
+                if (existing) {
+                  this.get(type).remove(existing).dispose()
+                }
+              })
+            }
+          })
+          break
+
+        default:
+          this.warn('unhandled update type ' + update.getType())
+          break
+      }
+    },
+
+    __objectFilter: function (obj, predicate) {
+      return Object.keys(obj)
+        .filter(key => predicate(key))
+        .reduce((res, key) => {
+          res[key] = obj[key]
+          return res
+        }, {})
+    },
+
+    __serialize: function (object) {
+      let skipProperties = ['deserialized', 'uid']
+      qx.Class.getMixins(object.constructor).forEach((x) => {
+        if (x.name.startsWith('app')) {
+          skipProperties = skipProperties.concat(Object.keys(qx.util.PropertyUtil.getProperties(x)))
+        }
+      })
+      const properties =
+        this.__objectFilter(qx.util.PropertyUtil.getProperties(object.constructor), x => !skipProperties.includes(x))
+
+      const result = {}
+      for (let name in properties) {
+        // ignore property groups
+        if (properties[name].group !== undefined) {
+          continue
+        }
+
+        const value = object['get' + qx.lang.String.firstUp(name)]()
+        if (qx.util.PropertyUtil.getInitValue(object, name) === value) {
+          continue
+        }
+        if (qx.lang.Type.isArray(value) && value.length === 0) {
+          continue
+        }
+        result[name] = qx.util.Serializer.toNativeObject(
+          value, this.__serialize.bind(this)
+        )
+      }
+      return result
     },
 
     /**
@@ -360,7 +451,7 @@ qx.Class.define('app.Model', {
      * Search an object by type and ID
      *
      * @param type {String} type of the object (e.g. channel, subscription)
-     * @param id {String} ID of the object
+     * @param uid {String} ID of the object
      */
     lookup: function (type, id) {
       let found = null
@@ -418,5 +509,6 @@ qx.Class.define('app.Model', {
       })
       this.__subscribedChannels = null
     }
+    this._disposeObjects('__modelStream')
   }
 })

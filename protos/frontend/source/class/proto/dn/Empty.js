@@ -44,13 +44,5 @@ qx.Class.define('proto.dn.Empty', {
     deserializeBinaryFromReader: function (msg, reader) {
 
     }
-  },
-
-  /*
-  *****************************************************************************
-     PROPERTIES
-  *****************************************************************************
-  */
-  properties: {
   }
 })

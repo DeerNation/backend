@@ -15,6 +15,7 @@ qx.Class.define('proto.dn.Model', {
   construct: function (props) {
     this.initActors(new qx.data.Array())
     this.initPublicChannels(new qx.data.Array())
+    this.initSubscriptions(new qx.data.Array())
     this.base(arguments, props)
   },
 
@@ -32,10 +33,17 @@ qx.Class.define('proto.dn.Model', {
      * @suppress {unusedLocalVariables} f is only used for nested messages
      */
     serializeBinaryToWriter: function (message, writer) {
-      var f = message.getMe()
+      var f = message.getType()
+      if (f !== 0.0) {
+        writer.writeEnum(
+          1,
+          f
+        )
+      }
+      f = message.getMe()
       if (f != null) {
         writer.writeMessage(
-          1,
+          2,
           f,
           proto.dn.model.Actor.serializeBinaryToWriter
         )
@@ -43,7 +51,7 @@ qx.Class.define('proto.dn.Model', {
       f = message.getActors().toArray()
       if (f != null) {
         writer.writeRepeatedMessage(
-          2,
+          3,
           f,
           proto.dn.model.Actor.serializeBinaryToWriter
         )
@@ -54,6 +62,14 @@ qx.Class.define('proto.dn.Model', {
           4,
           f,
           proto.dn.model.Channel.serializeBinaryToWriter
+        )
+      }
+      f = message.getSubscriptions().toArray()
+      if (f != null) {
+        writer.writeRepeatedMessage(
+          5,
+          f,
+          proto.dn.model.Subscription.serializeBinaryToWriter
         )
       }
     },
@@ -86,11 +102,15 @@ qx.Class.define('proto.dn.Model', {
         var field = reader.getFieldNumber()
         switch (field) {
           case 1:
+            value = reader.readEnum()
+            msg.setType(value)
+            break
+          case 2:
             value = new proto.dn.model.Actor()
             reader.readMessage(value, proto.dn.model.Actor.deserializeBinaryFromReader)
             msg.setMe(value)
             break
-          case 2:
+          case 3:
             value = new proto.dn.model.Actor()
             reader.readMessage(value, proto.dn.model.Actor.deserializeBinaryFromReader)
             msg.getActors().push(value)
@@ -99,6 +119,11 @@ qx.Class.define('proto.dn.Model', {
             value = new proto.dn.model.Channel()
             reader.readMessage(value, proto.dn.model.Channel.deserializeBinaryFromReader)
             msg.getPublicChannels().push(value)
+            break
+          case 5:
+            value = new proto.dn.model.Subscription()
+            reader.readMessage(value, proto.dn.model.Subscription.deserializeBinaryFromReader)
+            msg.getSubscriptions().push(value)
             break
           default:
             reader.skipField()
@@ -115,6 +140,16 @@ qx.Class.define('proto.dn.Model', {
   *****************************************************************************
   */
   properties: {
+
+    /**
+     * Enum of type {@link proto.dn.ChangeType}
+     */
+    type: {
+      check: 'Number',
+      init: 0,
+      nullable: false,
+      event: 'changeType'
+    },
 
     me: {
       check: 'proto.dn.model.Actor',
@@ -139,6 +174,15 @@ qx.Class.define('proto.dn.Model', {
       check: 'qx.data.Array',
       deferredInit: true,
       event: 'changePublicChannels'
+    },
+
+    /**
+     * @type {qx.data.Array} array of {@link proto.dn.model.Subscription}
+     */
+    subscriptions: {
+      check: 'qx.data.Array',
+      deferredInit: true,
+      event: 'changeSubscriptions'
     }
   }
 })

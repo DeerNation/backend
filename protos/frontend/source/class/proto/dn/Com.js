@@ -22,18 +22,20 @@ qx.Class.define('proto.dn.Com', {
      * - all other Actors
      * - all public channels
      * @param payload {proto.dn.Empty}
+     * @param callback {Function} onMessage callback
+     * @param context {Object} onMessage callback context
      * @returns {Promise} resolves to {proto.dn.Model}
      */
-    getModel: function (payload) {
+    getModel: function (payload, callback, context) {
       qx.core.Assert.assertInstance(payload, proto.dn.Empty)
       return this._call(payload, {
         methodName: 'getModel',
         service: this,
         requestStream: false,
-        responseStream: false,
+        responseStream: true,
         requestType: proto.dn.Empty,
         responseType: proto.dn.Model
-      })
+      }, callback, context)
     },
 
     /**

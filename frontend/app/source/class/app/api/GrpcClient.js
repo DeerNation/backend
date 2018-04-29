@@ -46,6 +46,11 @@ qx.Class.define('app.api.GrpcClient', {
           })
         })
       }
+
+      // streaming RPC
+      socket.invoke = (service, config) => {
+        return new app.api.StreamChannel(socket, service, config)
+      }
     },
 
     registerService: function (service) {

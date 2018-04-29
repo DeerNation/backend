@@ -77,13 +77,13 @@ qx.Class.define('app.ui.BaseMenu', {
     // property apply
     _applyActor: function (value, old) {
       if (old) {
-        old.removeListener('changedOnline', this._onActorOnline, this)
-        old.removeListener('changedStatus', this._onActorOnline, this)
+        old.removeListener('changeOnline', this._onActorOnline, this)
+        old.removeListener('changeStatus', this._onActorOnline, this)
       }
       if (value) {
         value.bind('name', this.getChildControl('actor-name'), 'value')
-        value.addListener('changedOnline', this._onActorOnline, this)
-        value.addListener('changedStatus', this._onActorOnline, this)
+        value.addListener('changeOnline', this._onActorOnline, this)
+        value.addListener('changeStatus', this._onActorOnline, this)
         this._onActorOnline()
 
         const actorIconBox = this.getChildControl('actor-icon-box')

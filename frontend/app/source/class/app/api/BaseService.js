@@ -43,32 +43,18 @@ qx.Class.define('app.api.BaseService', {
   members: {
 
     _call: function (payload, serviceDefinition) {
-      const args = qx.lang.Array.fromArguments(arguments, 2)
       const config = {
         request: payload,
         metadata: this.__metadata
         // debug: qx.core.Environment.get('qx.debug')
       }
+      if (!config.request) {
+        throw Error('no payload defined')
+      }
       const socket = this.getSocket()
       if (serviceDefinition.responseStream === true) {
         // streaming response
-        let context = null
-        let callback
-        if (typeof args[args.length - 1] === 'object') {
-          context = args.pop()
-        }
-        if (typeof args[args.length - 1] === 'function') {
-          callback = args.pop()
-        }
-        else {
-          throw Error('no callback defined')
-        }
-        if (config.request === callback) {
-          throw Error('no payload defined')
-        }
-        return socket.invoke(serviceDefinition, Object.assign(config, {
-          onMessage: callback.bind(context)
-        }))
+        return socket.invoke(serviceDefinition, config)
       } else {
         return socket.unary(serviceDefinition, config)
       }

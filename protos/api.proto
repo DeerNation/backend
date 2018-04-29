@@ -12,7 +12,7 @@ service Com {
      *  - all other Actors
      *  - all public channels
      */
-    rpc getModel(Empty) returns (Model);
+    rpc getModel(Empty) returns (stream Model);
 
     /**
      * Returns the complete data needed to show the channels content.
@@ -38,34 +38,40 @@ service Com {
     rpc listenForUpdates(Empty) returns (stream ActorChanges);
 }
 
+enum ChangeType {
+    ADD = 0;
+    UPDATE = 1;
+    DELETE = 2;
+    REPLACE = 3;
+}
+
 /**
  * Actor related changes (new subscriptions, other actors/states)
  */
 message ActorChanges {
-    enum Type {
-        ADD = 0;
-        UPDATE = 1;
-        DELETE = 2;
-    }
-    Type type = 1;
+    ChangeType type = 1;
     repeated dn.model.Subscription subscription = 2;
     repeated dn.model.Actor actor = 3;
 }
 
 message Object {
+    ChangeType type = 1;
     oneof content {
-        dn.model.Activity activity = 1;
-        dn.model.Actor actor = 2;
+        dn.model.Activity activity = 2;
+        dn.model.Actor actor = 3;
     }
 }
 
 message Model {
+    ChangeType type = 1;
     // the currently logged in Actor
-    dn.model.Actor me = 1;
+    dn.model.Actor me = 2;
     // all available actors (e.g. for direct messaging)
-    repeated dn.model.Actor actors = 2;
+    repeated dn.model.Actor actors = 3;
     // the public channels
     repeated dn.model.Channel publicChannels = 4;
+    // subscriptions of the current user
+    repeated dn.model.Subscription subscriptions = 5;
 }
 
 /**

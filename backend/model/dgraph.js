@@ -6,10 +6,12 @@
  */
 const dgraph = require('dgraph-js')
 const grpc = require('grpc')
+const path = require('path')
 const acl = require('../acl')
 const defaultData = require('./default-graph-data')
 const logger = require('../logger')(__filename)
 const config = require('../config')
+const protos = grpc.load({root: path.join(__dirname, '..', '..'), file: path.join('protos', 'api.proto')})
 
 const clientStub = new dgraph.DgraphClientStub(
   'localhost:9080',
@@ -74,7 +76,7 @@ fillDb()
  * dn.Com service implementation
  */
 class DgraphService {
-  async getModel (authToken) {
+  async getModel (authToken, request, respond) {
     let addQuery = ''
     if (authToken && authToken.user) {
       // query current actor + subscriptions too
@@ -145,10 +147,27 @@ class DgraphService {
         sub.channel = sub.channel[0]
         sub.channel.owner = sub.channel.owner[0]
       })
+      model.subscriptions = model.me.subscriptions
+      delete model.me.subscriptions
     }
     model.publicChannels.forEach(chan => {
       chan.owner = chan.owner[0]
     })
+    model.type = protos.dn.ChangeType.REPLACE
+    // TODO: add listeners for updates and send them to the streaming channel
+    setInterval(() => {
+      const changeTest = {
+        type: 1,
+        me: {
+          uid: '0x1',
+          name: 'Tobias'
+        },
+        subscriptions: [
+
+        ]
+      }
+      respond(changeTest)
+    }, 100000)
     return model
   }
 

@@ -12,10 +12,31 @@ class GrpcServer {
   constructor () {
     this.socket = null
     this._services = {}
+    this._streamHandlers = {}
   }
 
   upgradeToGrpc (socket) {
     this.socket = socket
+
+    // listen for incoming streamChannel requests
+    this.socket.on('raw', (request) => {
+      try {
+        request = JSON.parse(request)
+      } catch (ex) {
+        return
+      }
+      if (request.hasOwnProperty('startStreamRpc')) {
+        this._streamHandlers[request.startStreamRpc] = {
+          handler: this._onStreamRequest.bind(this, request.startStreamRpc),
+          service: this._services[request.startStreamRpc.split('#')[0]]
+        }
+        this.socket.on(request.startStreamRpc, this._streamHandlers[request.startStreamRpc].handler)
+        this._streamHandlers[request.startStreamRpc].handler(request.startStreamRpc, request.data)
+      } else if (request.hasOwnProperty('stopStreamRpc')) {
+        this.socket.off(request.startStreamRpc, this._streamHandlers[request.startStreamRpc].handler)
+        delete this._streamHandlers[request.startStreamRpc]
+      }
+    })
   }
 
   /**
@@ -50,6 +71,23 @@ class GrpcServer {
     logger.debug('executing ' + path)
     const result = await service.callback(this.socket.getAuthToken(), service.requestDeserialize(bytes))
     response(null, service.responseSerialize(result))
+  }
+
+  async _onStreamRequest (streamChannel, data) {
+    const service = this._streamHandlers[streamChannel].service
+    const bytes = Uint8Array.from(Object.values(data))
+    await acl.check(this.socket.getAuthToken(), config.domain + '.rpc.' + service.originalName, acl.action.EXECUTE)
+    logger.debug('executing ' + streamChannel)
+    const result = await service.callback(
+      this.socket.getAuthToken(),
+      service.requestDeserialize(bytes),
+      this.__respond.bind(this, streamChannel, service.responseSerialize)
+    )
+    this.socket.emit(streamChannel, service.responseSerialize(result))
+  }
+
+  __respond (streamChannel, serializer, result) {
+    this.socket.emit(streamChannel, serializer(result))
   }
 }
 
