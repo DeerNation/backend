@@ -49,7 +49,7 @@ class GrpcServer {
       const rpc = service.service[name]
       if (typeof handler[name] === 'function') {
         logger.debug('registering service endpoint ' + name)
-        this._services[rpc.path] = Object.assign({callback: handler[name]}, rpc)
+        this._services[rpc.path] = Object.assign({callback: handler[name].bind(handler)}, rpc)
         this.socket.on(service.service[name].path, this._onRequest.bind(this, service.service[name].path))
       } else {
         logger.warn('no callback defined for service endpoint ' + name)

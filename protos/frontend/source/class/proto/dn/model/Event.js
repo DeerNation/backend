@@ -6,7 +6,7 @@
  */
 qx.Class.define('proto.dn.model.Event', {
   extend: proto.core.BaseMessage,
-  include: [app.plugins.event.MEvent],
+  include: [app.plugins.event.MEvent, app.api.MUpdate],
 
   /*
   *****************************************************************************
@@ -14,7 +14,7 @@ qx.Class.define('proto.dn.model.Event', {
   *****************************************************************************
   */
   construct: function (props) {
-    this.initCategories(new qx.data.Array())
+    this.initCategories(new app.api.Array())
     this.base(arguments, props)
   },
 
@@ -203,10 +203,10 @@ qx.Class.define('proto.dn.model.Event', {
     },
 
     /**
-     * @type {qx.data.Array} array of {@link String}
+     * @type {app.api.Array} array of {@link String}
      */
     categories: {
-      check: 'qx.data.Array',
+      check: 'app.api.Array',
       deferredInit: true,
       event: 'changeCategories'
     },

@@ -6,6 +6,7 @@
  */
 qx.Class.define('proto.dn.model.Actors', {
   extend: proto.core.BaseMessage,
+  include: [app.api.MUpdate],
 
   /*
   *****************************************************************************
@@ -13,7 +14,7 @@ qx.Class.define('proto.dn.model.Actors', {
   *****************************************************************************
   */
   construct: function (props) {
-    this.initActors(new qx.data.Array())
+    this.initActors(new app.api.Array())
     this.base(arguments, props)
   },
 
@@ -90,10 +91,10 @@ qx.Class.define('proto.dn.model.Actors', {
   properties: {
 
     /**
-     * @type {qx.data.Array} array of {@link proto.dn.model.Actor}
+     * @type {app.api.Array} array of {@link proto.dn.model.Actor}
      */
     actors: {
-      check: 'qx.data.Array',
+      check: 'app.api.Array',
       deferredInit: true,
       event: 'changeActors'
     }

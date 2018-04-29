@@ -190,6 +190,12 @@ qx.Class.define('app.Model', {
       const socket = app.io.Socket.getInstance()
       const currentUserId = socket.getAuthToken() && socket.getAuthToken().user
 
+      const objectChange = update.getObject()
+      if (objectChange) {
+        // change for a single object send to bus where the objects listen to
+        qx.event.message.Bus('proto.dn.model.' + objectChange.getuid(), objectChange)
+      }
+
       switch (update.getType()) {
         case proto.dn.ChangeType.REPLACE:
           this.getChannels().removeAll()
@@ -224,15 +230,6 @@ qx.Class.define('app.Model', {
           break
 
         case proto.dn.ChangeType.UPDATE:
-          if (update.getMe() && this.getActor() && this.getActor().getUid() === update.getMe().getUid()) {
-            // changes for the current user
-            const changes = qx.util.Serializer.toNativeObject(update.getMe(), this.__serialize.bind(this))
-            if (Object.keys(changes).length > 0) {
-              // apply changes
-              this.debug(`applying changes to current actor: ${qx.lang.Json.stringify(changes, null, 2)}`)
-              this.getActor().set(changes)
-            }
-          }
           ['subscriptions', 'actors', 'publicChannels'].forEach(type => {
             const content = update.get(type)
             if (content) {
@@ -240,7 +237,7 @@ qx.Class.define('app.Model', {
               content.forEach(entry => {
                 const existing = this.lookup(localType, entry.getUid())
                 if (existing) {
-                  const changes = qx.util.Serializer.toNativeObject(entry, this.__serialize.bind(this))
+                  const changes = qx.util.Serializer.toNativeObject(entry, app.api.Utils.serialize)
                   if (Object.keys(changes).length > 0) {
                     // apply changes
                     this.debug(`applying changes to ${type} ${entry.getUid()}: ${qx.lang.Json.stringify(changes, null, 2)}`)
@@ -260,7 +257,22 @@ qx.Class.define('app.Model', {
               content.forEach(entry => {
                 const existing = this.lookup(localType, entry.getUid())
                 if (existing) {
-                  this.get(type).remove(existing).dispose()
+                  this.get(localType).remove(existing).dispose()
+                }
+              })
+            }
+          })
+          break
+
+        case proto.dn.ChangeType.ADD:
+          ['subscriptions', 'actors', 'publicChannels'].forEach(type => {
+            const content = update.get(type)
+            if (content) {
+              const localType = type === 'publicChannels' ? 'channels' : type
+              content.forEach(entry => {
+                const existing = this.lookup(localType, entry.getUid())
+                if (!existing) {
+                  this.get(localType).push(entry)
                 }
               })
             }
@@ -271,46 +283,6 @@ qx.Class.define('app.Model', {
           this.warn('unhandled update type ' + update.getType())
           break
       }
-    },
-
-    __objectFilter: function (obj, predicate) {
-      return Object.keys(obj)
-        .filter(key => predicate(key))
-        .reduce((res, key) => {
-          res[key] = obj[key]
-          return res
-        }, {})
-    },
-
-    __serialize: function (object) {
-      let skipProperties = ['deserialized', 'uid']
-      qx.Class.getMixins(object.constructor).forEach((x) => {
-        if (x.name.startsWith('app')) {
-          skipProperties = skipProperties.concat(Object.keys(qx.util.PropertyUtil.getProperties(x)))
-        }
-      })
-      const properties =
-        this.__objectFilter(qx.util.PropertyUtil.getProperties(object.constructor), x => !skipProperties.includes(x))
-
-      const result = {}
-      for (let name in properties) {
-        // ignore property groups
-        if (properties[name].group !== undefined) {
-          continue
-        }
-
-        const value = object['get' + qx.lang.String.firstUp(name)]()
-        if (qx.util.PropertyUtil.getInitValue(object, name) === value) {
-          continue
-        }
-        if (qx.lang.Type.isArray(value) && value.length === 0) {
-          continue
-        }
-        result[name] = qx.util.Serializer.toNativeObject(
-          value, this.__serialize.bind(this)
-        )
-      }
-      return result
     },
 
     /**
@@ -450,11 +422,21 @@ qx.Class.define('app.Model', {
     /**
      * Search an object by type and ID
      *
-     * @param type {String} type of the object (e.g. channel, subscription)
-     * @param uid {String} ID of the object
+     * @param type {String?} type of the object (e.g. channel, subscription)
+     * @param id {String} ID of the object
      */
     lookup: function (type, id) {
       let found = null
+      // search everywhere
+      if (!type) {
+        ['subscriptions', 'actors', 'channels'].some(name => {
+          found = this.lookup(name, id)
+          if (found) {
+            return true
+          }
+        })
+        return found
+      }
       const propertyName = type.endsWith('s') ? type : type + 's'
       const target = this['get' + qx.lang.String.firstUp(type) + 's']()
 

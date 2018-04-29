@@ -6,6 +6,7 @@
  */
 qx.Class.define('proto.dn.model.Subscriptions', {
   extend: proto.core.BaseMessage,
+  include: [app.api.MUpdate],
 
   /*
   *****************************************************************************
@@ -13,7 +14,7 @@ qx.Class.define('proto.dn.model.Subscriptions', {
   *****************************************************************************
   */
   construct: function (props) {
-    this.initSubscriptions(new qx.data.Array())
+    this.initSubscriptions(new app.api.Array())
     this.base(arguments, props)
   },
 
@@ -90,10 +91,10 @@ qx.Class.define('proto.dn.model.Subscriptions', {
   properties: {
 
     /**
-     * @type {qx.data.Array} array of {@link proto.dn.model.Subscription}
+     * @type {app.api.Array} array of {@link proto.dn.model.Subscription}
      */
     subscriptions: {
-      check: 'qx.data.Array',
+      check: 'app.api.Array',
       deferredInit: true,
       event: 'changeSubscriptions'
     }

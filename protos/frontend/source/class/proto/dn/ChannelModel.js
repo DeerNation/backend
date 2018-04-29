@@ -16,7 +16,7 @@ qx.Class.define('proto.dn.ChannelModel', {
   *****************************************************************************
   */
   construct: function (props) {
-    this.initPublications(new qx.data.Array())
+    this.initPublications(new app.api.Array())
     this.base(arguments, props)
   },
 
@@ -119,10 +119,10 @@ qx.Class.define('proto.dn.ChannelModel', {
   properties: {
 
     /**
-     * @type {qx.data.Array} array of {@link proto.dn.model.Publication}
+     * @type {app.api.Array} array of {@link proto.dn.model.Publication}
      */
     publications: {
-      check: 'qx.data.Array',
+      check: 'app.api.Array',
       deferredInit: true,
       event: 'changePublications'
     },

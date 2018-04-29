@@ -13,9 +13,9 @@ qx.Class.define('proto.dn.Model', {
   *****************************************************************************
   */
   construct: function (props) {
-    this.initActors(new qx.data.Array())
-    this.initPublicChannels(new qx.data.Array())
-    this.initSubscriptions(new qx.data.Array())
+    this.initActors(new app.api.Array())
+    this.initPublicChannels(new app.api.Array())
+    this.initSubscriptions(new app.api.Array())
     this.base(arguments, props)
   },
 
@@ -72,6 +72,14 @@ qx.Class.define('proto.dn.Model', {
           proto.dn.model.Subscription.serializeBinaryToWriter
         )
       }
+      f = message.getObject()
+      if (f != null) {
+        writer.writeMessage(
+          6,
+          f,
+          proto.dn.Object.serializeBinaryToWriter
+        )
+      }
     },
 
     /**
@@ -125,6 +133,11 @@ qx.Class.define('proto.dn.Model', {
             reader.readMessage(value, proto.dn.model.Subscription.deserializeBinaryFromReader)
             msg.getSubscriptions().push(value)
             break
+          case 6:
+            value = new proto.dn.Object()
+            reader.readMessage(value, proto.dn.Object.deserializeBinaryFromReader)
+            msg.setObject(value)
+            break
           default:
             reader.skipField()
             break
@@ -159,30 +172,37 @@ qx.Class.define('proto.dn.Model', {
     },
 
     /**
-     * @type {qx.data.Array} array of {@link proto.dn.model.Actor}
+     * @type {app.api.Array} array of {@link proto.dn.model.Actor}
      */
     actors: {
-      check: 'qx.data.Array',
+      check: 'app.api.Array',
       deferredInit: true,
       event: 'changeActors'
     },
 
     /**
-     * @type {qx.data.Array} array of {@link proto.dn.model.Channel}
+     * @type {app.api.Array} array of {@link proto.dn.model.Channel}
      */
     publicChannels: {
-      check: 'qx.data.Array',
+      check: 'app.api.Array',
       deferredInit: true,
       event: 'changePublicChannels'
     },
 
     /**
-     * @type {qx.data.Array} array of {@link proto.dn.model.Subscription}
+     * @type {app.api.Array} array of {@link proto.dn.model.Subscription}
      */
     subscriptions: {
-      check: 'qx.data.Array',
+      check: 'app.api.Array',
       deferredInit: true,
       event: 'changeSubscriptions'
+    },
+
+    object: {
+      check: 'proto.dn.Object',
+      init: null,
+      nullable: true,
+      event: 'changeObject'
     }
   }
 })

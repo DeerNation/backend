@@ -72,6 +72,8 @@ message Model {
     repeated dn.model.Channel publicChannels = 4;
     // subscriptions of the current user
     repeated dn.model.Subscription subscriptions = 5;
+    // change for a single object
+    Object object = 6;
 }
 
 /**

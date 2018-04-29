@@ -6,7 +6,7 @@
  */
 qx.Class.define('proto.dn.model.Channel', {
   extend: proto.core.BaseMessage,
-  include: [app.api.MChannel],
+  include: [app.api.MChannel, app.api.MUpdate],
 
   /*
   *****************************************************************************
@@ -14,7 +14,7 @@ qx.Class.define('proto.dn.model.Channel', {
   *****************************************************************************
   */
   construct: function (props) {
-    this.initAllowedActivityTypes(new qx.data.Array())
+    this.initAllowedActivityTypes(new app.api.Array())
     this.base(arguments, props)
   },
 
@@ -238,10 +238,10 @@ qx.Class.define('proto.dn.model.Channel', {
     },
 
     /**
-     * @type {qx.data.Array} array of {@link String}
+     * @type {app.api.Array} array of {@link String}
      */
     allowedActivityTypes: {
-      check: 'qx.data.Array',
+      check: 'app.api.Array',
       deferredInit: true,
       event: 'changeAllowedActivityTypes'
     },

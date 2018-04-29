@@ -7,6 +7,7 @@
  */
 qx.Class.define('proto.dn.model.Activity', {
   extend: proto.core.BaseMessage,
+  include: [app.api.MUpdate],
 
   /*
   *****************************************************************************

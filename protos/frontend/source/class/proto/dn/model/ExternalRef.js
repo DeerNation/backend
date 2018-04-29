@@ -6,6 +6,7 @@
  */
 qx.Class.define('proto.dn.model.ExternalRef', {
   extend: proto.core.BaseMessage,
+  include: [app.api.MUpdate],
 
   /*
   *****************************************************************************

@@ -76,7 +76,68 @@ fillDb()
  * dn.Com service implementation
  */
 class DgraphService {
+  constructor () {
+    this._listeners = {}
+  }
+
+  /**
+   * Add listener to changes for the given UID
+   * @param uid {String}
+   * @param callback {Function}
+   * @param context {Object?}
+   */
+  addListener (uid, callback, context) {
+    if (!this._listeners.hasOwnProperty(uid)) {
+      this._listeners[uid] = []
+    }
+    this._listeners[uid] = [callback, context]
+  }
+
+  /**
+   * Remove listener to changes for the given UID
+   * @param uid {String}
+   * @param callback {Function}
+   * @param context {Object?}
+   */
+  removeListener (uid, callback, context) {
+    if (this._listeners.hasOwnProperty(uid)) {
+      let removeAt = -1
+      this._listeners[uid].some((entry, index) => {
+        if (entry[0] === callback && entry[1] === (context || this)) {
+          removeAt = index
+          return true
+        }
+      })
+      if (removeAt >= 0) {
+        this._listeners[uid].splice(removeAt, 1)
+      }
+    }
+  }
+
+  /**
+   * Remove all listeners for changes on the UID
+   * @param uid {String\
+   */
+  removeAllListeners (uid) {
+    delete this._listeners[uid]
+  }
+
+  /**
+   * Notify listeners about a change for the UID
+   * @param uid {String}
+   * @param change {Map} change data
+   */
+  notifyListeners (uid, change) {
+    if (this._listeners.hasOwnProperty(uid)) {
+      this._listeners[uid].forEach(entry => {
+        entry[0].call(entry[1], change)
+      })
+    }
+  }
+
   async getModel (authToken, request, respond) {
+    console.log(this)
+    // TODO: remove listeners when the socket gets lost, the stream gets closed etc.
     let addQuery = ''
     if (authToken && authToken.user) {
       // query current actor + subscriptions too
@@ -143,31 +204,28 @@ class DgraphService {
     // normalize model
     if (model.hasOwnProperty('me')) {
       model.me = model.me[0]
+
+      // add listener
+      this.addListener(model.me.uid, respond)
+
       model.me.subscriptions.forEach(sub => {
         sub.channel = sub.channel[0]
         sub.channel.owner = sub.channel.owner[0]
+
+        // add listener
+        this.addListener(sub.uid, respond)
+
+        // TODO how to handle changes of channels referenced by subscriptions or subscriptions referenced by current user (subscription edge)
       })
       model.subscriptions = model.me.subscriptions
       delete model.me.subscriptions
     }
     model.publicChannels.forEach(chan => {
       chan.owner = chan.owner[0]
+      // add listener
+      this.addListener(chan.uid, respond)
     })
     model.type = protos.dn.ChangeType.REPLACE
-    // TODO: add listeners for updates and send them to the streaming channel
-    setInterval(() => {
-      const changeTest = {
-        type: 1,
-        me: {
-          uid: '0x1',
-          name: 'Tobias'
-        },
-        subscriptions: [
-
-        ]
-      }
-      respond(changeTest)
-    }, 100000)
     return model
   }
 
@@ -314,6 +372,9 @@ class DgraphService {
       mu.setSetJson(request.content)
       await txn.mutate(mu)
       await txn.commit()
+      this.notifyListeners(request.content.uid, {
+        object: request.content
+      })
       return {
         code: 0
       }
@@ -339,6 +400,9 @@ class DgraphService {
       mu.setSetJson(request.content)
       await txn.mutate(mu)
       await txn.commit()
+      this.notifyListeners(request.content.uid, {
+        object: request.content
+      })
       return {
         code: 0
       }
@@ -364,6 +428,9 @@ class DgraphService {
       mu.setDeleteJson(request.content)
       await txn.mutate(mu)
       await txn.commit()
+      this.notifyListeners(request.content.uid, {
+        object: request.content
+      })
       return {
         code: 0
       }

@@ -6,7 +6,7 @@
  */
 qx.Class.define('proto.dn.model.Subscription', {
   extend: proto.core.BaseMessage,
-  include: [app.api.MSubscription],
+  include: [app.api.MSubscription, app.api.MUpdate],
 
   /*
   *****************************************************************************
