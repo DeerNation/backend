@@ -23,7 +23,7 @@
  * @author tobiasb
  * @since 2018
  */
-
+// TODO add acl checks for leaving room (aka delete subscription) and deleting channel
 qx.Class.define('app.ui.form.SubscriptionItem', {
   extend: qx.ui.core.Widget,
   implement: [qx.ui.form.IModel],
@@ -81,6 +81,7 @@ qx.Class.define('app.ui.form.SubscriptionItem', {
     __visibilityButton: null,
     __favoriteButton: null,
     __unsubscribeButton: null,
+    __deleteChannelButton: null,
 
     // apply method
     _applyModel: function (value, old) {
@@ -181,6 +182,11 @@ qx.Class.define('app.ui.form.SubscriptionItem', {
         this.__unsubscribeButton = new qx.ui.menu.Button(this.tr('Leave room'), app.Config.icons.unsubscribe + '/20')
         this.__unsubscribeButton.addListener('execute', this._deleteSubscription, this)
         menu.add(this.__unsubscribeButton)
+
+        // owner can delete the channel
+        this.__deleteChannelButton = new qx.ui.menu.Button(this.tr('Delete channel'), app.Config.icons.delete + '/20')
+        this.__deleteChannelButton.addListener('execute', this._deleteChannel, this)
+        menu.add(this.__deleteChannelButton)
       }
       return this.__menu
     },
@@ -196,9 +202,29 @@ qx.Class.define('app.ui.form.SubscriptionItem', {
     },
 
     _deleteSubscription: function () {
-      dialog.Dialog.confirm(this.tr('Do you really want to leave this room?'), (confirmed) => {
+      dialog.Dialog.confirm(this.tr('Do you really want to leave this channel?'), (confirmed) => {
         if (confirmed === true) {
-          this.getModel().delete()
+          app.api.Service.getInstance().deleteObject(new proto.dn.Object({
+            subscription: new proto.dn.model.Subscription({uid: this.getModel().getUid()})
+          })).catch(err => {
+            this.error(err)
+          })
+        }
+      })
+    },
+
+    _deleteChannel: function () {
+      dialog.Dialog.confirm(this.tr('Do you really want to delete this channel?'), (confirmed) => {
+        if (confirmed === true) {
+          app.api.Service.getInstance().deleteObject(new proto.dn.Object({
+            subscription: new proto.dn.model.Subscription({uid: this.getModel().getUid()})
+          })).then(() => {
+            return app.api.Service.getInstance().deleteObject(new proto.dn.Object({
+              channel: new proto.dn.model.Channel({uid: this.getModel().getChannel().getUid()})
+            }))
+          }).catch(err => {
+            this.error(err)
+          })
         }
       })
     },

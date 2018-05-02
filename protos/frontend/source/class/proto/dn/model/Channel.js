@@ -103,6 +103,13 @@ qx.Class.define('proto.dn.model.Channel', {
           f
         )
       }
+      f = message.getWriteProtected()
+      if (f != null) {
+        writer.writeBool(
+          10,
+          f
+        )
+      }
     },
 
     /**
@@ -168,6 +175,10 @@ qx.Class.define('proto.dn.model.Channel', {
           case 9:
             value = reader.readString()
             msg.setView(value)
+            break
+          case 10:
+            value = reader.readBool()
+            msg.setWriteProtected(value)
             break
           default:
             reader.skipField()
@@ -251,6 +262,13 @@ qx.Class.define('proto.dn.model.Channel', {
       init: '',
       nullable: false,
       event: 'changeView'
+    },
+
+    writeProtected: {
+      check: 'Boolean',
+      init: false,
+      nullable: false,
+      event: 'changeWriteProtected'
     }
   }
 })

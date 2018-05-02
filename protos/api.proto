@@ -26,16 +26,14 @@ service Com {
     // ----------------------------------------------
 
     rpc createObject(Object) returns (Response);
-    rpc readObject(Uid) returns (Object);
+    rpc getObject(Uid) returns (Object);
+    rpc getObjects(Query) returns (Objects);
     rpc updateObject(Object) returns (Response);
     rpc deleteObject(Object) returns (Response);
 
     // ----------------------------------------------
     // Stream requests
     // ----------------------------------------------
-
-    // All changes the needed for live updating the GUI for the curren user
-    rpc listenForUpdates(Empty) returns (stream ActorChanges);
 }
 
 enum ChangeType {
@@ -45,13 +43,20 @@ enum ChangeType {
     REPLACE = 3;
 }
 
-/**
- * Actor related changes (new subscriptions, other actors/states)
- */
-message ActorChanges {
-    ChangeType type = 1;
-    repeated dn.model.Subscription subscription = 2;
-    repeated dn.model.Actor actor = 3;
+message Query {
+    string baseName = 1;
+    string filter = 2;
+    Point location = 3;
+    int32 radius = 4;
+}
+
+message Point {
+    float latitude = 1;
+    float longitude = 2;
+}
+
+message Objects {
+    repeated Object list = 1;
 }
 
 message Object {
@@ -59,6 +64,8 @@ message Object {
     oneof content {
         dn.model.Activity activity = 2;
         dn.model.Actor actor = 3;
+        dn.model.Channel channel = 4;
+        dn.model.Subscription subscription = 5;
     }
 }
 
@@ -98,6 +105,7 @@ message Token {
 
 message Uid {
     string uid = 1;
+    int32 depth = 2;
 }
 
 message Empty {}
@@ -121,6 +129,7 @@ message Response {
     }
     Code code = 1;
     string message = 2;
+    map<string, string> uids = 3;
 }
 
 /**

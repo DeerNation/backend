@@ -23,21 +23,21 @@
  * @author tobiasb
  * @since 2018
  */
-const WAMPServer = require('wamp-socket-cluster/WAMPServer')
+// const WAMPServer = require('wamp-socket-cluster/WAMPServer')
 const dbModule = require('./db')
 const acl = require('../acl')
 const config = require('../config')
 
 class RpcServer {
   constructor () {
-    this.rpcServer = new WAMPServer()
+    // this.rpcServer = new WAMPServer()
     this.registerRPCEndpoints(dbModule)
     this.socket = null
   }
 
   upgradeToWAMP (socket) {
     this.socket = socket
-    this.rpcServer.upgradeToWAMP(socket)
+    // this.rpcServer.upgradeToWAMP(socket)
   }
 
   registerRPCEndpoints (endpoints) {
@@ -54,7 +54,7 @@ class RpcServer {
       }
       wrappedEndpoints[methodName] = this._wrapper.bind(this, func, context)
     })
-    this.rpcServer.registerRPCEndpoints(wrappedEndpoints)
+    // this.rpcServer.registerRPCEndpoints(wrappedEndpoints)
   }
 
   async _wrapper (func, context, data, callback) {
@@ -78,10 +78,10 @@ class RpcServer {
 
 const rpcServer = new RpcServer()
 
-rpcServer.registerRPCEndpoints({
-  getAllowedActions: acl.getAllowedActions.bind(acl),
-  check: acl.check.bind(acl),
-  getAllowedActionsForRole: acl.getAllowedActionsForRole.bind(acl)
-})
+// rpcServer.registerRPCEndpoints({
+//   getAllowedActions: acl.getAllowedActions.bind(acl),
+//   check: acl.check.bind(acl),
+//   getAllowedActionsForRole: acl.getAllowedActionsForRole.bind(acl)
+// })
 
 module.exports = rpcServer

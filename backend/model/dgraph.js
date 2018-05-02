@@ -8,10 +8,12 @@ const dgraph = require('dgraph-js')
 const grpc = require('grpc')
 const path = require('path')
 const acl = require('../acl')
+const i18n = require('i18n')
 const defaultData = require('./default-graph-data')
 const logger = require('../logger')(__filename)
 const config = require('../config')
-const protos = grpc.load({root: path.join(__dirname, '..', '..'), file: path.join('protos', 'api.proto')})
+const proto = grpc.load({root: path.join(__dirname, '..', '..'), file: path.join('protos', 'api.proto')})
+const modelSubscriptions = require('./ModelSubscriptions')
 
 const clientStub = new dgraph.DgraphClientStub(
   'localhost:9080',
@@ -27,7 +29,7 @@ const dgraphClient = new dgraph.DgraphClient(clientStub)
 
 async function setSchema () {
   logger.debug('applying schema')
-  const schema = `id: string @index(hash) .
+  const schema = `id: string @index(hash) @upsert .
 baseName: string @index(exact) .  
 actor: uid @reverse .
 roleTarget: uid @reverse .
@@ -76,67 +78,7 @@ fillDb()
  * dn.Com service implementation
  */
 class DgraphService {
-  constructor () {
-    this._listeners = {}
-  }
-
-  /**
-   * Add listener to changes for the given UID
-   * @param uid {String}
-   * @param callback {Function}
-   * @param context {Object?}
-   */
-  addListener (uid, callback, context) {
-    if (!this._listeners.hasOwnProperty(uid)) {
-      this._listeners[uid] = []
-    }
-    this._listeners[uid] = [callback, context]
-  }
-
-  /**
-   * Remove listener to changes for the given UID
-   * @param uid {String}
-   * @param callback {Function}
-   * @param context {Object?}
-   */
-  removeListener (uid, callback, context) {
-    if (this._listeners.hasOwnProperty(uid)) {
-      let removeAt = -1
-      this._listeners[uid].some((entry, index) => {
-        if (entry[0] === callback && entry[1] === (context || this)) {
-          removeAt = index
-          return true
-        }
-      })
-      if (removeAt >= 0) {
-        this._listeners[uid].splice(removeAt, 1)
-      }
-    }
-  }
-
-  /**
-   * Remove all listeners for changes on the UID
-   * @param uid {String\
-   */
-  removeAllListeners (uid) {
-    delete this._listeners[uid]
-  }
-
-  /**
-   * Notify listeners about a change for the UID
-   * @param uid {String}
-   * @param change {Map} change data
-   */
-  notifyListeners (uid, change) {
-    if (this._listeners.hasOwnProperty(uid)) {
-      this._listeners[uid].forEach(entry => {
-        entry[0].call(entry[1], change)
-      })
-    }
-  }
-
-  async getModel (authToken, request, respond) {
-    console.log(this)
+  async getModel (authToken, request, respond, options) {
     // TODO: remove listeners when the socket gets lost, the stream gets closed etc.
     let addQuery = ''
     if (authToken && authToken.user) {
@@ -201,20 +143,27 @@ class DgraphService {
     const res = await dgraphClient.newTxn().query(query)
     const model = res.getJson()
 
+    const processChange = function (change) {
+      respond(change)
+    }
+
     // normalize model
     if (model.hasOwnProperty('me')) {
       model.me = model.me[0]
 
+      options.socket.on('close', () => {
+        console.log(options.socket.id, 'closed')
+        modelSubscriptions.removeListener(model.me.uid, processChange)
+        modelSubscriptions.removeListener('subscription>actor[' + model.me.uid + ']', processChange)
+      })
       // add listener
-      this.addListener(model.me.uid, respond)
+      modelSubscriptions.addListener(model.me.uid, processChange)
+      // listen to actor -> subscription edge
+      modelSubscriptions.addListener('subscription>actor[' + model.me.uid + ']', processChange)
 
       model.me.subscriptions.forEach(sub => {
         sub.channel = sub.channel[0]
         sub.channel.owner = sub.channel.owner[0]
-
-        // add listener
-        this.addListener(sub.uid, respond)
-
         // TODO how to handle changes of channels referenced by subscriptions or subscriptions referenced by current user (subscription edge)
       })
       model.subscriptions = model.me.subscriptions
@@ -222,10 +171,8 @@ class DgraphService {
     }
     model.publicChannels.forEach(chan => {
       chan.owner = chan.owner[0]
-      // add listener
-      this.addListener(chan.uid, respond)
     })
-    model.type = protos.dn.ChangeType.REPLACE
+    model.type = proto.dn.ChangeType.REPLACE
     return model
   }
 
@@ -307,10 +254,11 @@ class DgraphService {
   // --------------------------------------------------------------
   //  CRUD operations
   // --------------------------------------------------------------
-  async readObject (authToken, request) {
+  async getObject (authToken, request) {
     const query = `query read($a: string) {
-        object(func: uid($a)) {
-            expand(_all_)
+        object(func: uid($a)) @recurse(depth: ${request.depth || 1}, loop: true) {
+          uid
+          expand(_all_)
         }
     }`
     const res = await dgraphClient.newTxn().queryWithVars(query, {$a: request.uid})
@@ -318,36 +266,43 @@ class DgraphService {
     if (!object) {
       return {}
     }
-    const response = {}
     await acl.check(authToken, config.domain + '.object.' + object.baseName, acl.action.READ)
+    const response = {content: object.baseName.toLowerCase()}
+
+    // edge normalization
+    Object.keys(object).forEach(edge => {
+      if (request.depth >= 2 && edge.startsWith('~')) {
+        // do not return reverse edges
+        delete object[edge]
+      } else if (Array.isArray(object[edge]) && object[edge].length === 1 && object[edge][0].hasOwnProperty('uid')) {
+        object[edge] = object[edge][0]
+        delete object[edge].baseName
+      }
+    })
     response[object.baseName.toLowerCase()] = object
     delete object.baseName
+    console.log(object)
     return response
   }
 
   async __crudChecks (authToken, request, action, uidNeeded) {
-    if (uidNeeded === true && !request.content.uid) {
-      return {
-        code: 1,
-        message: 'uid needed to identify the object'
-      }
-    } else if (uidNeeded === false && request.content.uid) {
-      return {
-        code: 1,
-        message: 'the data must not contain an uid'
-      }
-    }
-    let type = ''
-    Object.keys(request).some(prop => {
-      if (prop !== 'content') {
-        type = prop
-        return true
-      }
-    })
+    const type = request.content
     if (!type) {
       return {
         code: 1,
         message: 'no object type found in data'
+      }
+    }
+    const object = request[type]
+    if (uidNeeded === true && !object.uid) {
+      return {
+        code: 1,
+        message: 'uid needed to identify the object'
+      }
+    } else if (uidNeeded === false && object.uid) {
+      return {
+        code: 1,
+        message: 'the data must not contain an uid'
       }
     }
     try {
@@ -355,7 +310,7 @@ class DgraphService {
     } catch (e) {
       return {
         code: 2,
-        message: '' + e
+        message: e.toString()
       }
     }
     return true
@@ -369,12 +324,10 @@ class DgraphService {
     const txn = dgraphClient.newTxn()
     try {
       const mu = new dgraph.Mutation()
-      mu.setSetJson(request.content)
+      mu.setSetJson(request[request.content])
       await txn.mutate(mu)
       await txn.commit()
-      this.notifyListeners(request.content.uid, {
-        object: request.content
-      })
+      modelSubscriptions.notifyListeners(this.__createChangeObject(request, proto.dn.ChangeType.UPDATE))
       return {
         code: 0
       }
@@ -389,25 +342,83 @@ class DgraphService {
     }
   }
 
+  /**
+   * Creates a new object
+   * @param authToken {Object}
+   * @param request {Map} proto.dn.Object as map
+   * @returns {Promise<*|boolean>}
+   */
   async createObject (authToken, request) {
-    const checkResult = this.__crudChecks(authToken, request, acl.action.CREATE, false)
+    const checkResult = await this.__crudChecks(authToken, request, acl.action.CREATE, false)
     if (checkResult !== true) {
       return checkResult
+    }
+    const object = request[request.content]
+    object.baseName = request.content.substring(0, 1).toUpperCase() + request.content.substring(1)
+    // mark it to find the uid in the response
+    object.uid = '_:' + request.content
+    const uidMappers = {}
+    uidMappers[request.content] = object
+    if (request.content === 'subscription') {
+      // if channel is new, we need to add some data to it
+      if (!object.channel.uid) {
+        // channel is new
+        let type = 'public'
+        Object.keys(proto.dn.model.Channel.Type).some(typeName => {
+          if (proto.dn.model.Channel.Type[typeName] === object.channel.type) {
+            type = typeName.toLowerCase()
+            return true
+          }
+        })
+        object.channel.id = config.channelPrefix + object.channel.title.toLowerCase() + '.' + type
+        // new channel create current user is the owner
+        object.channel.owner = {uid: authToken.user}
+        object.channel.uid = '_:channel'
+        object.channel.baseName = 'Channel'
+        console.log(object.channel)
+        uidMappers['channel'] = object.channel
+      }
+      if (!object.actor) {
+        // add subscription for current user
+        object.actor = {uid: authToken.user}
+      } else {
+        // TODO: check if the user is allowed to add subscriptions for other actors
+        return {
+          code: 2,
+          message: i18n.__('You are not allowed to add subscriptions for other users')
+        }
+      }
     }
     const txn = dgraphClient.newTxn()
     try {
       const mu = new dgraph.Mutation()
-      mu.setSetJson(request.content)
-      await txn.mutate(mu)
+      mu.setSetJson(object)
+      const res = await txn.mutate(mu)
       await txn.commit()
-      this.notifyListeners(request.content.uid, {
-        object: request.content
+      if (request.content === 'subscription') {
+        // remove baseNames again for the update notifications
+        delete object.baseName
+        if (object.channel) {
+          delete object.channel.baseName
+        }
+      }
+      Object.keys(uidMappers).forEach(name => {
+        uidMappers[name].uid = res.getUidsMap().get(name)
+        const change = {
+          object: {
+            type: proto.dn.ChangeType.ADD,
+            content: name
+          }
+        }
+        change.object[name] = uidMappers[name]
+        modelSubscriptions.notifyListeners(change)
       })
       return {
-        code: 0
+        code: 0,
+        message: i18n.__('Object has been created')
       }
     } catch (e) {
-      logger.error(e)
+      logger.error('Error creating object: ' + e)
       return {
         code: 1,
         message: '' + e
@@ -415,22 +426,45 @@ class DgraphService {
     } finally {
       await txn.discard()
     }
+  }
+
+  /**
+   * Create tha data structure for an proto.dn.Object instance
+   * @param request {Object}
+   * @param type {Number} of proto.dn.ChangeType
+   * @returns {{object: {type: *, content: *}}}
+   * @private
+   */
+  __createChangeObject (request, type) {
+    const change = {
+      object: {
+        type: type,
+        content: request.content
+      }
+    }
+    change.object[request.content] = request[request.content]
+    return change
   }
 
   async deleteObject (authToken, request) {
-    const checkResult = this.__crudChecks(authToken, request, acl.action.DELETE, true)
+    const checkResult = await this.__crudChecks(authToken, request, acl.action.DELETE, true)
     if (checkResult !== true) {
       return checkResult
     }
+    // read the complete object from DB to get the edges
+    const deletedObject = await this.getObject(authToken, {uid: request[request.content].uid, depth: 2})
+    console.log(deletedObject)
     const txn = dgraphClient.newTxn()
     try {
       const mu = new dgraph.Mutation()
-      mu.setDeleteJson(request.content)
+      mu.setDeleteJson({uid: request[request.content].uid})
       await txn.mutate(mu)
       await txn.commit()
-      this.notifyListeners(request.content.uid, {
-        object: request.content
-      })
+      const change = this.__createChangeObject(request, proto.dn.ChangeType.DELETE)
+      // replace with complete object
+      change.object[change.object.content] = deletedObject[deletedObject.content]
+      console.log(JSON.stringify(change, null, 2))
+      modelSubscriptions.notifyListeners(change)
       return {
         code: 0
       }

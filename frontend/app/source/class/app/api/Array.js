@@ -14,8 +14,8 @@ qx.Class.define('app.api.Array', {
   ******************************************************
   */
   construct: function () {
-    this.base(arguments)
     this.addListener('change', this.__onChange, this)
+    this.base(arguments)
   },
 
   /*
@@ -27,22 +27,26 @@ qx.Class.define('app.api.Array', {
     __onChange: function (ev) {
       ev.getData().added.forEach(entry => {
         if (entry instanceof proto.core.BaseMessage) {
-          qx.event.message.Bus.subscribe('proto.dn.model.' + entry, this._onObjectUpdate, this)
+          console.log('listening to ' + entry.getUid())
+          qx.event.message.Bus.subscribe('proto.dn.model.' + entry.getUid(), this._onObjectUpdate, this)
         }
       })
       ev.getData().removed.forEach(entry => {
         if (entry instanceof proto.core.BaseMessage) {
-          qx.event.message.Bus.unsubscribe('proto.dn.model.' + entry, this._onObjectUpdate, this)
+          console.log('stop listening to ' + entry.getUid())
+          qx.event.message.Bus.unsubscribe('proto.dn.model.' + entry.getUid(), this._onObjectUpdate, this)
         }
       })
     },
 
     _onObjectUpdate: function (ev) {
       const change = ev.getData()
+      console.log(change.getType())
       if (change.getType() === proto.dn.ChangeType.DELETE) {
         const uid = change.getContent().getUid()
         this.some(entry => {
           if (entry.getUid && entry.getUid() === uid) {
+            console.log('deleting ' + uid)
             this.remove(entry)
             return true
           }

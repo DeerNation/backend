@@ -101,6 +101,7 @@ message Channel {
     string color = 7;
     repeated string allowedActivityTypes = 8;
     string view = 9;
+    bool writeProtected = 10;
 }
 
 message Actor {
@@ -113,7 +114,7 @@ message Actor {
     }
     Type type = 2;
     string username = 3;
-    string role = 4;
+    ACLRole roles = 4;
     string name = 5;
     string email = 6;
     string color = 7;
@@ -155,4 +156,11 @@ message AclActions {
     string actions = 1;
     string memberActions = 2;
     string ownerActions = 3;
+}
+
+message ACLRole {
+    string uid = 1;
+    string id = 2;
+    int32 weight = 3;
+    ACLRole parent = 4;
 }

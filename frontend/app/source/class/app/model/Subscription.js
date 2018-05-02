@@ -22,6 +22,7 @@
  *
  * @author Tobias Bräutigam <tbraeutigam@gmail.com>
  * @since 2018
+ * @deprecated
  */
 
 qx.Class.define('app.model.Subscription', {

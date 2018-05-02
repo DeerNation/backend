@@ -10,5 +10,6 @@
 	"New message in %s": "New message in %s",
 	"You are not allowed to delete entries in this channel.": "You are not allowed to delete entries in this channel.",
 	"You do not have the rights to do this.": "You do not have the rights to do this.",
-	"You are not allowed to delete this activity.": "You are not allowed to delete this activity."
+	"You are not allowed to delete this activity.": "You are not allowed to delete this activity.",
+	"Object has been created": "Object has been created"
 }

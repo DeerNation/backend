@@ -22,6 +22,7 @@
  *
  * @author tobiasb
  * @since 2018
+ * @deprecated
  */
 
 qx.Class.define('app.model.Factory', {

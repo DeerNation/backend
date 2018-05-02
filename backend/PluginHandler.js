@@ -28,7 +28,7 @@ const path = require('path')
 const glob = require('glob')
 const fs = require('fs')
 const schemaHandler = require('./model/JsonSchemaHandler')
-const graphQL = require('./model/graphql-thinky')
+// const graphQL = require('./model/graphql-thinky')
 const schema = require('./model/schema')
 const channelHandler = require('./ChannelHandler')
 
@@ -79,15 +79,15 @@ class PluginHandler {
     }
 
     // read graphql type
-    if (manifest.provides.hasOwnProperty('graphQlType')) {
-      const graphQlTypeFile = path.join(pluginDir, manifest.provides.graphQlType)
-      if (!fs.existsSync(graphQlTypeFile)) {
-        logger.error('GraphQL type file not found: %s', graphQlTypeFile)
-      } else {
-        const {graphQlType, qglTypeResolver} = require(graphQlTypeFile)
-        graphQL.registerContentType(graphQlType, qglTypeResolver)
-      }
-    }
+    // if (manifest.provides.hasOwnProperty('graphQlType')) {
+    //   const graphQlTypeFile = path.join(pluginDir, manifest.provides.graphQlType)
+    //   if (!fs.existsSync(graphQlTypeFile)) {
+    //     logger.error('GraphQL type file not found: %s', graphQlTypeFile)
+    //   } else {
+    //     const {graphQlType, qglTypeResolver} = require(graphQlTypeFile)
+    //     graphQL.registerContentType(graphQlType, qglTypeResolver)
+    //   }
+    // }
 
     if (manifest.provides.hasOwnProperty('notification')) {
       const notificationFile = path.join(pluginDir, manifest.provides.notification)

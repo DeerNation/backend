@@ -17,6 +17,9 @@ class GrpcServer {
 
   upgradeToGrpc (socket) {
     this.socket = socket
+    socket.on('close', () => {
+      console.log('Socket closed')
+    })
 
     // listen for incoming streamChannel requests
     this.socket.on('raw', (request) => {
@@ -81,7 +84,12 @@ class GrpcServer {
     const result = await service.callback(
       this.socket.getAuthToken(),
       service.requestDeserialize(bytes),
-      this.__respond.bind(this, streamChannel, service.responseSerialize)
+      this.__respond.bind(this, streamChannel, service.responseSerialize),
+      {
+        socket: this.socket,
+        service: service,
+        channel: streamChannel
+      }
     )
     this.socket.emit(streamChannel, service.responseSerialize(result))
   }

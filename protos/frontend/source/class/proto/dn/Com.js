@@ -94,15 +94,32 @@ qx.Class.define('proto.dn.Com', {
      * @param payload {proto.dn.Uid}
      * @returns {Promise} resolves to {proto.dn.Object}
      */
-    readObject: function (payload) {
+    getObject: function (payload) {
       qx.core.Assert.assertInstance(payload, proto.dn.Uid)
       return this._call(payload, {
-        methodName: 'readObject',
+        methodName: 'getObject',
         service: this,
         requestStream: false,
         responseStream: false,
         requestType: proto.dn.Uid,
         responseType: proto.dn.Object
+      })
+    },
+
+    /**
+     *
+     * @param payload {proto.dn.Query}
+     * @returns {Promise} resolves to {proto.dn.Objects}
+     */
+    getObjects: function (payload) {
+      qx.core.Assert.assertInstance(payload, proto.dn.Query)
+      return this._call(payload, {
+        methodName: 'getObjects',
+        service: this,
+        requestStream: false,
+        responseStream: false,
+        requestType: proto.dn.Query,
+        responseType: proto.dn.Objects
       })
     },
 
@@ -138,25 +155,6 @@ qx.Class.define('proto.dn.Com', {
         requestType: proto.dn.Object,
         responseType: proto.dn.Response
       })
-    },
-
-    /**
-     * All changes the needed for live updating the GUI for the curren user
-     * @param payload {proto.dn.Empty}
-     * @param callback {Function} onMessage callback
-     * @param context {Object} onMessage callback context
-     * @returns {Promise} resolves to {proto.dn.ActorChanges}
-     */
-    listenForUpdates: function (payload, callback, context) {
-      qx.core.Assert.assertInstance(payload, proto.dn.Empty)
-      return this._call(payload, {
-        methodName: 'listenForUpdates',
-        service: this,
-        requestStream: false,
-        responseStream: true,
-        requestType: proto.dn.Empty,
-        responseType: proto.dn.ActorChanges
-      }, callback, context)
     }
   }
 })

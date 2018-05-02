@@ -159,8 +159,24 @@ qx.Class.define('app.ui.BaseMenu', {
             this.error('No channel name defined')
             return
           }
+          const subscription = new proto.dn.model.Subscription({
+            channel: new proto.dn.model.Channel({
+              title: data.name,
+              writeProtected: data.writeProtected,
+              type: data.private ? proto.dn.model.Channel.Type.PRIVATE : proto.dn.model.Channel.Type.PUBLIC,
+              color: qx.util.ColorUtil.randomColor()
+            })
+          })
+          const object = new proto.dn.Object({subscription: subscription})
           // create this channel
-          app.io.Rpc.getProxy().createChannel(data)
+          app.api.Service.getInstance().createObject(object).then(res => {
+            if (res && res.getCode() === proto.dn.Response.Code.ERROR) {
+              throw new Error(res.getMessage())
+            }
+            this.debug(res.getMessage())
+          }).catch(err => {
+            this.error(err.message)
+          })
         }
       }.bind(this))
     },

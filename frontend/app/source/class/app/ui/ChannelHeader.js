@@ -83,7 +83,7 @@ qx.Class.define('app.ui.ChannelHeader', {
           }
         })
         channel.bind('description', this.getChildControl('description'), 'value')
-        if (value instanceof app.model.Subscription) {
+        if (value instanceof proto.dn.model.Subscription) {
           value.bind('favorite', this.getChildControl('favorite'), 'icon', {
             converter: function (val) {
               if (val) {

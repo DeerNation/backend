@@ -32,14 +32,16 @@ qx.Mixin.define('app.api.MUpdate', {
 
     _onUpdate: function (ev) {
       const change = ev.getData()
-      switch (change.getType) {
+      switch (change.getType()) {
         case proto.dn.ChangeType.DELETE:
+          console.log('disposing ' + this.getUid() + '/' + change.getContent().getUid())
           this.dispose()
           break
 
         case proto.dn.ChangeType.UPDATE:
         case proto.dn.ChangeType.REPLACE:
-          const changes = qx.util.Serializer.toNativeObject(change, app.api.Utils.serialize)
+          const changes = qx.util.Serializer.toNativeObject(change.getContent(), app.api.Utils.serialize)
+          console.log(changes)
           if (changes.length > 1) {
             this.set(changes)
           }

@@ -29,10 +29,9 @@ const moment = require('moment')
 const logger = require('../logger')(__filename)
 
 class ICal {
-  constructor (file, model) {
+  constructor (file) {
     this.__uri = file
     this.__parsedData = null
-    this.__model = model
   }
 
   parse () {

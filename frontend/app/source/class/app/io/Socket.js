@@ -40,10 +40,6 @@ qx.Class.define('app.io.Socket', {
     this.__queuedSubscriptions = []
     this.connect()
 
-    // eslint-disable-next-line
-    this.__wampClient = new wampSocketCluster()
-    this.__wampClient.upgradeToWAMP(this.__socket)
-
     app.api.GrpcClient.getInstance().upgradeToGrpcClient(this.__socket)
 
     app.io.Rpc.setSocket(this.__socket)
@@ -101,7 +97,6 @@ qx.Class.define('app.io.Socket', {
     __channels: null,
     __queuedSubscriptions: null,
     __loginDialog: null,
-    __wampClient: null,
 
     connect: function () {
       if (this.__socket && this.__socket.state !== this.__socket.CLOSED) {
@@ -235,7 +230,6 @@ qx.Class.define('app.io.Socket', {
   */
   destruct: function () {
     this.close()
-    this.__wampClient = null
     this.__socket = null
   }
 })

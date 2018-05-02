@@ -9,6 +9,16 @@ qx.Class.define('proto.dn.Response', {
 
   /*
   *****************************************************************************
+     CONSTRUCTOR
+  *****************************************************************************
+  */
+  construct: function (props) {
+    this.initUids(new app.api.Array())
+    this.base(arguments, props)
+  },
+
+  /*
+  *****************************************************************************
      STATICS
   *****************************************************************************
   */
@@ -41,6 +51,14 @@ qx.Class.define('proto.dn.Response', {
         writer.writeString(
           2,
           f
+        )
+      }
+      f = message.getUids().toArray()
+      if (f != null) {
+        writer.writeRepeatedMessage(
+          3,
+          f,
+          proto.dn.Response.UidsEntry.serializeBinaryToWriter
         )
       }
     },
@@ -80,6 +98,11 @@ qx.Class.define('proto.dn.Response', {
             value = reader.readString()
             msg.setMessage(value)
             break
+          case 3:
+            value = new proto.dn.Response.UidsEntry()
+            reader.readMessage(value, proto.dn.Response.UidsEntry.deserializeBinaryFromReader)
+            msg.getUids().push(value)
+            break
           default:
             reader.skipField()
             break
@@ -111,6 +134,15 @@ qx.Class.define('proto.dn.Response', {
       init: '',
       nullable: false,
       event: 'changeMessage'
+    },
+
+    /**
+     * @type {app.api.Array} array of {@link proto.dn.Response.UidsEntry}
+     */
+    uids: {
+      check: 'app.api.Array',
+      deferredInit: true,
+      event: 'changeUids'
     }
   }
 })

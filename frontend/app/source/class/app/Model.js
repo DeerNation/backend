@@ -36,9 +36,9 @@ qx.Class.define('app.Model', {
   construct: function () {
     this.base(arguments)
     this.__subscribedChannels = {}
-    this.setChannels(new qx.data.Array())
-    this.setSubscriptions(new qx.data.Array())
-    this.setActors(new qx.data.Array())
+    this.setChannels(new app.api.Array())
+    this.setSubscriptions(new app.api.Array())
+    this.setActors(new app.api.Array())
 
     this.__lookupCache = {}
 
@@ -92,7 +92,7 @@ qx.Class.define('app.Model', {
      * DO NOT REPLACE THIS ARRAY!!! Only modify its content
      */
     channels: {
-      check: 'qx.data.Array',
+      check: 'app.api.Array',
       init: null
     },
 
@@ -100,7 +100,7 @@ qx.Class.define('app.Model', {
      * DO NOT REPLACE THIS ARRAY!!! Only modify its content
      */
     subscriptions: {
-      check: 'qx.data.Array',
+      check: 'app.api.Array',
       init: null
     },
 
@@ -123,7 +123,7 @@ qx.Class.define('app.Model', {
     },
 
     actors: {
-      check: 'qx.data.Array',
+      check: 'app.api.Array',
       init: null
     }
   },
@@ -145,38 +145,12 @@ qx.Class.define('app.Model', {
     },
 
     init: async function () {
-      const service = new proto.dn.Com(app.io.Socket.getInstance())
+      const service = app.api.Service.getInstance()
       const modelStream = this.__modelStream = await service.getModel(new proto.dn.Empty())
       modelStream.addListener('message', this._onModelUpdate, this)
       modelStream.addListener('error', (err) => {
         this.error(err)
       }, this)
-
-      //
-      // app.io.Rpc.getProxy().getChannels().then(channels => {
-      //   this.getChannels().append(app.model.Factory.createAll(channels, app.model.Channel))
-      //
-      //   this.__subscribeAndWatchChannel('crud>publicChannels():Channel', this._onUpdate.bind(this, 'channel'))
-      //
-      //   if (currentUserId) {
-      //     return app.io.Rpc.getProxy().getSubscriptions()
-      //   } else {
-      //     return Promise.resolve([])
-      //   }
-      // }).then(subs => {
-      //   this.getSubscriptions().append(app.model.Factory.createAll(subs, app.model.Subscription))
-      //
-      //   if (currentUserId) {
-      //   // now subscribe to changes
-      //     this.__subscribeAndWatchChannel(
-      //       'crud>mySubscriptions(' + qx.lang.Json.stringify({actorId: currentUserId}) + '):Subscription',
-      //       this._onUpdate.bind(this, 'subscription')
-      //     )
-      //   } else if (this.getActor()) {
-      //     socket.unsubscribe('crud>mySubscriptions(' + qx.lang.Json.stringify({actorId: this.getActor().getUid()}) + '):Subscription')
-      //     this.resetActor()
-      //   }
-      // })
     },
 
     /**
@@ -192,8 +166,17 @@ qx.Class.define('app.Model', {
 
       const objectChange = update.getObject()
       if (objectChange) {
+        console.log('ObjectChange:', objectChange)
         // change for a single object send to bus where the objects listen to
-        qx.event.message.Bus('proto.dn.model.' + objectChange.getuid(), objectChange)
+        qx.event.message.Bus.dispatchByName('proto.dn.model.' + objectChange.getContent().getUid(), objectChange)
+        if (objectChange.getType() === proto.dn.ChangeType.ADD) {
+          if (objectChange.getContent() instanceof proto.dn.model.Subscription &&
+            objectChange.getContent().getActor().getUid() === this.getActor().getUid()
+          ) {
+            // new subscriptions
+            this.getSubscriptions().push(objectChange.getContent())
+          }
+        }
       }
 
       switch (update.getType()) {
@@ -316,80 +299,6 @@ qx.Class.define('app.Model', {
     },
 
     /**
-     * Handles incoming updates on the subscription channel
-     *
-     * @param type {String} type of the updated data model
-     * @param data {Object} changed data
-     * @protected
-     */
-    _onUpdate: function (type, data) {
-      console.log(type, data)
-      const Clazz = qx.Class.getByName('app.model.' + qx.lang.String.firstUp(type))
-      const target = this['get' + qx.lang.String.firstUp(type) + 's']()
-
-      switch (data.type) {
-        case 'create':
-          // get object from backend
-          // socket.emit('read', {
-          //   type: qx.lang.String.firstUp(type),
-          //   id: data.id
-          // }, (err, response) => {
-          //   if (err) {
-          //     this.error(err)
-          //   } else {
-          //     target.append(app.model.Factory.create(response, Clazz))
-          //   }
-          // })
-
-          app.io.Rpc.getProxy().getObject(qx.lang.String.firstUp(type), data.id).then(response => {
-            // first we make sure that the channel is known
-            this.asyncLookup('channel', response.channelId).then(() => {
-              target.append(app.model.Factory.create(response, Clazz))
-            })
-          })
-          break
-
-        case 'update':
-          // request new date from backend
-          // socket.emit('read', {
-          //   type: qx.lang.String.firstUp(type),
-          //   id: data.id
-          // }, (err, response) => {
-          //   if (err) {
-          //     this.error(err)
-          //   } else {
-          //     target.some((entry) => {
-          //       if (entry.getId() === data.id) {
-          //         target.set(response)
-          //         return true
-          //       }
-          //     })
-          //     target.append(app.model.Factory.create(response, Clazz))
-          //   }
-          // })
-          app.io.Rpc.getProxy().getObject(qx.lang.String.firstUp(type), data.id).then(response => {
-            target.some((entry) => {
-              if (entry.getId() === data.id) {
-                target.set(response)
-                return true
-              }
-            })
-          })
-          break
-
-        case 'delete':
-          target.some((entry) => {
-            if (entry.getId() === data.id) {
-              this.debug(type + ' was deleted ', entry)
-              target.remove(entry)
-              return true
-            }
-          })
-          break
-      }
-    },
-
-    /**
      * Selected the Subscription for this channel
      * @param channelId {String}
      */
@@ -467,10 +376,9 @@ qx.Class.define('app.Model', {
       if (!found) {
         const propertyName = type.endsWith('s') ? type : type + 's'
         const target = this['get' + qx.lang.String.firstUp(type) + 's']()
-        const Clazz = qx.Class.getByName('app.model.' + qx.lang.String.firstUp(type))
 
-        const res = await app.io.Rpc.getProxy().getObject(qx.lang.String.firstUp(type), id)
-        found = this.__lookupCache[propertyName][id] = app.model.Factory.create(res, Clazz)
+        const res = await app.api.Service.getInstance().getObject(new proto.dn.Uid({uid: id}))
+        found = this.__lookupCache[propertyName][id] = res
         target.push(found)
       }
       return found

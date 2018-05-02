@@ -28,6 +28,13 @@ qx.Class.define('proto.dn.Uid', {
           f
         )
       }
+      f = message.getDepth()
+      if (f != null) {
+        writer.writeInt32(
+          2,
+          f
+        )
+      }
     },
 
     /**
@@ -61,6 +68,10 @@ qx.Class.define('proto.dn.Uid', {
             value = reader.readString()
             msg.setUid(value)
             break
+          case 2:
+            value = reader.readInt32()
+            msg.setDepth(value)
+            break
           default:
             reader.skipField()
             break
@@ -82,6 +93,13 @@ qx.Class.define('proto.dn.Uid', {
       init: '',
       nullable: false,
       event: 'changeUid'
+    },
+
+    depth: {
+      check: 'Integer',
+      init: 0,
+      nullable: false,
+      event: 'changeDepth'
     }
   }
 })

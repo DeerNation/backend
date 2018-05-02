@@ -65,7 +65,7 @@ qx.Class.define('app.ui.list.Subscriptions', {
             case proto.dn.model.Channel.Type.PUBLIC:
               return qx.locale.Manager.tr('Channels')
 
-            case proto.dn.Channel.Type.PRIVATE:
+            case proto.dn.model.Channel.Type.PRIVATE:
               return qx.locale.Manager.tr('Private channels')
           }
         },
