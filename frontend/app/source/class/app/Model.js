@@ -144,13 +144,11 @@ qx.Class.define('app.Model', {
       }
     },
 
-    init: async function () {
+    init: function () {
       const service = app.api.Service.getInstance()
-      const modelStream = this.__modelStream = await service.getModel(new proto.dn.Empty())
+      const modelStream = this.__modelStream = service.getModel(new proto.dn.Empty())
       modelStream.addListener('message', this._onModelUpdate, this)
-      modelStream.addListener('error', (err) => {
-        this.error(err)
-      }, this)
+      modelStream.addListener('error', app.Error.show)
     },
 
     /**
@@ -166,15 +164,14 @@ qx.Class.define('app.Model', {
 
       const objectChange = update.getObject()
       if (objectChange) {
-        console.log('ObjectChange:', objectChange)
         // change for a single object send to bus where the objects listen to
-        qx.event.message.Bus.dispatchByName('proto.dn.model.' + objectChange.getContent().getUid(), objectChange)
+        qx.event.message.Bus.dispatchByName('proto.dn.model.' + objectChange.getOneOfContent().getUid(), objectChange)
         if (objectChange.getType() === proto.dn.ChangeType.ADD) {
-          if (objectChange.getContent() instanceof proto.dn.model.Subscription &&
-            objectChange.getContent().getActor().getUid() === this.getActor().getUid()
+          if (objectChange.getOneOfContent() instanceof proto.dn.model.Subscription &&
+            objectChange.getOneOfContent().getActor().getUid() === this.getActor().getUid()
           ) {
             // new subscriptions
-            this.getSubscriptions().push(objectChange.getContent())
+            this.getSubscriptions().push(objectChange.getOneOfContent())
           }
         }
       }

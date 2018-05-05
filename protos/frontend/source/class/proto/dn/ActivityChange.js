@@ -153,7 +153,7 @@ qx.Class.define('proto.dn.ActivityChange', {
      * oneOfIndex: 0
      */
     content: {
-      check: 'proto.core.BaseMessage',
+      check: ['activity', 'writing'],
       init: null,
       event: 'changeContent'
     }
@@ -167,10 +167,8 @@ qx.Class.define('proto.dn.ActivityChange', {
   members: {
     // oneOf property apply
     _applyOneOf0: function (value, old, name) {
-      if (value !== null) {
-        this.setContent(value)
-      }
-
+      this.setContent(name)
+      
       // reset all other values
       proto.dn.ActivityChange.ONEOFS[0].forEach(function (prop) {
         if (prop !== name) {
@@ -180,7 +178,7 @@ qx.Class.define('proto.dn.ActivityChange', {
     },
     /**
      * Set value for oneOf field 'content'. Tries to detect the object type and call the correct setter.
-     * @param obj {Object}
+     * @param obj {var}
      */
     setOneOfContent: function (obj) {
       var type = obj.basename.toLowerCase()
@@ -189,6 +187,16 @@ qx.Class.define('proto.dn.ActivityChange', {
       } else {
         throw new Error('type ' + type + ' is invalid for content, allowed types are: ' + proto.dn.ActivityChange.ONEOFS[0].join(', '))
       }
+    },
+    /**
+     * Get value for oneOf field 'content'.
+     * @returns {var}
+     */
+    getOneOfContent: function () {
+      if (this.getContent()) {
+        return this.get(this.getContent())
+      }
+      return null
     }
   },
 

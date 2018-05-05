@@ -11,9 +11,9 @@ qx.Class.define('proto.core.BaseMessage', {
   *****************************************************************************
   */
   construct: function (props) {
-    this.base(arguments);
+    this.base(arguments)
     if (props) {
-      this.set(props);
+      this.set(props)
     }
   },
 
@@ -49,11 +49,11 @@ qx.Class.define('proto.core.BaseMessage', {
      * @returns {!Object}
      */
     toObject: function (opt_includeInstance) {
-      var obj = qx.util.Serializer.toNativeObject(this);
+      var obj = qx.util.Serializer.toNativeObject(this)
       if (opt_includeInstance === true) {
-        obj.$jspbMessageInstance = this;
+        obj.$jspbMessageInstance = this
       }
-      return obj;
+      return obj
     },
 
     /**
@@ -61,9 +61,9 @@ qx.Class.define('proto.core.BaseMessage', {
      * @returns {Uint8Array}
      */
     serializeBinary: function () {
-      var writer = new jspb.BinaryWriter();
-      this.constructor.serializeBinaryToWriter(this, writer);
-      return writer.getResultBuffer();
+      var writer = new jspb.BinaryWriter()
+      this.constructor.serializeBinaryToWriter(this, writer)
+      return writer.getResultBuffer()
     },
 
     /**

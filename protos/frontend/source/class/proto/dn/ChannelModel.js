@@ -34,10 +34,17 @@ qx.Class.define('proto.dn.ChannelModel', {
      * @suppress {unusedLocalVariables} f is only used for nested messages
      */
     serializeBinaryToWriter: function (message, writer) {
-      var f = message.getPublications().toArray()
+      var f = message.getType()
+      if (f !== 0.0) {
+        writer.writeEnum(
+          1,
+          f
+        )
+      }
+      f = message.getPublications().toArray()
       if (f != null) {
         writer.writeRepeatedMessage(
-          1,
+          2,
           f,
           proto.dn.model.Publication.serializeBinaryToWriter
         )
@@ -45,7 +52,7 @@ qx.Class.define('proto.dn.ChannelModel', {
       f = message.getChannelActions()
       if (f != null) {
         writer.writeMessage(
-          2,
+          3,
           f,
           proto.dn.model.AclActions.serializeBinaryToWriter
         )
@@ -53,9 +60,25 @@ qx.Class.define('proto.dn.ChannelModel', {
       f = message.getActivityActions()
       if (f != null) {
         writer.writeMessage(
-          3,
+          4,
           f,
           proto.dn.model.AclActions.serializeBinaryToWriter
+        )
+      }
+      f = message.getWritingUser()
+      if (f != null) {
+        writer.writeMessage(
+          5,
+          f,
+          proto.dn.WritingUser.serializeBinaryToWriter
+        )
+      }
+      f = message.getObject()
+      if (f != null) {
+        writer.writeMessage(
+          6,
+          f,
+          proto.dn.Object.serializeBinaryToWriter
         )
       }
     },
@@ -88,19 +111,33 @@ qx.Class.define('proto.dn.ChannelModel', {
         var field = reader.getFieldNumber()
         switch (field) {
           case 1:
+            value = reader.readEnum()
+            msg.setType(value)
+            break
+          case 2:
             value = new proto.dn.model.Publication()
             reader.readMessage(value, proto.dn.model.Publication.deserializeBinaryFromReader)
             msg.getPublications().push(value)
             break
-          case 2:
+          case 3:
             value = new proto.dn.model.AclActions()
             reader.readMessage(value, proto.dn.model.AclActions.deserializeBinaryFromReader)
             msg.setChannelActions(value)
             break
-          case 3:
+          case 4:
             value = new proto.dn.model.AclActions()
             reader.readMessage(value, proto.dn.model.AclActions.deserializeBinaryFromReader)
             msg.setActivityActions(value)
+            break
+          case 5:
+            value = new proto.dn.WritingUser()
+            reader.readMessage(value, proto.dn.WritingUser.deserializeBinaryFromReader)
+            msg.setWritingUser(value)
+            break
+          case 6:
+            value = new proto.dn.Object()
+            reader.readMessage(value, proto.dn.Object.deserializeBinaryFromReader)
+            msg.setObject(value)
             break
           default:
             reader.skipField()
@@ -117,6 +154,16 @@ qx.Class.define('proto.dn.ChannelModel', {
   *****************************************************************************
   */
   properties: {
+
+    /**
+     * Enum of type {@link proto.dn.ChangeType}
+     */
+    type: {
+      check: 'Number',
+      init: 0,
+      nullable: false,
+      event: 'changeType'
+    },
 
     /**
      * @type {app.api.Array} array of {@link proto.dn.model.Publication}
@@ -139,6 +186,20 @@ qx.Class.define('proto.dn.ChannelModel', {
       init: null,
       nullable: true,
       event: 'changeActivityActions'
+    },
+
+    writingUser: {
+      check: 'proto.dn.WritingUser',
+      init: null,
+      nullable: true,
+      event: 'changeWritingUser'
+    },
+
+    object: {
+      check: 'proto.dn.Object',
+      init: null,
+      nullable: true,
+      event: 'changeObject'
     }
   }
 })

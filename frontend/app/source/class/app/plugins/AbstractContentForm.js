@@ -107,21 +107,29 @@ qx.Class.define('app.plugins.AbstractContentForm', {
         if (this.getActivity()) {
           // update message in existing activity
           try {
-            await app.io.Rpc.getProxy().updateObjectProperty('Activity',
-              this.getActivity().getId(),
-              {
-                content: this._createContent()
-              })
+            const newAct = new proto.dn.model.Activity({uid: this.getActivity().getUid()})
+            newAct.set(this.getType(), this._createContent())
+            await app.api.Service.getInstance().updateObject(new proto.dn.Object({
+              activity: newAct
+            }))
             this.resetActivity()
             this.fireEvent('done')
           } catch (err) {
             this.error(err)
           }
         } else {
-          await app.io.Rpc.getProxy().publish(this.getChannel().getId(), {
-            type: this.getType(),
-            content: this._createContent()
+          const newAct = new proto.dn.model.Activity()
+          newAct.set(this.getType(), this._createContent())
+          const newObj = new proto.dn.Object({
+            publication: new proto.dn.model.Publication({
+              activity: newAct,
+              channel: new proto.dn.model.Channel({uid: this.getChannel().getUid()})
+            })
           })
+          const response = await app.api.Service.getInstance().createObject(newObj)
+          if (response.getCode() !== proto.dn.Response.Code.OK) {
+            app.Error.show(response.getMessage())
+          }
           this.fireEvent('done')
         }
       } else {
@@ -148,13 +156,11 @@ qx.Class.define('app.plugins.AbstractContentForm', {
      */
     _sendWrite: function () {
       if (this.getChannel()) {
-        app.io.Socket.getInstance().publish(this.getChannel().getId(), {
-          a: 'i',
-          c: {
-            type: 'write',
-            uid: app.Model.getInstance().getActor().getUsername()
-          }
-        })
+        const message = app.api.Service.createChannelModel(new proto.dn.WritingUser({
+          done: false,
+          username: app.Model.getInstance().getActor().getUsername()
+        }), proto.dn.ChangeType.INTERNAL)
+        app.io.Socket.getInstance().publishPb(this.getChannel().getId(), message)
       }
     },
 
@@ -164,14 +170,11 @@ qx.Class.define('app.plugins.AbstractContentForm', {
      */
     _sendWriteEnd: function () {
       if (this.getChannel()) {
-        app.io.Socket.getInstance().publish(this.getChannel().getId(), {
-          a: 'i',
-          c: {
-            type: 'write',
-            uid: app.Model.getInstance().getActor().getUsername(),
-            done: true
-          }
-        })
+        const message = app.api.Service.createChannelModel(new proto.dn.WritingUser({
+          done: true,
+          username: app.Model.getInstance().getActor().getUsername()
+        }), proto.dn.ChangeType.INTERNAL)
+        app.io.Socket.getInstance().publishPb(this.getChannel().getId(), message)
       }
     },
 

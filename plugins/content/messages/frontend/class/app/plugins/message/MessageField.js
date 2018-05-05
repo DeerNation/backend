@@ -76,15 +76,23 @@ qx.Class.define('app.plugins.message.MessageField', {
 
     // overridden
     _createContent: function () {
-      return {
-        content: this.getChildControl('textfield').getValue()
-      }
+      return this.getActivity() ? this.getActivity().getMessage() : new proto.dn.model.Message({content: this.getChildControl('textfield').getValue()})
     },
 
     // property apply
-    _applyActivity: function (value) {
+    _applyActivity: function (value, old) {
+      if (old) {
+        if (this.getActivity().getContent() === 'message') {
+          this.getActivity().getMessage().removeRelatedBindings(this.getChildControl('textfield'))
+          this.getChildControl('textfield', this.getActivity().getMessage())
+        }
+      }
       if (value) {
-        this.getChildControl('textfield').setValue(value.getContent().content)
+        if (this.getActivity().getContent() !== 'message') {
+          this.getActivity().setMessage(new proto.dn.model.Message())
+        }
+        this.getActivity().getMessage().bind('content', this.getChildControl('textfield'), 'value')
+        this.getChildControl('textfield').bind('value', this.getActivity().getMessage(), 'content')
       } else {
         this.getChildControl('textfield').resetValue()
       }
@@ -103,7 +111,8 @@ qx.Class.define('app.plugins.message.MessageField', {
           control = new qx.ui.form.TextArea()
           control.set({
             minimalLineHeight: 1,
-            autoSize: true
+            autoSize: true,
+            liveUpdate: true
           })
           this._addAt(control, 1, {flex: 1})
           control.addListener('focusin', this._sendWrite, this)

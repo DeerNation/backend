@@ -60,16 +60,41 @@ qx.Class.define('app.api.StreamChannel', {
       // send initial request to server
       this._socket.send(qx.lang.Json.stringify({startStreamRpc: this._channelName, data: this._config.request.serializeBinary()}))
 
+      this._onHandler = this.__onHandler.bind(this)
+      this._onError = this.__onError.bind(this)
+      this._onClose = this.__onClose.bind(this)
+      this._connectAbort = this.__connectAbort.bind(this)
+
       // subscribe to channel
-      this._socket.on(this._channelName, this._onHandler.bind(this))
+      this._socket.on(this._channelName, this._onHandler)
+
+      // listen to problems
+      this._socket.on('close', this._onClose)
+      this._socket.on('error', this._onError)
+      this._socket.on('connectAbort', this._connectAbort)
     },
 
-    _onHandler: function (res) {
+    __onHandler: function (res) {
       this.fireDataEvent('message', this._service.responseType.deserializeBinary(res.data))
     },
 
+    __onError: function (err) {
+      this.fireDataEvent('error', err.message)
+    },
+
+    __onClose: function () {
+      this.fireEvent('close')
+    },
+
+    __connectAbort: function () {
+      this.fireDataEvent('error', 'connection aborted')
+    },
+
     close: function () {
-      this._socket.off(this._channelName, this._onHandler.bind(this))
+      this._socket.off(this._channelName, this._onHandler)
+      this._socket.off('close', this._onClose)
+      this._socket.off('error', this._onError)
+      this._socket.off('connectAbort', this._connectAbort)
       this._socket.send(qx.lang.Json.stringify({stopStreamRpc: this._channelName}))
     }
   },

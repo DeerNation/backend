@@ -20,8 +20,7 @@ const pluginHandler = require('./backend/PluginHandler')
 const MetadataScraper = require('./backend/MetadataScraper')
 const grpcServer = require('./backend/rpc/grpc')
 const dgraphService = require('./backend/model/dgraph').dgraphService
-const grpc = require('grpc')
-const dn = grpc.load({root: __dirname, file: path.join('protos', 'api.proto')}).dn
+const dn = require('./backend/model/protos').dn
 
 class Worker extends SCWorker {
   run () {

@@ -37,6 +37,9 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
     this.base(arguments)
     this.addListener('swipe', this._onSwipe, this)
     this.setSelectedActivities(new qx.data.Array())
+    this.__writingUsers = new qx.data.Array()
+    this.__writingUserTimers = {}
+    this.__writingUsers.addListener('changeLength', this._onWritingUsersChange, this)
 
     qx.event.message.Bus.subscribe('channel.activities.delete', this._onActivityDelete, this)
 
@@ -124,6 +127,9 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
   */
   members: {
     __currentSCChannel: null,
+    __modelStream: null,
+    __writingUsers: null,
+    __writingUserTimers: null,
 
     _onSwipe: function (ev) {
       if (ev.getDirection() === 'right') {
@@ -165,18 +171,36 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
         const service = new proto.dn.Com(socket)
         service.getChannelModel(new proto.dn.ChannelRequest({
           uid: subscription.getChannel().getUid(),
-          channelId: subscription.getChannel().getId()
+          channelId: subscription.getChannel().getId(),
+          limit: 10
         })).then(channelModel => {
           this.setChannelAcls(channelModel.getChannelActions())
           this.setChannelActivitiesAcls(channelModel.getActivityActions())
           publications.replace(channelModel.getPublications())
           this.setPublications(publications)
+          this._subscribeToChannel(subscription.getChannel())
           this.fireEvent('subscriptionApplied')
-        })
+        }).catch(app.Error.show)
         this.getChildControl('header').setSubscription(subscription)
         this.getChildControl('header').show()
       } else {
         this.getChildControl('header').exclude()
+      }
+    },
+
+    _onWritingUsersChange: function (ev) {
+      if (ev.getData() === 0) {
+        this.getChildControl('status-bar').resetValue()
+      } else {
+        const model = this.__writingUsers
+        const last = ev.getData() - 1
+        this.getChildControl('status-bar').setValue(this.trn(
+          '%1 is writing...',
+          '%1 and %2 are writing...',
+          model.getLength(),
+          last > 0 ? model.slice(0, last).join(', ') : model.getItem(0),
+          last > 0 ? model.getItem(last) : null)
+        )
       }
     },
 
@@ -205,17 +229,19 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
     _deleteActivity: function (ev) {
       const activity = ev instanceof proto.dn.model.Activity ? ev : ev.getData()
       if (this.isAllowed('d')) {
-        app.io.Rpc.getProxy().deleteActivity(activity.getId()).then(res => {
-          if (res === true) {
+        app.api.Service.getInstance().deleteObject(new proto.dn.Object({
+          publication: new proto.dn.model.Publication({uid: activity.getUid()})
+        })).then(res => {
+          if (res.getCode() === proto.dn.Response.Code.OK) {
             this.debug('activity as been deleted')
+          } else if (res.getCode() === proto.dn.Response.Code.FORBIDDEN) {
+            this.error('you are not allowed to delete activity', activity.getUid())
           } else {
-            this.error(res)
+            app.Error.show(res.getMessage())
           }
-        }).catch(err => {
-          this.error(err)
-        })
+        }).catch(app.Error.show)
       } else {
-        this.error('you are not allowed to delete activity', activity.getId())
+        this.error('you are not allowed to delete activity', activity.getUid())
       }
     },
 
@@ -225,6 +251,9 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
      * @param target {proto.dn.model.Activity} activity the action should be checked for
      */
     isAllowed: function (action, target) {
+      if (!app.Model.getInstance().getActor()) {
+        return false
+      }
       let acls, targetOwnerId
       if (!target) {
         target = this.getSubscription()
@@ -317,97 +346,83 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
      * @protected
      */
     _onActivity: function (payload) {
-      if (payload.hasOwnProperty('a') && payload.hasOwnProperty('c')) {
-        let found
-        switch (payload.a) {
-          case 'd':
-            // delete
-            found = this._findActivity(payload.c)
-            if (found) {
-              this.getPublications().remove(found)
-            }
-            this._debouncedFireEvent('refresh')
-            break
+      let data = payload.data ? payload.data : payload.buffer.data
+      if (data.constructor === Object) {
+        data = Uint8Array.from(Object.values(data))
+      }
+      const message = proto.dn.ChannelModel.deserializeBinary(data)
+      console.log(message)
+      let found, changedObject
+      switch (message.getType()) {
+        case proto.dn.ChangeType.DELETE:
+          // delete
+          found = this._findActivity(message.getObject().getOneOfContent().getUid())
+          if (found) {
+            this.getPublications().remove(found)
+          }
+          this._debouncedFireEvent('refresh')
+          break
 
-          case 'u':
-            // update
-            found = this._findActivity(payload.c.getUid())
-            if (found) {
-              this.debug('updating existing activity', payload.c.getUid())
-              found.set(qx.util.Serializer.toNativeObject(payload.c))
+        case proto.dn.ChangeType.UPDATE:
+          // update
+          changedObject = message.getObject().getOneOfContent()
+          found = this._findActivity(changedObject.getUid())
+          if (found) {
+            this.debug('updating existing activity', found.getUid())
+            found.set(qx.util.Serializer.toNativeObject(changedObject, app.api.Utils.serialize))
+          } else {
+            // add new activity
+            if (!changedObject.getPublished()) {
+              changedObject.setPublished(changedObject.getCreated())
+            }
+            this.debug('not activity to update found, creating new one')
+            this.getPublications().push(changedObject)
+          }
+          this._debouncedFireEvent('refresh')
+          break
+
+        case proto.dn.ChangeType.ADD:
+          changedObject = message.getObject().getOneOfContent()
+          if (!changedObject.getPublished()) {
+            changedObject.setPublished(changedObject.getCreated())
+          }
+          this.getPublications().push(changedObject)
+          this._debouncedFireEvent('refresh')
+          break
+
+        case proto.dn.ChangeType.INTERNAL:
+          // internal messaging, like states, writing users etc
+          const writingUser = message.getWritingUser()
+          if (writingUser) {
+            if (writingUser.getUsername() === app.Model.getInstance().getActor().getUsername()) {
+              // ignore ourselves
+              return
+            }
+            const model = this.__writingUsers
+            const label = writingUser.getUsername()
+            if (!model.includes(label)) {
+              model.push(label)
+              this.__writingUserTimers[label] = qx.event.Timer.once(function () {
+                model.remove(label)
+                delete this.__writingUserTimers[label]
+              }, this, 5000)
+            } else if (writingUser.isDone()) {
+              // user is done writing
+              model.remove(label)
+              this.__writingUserTimers[label].stop()
+              delete this.__writingUserTimers[label]
+            } else if (this.__writingUserTimers[label]) {
+              this.__writingUserTimers[label].restart()
             } else {
-              // add new activity
-              if (!payload.c.getPublished()) {
-                payload.c.setPublished(payload.c.getCreated())
-              }
-              this.debug('not activity to update found, creating new one')
-              this.getPublications().push(payload.c)
+              this.__writingUserTimers[label] = qx.event.Timer.once(function () {
+                model.remove(label)
+                delete this.__writingUserTimers[label]
+              }, this, 5000)
             }
-            this._debouncedFireEvent('refresh')
-            break
-
-          case 'a':
-            if (!payload.c.getPublished()) {
-              payload.c.setPublished(payload.c.getCreated())
-            }
-            this.getPublications().push(payload.c)
-            this._debouncedFireEvent('refresh')
-            break
-
-          case 'i':
-            // internal messaging, like states, writing users etc
-            switch (payload.c.type) {
-              case 'write':
-                if (payload.c.uid === app.Model.getInstance().getActor().getUsername()) {
-                  // ignore ourselves
-                  return
-                }
-                const model = this.__writingUsers
-
-                model.addListener('changeLength', (ev) => {
-                  if (ev.getData() === 0) {
-                    this.getChildControl('status-bar').resetValue()
-                  } else {
-                    const last = ev.getData() - 1
-                    this.getChildControl('status-bar').setValue(this.trn(
-                      '%1 is writing...',
-                      '%1 and %2 are writing...',
-                      model.getLength(),
-                      last > 0 ? model.slice(0, last).join(', ') : model.getItem(0),
-                      last > 0 ? model.getItem(last) : null)
-                    )
-                  }
-                })
-                const label = payload.c.uid
-                if (!model.includes(label)) {
-                  model.push(label)
-                  this.__writingUserTimers[label] = qx.event.Timer.once(function () {
-                    model.remove(label)
-                    delete this.__writingUserTimers[label]
-                  }, this, 5000)
-                } else if (payload.c.done) {
-                  // user is done writing
-                  model.remove(label)
-                  this.__writingUserTimers[label].stop()
-                  delete this.__writingUserTimers[label]
-                } else if (this.__writingUserTimers[label]) {
-                  this.__writingUserTimers[label].restart()
-                } else {
-                  this.__writingUserTimers[label] = qx.event.Timer.once(function () {
-                    model.remove(label)
-                    delete this.__writingUserTimers[label]
-                  }, this, 5000)
-                }
-                break
-
-              default:
-                this.warning('unhandled internal message type: ', payload.c.type)
-                break
-            }
-            break
-        }
-      } else {
-        throw new Error('wrong activity payload')
+          } else {
+            this.warning('unhandled internal message:', message)
+          }
+          break
       }
     },
 
@@ -418,7 +433,7 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
      */
     _subscribeToChannel: function (channel) {
       const acl = this.getChannelAcls()
-      if (acl.actions.includes('e')) {
+      if (acl.getActions().includes('e')) {
         this.__currentSCChannel.subscribe()
         this.__currentSCChannel.on('subscribe', () => {
           this.__currentSCChannel.watch(this._onActivity.bind(this))
@@ -433,10 +448,11 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
           this._handleSubscribed(false)
         })
       } else {
+        // TODO: convert to gRPC
         // show subscription hint
-        app.io.Rpc.getProxy().getAllowedActionsForRole('user', channel.getId()).then(userAcl => {
-          this._handleSubscriptionAcl(userAcl.actions.includes('e'))
-        })
+        // app.io.Rpc.getProxy().getAllowedActionsForRole('user', channel.getId()).then(userAcl => {
+        //   this._handleSubscriptionAcl(userAcl.actions.includes('e'))
+        // })
       }
     },
 
@@ -646,5 +662,14 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
       }
       return control || this.base(arguments, id, hash)
     }
+  },
+
+  /*
+  ******************************************************
+    DESTRUCTOR
+  ******************************************************
+  */
+  destruct: function () {
+    this._disposeMap('__writingUserTimers')
   }
 })

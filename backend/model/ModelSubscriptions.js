@@ -9,7 +9,7 @@ const logger = require('../logger')(__filename)
 class ModelSubscriptions {
   constructor () {
     this._listeners = {}
-    this._listenerIdRegex = /([^>]*)>?([\w]*)\[?(0x[\d]+)\]?/
+    this._listenerIdRegex = /([^>]*)>?([\w]*)\[?(0x[\d]+)?\]?/
   }
 
   __parseListenerId (listenerId) {
@@ -30,7 +30,7 @@ class ModelSubscriptions {
    * @param callback {Function}
    * @param context {Object?}
    */
-  addListener (listenerId, callback, context, socket) {
+  addListener (listenerId, callback, context) {
     listenerId = listenerId.toLowerCase()
     if (!this._listeners.hasOwnProperty(listenerId)) {
       this._listeners[listenerId] = {
@@ -78,7 +78,6 @@ class ModelSubscriptions {
     const baseName = change.object.content.toLowerCase()
     Object.keys(this._listeners).forEach(listenerId => {
       const listener = this._listeners[listenerId]
-      console.log(listener)
       if (listener.parsedId.type && baseName !== listener.parsedId.type) {
         return
       }

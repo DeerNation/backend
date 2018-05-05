@@ -96,7 +96,7 @@ qx.Class.define('proto.dn.Uid', {
     },
 
     depth: {
-      check: 'Integer',
+      check: 'Number',
       init: 0,
       nullable: false,
       event: 'changeDepth'

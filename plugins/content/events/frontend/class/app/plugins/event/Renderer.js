@@ -90,7 +90,7 @@ qx.Class.define('app.plugins.event.Renderer', {
 
     _applyModel: function (value, old) {
       if (old && !value) {
-        const content = old.getContent()
+        const content = old.getOneOfContent()
         if (content) {
           content.removeRelatedBindings(this.getChildControl('title'))
           content.removeRelatedBindings(this.getChildControl('day'))
@@ -102,7 +102,7 @@ qx.Class.define('app.plugins.event.Renderer', {
         }
       }
       if (value) {
-        const content = value.getContent()
+        const content = value.getOneOfContent()
         if (content) {
           let control = this.getChildControl('title')
           this._bindPropertyToChildControl(content, 'name', 'title', 'value', {
@@ -120,22 +120,22 @@ qx.Class.define('app.plugins.event.Renderer', {
             converter: function (value) {
               return this.__dayFormat.format(value)
             }.bind(this)
-          }, old && old.getContent())
+          }, old && old.getOneOfContent())
           this._bindPropertyToChildControl(content, 'start', 'month', 'value', {
             converter: function (value) {
               return this.__monthFormat.format(value)
             }.bind(this)
-          }, old && old.getContent())
+          }, old && old.getOneOfContent())
 
           this._bindPropertyToChildControl(content, 'start', 'time', 'label', {
             converter: function (value) {
               return content.isAllDay() ? this.tr('all-day') : this.tr('%1 o\'clock', this.__timeFormat.format(value))
             }.bind(this)
-          }, old && old.getContent())
+          }, old && old.getOneOfContent())
 
-          this._bindPropertyToChildControl(content, 'organizer', 'organizer', 'label', null, old && old.getContent(), true)
-          this._bindPropertyToChildControl(content, 'location', 'location', 'label', null, old && old.getContent(), true)
-          this._bindPropertyToChildControl(content, 'description', 'description', 'value', null, old && old.getContent(), true)
+          this._bindPropertyToChildControl(content, 'organizer', 'organizer', 'label', null, old && old.getOneOfContent(), true)
+          this._bindPropertyToChildControl(content, 'location', 'location', 'label', null, old && old.getOneOfContent(), true)
+          this._bindPropertyToChildControl(content, 'description', 'description', 'value', null, old && old.getOneOfContent(), true)
 
           if (!this.__catController) {
             this.__catController = new qx.data.controller.List(content.getCategories(), this.getChildControl('categories'), '')

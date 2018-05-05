@@ -232,7 +232,7 @@ module.exports = {
     },
     {
       uid: '0x20',
-      topic: 'hbg\\.rpc\\.(login|getAllowedActions|check|getChannels|getActors|getChannelActivities)',
+      topic: 'hbg\\.rpc\\.(login|getModel|check|getChannelModel)',
       actions: 'x',
       roleTarget: {uid: '0x11'}
     },

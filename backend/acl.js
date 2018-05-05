@@ -23,12 +23,9 @@
  * @author Tobias Bräutigam <tbraeutigam@gmail.com>
  * @since 2018
  */
-const schema = require('./model/schema')
 const i18n = require('i18n')
 const logger = require('./logger')(__filename)
-
-class AclException extends Error {
-}
+const {AclException} = require('./exceptions')
 
 const action = {
   CREATE: 'c',
@@ -105,7 +102,7 @@ module.exports = {
           return (new RegExp(entry.topic)).test(topic)
         })
       } else {
-        console.log(query,role)
+        console.log(query, role)
       }
     } else {
       query = `

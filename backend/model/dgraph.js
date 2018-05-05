@@ -6,14 +6,15 @@
  */
 const dgraph = require('dgraph-js')
 const grpc = require('grpc')
-const path = require('path')
 const acl = require('../acl')
+const proto = require('./protos')
 const i18n = require('i18n')
 const defaultData = require('./default-graph-data')
 const logger = require('../logger')(__filename)
 const config = require('../config')
-const proto = grpc.load({root: path.join(__dirname, '..', '..'), file: path.join('protos', 'api.proto')})
+
 const modelSubscriptions = require('./ModelSubscriptions')
+const createHook = require('./hooks/CreateObject')
 
 const clientStub = new dgraph.DgraphClientStub(
   'localhost:9080',
@@ -177,14 +178,28 @@ class DgraphService {
   }
 
   async getChannelModel (authToken, request) {
+    if (!request.channelId || !request.uid) {
+      throw new Error('invalid request')
+    }
     const result = {}
     result.channelActions = await acl.getAllowedActions(authToken, request.channelId)
     result.activityActions = await acl.getAllowedActions(authToken, request.channelId + '.activities')
+    let options = 'orderasc: published'
+    let reverse = false
+    if (request.limit) {
+      options = 'orderdesc: published, first: ' + request.limit
+      reverse = true
+    }
+    let filter = 'has(published)'
+    if (request.date) {
+      filter += ` AND ge(published, "${request.date}")`
+    }
 
     if (result.activityActions.actions.includes('r')) {
       const query = `query channelModel($a: string) {
        channel(func: uid($a)) {
-        publications : ~channel (orderasc: published) @filter(has(published)) {
+        id
+        publications : ~channel (${options}) @filter(${filter}) {
           uid
           published
           master
@@ -210,8 +225,15 @@ class DgraphService {
         }
       }
     }`
+      console.log(request.uid, query)
       const res = await dgraphClient.newTxn().queryWithVars(query, {$a: request.uid})
+      if (res.getJson().channel[0].id !== request.channelId) {
+        throw new Error('invalid request')
+      }
       result.publications = res.getJson().channel[0].publications
+      if (reverse) {
+        result.publications = result.publications.reverse()
+      }
       // normalize data
       result.publications.forEach(pub => {
         pub.activity = pub.activity[0]
@@ -266,7 +288,10 @@ class DgraphService {
     if (!object) {
       return {}
     }
-    await acl.check(authToken, config.domain + '.object.' + object.baseName, acl.action.READ)
+    if (authToken !== config.UUID) {
+      // only check acl if this is not internal call
+      await acl.check(authToken, config.domain + '.object.' + object.baseName, acl.action.READ)
+    }
     const response = {content: object.baseName.toLowerCase()}
 
     // edge normalization
@@ -281,7 +306,6 @@ class DgraphService {
     })
     response[object.baseName.toLowerCase()] = object
     delete object.baseName
-    console.log(object)
     return response
   }
 
@@ -354,54 +378,41 @@ class DgraphService {
       return checkResult
     }
     const object = request[request.content]
+    logger.debug(JSON.stringify(object, null, 2))
     object.baseName = request.content.substring(0, 1).toUpperCase() + request.content.substring(1)
     // mark it to find the uid in the response
     object.uid = '_:' + request.content
     const uidMappers = {}
     uidMappers[request.content] = object
-    if (request.content === 'subscription') {
-      // if channel is new, we need to add some data to it
-      if (!object.channel.uid) {
-        // channel is new
-        let type = 'public'
-        Object.keys(proto.dn.model.Channel.Type).some(typeName => {
-          if (proto.dn.model.Channel.Type[typeName] === object.channel.type) {
-            type = typeName.toLowerCase()
-            return true
-          }
-        })
-        object.channel.id = config.channelPrefix + object.channel.title.toLowerCase() + '.' + type
-        // new channel create current user is the owner
-        object.channel.owner = {uid: authToken.user}
-        object.channel.uid = '_:channel'
-        object.channel.baseName = 'Channel'
-        console.log(object.channel)
-        uidMappers['channel'] = object.channel
-      }
-      if (!object.actor) {
-        // add subscription for current user
-        object.actor = {uid: authToken.user}
-      } else {
-        // TODO: check if the user is allowed to add subscriptions for other actors
-        return {
-          code: 2,
-          message: i18n.__('You are not allowed to add subscriptions for other users')
-        }
+
+    // apply pre creation hooks
+    try {
+      createHook(true, authToken, request.content, object, uidMappers)
+    } catch (e) {
+      return {
+        code: e.code || 1,
+        message: e.message
       }
     }
+    logger.debug(JSON.stringify(object, null, 2))
     const txn = dgraphClient.newTxn()
     try {
       const mu = new dgraph.Mutation()
       mu.setSetJson(object)
       const res = await txn.mutate(mu)
       await txn.commit()
-      if (request.content === 'subscription') {
-        // remove baseNames again for the update notifications
-        delete object.baseName
-        if (object.channel) {
-          delete object.channel.baseName
+
+      // apply post creation hooks
+      try {
+        createHook(false, authToken, request.content, object, uidMappers)
+      } catch (e) {
+        txn.discard()
+        return {
+          code: e.code || 1,
+          message: e.message
         }
       }
+
       Object.keys(uidMappers).forEach(name => {
         uidMappers[name].uid = res.getUidsMap().get(name)
         const change = {

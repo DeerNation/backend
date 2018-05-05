@@ -55,9 +55,6 @@ qx.Class.define('app.ui.channel.View', {
     selectUp.addListener('execute', this._onSelectUp, this)
     selectDown.addListener('execute', this._onSelectDown, this)
     deselect.addListener('execute', this._onDeselection, this)
-
-    this.__writingUsers = new qx.data.Array()
-    this.__writingUserTimers = {}
   },
 
   /*
@@ -86,8 +83,6 @@ qx.Class.define('app.ui.channel.View', {
   */
   members: {
     __dateFormat: null,
-    __writingUsers: null,
-    __writingUserTimers: null,
     _prefetcher: null,
 
     // property apply
@@ -264,9 +259,18 @@ qx.Class.define('app.ui.channel.View', {
           this._add(control)
           control.addListener('execute', this._onAddActivity, this)
           this.addListener('resize', this._onResize, this)
+          app.Model.getInstance().addListener('changeActor', this._onChangeActor, this)
           break
       }
       return control || this.base(arguments, id, hash)
+    },
+
+    _onChangeActor: function () {
+      if (app.Model.getInstance().getActor()) {
+        this.getChildControl('add-button').show()
+      } else {
+        this.getChildControl('add-button').exclude()
+      }
     },
 
     /**
@@ -276,6 +280,7 @@ qx.Class.define('app.ui.channel.View', {
     _onAddActivity: function () {
       this._initForm()
       this.getChildControl('add-button').exclude()
+      this.getChildControl('editor-container').show()
       this.getChildControl('editor-container').getSelection()[0].addListenerOnce('done', () => {
         this.getChildControl('add-button').show()
         this.getChildControl('editor-container').exclude()
@@ -351,9 +356,9 @@ qx.Class.define('app.ui.channel.View', {
   ******************************************************
   */
   destruct: function () {
-    this._disposeMap('__writingUserTimers')
     this._disposeObjects('_prefetcher')
     this._prefetcher = null
+    app.Model.getInstance().removeListener('changeActor', this._onChangeActor, this)
   },
 
   defer: function (statics) {

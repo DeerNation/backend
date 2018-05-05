@@ -208,6 +208,15 @@ qx.Class.define('app.io.Socket', {
       return this.__socket.publish(channel, payload)
     },
 
+    /**
+     * Publish protobuf encoded message on channel
+     * @param channel
+     * @param payload
+     */
+    publishPb: function (channel, payload) {
+      return this.__socket.publish(channel, {base64: false, data: payload.serializeBinary()})
+    },
+
     _onSubscribeError: function (promiseReject, channel, err, channelName) {
       channel.off('subscribeFail')
       this.error('Error on subscribing channel', channelName, ':', err)

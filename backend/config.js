@@ -23,8 +23,10 @@
  * @author Tobias Bräutigam <tbraeutigam@gmail.com>
  * @since 2018
  */
+const uuidv4 = require('uuid/v4')
 
 module.exports = {
   domain: 'hbg',
-  channelPrefix: 'hbg.channel.'
+  channelPrefix: 'hbg.channel.',
+  UUID: uuidv4()
 }

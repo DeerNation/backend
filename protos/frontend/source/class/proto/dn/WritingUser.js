@@ -21,7 +21,7 @@ qx.Class.define('proto.dn.WritingUser', {
      * @suppress {unusedLocalVariables} f is only used for nested messages
      */
     serializeBinaryToWriter: function (message, writer) {
-      var f = message.getUid()
+      var f = message.getUsername()
       if (f.length > 0) {
         writer.writeString(
           1,
@@ -66,7 +66,7 @@ qx.Class.define('proto.dn.WritingUser', {
         switch (field) {
           case 1:
             value = reader.readString()
-            msg.setUid(value)
+            msg.setUsername(value)
             break
           case 2:
             value = reader.readBool()
@@ -88,11 +88,11 @@ qx.Class.define('proto.dn.WritingUser', {
   */
   properties: {
 
-    uid: {
+    username: {
       check: 'String',
       init: '',
       nullable: false,
-      event: 'changeUid'
+      event: 'changeUsername'
     },
 
     done: {

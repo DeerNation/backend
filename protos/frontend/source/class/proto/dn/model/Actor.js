@@ -61,7 +61,7 @@ qx.Class.define('proto.dn.model.Actor', {
           f
         )
       }
-      f = message.getRoles()
+      f = message.getRole()
       if (f != null) {
         writer.writeMessage(
           4,
@@ -163,7 +163,7 @@ qx.Class.define('proto.dn.model.Actor', {
           case 4:
             value = new proto.dn.model.ACLRole()
             reader.readMessage(value, proto.dn.model.ACLRole.deserializeBinaryFromReader)
-            msg.setRoles(value)
+            msg.setRole(value)
             break
           case 5:
             value = reader.readString()
@@ -234,11 +234,11 @@ qx.Class.define('proto.dn.model.Actor', {
       event: 'changeUsername'
     },
 
-    roles: {
+    role: {
       check: 'proto.dn.model.ACLRole',
       init: null,
       nullable: true,
-      event: 'changeRoles'
+      event: 'changeRole'
     },
 
     name: {

@@ -42,6 +42,13 @@ qx.Class.define('proto.dn.ChannelRequest', {
           f
         )
       }
+      f = message.getLimit()
+      if (f != null) {
+        writer.writeInt32(
+          4,
+          f
+        )
+      }
     },
 
     /**
@@ -83,6 +90,10 @@ qx.Class.define('proto.dn.ChannelRequest', {
             value = reader.readString()
             msg.setDate(value)
             break
+          case 4:
+            value = reader.readInt32()
+            msg.setLimit(value)
+            break
           default:
             reader.skipField()
             break
@@ -118,6 +129,13 @@ qx.Class.define('proto.dn.ChannelRequest', {
       init: '',
       nullable: false,
       event: 'changeDate'
+    },
+
+    limit: {
+      check: 'Number',
+      init: 0,
+      nullable: false,
+      event: 'changeLimit'
     }
   }
 })

@@ -48,7 +48,6 @@ message Activity {
     // this activity might by originated by an external source, e.g. a facebook feed entry
     ExternalRef ref = 6;
     bool master = 8;
-    string published = 9 [(qx.date) = true];
     // content of the activity
     oneof content {
         Message message = 20;
@@ -114,7 +113,7 @@ message Actor {
     }
     Type type = 2;
     string username = 3;
-    ACLRole roles = 4;
+    ACLRole role = 4;
     string name = 5;
     string email = 6;
     string color = 7;

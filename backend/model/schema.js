@@ -26,8 +26,8 @@
 const scCrudRethink = require('sc-crud-rethink')
 const logger = require('../logger')(__filename)
 const i18n = require('i18n')
-const defaultData = require('./default-data')
-const Migrator = require('./migrations')
+// const defaultData = require('./default-data')
+// const Migrator = require('./migrations')
 
 class Schema {
   constructor () {
@@ -427,25 +427,25 @@ class Schema {
     m.Channel.hasMany(m.Subscription, 'subscriptions', 'id', 'channelId')
     m.Subscription.belongsTo(m.Channel, 'channel', 'channelId', 'id')
 
-    logger.debug('initializing database with default data')
-    let promises = []
-    Object.keys(defaultData).forEach(key => {
-      promises.push(m[key].save(defaultData[key], {conflict: 'update'}).then(() => {
-        logger.debug('%s default data applied', key)
-      }).error(error => {
-        logger.error('Error applying default data to %s:%s', key, error)
-      }))
-    })
-    if (callback) {
-      Promise.all(promises).then(() => {
-        callback()
-      })
-    }
+    // logger.debug('initializing database with default data')
+    // let promises = []
+    // Object.keys(defaultData).forEach(key => {
+    //   promises.push(m[key].save(defaultData[key], {conflict: 'update'}).then(() => {
+    //     logger.debug('%s default data applied', key)
+    //   }).error(error => {
+    //     logger.error('Error applying default data to %s:%s', key, error)
+    //   }))
+    // })
+    // if (callback) {
+    //   Promise.all(promises).then(() => {
+    //     callback()
+    //   })
+    // }
     this.__crud = crud
 
     // run migration scripts
-    const migrator = new Migrator(this)
-    migrator.run()
+    // const migrator = new Migrator(this)
+    // migrator.run()
 
     return crud
   }

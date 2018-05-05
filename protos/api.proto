@@ -11,6 +11,8 @@ service Com {
      *  - the current actor (including its subscriptions)
      *  - all other Actors
      *  - all public channels
+     *
+     * If the user it not logged in only the public channels are returned
      */
     rpc getModel(Empty) returns (stream Model);
 
@@ -41,6 +43,7 @@ enum ChangeType {
     UPDATE = 1;
     DELETE = 2;
     REPLACE = 3;
+    INTERNAL = 4;
 }
 
 message Query {
@@ -66,6 +69,7 @@ message Object {
         dn.model.Actor actor = 3;
         dn.model.Channel channel = 4;
         dn.model.Subscription subscription = 5;
+        dn.model.Publication publication = 6;
     }
 }
 
@@ -90,12 +94,15 @@ message Model {
  *  - the channels publications
  */
 message ChannelModel {
+    ChangeType type = 1;
     // publications in this channel
-    repeated dn.model.Publication publications = 1;
+    repeated dn.model.Publication publications = 2;
     // allowed actions of the current user for this channel
-    dn.model.AclActions channelActions = 2;
+    dn.model.AclActions channelActions = 3;
     // allowed actions of the current user for activities in this channel
-    dn.model.AclActions activityActions = 3;
+    dn.model.AclActions activityActions = 4;
+    WritingUser writingUser = 5;
+    Object object = 6;
 }
 
 message Token {
@@ -116,6 +123,7 @@ message ChannelRequest {
     // channel name (as alternative to the uid)
     string channelId = 2;
     string date = 3;
+    int32 limit = 4;
 }
 
 /**
@@ -156,7 +164,7 @@ message ActivityChange {
  */
 message WritingUser {
     // user ID
-    string uid = 1;
+    string username = 1;
     // true if the user is currently writing, false if he has stopped writing
     bool done = 2;
 }

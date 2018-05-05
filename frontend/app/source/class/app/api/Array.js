@@ -43,7 +43,7 @@ qx.Class.define('app.api.Array', {
       const change = ev.getData()
       console.log(change.getType())
       if (change.getType() === proto.dn.ChangeType.DELETE) {
-        const uid = change.getContent().getUid()
+        const uid = change.getOneOfContent().getUid()
         this.some(entry => {
           if (entry.getUid && entry.getUid() === uid) {
             console.log('deleting ' + uid)

@@ -8,11 +8,11 @@ qx.Class.define('proto.core.BaseService', {
   *****************************************************************************
   */
   construct: function (url, metadata) {
-    this.base(arguments);
-    this.setUrl(url);
+    this.base(arguments)
+    this.setUrl(url)
 
     if (metadata) {
-      this.setMetadata(metadata);
+      this.setMetadata(metadata)
     }
   },
 
@@ -46,60 +46,59 @@ qx.Class.define('proto.core.BaseService', {
       if (value) {
         this.__metadata = new grpc.Metadata(value)
       } else {
-        this.__metadata = null;
+        this.__metadata = null
       }
     },
 
     _call: function (payload, serviceDefinition) {
-      var args = qx.lang.Array.fromArguments(arguments, 2);
+      var args = qx.lang.Array.fromArguments(arguments, 2)
       var config = {
         request: payload,
         host: this.getUrl(),
         metadata: this.__metadata
         // debug: qx.core.Environment.get('qx.debug')
-      };
+      }
       return new qx.Promise(function (resolve, reject) {
         if (serviceDefinition.responseStream === true) {
           // streaming response
-          var context = null;
-          var callback;
+          var context = null
+          var callback
           if (typeof args[args.length - 1] === 'object') {
-            context = args.pop();
+            context = args.pop()
           }
           if (typeof args[args.length - 1] === 'function') {
-            callback = args.pop();
-          }
-          else {
-            throw Error('no callback defined');
+            callback = args.pop()
+          } else {
+            throw Error('no callback defined')
           }
           if (config.request === callback) {
-            throw Error('no payload defined');
+            throw Error('no payload defined')
           }
           grpc.invoke(serviceDefinition, Object.assign(config, {
             onMessage: callback.bind(context),
             onEnd: function (code, message, trailers) {
               if (code !== grpc.Code.OK) {
-                reject(new Error(message));
+                reject(new Error(message))
               }
               else {
-                resolve(message);
+                resolve(message)
               }
             }
-          }));
+          }))
         }
         else {
           grpc.unary(serviceDefinition, Object.assign(config, {
             onEnd: function (res) {
               if (res.status !== grpc.Code.OK) {
-                reject(new Error(res.statusMessage));
+                reject(new Error(res.statusMessage))
               }
               else {
-                resolve(res.message);
+                resolve(res.message)
               }
             }
-          }));
+          }))
         }
-      }, this);
+      }, this)
     }
   }
 })

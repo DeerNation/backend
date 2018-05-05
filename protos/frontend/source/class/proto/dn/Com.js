@@ -21,6 +21,8 @@ qx.Class.define('proto.dn.Com', {
      * - the current actor (including its subscriptions)
      * - all other Actors
      * - all public channels
+     * 
+     * If the user it not logged in only the public channels are returned
      * @param payload {proto.dn.Empty}
      * @param callback {Function} onMessage callback
      * @param context {Object} onMessage callback context

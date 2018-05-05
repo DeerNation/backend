@@ -76,13 +76,6 @@ qx.Class.define('proto.dn.model.Activity', {
           f
         )
       }
-      f = message.getPublished()
-      if (f.length > 0) {
-        writer.writeString(
-          9,
-          f
-        )
-      }
       f = message.getMessage()
       if (f != null) {
         writer.writeMessage(
@@ -154,10 +147,6 @@ qx.Class.define('proto.dn.model.Activity', {
             value = reader.readBool()
             msg.setMaster(value)
             break
-          case 9:
-            value = reader.readString()
-            msg.setPublished(value)
-            break
           case 20:
             value = new proto.dn.model.Message()
             reader.readMessage(value, proto.dn.model.Message.deserializeBinaryFromReader)
@@ -227,14 +216,6 @@ qx.Class.define('proto.dn.model.Activity', {
       event: 'changeMaster'
     },
 
-    published: {
-      check: 'Date',
-      init: '',
-      nullable: false,
-      event: 'changePublished',
-      transform: '_toDate'
-    },
-
     message: {
       check: 'proto.dn.model.Message',
       init: null,
@@ -255,7 +236,7 @@ qx.Class.define('proto.dn.model.Activity', {
      * oneOfIndex: 0
      */
     content: {
-      check: 'proto.core.BaseMessage',
+      check: ['message', 'event'],
       init: null,
       event: 'changeContent'
     }
@@ -269,10 +250,8 @@ qx.Class.define('proto.dn.model.Activity', {
   members: {
     // oneOf property apply
     _applyOneOf0: function (value, old, name) {
-      if (value !== null) {
-        this.setContent(value)
-      }
-
+      this.setContent(name)
+      
       // reset all other values
       proto.dn.model.Activity.ONEOFS[0].forEach(function (prop) {
         if (prop !== name) {
@@ -282,7 +261,7 @@ qx.Class.define('proto.dn.model.Activity', {
     },
     /**
      * Set value for oneOf field 'content'. Tries to detect the object type and call the correct setter.
-     * @param obj {Object}
+     * @param obj {var}
      */
     setOneOfContent: function (obj) {
       var type = obj.basename.toLowerCase()
@@ -291,6 +270,16 @@ qx.Class.define('proto.dn.model.Activity', {
       } else {
         throw new Error('type ' + type + ' is invalid for content, allowed types are: ' + proto.dn.model.Activity.ONEOFS[0].join(', '))
       }
+    },
+    /**
+     * Get value for oneOf field 'content'.
+     * @returns {var}
+     */
+    getOneOfContent: function () {
+      if (this.getContent()) {
+        return this.get(this.getContent())
+      }
+      return null
     }
   },
 
