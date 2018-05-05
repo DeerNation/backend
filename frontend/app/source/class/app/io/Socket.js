@@ -214,7 +214,7 @@ qx.Class.define('app.io.Socket', {
      * @param payload
      */
     publishPb: function (channel, payload) {
-      return this.__socket.publish(channel, {base64: false, data: payload.serializeBinary()})
+      return this.__socket.publish(channel, payload.serializeBinary())
     },
 
     _onSubscribeError: function (promiseReject, channel, err, channelName) {

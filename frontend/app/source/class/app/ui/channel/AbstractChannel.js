@@ -346,12 +346,11 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
      * @protected
      */
     _onActivity: function (payload) {
-      let data = payload.data ? payload.data : payload.buffer.data
-      if (data.constructor === Object) {
-        data = Uint8Array.from(Object.values(data))
-      }
+      let data = payload.hasOwnProperty('buffer') ? payload.buffer.data : Uint8Array.from(Object.values(payload))
       const message = proto.dn.ChannelModel.deserializeBinary(data)
-      console.log(message)
+      if (message.getType() !== proto.dn.ChangeType.INTERNAL) {
+        console.log(message)
+      }
       let found, changedObject
       switch (message.getType()) {
         case proto.dn.ChangeType.DELETE:
