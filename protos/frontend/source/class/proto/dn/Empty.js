@@ -1,8 +1,9 @@
 
 /**
- * Empty class generated from protobuf definition "protos/api.proto".
  *
+ * Empty class generated from protobuf definition "protos/api.proto".
  * auto-generated code PLEASE DO NOT EDIT!
+ * 
  */
 qx.Class.define('proto.dn.Empty', {
   extend: proto.core.BaseMessage,

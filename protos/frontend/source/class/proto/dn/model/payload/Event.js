@@ -1,10 +1,11 @@
 
 /**
- * Event class generated from protobuf definition "protos/model.proto".
  * An Event is a date related activity with a start and end date.
+ * Event class generated from protobuf definition "plugins/content/events/backend/payload.proto".
  * auto-generated code PLEASE DO NOT EDIT!
+ * 
  */
-qx.Class.define('proto.dn.model.Event', {
+qx.Class.define('proto.dn.model.payload.Event', {
   extend: proto.core.BaseMessage,
   include: [app.plugins.event.MEvent, app.api.MUpdate],
 
@@ -54,6 +55,7 @@ qx.Class.define('proto.dn.model.Event', {
         )
       }
       f = message.getStart()
+      f = f instanceof Date ? Math.round(f.getTime() / 1000) : '0'
       if (f.length > 0) {
         writer.writeString(
           4,
@@ -61,6 +63,7 @@ qx.Class.define('proto.dn.model.Event', {
         )
       }
       f = message.getEnd()
+      f = f instanceof Date ? Math.round(f.getTime() / 1000) : '0'
       if (f.length > 0) {
         writer.writeString(
           5,
@@ -93,20 +96,20 @@ qx.Class.define('proto.dn.model.Event', {
     /**
      * Deserializes binary data (in protobuf wire format).
      * @param bytes {jspb.ByteSource} The bytes to deserialize.
-     * @return {proto.dn.model.Event}
+     * @return {proto.dn.model.payload.Event}
      */
     deserializeBinary: function (bytes) {
       var reader = new jspb.BinaryReader(bytes)
-      var msg = new proto.dn.model.Event()
-      return proto.dn.model.Event.deserializeBinaryFromReader(msg, reader)
+      var msg = new proto.dn.model.payload.Event()
+      return proto.dn.model.payload.Event.deserializeBinaryFromReader(msg, reader)
     },
 
     /**
      * Deserializes binary data (in protobuf wire format) from the
      * given reader into the given message object.
-     * @param msg {proto.dn.model.Event} The message object to deserialize into.
+     * @param msg {proto.dn.model.payload.Event} The message object to deserialize into.
      * @param reader {jspb.BinaryReader} The BinaryReader to use.
-     * @return {proto.dn.model.Event}
+     * @return {proto.dn.model.payload.Event}
      */
     deserializeBinaryFromReader: function (msg, reader) {
       msg.setDeserialized(true)
@@ -188,16 +191,16 @@ qx.Class.define('proto.dn.model.Event', {
 
     start: {
       check: 'Date',
-      init: '',
-      nullable: false,
+      init: null,
+      nullable: true,
       event: 'changeStart',
       transform: '_toDate'
     },
 
     end: {
       check: 'Date',
-      init: '',
-      nullable: false,
+      init: null,
+      nullable: true,
       event: 'changeEnd',
       transform: '_toDate'
     },

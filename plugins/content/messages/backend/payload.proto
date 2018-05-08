@@ -1,0 +1,15 @@
+syntax = "proto3";
+package dn.model.payload;
+
+/**
+ * A Message is the basic activity content type: a simple message that can contain
+ * anything encoded in a markdown notation.
+ */
+message Message {
+    // UUID of this entry
+    string uid = 1;
+    // message content
+    string content = 2;
+    // optional url
+    string link = 3;
+}

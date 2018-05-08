@@ -76,7 +76,7 @@ qx.Class.define('app.plugins.message.MessageField', {
 
     // overridden
     _createContent: function () {
-      return this.getActivity() ? this.getActivity().getMessage() : new proto.dn.model.Message({content: this.getChildControl('textfield').getValue()})
+      return this.getActivity() ? this.getActivity().getMessage() : new proto.dn.model.payload.Message({content: this.getChildControl('textfield').getValue()})
     },
 
     // property apply
@@ -89,7 +89,7 @@ qx.Class.define('app.plugins.message.MessageField', {
       }
       if (value) {
         if (this.getActivity().getContent() !== 'message') {
-          this.getActivity().setMessage(new proto.dn.model.Message())
+          this.getActivity().setMessage(new proto.dn.model.payload.Message())
         }
         this.getActivity().getMessage().bind('content', this.getChildControl('textfield'), 'value')
         this.getChildControl('textfield').bind('value', this.getActivity().getMessage(), 'content')

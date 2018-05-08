@@ -1,5 +1,6 @@
 syntax = "proto3";
 //import "google/protobuf/timestamp.proto";
+import "protos/google/protobuf/any.proto";
 import "node_modules/protoc-gen-qx/protos/extensions.proto";
 package dn.model;
 
@@ -49,10 +50,7 @@ message Activity {
     ExternalRef ref = 6;
     bool master = 8;
     // content of the activity
-    oneof content {
-        Message message = 20;
-        Event event = 21;
-    }
+    google.protobuf.Any content = 9;
 }
 
 /**
@@ -121,34 +119,6 @@ message Actor {
     repeated Subscription subscriptions = 9;
     bool online = 10;
     string status = 11;
-}
-
-/**
- * A Message is the basic activity content type: a simple message that can contain
- * anything encoded in a markdown notation.
- */
-message Message {
-    // UUID of this entry
-    string uid = 1;
-    // message content
-    string content = 2;
-    // optional url
-    string link = 3;
-}
-
-/**
- * An Event is a date related activity with a start and end date.
- */
-message Event {
-    // UUID of this entry
-    string uid = 1;
-    string name = 2;
-    string location = 3;
-    string start = 4 [(qx.date) = true];
-    string end = 5 [(qx.date) = true];
-    repeated string categories = 6;
-    string organizer = 7;
-    string description = 8;
 }
 
 message AclActions {

@@ -207,6 +207,10 @@ class DgraphService {
             uid
             hash
             created
+            content {
+              uid
+              expand(_all_)
+            }
             event {
               uid
               expand(_all_)
@@ -237,11 +241,27 @@ class DgraphService {
       // normalize data
       result.publications.forEach(pub => {
         pub.activity = pub.activity[0]
+        delete pub.activity.actor
+        delete pub.activity.baseName
         pub.actor = pub.actor[0]
         if (pub.activity.event) {
-          pub.activity.event = pub.activity.event[0]
+          pub.activity.content = {
+            type_url: 'app.hirschberg-sauerland.de/protos/dn.model.payload.Event',
+            value: proto.dn.model.payload.Event.encode(pub.activity.event[0])
+          }
+          delete pub.activity.event
         } else if (pub.activity.message) {
-          pub.activity.message = pub.activity.message[0]
+          pub.activity.content = {
+            type_url: 'app.hirschberg-sauerland.de/protos/dn.model.payload.Message',
+            value: proto.dn.model.payload.Message.encode(pub.activity.message[0])
+          }
+          delete pub.activity.message
+        } else if (pub.activity.content) {
+          pub.activity.content = {
+            type_url: 'app.hirschberg-sauerland.de/protos/dn.model.payload.' + pub.activity.content[0].baseName,
+            value: proto.dn.model.payload[pub.activity.content[0].baseName].encode(pub.activity.content[0])
+          }
+          delete pub.activity.content.value.baseName
         }
       })
     }

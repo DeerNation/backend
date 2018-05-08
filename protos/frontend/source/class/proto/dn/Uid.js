@@ -1,8 +1,9 @@
 
 /**
- * Uid class generated from protobuf definition "protos/api.proto".
  *
+ * Uid class generated from protobuf definition "protos/api.proto".
  * auto-generated code PLEASE DO NOT EDIT!
+ * 
  */
 qx.Class.define('proto.dn.Uid', {
   extend: proto.core.BaseMessage,
@@ -29,7 +30,7 @@ qx.Class.define('proto.dn.Uid', {
         )
       }
       f = message.getDepth()
-      if (f != null) {
+      if (f !== 0) {
         writer.writeInt32(
           2,
           f

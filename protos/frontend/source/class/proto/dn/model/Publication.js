@@ -1,9 +1,10 @@
 
 /**
- * Publication class generated from protobuf definition "protos/model.proto".
  * A Publication describes the relation of an activity that has been published
  * by an acton in a channel.
+ * Publication class generated from protobuf definition "protos/model.proto".
  * auto-generated code PLEASE DO NOT EDIT!
+ * 
  */
 qx.Class.define('proto.dn.model.Publication', {
   extend: proto.core.BaseMessage,
@@ -55,6 +56,7 @@ qx.Class.define('proto.dn.model.Publication', {
         )
       }
       f = message.getPublished()
+      f = f instanceof Date ? Math.round(f.getTime() / 1000) : '0'
       if (f.length > 0) {
         writer.writeString(
           5,
@@ -62,7 +64,7 @@ qx.Class.define('proto.dn.model.Publication', {
         )
       }
       f = message.getMaster()
-      if (f != null) {
+      if (f !== false) {
         writer.writeBool(
           6,
           f
@@ -170,8 +172,8 @@ qx.Class.define('proto.dn.model.Publication', {
 
     published: {
       check: 'Date',
-      init: '',
-      nullable: false,
+      init: null,
+      nullable: true,
       event: 'changePublished',
       transform: '_toDate'
     },

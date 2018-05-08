@@ -1,8 +1,9 @@
 
 /**
- * Subscription class generated from protobuf definition "protos/model.proto".
  *
+ * Subscription class generated from protobuf definition "protos/model.proto".
  * auto-generated code PLEASE DO NOT EDIT!
+ * 
  */
 qx.Class.define('proto.dn.model.Subscription', {
   extend: proto.core.BaseMessage,
@@ -46,7 +47,7 @@ qx.Class.define('proto.dn.model.Subscription', {
         )
       }
       f = message.getFavorite()
-      if (f != null) {
+      if (f !== false) {
         writer.writeBool(
           4,
           f

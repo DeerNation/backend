@@ -1,9 +1,10 @@
 
 /**
- * Activity class generated from protobuf definition "protos/model.proto".
  * An Activity is everything that can be published in a channel.
  * it contains of some metadata and the content of a certain type.
+ * Activity class generated from protobuf definition "protos/model.proto".
  * auto-generated code PLEASE DO NOT EDIT!
+ * 
  */
 qx.Class.define('proto.dn.model.Activity', {
   extend: proto.core.BaseMessage,
@@ -15,15 +16,6 @@ qx.Class.define('proto.dn.model.Activity', {
   *****************************************************************************
   */
   statics: {
-    // array with oneOf property groups
-    ONEOFS: [],
-    /**
-     * Returns the allowed type for the oneOf field 'content'.
-     * @returns {Array} array of type names as string
-     */
-    getAllowedTypesOfContent: function () {
-      return this.ONEOFS[0]
-    },
     /**
      * Serializes the given message to binary data (in protobuf wire
      * format), writing to the given BinaryWriter.
@@ -40,6 +32,7 @@ qx.Class.define('proto.dn.model.Activity', {
         )
       }
       f = message.getCreated()
+      f = f instanceof Date ? Math.round(f.getTime() / 1000) : '0'
       if (f.length > 0) {
         writer.writeString(
           3,
@@ -70,26 +63,18 @@ qx.Class.define('proto.dn.model.Activity', {
         )
       }
       f = message.getMaster()
-      if (f != null) {
+      if (f !== false) {
         writer.writeBool(
           8,
           f
         )
       }
-      f = message.getMessage()
+      f = message.getContent()
       if (f != null) {
         writer.writeMessage(
-          20,
+          9,
           f,
-          proto.dn.model.Message.serializeBinaryToWriter
-        )
-      }
-      f = message.getEvent()
-      if (f != null) {
-        writer.writeMessage(
-          21,
-          f,
-          proto.dn.model.Event.serializeBinaryToWriter
+          proto.google.protobuf.Any.serializeBinaryToWriter
         )
       }
     },
@@ -147,15 +132,10 @@ qx.Class.define('proto.dn.model.Activity', {
             value = reader.readBool()
             msg.setMaster(value)
             break
-          case 20:
-            value = new proto.dn.model.Message()
-            reader.readMessage(value, proto.dn.model.Message.deserializeBinaryFromReader)
-            msg.setMessage(value)
-            break
-          case 21:
-            value = new proto.dn.model.Event()
-            reader.readMessage(value, proto.dn.model.Event.deserializeBinaryFromReader)
-            msg.setEvent(value)
+          case 9:
+            value = new proto.google.protobuf.Any()
+            reader.readMessage(value, proto.google.protobuf.Any.deserializeBinaryFromReader)
+            msg.setContent(value)
             break
           default:
             reader.skipField()
@@ -182,8 +162,8 @@ qx.Class.define('proto.dn.model.Activity', {
 
     created: {
       check: 'Date',
-      init: '',
-      nullable: false,
+      init: null,
+      nullable: true,
       event: 'changeCreated',
       transform: '_toDate'
     },
@@ -216,74 +196,11 @@ qx.Class.define('proto.dn.model.Activity', {
       event: 'changeMaster'
     },
 
-    message: {
-      check: 'proto.dn.model.Message',
-      init: null,
-      nullable: true,
-      event: 'changeMessage',
-      apply: '_applyOneOf0'
-    },
-
-    event: {
-      check: 'proto.dn.model.Event',
-      init: null,
-      nullable: true,
-      event: 'changeEvent',
-      apply: '_applyOneOf0'
-    },
-
-    /**
-     * oneOfIndex: 0
-     */
     content: {
-      check: ['message', 'event'],
+      check: 'proto.google.protobuf.Any',
       init: null,
+      nullable: true,
       event: 'changeContent'
     }
-  },
-
-  /*
-  *****************************************************************************
-     MEMBERS
-  *****************************************************************************
-  */
-  members: {
-    // oneOf property apply
-    _applyOneOf0: function (value, old, name) {
-      this.setContent(name)
-      
-      // reset all other values
-      proto.dn.model.Activity.ONEOFS[0].forEach(function (prop) {
-        if (prop !== name) {
-          this.reset(prop)
-        }
-      }, this)
-    },
-    /**
-     * Set value for oneOf field 'content'. Tries to detect the object type and call the correct setter.
-     * @param obj {var}
-     */
-    setOneOfContent: function (obj) {
-      var type = obj.basename.toLowerCase()
-      if (proto.dn.model.Activity.ONEOFS[0].includes(type)) {
-        this.set(type, obj)
-      } else {
-        throw new Error('type ' + type + ' is invalid for content, allowed types are: ' + proto.dn.model.Activity.ONEOFS[0].join(', '))
-      }
-    },
-    /**
-     * Get value for oneOf field 'content'.
-     * @returns {var}
-     */
-    getOneOfContent: function () {
-      if (this.getContent()) {
-        return this.get(this.getContent())
-      }
-      return null
-    }
-  },
-
-  defer: function (statics) {
-    statics.ONEOFS[0] = ['message', 'event']
   }
 })

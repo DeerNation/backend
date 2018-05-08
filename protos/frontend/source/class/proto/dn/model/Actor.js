@@ -1,8 +1,9 @@
 
 /**
- * Actor class generated from protobuf definition "protos/model.proto".
  *
+ * Actor class generated from protobuf definition "protos/model.proto".
  * auto-generated code PLEASE DO NOT EDIT!
+ * 
  */
 qx.Class.define('proto.dn.model.Actor', {
   extend: proto.core.BaseMessage,
@@ -106,7 +107,7 @@ qx.Class.define('proto.dn.model.Actor', {
         )
       }
       f = message.getOnline()
-      if (f != null) {
+      if (f !== false) {
         writer.writeBool(
           10,
           f

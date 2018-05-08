@@ -71,6 +71,12 @@ qx.Class.define('proto.core.BaseMessage', {
      * @protected
      */
     _toString: function (value) {
+      if (qx.lang.Type.isArray(value)) {
+        value = value.map(function (entry) {
+          return '' + entry
+        })
+        return value
+      }
       return '' + value
     },
 
@@ -79,6 +85,9 @@ qx.Class.define('proto.core.BaseMessage', {
      * @protected
      */
     _toDate: function (value) {
+      if (!value) {
+        return null;
+      }
       if (qx.lang.Type.isString(value)) {
         return new Date(value)
       }

@@ -1,8 +1,9 @@
 
 /**
- * Channel class generated from protobuf definition "protos/model.proto".
  *
+ * Channel class generated from protobuf definition "protos/model.proto".
  * auto-generated code PLEASE DO NOT EDIT!
+ * 
  */
 qx.Class.define('proto.dn.model.Channel', {
   extend: proto.core.BaseMessage,
@@ -104,7 +105,7 @@ qx.Class.define('proto.dn.model.Channel', {
         )
       }
       f = message.getWriteProtected()
-      if (f != null) {
+      if (f !== false) {
         writer.writeBool(
           10,
           f

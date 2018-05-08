@@ -19,10 +19,10 @@ module.exports = {
     'proto.dn.model.Actor': {
       include: ['app.api.MActor', 'app.api.MUpdate']
     },
-    'proto.dn.model.Message': {
+    'proto.dn.model.payload.Message': {
       include: ['app.plugins.message.MMessage', 'app.api.MUpdate']
     },
-    'proto.dn.model.Event': {
+    'proto.dn.model.payload.Event': {
       include: ['app.plugins.event.MEvent', 'app.api.MUpdate']
     }
   },

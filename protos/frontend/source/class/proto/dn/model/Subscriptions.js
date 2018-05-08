@@ -1,8 +1,9 @@
 
 /**
- * Subscriptions class generated from protobuf definition "protos/model.proto".
  * A List of subscriptions
+ * Subscriptions class generated from protobuf definition "protos/model.proto".
  * auto-generated code PLEASE DO NOT EDIT!
+ * 
  */
 qx.Class.define('proto.dn.model.Subscriptions', {
   extend: proto.core.BaseMessage,

@@ -1,8 +1,9 @@
 
 /**
- * WritingUser class generated from protobuf definition "protos/api.proto".
  * User currently writing in channel status.
+ * WritingUser class generated from protobuf definition "protos/api.proto".
  * auto-generated code PLEASE DO NOT EDIT!
+ * 
  */
 qx.Class.define('proto.dn.WritingUser', {
   extend: proto.core.BaseMessage,
@@ -29,7 +30,7 @@ qx.Class.define('proto.dn.WritingUser', {
         )
       }
       f = message.getDone()
-      if (f != null) {
+      if (f !== false) {
         writer.writeBool(
           2,
           f

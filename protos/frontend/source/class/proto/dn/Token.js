@@ -1,8 +1,9 @@
 
 /**
- * Token class generated from protobuf definition "protos/api.proto".
  *
+ * Token class generated from protobuf definition "protos/api.proto".
  * auto-generated code PLEASE DO NOT EDIT!
+ * 
  */
 qx.Class.define('proto.dn.Token', {
   extend: proto.core.BaseMessage,

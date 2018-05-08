@@ -1,8 +1,9 @@
 
 /**
- * AclActions class generated from protobuf definition "protos/model.proto".
  *
+ * AclActions class generated from protobuf definition "protos/model.proto".
  * auto-generated code PLEASE DO NOT EDIT!
+ * 
  */
 qx.Class.define('proto.dn.model.AclActions', {
   extend: proto.core.BaseMessage,

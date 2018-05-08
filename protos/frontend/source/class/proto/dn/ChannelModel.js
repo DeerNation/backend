@@ -1,11 +1,12 @@
 
 /**
- * ChannelModel class generated from protobuf definition "protos/api.proto".
  * The ChannelModel contains:
  * - allowed actions for current user on channel
  * - allowed actions for current user on channel activities
  * - the channels publications
+ * ChannelModel class generated from protobuf definition "protos/api.proto".
  * auto-generated code PLEASE DO NOT EDIT!
+ * 
  */
 qx.Class.define('proto.dn.ChannelModel', {
   extend: proto.core.BaseMessage,

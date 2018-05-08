@@ -1,11 +1,12 @@
 
 /**
- * Message class generated from protobuf definition "protos/model.proto".
  * A Message is the basic activity content type: a simple message that can contain
  * anything encoded in a markdown notation.
+ * Message class generated from protobuf definition "plugins/content/messages/backend/payload.proto".
  * auto-generated code PLEASE DO NOT EDIT!
+ * 
  */
-qx.Class.define('proto.dn.model.Message', {
+qx.Class.define('proto.dn.model.payload.Message', {
   extend: proto.core.BaseMessage,
   include: [app.plugins.message.MMessage, app.api.MUpdate],
 
@@ -49,20 +50,20 @@ qx.Class.define('proto.dn.model.Message', {
     /**
      * Deserializes binary data (in protobuf wire format).
      * @param bytes {jspb.ByteSource} The bytes to deserialize.
-     * @return {proto.dn.model.Message}
+     * @return {proto.dn.model.payload.Message}
      */
     deserializeBinary: function (bytes) {
       var reader = new jspb.BinaryReader(bytes)
-      var msg = new proto.dn.model.Message()
-      return proto.dn.model.Message.deserializeBinaryFromReader(msg, reader)
+      var msg = new proto.dn.model.payload.Message()
+      return proto.dn.model.payload.Message.deserializeBinaryFromReader(msg, reader)
     },
 
     /**
      * Deserializes binary data (in protobuf wire format) from the
      * given reader into the given message object.
-     * @param msg {proto.dn.model.Message} The message object to deserialize into.
+     * @param msg {proto.dn.model.payload.Message} The message object to deserialize into.
      * @param reader {jspb.BinaryReader} The BinaryReader to use.
-     * @return {proto.dn.model.Message}
+     * @return {proto.dn.model.payload.Message}
      */
     deserializeBinaryFromReader: function (msg, reader) {
       msg.setDeserialized(true)

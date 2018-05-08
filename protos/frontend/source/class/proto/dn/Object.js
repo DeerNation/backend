@@ -1,13 +1,11 @@
 
 /**
- * ActivityChange messages are the messages sent in a channel.
- * They contain either an update for an activity or an internal
- * status update for the channel, like a currently writing user state.
- * ActivityChange class generated from protobuf definition "protos/api.proto".
+ *
+ * Object class generated from protobuf definition "protos/api.proto".
  * auto-generated code PLEASE DO NOT EDIT!
  * 
  */
-qx.Class.define('proto.dn.ActivityChange', {
+qx.Class.define('proto.dn.Object', {
   extend: proto.core.BaseMessage,
 
   /*
@@ -18,15 +16,6 @@ qx.Class.define('proto.dn.ActivityChange', {
   statics: {
     // array with oneOf property groups
     ONEOFS: [],
-    /**
-     * @enum
-     */
-    Type: {
-      ADD: 0,
-      UPDATE: 1,
-      DELETE: 2,
-      INTERNAL: 3
-    },
     /**
      * Returns the allowed type for the oneOf field 'content'.
      * @returns {Array} array of type names as string
@@ -57,12 +46,36 @@ qx.Class.define('proto.dn.ActivityChange', {
           proto.dn.model.Activity.serializeBinaryToWriter
         )
       }
-      f = message.getWriting()
+      f = message.getActor()
       if (f != null) {
         writer.writeMessage(
           3,
           f,
-          proto.dn.WritingUser.serializeBinaryToWriter
+          proto.dn.model.Actor.serializeBinaryToWriter
+        )
+      }
+      f = message.getChannel()
+      if (f != null) {
+        writer.writeMessage(
+          4,
+          f,
+          proto.dn.model.Channel.serializeBinaryToWriter
+        )
+      }
+      f = message.getSubscription()
+      if (f != null) {
+        writer.writeMessage(
+          5,
+          f,
+          proto.dn.model.Subscription.serializeBinaryToWriter
+        )
+      }
+      f = message.getPublication()
+      if (f != null) {
+        writer.writeMessage(
+          6,
+          f,
+          proto.dn.model.Publication.serializeBinaryToWriter
         )
       }
     },
@@ -70,20 +83,20 @@ qx.Class.define('proto.dn.ActivityChange', {
     /**
      * Deserializes binary data (in protobuf wire format).
      * @param bytes {jspb.ByteSource} The bytes to deserialize.
-     * @return {proto.dn.ActivityChange}
+     * @return {proto.dn.Object}
      */
     deserializeBinary: function (bytes) {
       var reader = new jspb.BinaryReader(bytes)
-      var msg = new proto.dn.ActivityChange()
-      return proto.dn.ActivityChange.deserializeBinaryFromReader(msg, reader)
+      var msg = new proto.dn.Object()
+      return proto.dn.Object.deserializeBinaryFromReader(msg, reader)
     },
 
     /**
      * Deserializes binary data (in protobuf wire format) from the
      * given reader into the given message object.
-     * @param msg {proto.dn.ActivityChange} The message object to deserialize into.
+     * @param msg {proto.dn.Object} The message object to deserialize into.
      * @param reader {jspb.BinaryReader} The BinaryReader to use.
-     * @return {proto.dn.ActivityChange}
+     * @return {proto.dn.Object}
      */
     deserializeBinaryFromReader: function (msg, reader) {
       msg.setDeserialized(true)
@@ -104,9 +117,24 @@ qx.Class.define('proto.dn.ActivityChange', {
             msg.setActivity(value)
             break
           case 3:
-            value = new proto.dn.WritingUser()
-            reader.readMessage(value, proto.dn.WritingUser.deserializeBinaryFromReader)
-            msg.setWriting(value)
+            value = new proto.dn.model.Actor()
+            reader.readMessage(value, proto.dn.model.Actor.deserializeBinaryFromReader)
+            msg.setActor(value)
+            break
+          case 4:
+            value = new proto.dn.model.Channel()
+            reader.readMessage(value, proto.dn.model.Channel.deserializeBinaryFromReader)
+            msg.setChannel(value)
+            break
+          case 5:
+            value = new proto.dn.model.Subscription()
+            reader.readMessage(value, proto.dn.model.Subscription.deserializeBinaryFromReader)
+            msg.setSubscription(value)
+            break
+          case 6:
+            value = new proto.dn.model.Publication()
+            reader.readMessage(value, proto.dn.model.Publication.deserializeBinaryFromReader)
+            msg.setPublication(value)
             break
           default:
             reader.skipField()
@@ -125,7 +153,7 @@ qx.Class.define('proto.dn.ActivityChange', {
   properties: {
 
     /**
-     * Enum of type {@link proto.dn.ActivityChange.Type}
+     * Enum of type {@link proto.dn.ChangeType}
      */
     type: {
       check: 'Number',
@@ -142,11 +170,35 @@ qx.Class.define('proto.dn.ActivityChange', {
       apply: '_applyOneOf0'
     },
 
-    writing: {
-      check: 'proto.dn.WritingUser',
+    actor: {
+      check: 'proto.dn.model.Actor',
       init: null,
       nullable: true,
-      event: 'changeWriting',
+      event: 'changeActor',
+      apply: '_applyOneOf0'
+    },
+
+    channel: {
+      check: 'proto.dn.model.Channel',
+      init: null,
+      nullable: true,
+      event: 'changeChannel',
+      apply: '_applyOneOf0'
+    },
+
+    subscription: {
+      check: 'proto.dn.model.Subscription',
+      init: null,
+      nullable: true,
+      event: 'changeSubscription',
+      apply: '_applyOneOf0'
+    },
+
+    publication: {
+      check: 'proto.dn.model.Publication',
+      init: null,
+      nullable: true,
+      event: 'changePublication',
       apply: '_applyOneOf0'
     },
 
@@ -154,7 +206,7 @@ qx.Class.define('proto.dn.ActivityChange', {
      * oneOfIndex: 0
      */
     content: {
-      check: ['activity', 'writing'],
+      check: ['activity', 'actor', 'channel', 'subscription', 'publication'],
       init: null,
       event: 'changeContent'
     }
@@ -171,7 +223,7 @@ qx.Class.define('proto.dn.ActivityChange', {
       this.setContent(name)
       
       // reset all other values
-      proto.dn.ActivityChange.ONEOFS[0].forEach(function (prop) {
+      proto.dn.Object.ONEOFS[0].forEach(function (prop) {
         if (prop !== name) {
           this.reset(prop)
         }
@@ -183,10 +235,10 @@ qx.Class.define('proto.dn.ActivityChange', {
      */
     setOneOfContent: function (obj) {
       var type = obj.basename.toLowerCase()
-      if (proto.dn.ActivityChange.ONEOFS[0].includes(type)) {
+      if (proto.dn.Object.ONEOFS[0].includes(type)) {
         this.set(type, obj)
       } else {
-        throw new Error('type ' + type + ' is invalid for content, allowed types are: ' + proto.dn.ActivityChange.ONEOFS[0].join(', '))
+        throw new Error('type ' + type + ' is invalid for content, allowed types are: ' + proto.dn.Object.ONEOFS[0].join(', '))
       }
     },
     /**
@@ -202,6 +254,6 @@ qx.Class.define('proto.dn.ActivityChange', {
   },
 
   defer: function (statics) {
-    statics.ONEOFS[0] = ['activity', 'writing']
+    statics.ONEOFS[0] = ['activity', 'actor', 'channel', 'subscription', 'publication']
   }
 })
