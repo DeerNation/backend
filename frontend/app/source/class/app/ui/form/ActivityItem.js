@@ -156,8 +156,7 @@ qx.Class.define('app.ui.form.ActivityItem', {
       }
       if (value) {
         const container = this.getChildControl('content-container')
-        console.log(value.getActivity().getContent())
-        const type = value.getActivity().getContent().getType_url().split('.').pop().toLowerCase();
+        const type = value.getActivity().getContent().getType_url().split('.').pop().toLowerCase()
         const currentRenderer = container.getSelection().length === 1 ? container.getSelection()[0] : null
         if (currentRenderer && currentRenderer.getType() === type) {
           // shortcut: the renderer can handle the type, so we just update the model

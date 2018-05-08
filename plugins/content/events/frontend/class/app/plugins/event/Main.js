@@ -3,6 +3,7 @@
  *
  * @author Tobias Bräutigam <tbraeutigam@gmail.com>
  * @since 2018
+ * @require(proto.dn.model.payload.Event)
  */
 
 qx.Class.define('app.plugins.event.Main', {
@@ -12,7 +13,6 @@ qx.Class.define('app.plugins.event.Main', {
     // register
     app.plugins.Registry.getInstance().registerContentPlugin({
       type: 'event',
-      model: app.plugins.event.Model,
       renderer: app.plugins.event.Renderer,
       form: app.plugins.event.Form,
       channelView: app.plugins.event.Calendar,

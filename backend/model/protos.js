@@ -16,7 +16,11 @@ const pluginPath = path.join(rootDir, 'plugins', 'content')
 const files = glob.sync(pluginPath + '/**/*.proto')
 files.forEach(protoPath => {
   const pluginProto = grpc.load({root: rootDir, file: protoPath.substring(rootDir.length)})
-  proto.dn = Object.assign(proto.dn, pluginProto.dn)
+  if (!proto.dn.model.payload) {
+    proto.dn.model.payload = {}
+  }
+  proto.dn.model.payload = Object.assign(proto.dn.model.payload, pluginProto.dn.model.payload)
+
 })
 
 module.exports = proto

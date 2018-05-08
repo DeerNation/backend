@@ -1,7 +1,6 @@
 syntax = "proto3";
 package dn;
-//import "google/protobuf/timestamp.proto";
-//import "google/protobuf/empty.proto";
+import "node_modules/protoc-gen-qx/protos/extensions.proto";
 import "protos/model.proto";
 
 service Com {
@@ -122,7 +121,7 @@ message ChannelRequest {
     string uid = 1;
     // channel name (as alternative to the uid)
     string channelId = 2;
-    string date = 3;
+    string date = 3 [(qx.date) = true];
     int32 limit = 4;
 }
 

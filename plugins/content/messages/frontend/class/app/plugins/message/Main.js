@@ -12,7 +12,6 @@ qx.Class.define('app.plugins.message.Main', {
     // register
     app.plugins.Registry.getInstance().registerContentPlugin({
       type: 'message',
-      model: app.plugins.message.Model,
       renderer: app.plugins.message.Renderer,
       form: app.plugins.message.MessageField,
       theme: [

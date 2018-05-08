@@ -37,6 +37,7 @@ qx.Class.define('proto.dn.ChannelRequest', {
         )
       }
       f = message.getDate()
+      f = f instanceof Date ? Math.round(f.getTime() / 1000) : '0'
       if (f.length > 0) {
         writer.writeString(
           3,
@@ -126,10 +127,11 @@ qx.Class.define('proto.dn.ChannelRequest', {
     },
 
     date: {
-      check: 'String',
-      init: '',
-      nullable: false,
-      event: 'changeDate'
+      check: 'Date',
+      init: null,
+      nullable: true,
+      event: 'changeDate',
+      transform: '_toDate'
     },
 
     limit: {

@@ -150,6 +150,14 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
       }
     },
 
+    _getChannelRequest: function (subscription) {
+      return new proto.dn.ChannelRequest({
+        uid: subscription.getChannel().getUid(),
+        channelId: subscription.getChannel().getId(),
+        limit: 10
+      })
+    },
+
     // property apply
     _applySubscription: function (subscription, oldSubscription) {
       const socket = app.io.Socket.getInstance()
@@ -169,11 +177,7 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
           publications = new qx.data.Array()
         }
         const service = new proto.dn.Com(socket)
-        service.getChannelModel(new proto.dn.ChannelRequest({
-          uid: subscription.getChannel().getUid(),
-          channelId: subscription.getChannel().getId(),
-          limit: 10
-        })).then(channelModel => {
+        service.getChannelModel(this._getChannelRequest(subscription)).then(channelModel => {
           this.setChannelAcls(channelModel.getChannelActions())
           this.setChannelActivitiesAcls(channelModel.getActivityActions())
           publications.replace(channelModel.getPublications())

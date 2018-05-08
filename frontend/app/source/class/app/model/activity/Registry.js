@@ -79,7 +79,6 @@ qx.Class.define('app.model.activity.Registry', {
     __registry: null,
 
     register: function (type, modelClass, rendererClass, formClass) {
-      qx.core.Assert.assertTrue(qx.Class.isSubClassOf(modelClass, app.model.activity.content.AbstractActivityContent))
       qx.core.Assert.assertTrue(qx.Class.isSubClassOf(formClass, app.plugins.AbstractContentForm))
       qx.core.Assert.assertInterface(rendererClass, app.ui.renderer.IRenderer)
       this.__registry[type] = {
