@@ -56,7 +56,7 @@ qx.Class.define('proto.dn.model.Publication', {
         )
       }
       f = message.getPublished()
-      f = f instanceof Date ? Math.round(f.getTime() / 1000) : '0'
+      f = f instanceof Date ? Math.round(f.getTime() / 1000) : ''
       if (f.length > 0) {
         writer.writeString(
           5,

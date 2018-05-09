@@ -108,7 +108,7 @@ qx.Class.define('app.plugins.event.Calendar', {
       const acls = this.getChannelActivitiesAcls()
 
       this.getPublications().forEach(act => {
-        const event = act.getActivity().getContent().getValue()
+        const event = act.getActivity().getContent()
         if (event) {
           if (event.getEnd() >= startDate && event.getStart() <= endDate) {
             // workaround for wrong allDay events

@@ -100,15 +100,15 @@ qx.Class.define('proto.google.protobuf.Any', {
      * @suppress {unusedLocalVariables} f is only used for nested messages
      */
     serializeBinaryToWriter: function (message, writer) {
-      var f = message.getType_url()
+      var f = message.getValue()
+      var type = this.generateTypeUrl(message)
 
-      if (f.length > 0) {
+      if (type.length > 0) {
         writer.writeString(
           1,
           f
         )
       }
-      f = message.getValue()
       if (f !== 0) {
         writer.writeBytes(
           2,
@@ -146,7 +146,7 @@ qx.Class.define('proto.google.protobuf.Any', {
         switch (field) {
           case 1:
             value = reader.readString()
-            msg.setType_url(value)
+            msg.setTypeUrl(value)
             break
           case 2:
             value = reader.readBytes()
@@ -158,7 +158,25 @@ qx.Class.define('proto.google.protobuf.Any', {
         }
       }
       return msg
-    }
+    },
+
+    /**
+     * Generates the type_url for the given object.
+     * @param objectInstance {Object} The object instance to pack.
+     * @param opt_typeUrlPrefix {String?} the type URL prefix.
+     * @returns {String} opt_typeUrlPrefix + objects classname
+     */
+    generateTypeUrl: function (objectInstance, opt_typeUrlPrefix) {
+      if (!opt_typeUrlPrefix) {
+        opt_typeUrlPrefix = 'type.googleapis.com/';
+      }
+
+      if (opt_typeUrlPrefix.substr(-1) != '/') {
+        return opt_typeUrlPrefix + '/' + objectInstance.classname;
+      } else {
+        return opt_typeUrlPrefix + objectInstance.classname;
+      }
+    },
   },
 
   /*
@@ -168,12 +186,12 @@ qx.Class.define('proto.google.protobuf.Any', {
   */
   properties: {
 
-    type_url: {
+    typeUrl: {
       check: 'String',
       init: '',
       nullable: false,
-      event: 'changeType_url',
-      apply: '_applyType_url'
+      event: 'changeTypeUrl',
+      apply: '_applyTypeUrl'
     },
 
     value: {
@@ -192,12 +210,20 @@ qx.Class.define('proto.google.protobuf.Any', {
   members: {
     __valueClazz: null,
 
-    _applyType_url: function (value) {
+    _applyTypeUrl: function (value) {
       this.__valueClazz = qx.Class.getByName('proto.' + value.split('/').pop())
     },
 
     _transformAny: function (value) {
       return this.__valueClazz.deserializeBinary(value)
+    },
+
+    /**
+     * Returns the type name contained in this instance, if any.
+     * @return {String?}
+     */
+    getTypeName: function () {
+      return this.getTypeUrl().split('/').pop();
     }
   }
 })

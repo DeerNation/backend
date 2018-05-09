@@ -32,7 +32,7 @@ qx.Class.define('proto.dn.model.Activity', {
         )
       }
       f = message.getCreated()
-      f = f instanceof Date ? Math.round(f.getTime() / 1000) : '0'
+      f = f instanceof Date ? Math.round(f.getTime() / 1000) : ''
       if (f.length > 0) {
         writer.writeString(
           3,
@@ -135,7 +135,7 @@ qx.Class.define('proto.dn.model.Activity', {
           case 9:
             value = new proto.google.protobuf.Any()
             reader.readMessage(value, proto.google.protobuf.Any.deserializeBinaryFromReader)
-            msg.setContent(value)
+            msg.setContent(value.getValue())
             break
           default:
             reader.skipField()
@@ -197,7 +197,6 @@ qx.Class.define('proto.dn.model.Activity', {
     },
 
     content: {
-      check: 'proto.google.protobuf.Any',
       init: null,
       nullable: true,
       event: 'changeContent'

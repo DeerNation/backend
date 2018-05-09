@@ -55,7 +55,7 @@ qx.Class.define('proto.dn.model.payload.Event', {
         )
       }
       f = message.getStart()
-      f = f instanceof Date ? Math.round(f.getTime() / 1000) : '0'
+      f = f instanceof Date ? Math.round(f.getTime() / 1000) : ''
       if (f.length > 0) {
         writer.writeString(
           4,
@@ -63,7 +63,7 @@ qx.Class.define('proto.dn.model.payload.Event', {
         )
       }
       f = message.getEnd()
-      f = f instanceof Date ? Math.round(f.getTime() / 1000) : '0'
+      f = f instanceof Date ? Math.round(f.getTime() / 1000) : ''
       if (f.length > 0) {
         writer.writeString(
           5,

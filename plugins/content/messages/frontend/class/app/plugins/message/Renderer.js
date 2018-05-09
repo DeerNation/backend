@@ -74,7 +74,7 @@ qx.Class.define('app.plugins.message.Renderer', {
         old.getOneOfContent().removeRelatedBindings(this)
       }
       if (value) {
-        const content = value.getContent().getValue()
+        const content = value.getContent()
         if (content) {
           content.bind('displayMessage', this.getChildControl('message'), 'value')
           content.bind('link', this, 'link')
