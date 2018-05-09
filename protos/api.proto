@@ -22,6 +22,11 @@ service Com {
 
     rpc setFirebaseToken(Token) returns (Response);
 
+    /**
+     * Updates a single property of an object
+     */
+    rpc updateProperty(PropertyUpdate) returns (Response);
+
     // ----------------------------------------------
     // CRUD
     // ----------------------------------------------
@@ -43,6 +48,12 @@ enum ChangeType {
     DELETE = 2;
     REPLACE = 3;
     INTERNAL = 4;
+}
+
+message PropertyUpdate {
+    string uid = 1;
+    string name = 2;
+    Object object = 3;
 }
 
 message Query {
@@ -70,6 +81,8 @@ message Object {
         dn.model.Subscription subscription = 5;
         dn.model.Publication publication = 6;
     }
+    // reset the values of these proeprties of the Object
+    repeated string resetProperties = 7;
 }
 
 message Model {

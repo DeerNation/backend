@@ -309,7 +309,7 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
         const list = new app.ui.list.Subscriptions(app.Model.getInstance().getSubscriptions(), {
           filter: (model) => {
             return !model.isHidden() && this.isAllowed('p', model) &&
-              model.getChannel().getChannelId() !== this.getSubscription().getChannelId()
+              model.getChannel().getUid() !== this.getSubscription().getChannel().getUid()
           }
         })
         dialog.add(list)
@@ -320,7 +320,13 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
             const channel = selection.getItem(0).getChannel()
             const promises = []
             activities.forEach(activity => {
-              promises.push(app.io.Rpc.getProxy().publish(channel.getId(), activity.getId()))
+              const newObj = new proto.dn.Object({
+                publication: new proto.dn.model.Publication({
+                  activity: new proto.dn.model.Activity({uid: activity.getUid()}),
+                  channel: new proto.dn.model.Channel({uid: channel.getUid()})
+                })
+              })
+              promises.push(app.api.Service.getInstance().createObject(newObj))
             })
             Promise.all(promises).then(() => {
               // open the channel

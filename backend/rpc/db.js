@@ -191,72 +191,72 @@ async function updateObjectProperty (authToken, type, id, prop, value) {
   })
 }
 
-async function setFirebaseToken (authToken, firebaseToken, oldToken) {
-  await acl.check(authToken, config.domain + '.object.firebase', acl.action.UPDATE, null, i18n.__('You are not allowed to save this token.'))
-  const crud = schema.getCrud()
-
-  if (oldToken) {
-    // delete old token
-    schema.getModel('Firebase').filter({token: oldToken}).delete()
-  }
-
-  if (firebaseToken) {
-    return schema.getModel('Firebase').filter({token: firebaseToken}).run()
-      .then((res) => {
-        if (res && res.length > 0) {
-          return new Promise((resolve, reject) => {
-            crud.update({
-              type: 'Firebase',
-              id: res[0].id,
-              value: {
-                token: firebaseToken,
-                actorId: authToken.user
-              }
-            }, (err, res) => {
-              if (err) {
-                reject(err)
-              } else {
-                resolve(res)
-              }
-            })
-          })
-        } else {
-          return new Promise((resolve, reject) => {
-            crud.create({
-              type: 'Firebase',
-              value: {
-                actorId: authToken.user,
-                token: firebaseToken
-              }
-            }, (err, res) => {
-              if (err) {
-                reject(err)
-              } else {
-                resolve(res)
-              }
-            })
-          })
-        }
-      })
-      .catch(() => {
-        return new Promise((resolve, reject) => {
-          crud.create({
-            type: 'Firebase',
-            value: {
-              actorId: authToken.user,
-              token: firebaseToken
-            }
-          }, (err, res) => {
-            if (err) {
-              reject(err)
-            } else {
-              resolve(res)
-            }
-          })
-        })
-      })
-  }
-}
+// async function setFirebaseToken (authToken, firebaseToken, oldToken) {
+//   await acl.check(authToken, config.domain + '.object.firebase', acl.action.UPDATE, null, i18n.__('You are not allowed to save this token.'))
+//   const crud = schema.getCrud()
+//
+//   if (oldToken) {
+//     // delete old token
+//     schema.getModel('Firebase').filter({token: oldToken}).delete()
+//   }
+//
+//   if (firebaseToken) {
+//     return schema.getModel('Firebase').filter({token: firebaseToken}).run()
+//       .then((res) => {
+//         if (res && res.length > 0) {
+//           return new Promise((resolve, reject) => {
+//             crud.update({
+//               type: 'Firebase',
+//               id: res[0].id,
+//               value: {
+//                 token: firebaseToken,
+//                 actorId: authToken.user
+//               }
+//             }, (err, res) => {
+//               if (err) {
+//                 reject(err)
+//               } else {
+//                 resolve(res)
+//               }
+//             })
+//           })
+//         } else {
+//           return new Promise((resolve, reject) => {
+//             crud.create({
+//               type: 'Firebase',
+//               value: {
+//                 actorId: authToken.user,
+//                 token: firebaseToken
+//               }
+//             }, (err, res) => {
+//               if (err) {
+//                 reject(err)
+//               } else {
+//                 resolve(res)
+//               }
+//             })
+//           })
+//         }
+//       })
+//       .catch(() => {
+//         return new Promise((resolve, reject) => {
+//           crud.create({
+//             type: 'Firebase',
+//             value: {
+//               actorId: authToken.user,
+//               token: firebaseToken
+//             }
+//           }, (err, res) => {
+//             if (err) {
+//               reject(err)
+//             } else {
+//               resolve(res)
+//             }
+//           })
+//         })
+//       })
+//   }
+// }
 
 async function deleteActivity (authToken, id) {
   // message specific check

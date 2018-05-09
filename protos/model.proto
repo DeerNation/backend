@@ -29,7 +29,7 @@ message Subscription {
     string uid = 1;
     Channel channel = 2;
     Actor actor = 3;
-    bool favorite = 4;
+    bool favorite = 4 [(qx.annotations) = 'persist'];
     // TODO add notification settings
 }
 
@@ -118,7 +118,7 @@ message Actor {
     string locale = 8;
     repeated Subscription subscriptions = 9;
     bool online = 10;
-    string status = 11;
+    string status = 11 [(qx.annotations) = 'persist'];
 }
 
 message AclActions {

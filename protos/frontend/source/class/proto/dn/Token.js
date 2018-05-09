@@ -57,6 +57,7 @@ qx.Class.define('proto.dn.Token', {
      * @return {proto.dn.Token}
      */
     deserializeBinaryFromReader: function (msg, reader) {
+      msg.$$deserializing = true
       msg.setDeserialized(true)
       while (reader.nextField()) {
         if (reader.isEndGroup()) {
@@ -78,6 +79,7 @@ qx.Class.define('proto.dn.Token', {
             break
         }
       }
+      msg.$$deserializing = false
       return msg
     }
   },

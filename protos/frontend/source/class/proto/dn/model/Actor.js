@@ -7,7 +7,7 @@
  */
 qx.Class.define('proto.dn.model.Actor', {
   extend: proto.core.BaseMessage,
-  include: [app.api.MActor, app.api.MUpdate],
+  include: [app.api.MActor, app.api.MUpdate, app.api.MPersist],
 
   /*
   *****************************************************************************
@@ -141,6 +141,7 @@ qx.Class.define('proto.dn.model.Actor', {
      * @return {proto.dn.model.Actor}
      */
     deserializeBinaryFromReader: function (msg, reader) {
+      msg.$$deserializing = true
       msg.setDeserialized(true)
       while (reader.nextField()) {
         if (reader.isEndGroup()) {
@@ -200,6 +201,7 @@ qx.Class.define('proto.dn.model.Actor', {
             break
         }
       }
+      msg.$$deserializing = false
       return msg
     }
   },
@@ -290,7 +292,8 @@ qx.Class.define('proto.dn.model.Actor', {
       check: 'String',
       init: '',
       nullable: false,
-      event: 'changeStatus'
+      event: 'changeStatus',
+      '@': ['persist']
     }
   }
 })

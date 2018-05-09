@@ -89,7 +89,7 @@ class ModelSubscriptions {
             if (!changedObject[listener.parsedId.edge].map(x => x.uid).includes(listener.parsedId.uid)) {
               return
             }
-          } else if (changedObject[listener.parsedId.edge].uid !== listener.parsedId.uid) {
+          } else if (changedObject[listener.parsedId.edge] && changedObject[listener.parsedId.edge].uid !== listener.parsedId.uid) {
             return
           }
         }

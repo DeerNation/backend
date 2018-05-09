@@ -178,6 +178,7 @@ qx.Class.define('app.Model', {
 
       switch (update.getType()) {
         case proto.dn.ChangeType.REPLACE:
+          console.log(update)
           this.getChannels().removeAll()
           this.getSubscriptions().removeAll()
           this.getActors().replace(update.getActors())

@@ -72,6 +72,7 @@ qx.Class.define('proto.dn.ChannelRequest', {
      * @return {proto.dn.ChannelRequest}
      */
     deserializeBinaryFromReader: function (msg, reader) {
+      msg.$$deserializing = true
       msg.setDeserialized(true)
       while (reader.nextField()) {
         if (reader.isEndGroup()) {
@@ -101,6 +102,7 @@ qx.Class.define('proto.dn.ChannelRequest', {
             break
         }
       }
+      msg.$$deserializing = false
       return msg
     }
   },

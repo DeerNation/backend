@@ -65,6 +65,7 @@ qx.Class.define('proto.dn.model.ExternalRef', {
      * @return {proto.dn.model.ExternalRef}
      */
     deserializeBinaryFromReader: function (msg, reader) {
+      msg.$$deserializing = true
       msg.setDeserialized(true)
       while (reader.nextField()) {
         if (reader.isEndGroup()) {
@@ -90,6 +91,7 @@ qx.Class.define('proto.dn.model.ExternalRef', {
             break
         }
       }
+      msg.$$deserializing = false
       return msg
     }
   },

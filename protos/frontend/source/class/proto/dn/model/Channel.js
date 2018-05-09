@@ -132,6 +132,7 @@ qx.Class.define('proto.dn.model.Channel', {
      * @return {proto.dn.model.Channel}
      */
     deserializeBinaryFromReader: function (msg, reader) {
+      msg.$$deserializing = true
       msg.setDeserialized(true)
       while (reader.nextField()) {
         if (reader.isEndGroup()) {
@@ -186,6 +187,7 @@ qx.Class.define('proto.dn.model.Channel', {
             break
         }
       }
+      msg.$$deserializing = false
       return msg
     }
   },

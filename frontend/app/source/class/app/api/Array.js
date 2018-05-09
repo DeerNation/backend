@@ -41,7 +41,6 @@ qx.Class.define('app.api.Array', {
 
     _onObjectUpdate: function (ev) {
       const change = ev.getData()
-      console.log(change.getType())
       if (change.getType() === proto.dn.ChangeType.DELETE) {
         const uid = change.getOneOfContent().getUid()
         this.some(entry => {

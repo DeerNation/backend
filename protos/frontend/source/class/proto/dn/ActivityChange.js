@@ -86,6 +86,7 @@ qx.Class.define('proto.dn.ActivityChange', {
      * @return {proto.dn.ActivityChange}
      */
     deserializeBinaryFromReader: function (msg, reader) {
+      msg.$$deserializing = true
       msg.setDeserialized(true)
       while (reader.nextField()) {
         if (reader.isEndGroup()) {
@@ -113,6 +114,7 @@ qx.Class.define('proto.dn.ActivityChange', {
             break
         }
       }
+      msg.$$deserializing = false
       return msg
     }
   },

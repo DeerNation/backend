@@ -38,6 +38,7 @@ channel: uid @reverse .
 username: string @index(hash) @upsert .
 password: password .
 type: string @index(hash) .
+tokenId: string @index(hash) .
 created: datetime .
 published: datetime .
 `
@@ -94,7 +95,7 @@ class DgraphService {
         online
         status
         color
-        subscriptions : ~actor @filter(has(favorite)) {
+        subscriptions : ~actor @filter(eq(baseName, "Subscription")) {
           uid
           favorite
           viewedUntil
@@ -268,8 +269,63 @@ class DgraphService {
     return result
   }
 
-  setFirebaseToken (authToken, request) {
+  async setFirebaseToken (authToken, request) {
+    await acl.check(authToken, config.domain + '.object.firebase', acl.action.UPDATE, null, i18n.__('You are not allowed to save this token.'))
 
+    const txn = dgraphClient.newTxn()
+    let res, mu
+
+    try {
+      const query = `query read($a: string) {
+          token(func: eq(tokenId, $a)) {
+            uid
+          }
+        }`
+      if (request.oldToken) {
+        // delete old token
+        res = await dgraphClient.newTxn().queryWithVars(query, {$a: request.oldToken})
+        const delJson = res.getJson().token.map(x => x.uid)
+        mu = new dgraph.Mutation()
+        mu.setDeleteJson(delJson)
+        await txn.mutate(mu)
+      }
+
+      if (request.newToken) {
+        res = await dgraphClient.newTxn().queryWithVars(query, {$a: request.newToken})
+        const existing = res.getJson().token.length > 0 ? res.getJson().token[0].uid : null
+        mu = new dgraph.Mutation()
+        if (existing) {
+          mu.setSetJson({
+            uid: existing,
+            actor: {
+              uid: authToken.user
+            }
+          })
+          await txn.mutate(mu)
+        } else {
+          mu.setSetJson({
+            uid: existing,
+            tokenId: request.newToken,
+            actor: {
+              uid: authToken.user
+            }
+          })
+        }
+        await txn.mutate(mu)
+        await txn.commit()
+        return {
+          code: 0
+        }
+      }
+    } catch (e) {
+      logger.error(e)
+      return {
+        code: 1,
+        message: '' + e
+      }
+    } finally {
+      await txn.discard()
+    }
   }
 
   /**
@@ -372,6 +428,66 @@ class DgraphService {
       await txn.mutate(mu)
       await txn.commit()
       modelSubscriptions.notifyListeners(this.__createChangeObject(request, proto.dn.ChangeType.UPDATE))
+      return {
+        code: 0
+      }
+    } catch (e) {
+      logger.error(e)
+      return {
+        code: 1,
+        message: '' + e
+      }
+    } finally {
+      await txn.discard()
+    }
+  }
+
+  async updateProperty (authToken, request) {
+    // get object type from DB to be able to check ACLs
+    const existing = await this.getObject(authToken, {uid: request.uid})
+    if (!existing) {
+      return {
+        code: 1,
+        message: i18n.__('Object not found')
+      }
+    }
+    try {
+      await acl.check(authToken, config.domain + '.object.' + existing.content.substring(0, 1).toUpperCase() + existing.content.substring(1), acl.action.UPDATE)
+    } catch (e) {
+      return {
+        code: 2,
+        message: e.toString()
+      }
+    }
+    const txn = dgraphClient.newTxn()
+    try {
+      const mu = new dgraph.Mutation()
+      const change = {
+        uid: request.uid
+      }
+      const update = {
+        object: {
+          type: proto.dn.ChangeType.UPDATE,
+          content: existing.content
+        }
+      }
+      console.log(request)
+      const updateChange = Object.assign({}, change)
+      if (request.object) {
+        const object = request.object[request.object.content]
+        change[request.name] = object[request.name]
+        updateChange[request.name] = object[request.name]
+        mu.setSetJson(change)
+      } else {
+        // delete property
+        change[request.name] = null
+        update.object.resetProperties = [request.name]
+        mu.setDeleteJson(change)
+      }
+      await txn.mutate(mu)
+      await txn.commit()
+      update.object[existing.content] = updateChange
+      modelSubscriptions.notifyListeners(update)
       return {
         code: 0
       }
@@ -514,6 +630,7 @@ class DgraphService {
 const dgraphService = new DgraphService()
 
 module.exports = {
-  client: dgraphClient,
+  dgraph: dgraph,
+  dgraphClient: dgraphClient,
   dgraphService: dgraphService
 }

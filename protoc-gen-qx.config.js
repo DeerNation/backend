@@ -14,10 +14,10 @@ module.exports = {
       include: ['app.api.MChannel', 'app.api.MUpdate']
     },
     'proto.dn.model.Subscription': {
-      include: ['app.api.MSubscription', 'app.api.MUpdate']
+      include: ['app.api.MSubscription', 'app.api.MUpdate', 'app.api.MPersist']
     },
     'proto.dn.model.Actor': {
-      include: ['app.api.MActor', 'app.api.MUpdate']
+      include: ['app.api.MActor', 'app.api.MUpdate', 'app.api.MPersist']
     },
     'proto.dn.model.payload.Message': {
       include: ['app.plugins.message.MMessage', 'app.api.MUpdate']

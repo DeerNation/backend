@@ -45,7 +45,7 @@ module.exports = {
 
   _getDgraphClient: function () {
     if (!this.__dgraphClient) {
-      this.__dgraphClient = require('./model/dgraph').client
+      this.__dgraphClient = require('./model/dgraph').dgraphClient
     }
     return this.__dgraphClient
   },

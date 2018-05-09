@@ -76,6 +76,23 @@ qx.Class.define('proto.dn.Com', {
     },
 
     /**
+     * Updates a single property of an object
+     * @param payload {proto.dn.PropertyUpdate}
+     * @returns {Promise} resolves to {proto.dn.Response}
+     */
+    updateProperty: function (payload) {
+      qx.core.Assert.assertInstance(payload, proto.dn.PropertyUpdate)
+      return this._call(payload, {
+        methodName: 'updateProperty',
+        service: this,
+        requestStream: false,
+        responseStream: false,
+        requestType: proto.dn.PropertyUpdate,
+        responseType: proto.dn.Response
+      })
+    },
+
+    /**
      *
      * @param payload {proto.dn.Object}
      * @returns {Promise} resolves to {proto.dn.Response}

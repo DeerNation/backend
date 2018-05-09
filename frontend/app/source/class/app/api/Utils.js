@@ -26,7 +26,10 @@ qx.Class.define('app.api.Utils', {
       let skipProperties = ['deserialized', 'uid']
       qx.Class.getMixins(object.constructor).forEach((x) => {
         if (x.name.startsWith('app')) {
-          skipProperties = skipProperties.concat(Object.keys(qx.util.PropertyUtil.getProperties(x)))
+          const props = qx.util.PropertyUtil.getProperties(x)
+          if (props) {
+            skipProperties = skipProperties.concat(Object.keys(props))
+          }
         }
       })
       const properties =

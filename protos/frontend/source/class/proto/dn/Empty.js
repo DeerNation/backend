@@ -43,7 +43,10 @@ qx.Class.define('proto.dn.Empty', {
      * @return {proto.dn.Empty}
      */
     deserializeBinaryFromReader: function (msg, reader) {
+      msg.$$deserializing = true
 
+      msg.$$deserializing = false
+      return msg
     }
   }
 })

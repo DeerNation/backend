@@ -10,6 +10,16 @@ qx.Class.define('proto.dn.Object', {
 
   /*
   *****************************************************************************
+     CONSTRUCTOR
+  *****************************************************************************
+  */
+  construct: function (props) {
+    this.initResetProperties(new app.api.Array())
+    this.base(arguments, props)
+  },
+
+  /*
+  *****************************************************************************
      STATICS
   *****************************************************************************
   */
@@ -78,6 +88,13 @@ qx.Class.define('proto.dn.Object', {
           proto.dn.model.Publication.serializeBinaryToWriter
         )
       }
+      f = message.getResetProperties()
+      if (f.length > 0) {
+        writer.writeRepeatedString(
+          7,
+          f
+        )
+      }
     },
 
     /**
@@ -99,6 +116,7 @@ qx.Class.define('proto.dn.Object', {
      * @return {proto.dn.Object}
      */
     deserializeBinaryFromReader: function (msg, reader) {
+      msg.$$deserializing = true
       msg.setDeserialized(true)
       while (reader.nextField()) {
         if (reader.isEndGroup()) {
@@ -136,11 +154,16 @@ qx.Class.define('proto.dn.Object', {
             reader.readMessage(value, proto.dn.model.Publication.deserializeBinaryFromReader)
             msg.setPublication(value)
             break
+          case 7:
+            value = reader.readString()
+            msg.getResetProperties().push(value)
+            break
           default:
             reader.skipField()
             break
         }
       }
+      msg.$$deserializing = false
       return msg
     }
   },
@@ -200,6 +223,15 @@ qx.Class.define('proto.dn.Object', {
       nullable: true,
       event: 'changePublication',
       apply: '_applyOneOf0'
+    },
+
+    /**
+     * @type {app.api.Array} array of {@link String}
+     */
+    resetProperties: {
+      check: 'app.api.Array',
+      deferredInit: true,
+      event: 'changeResetProperties'
     },
 
     /**

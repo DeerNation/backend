@@ -7,7 +7,7 @@
  */
 qx.Class.define('proto.dn.model.Subscription', {
   extend: proto.core.BaseMessage,
-  include: [app.api.MSubscription, app.api.MUpdate],
+  include: [app.api.MSubscription, app.api.MUpdate, app.api.MPersist],
 
   /*
   *****************************************************************************
@@ -74,6 +74,7 @@ qx.Class.define('proto.dn.model.Subscription', {
      * @return {proto.dn.model.Subscription}
      */
     deserializeBinaryFromReader: function (msg, reader) {
+      msg.$$deserializing = true
       msg.setDeserialized(true)
       while (reader.nextField()) {
         if (reader.isEndGroup()) {
@@ -105,6 +106,7 @@ qx.Class.define('proto.dn.model.Subscription', {
             break
         }
       }
+      msg.$$deserializing = false
       return msg
     }
   },
@@ -141,7 +143,8 @@ qx.Class.define('proto.dn.model.Subscription', {
       check: 'Boolean',
       init: false,
       nullable: false,
-      event: 'changeFavorite'
+      event: 'changeFavorite',
+      '@': ['persist']
     }
   }
 })

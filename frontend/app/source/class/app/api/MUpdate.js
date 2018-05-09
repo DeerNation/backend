@@ -41,10 +41,11 @@ qx.Mixin.define('app.api.MUpdate', {
         case proto.dn.ChangeType.UPDATE:
         case proto.dn.ChangeType.REPLACE:
           const changes = qx.util.Serializer.toNativeObject(change.getOneOfContent(), app.api.Utils.serialize)
-          console.log(changes)
+          console.log(changes, change.getResetProperties())
           if (changes.length > 1) {
             this.set(changes)
           }
+          change.getResetProperties().forEach(this.reset, this)
           break
       }
     }
