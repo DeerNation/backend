@@ -176,14 +176,7 @@ qx.Class.define('app.plugins.event.Calendar', {
      */
     _onEventResize: function (event, delta, revertFunc, jsEvent, ui, view) {
       console.log(event.title + ' end is now ' + event.end.format())
-      app.io.Rpc.getProxy().updateObjectProperty('Activity',
-        event.id,
-        {
-          content: {
-            end: event.end.format()
-          }
-        }).catch(err => {
-        this.error(err)
+      app.api.Service.updateProperty(event.id, 'end', event.end.format(), app.dn.model.Event).catch(() => {
         revertFunc()
       })
     },
@@ -199,15 +192,9 @@ qx.Class.define('app.plugins.event.Calendar', {
      * @protected
      */
     _onEventDrop: function (event, delta, revertFunc, jsEvent, ui, view) {
-      app.io.Rpc.getProxy().updateObjectProperty('Activity',
-        event.id,
-        {
-          content: {
-            end: event.end.format(),
-            start: event.start.format()
-          }
-        }).catch(err => {
-        this.error(err)
+      app.api.Service.updateProperty(event.id, 'start', event.start.format(), app.dn.model.Event).then(() => {
+        return app.api.Service.updateProperty(event.id, 'end', event.end.format(), app.dn.model.Event)
+      }).catch(() => {
         revertFunc()
       })
     },

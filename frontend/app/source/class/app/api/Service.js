@@ -32,6 +32,21 @@ qx.Class.define('app.api.Service', {
         model.setWritingUser(payload)
       }
       return model
+    },
+
+    updateProperty: function (uid, prop, value, Clazz) {
+      const update = new proto.dn.PropertyUpdate({
+        uid: uid,
+        name: name
+      })
+      if (value !== undefined) {
+        const obj = new proto.dn.Object()
+        const newThis = new Clazz()
+        obj.setOneOfContent(newThis)
+        newThis.set(name, value)
+        update.setObject(obj)
+      }
+      return app.api.Service.getInstance().updateProperty(update).catch(app.Error.show)
     }
   }
 })

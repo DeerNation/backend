@@ -34,21 +34,10 @@ qx.Mixin.define('app.api.MPersist', {
       const value = ev.getData()
       const oldValue = ev.getOldData()
       if (value !== qx.util.PropertyUtil.getInitValue(this, name)) {
-        const obj = new proto.dn.Object()
-        const newThis = new this.constructor()
-        newThis.set(name, value)
-        obj.setOneOfContent(newThis)
-        app.api.Service.getInstance().updateProperty(new proto.dn.PropertyUpdate({
-          uid: this.getUid(),
-          name: name,
-          object: obj
-        })).catch(app.Error.show)
+        app.api.Service.updateProperty(this.getUid(), name, value, this.constructor)
       } else if (oldValue !== undefined) {
         // reset property
-        app.api.Service.getInstance().updateProperty(new proto.dn.PropertyUpdate({
-          uid: this.getUid(),
-          name: name
-        })).catch(app.Error.show)
+        app.api.Service.updateProperty(this.getUid(), name)
       }
     }
   }
