@@ -42,8 +42,6 @@ qx.Class.define('app.io.Socket', {
 
     app.api.GrpcClient.getInstance().upgradeToGrpcClient(this.__socket)
 
-    app.io.Rpc.setSocket(this.__socket)
-
     this.__socket.on('error', function (err) {
       this.error('Socket error - ' + err)
     }.bind(this))

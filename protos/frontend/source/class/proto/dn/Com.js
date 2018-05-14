@@ -93,6 +93,23 @@ qx.Class.define('proto.dn.Com', {
     },
 
     /**
+     * Returns concatenated string with all allowed actions for the given role on the topic
+     * @param payload {proto.dn.AclRequest}
+     * @returns {Promise} resolves to {proto.dn.AllowedActions}
+     */
+    getAllowedActionsForRole: function (payload) {
+      qx.core.Assert.assertInstance(payload, proto.dn.AclRequest)
+      return this._call(payload, {
+        methodName: 'getAllowedActionsForRole',
+        service: this,
+        requestStream: false,
+        responseStream: false,
+        requestType: proto.dn.AclRequest,
+        responseType: proto.dn.AllowedActions
+      })
+    },
+
+    /**
      *
      * @param payload {proto.dn.Object}
      * @returns {Promise} resolves to {proto.dn.Response}

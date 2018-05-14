@@ -34,16 +34,18 @@ qx.Class.define('app.api.Service', {
       return model
     },
 
-    updateProperty: function (uid, prop, value, Clazz) {
+    updateProperty: function (uid, props, values, Clazz) {
       const update = new proto.dn.PropertyUpdate({
         uid: uid,
-        name: name
+        names: props
       })
-      if (value !== undefined) {
+      if (values !== undefined) {
         const obj = new proto.dn.Object()
         const newThis = new Clazz()
         obj.setOneOfContent(newThis)
-        newThis.set(name, value)
+        props.forEach((prop, index) => {
+          newThis.set(prop, values[index])
+        })
         update.setObject(obj)
       }
       return app.api.Service.getInstance().updateProperty(update).catch(app.Error.show)

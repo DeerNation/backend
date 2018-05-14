@@ -27,6 +27,12 @@ service Com {
      */
     rpc updateProperty(PropertyUpdate) returns (Response);
 
+
+    /**
+     * Returns concatenated string with all allowed actions for the given role on the topic
+     */
+    rpc getAllowedActionsForRole(AclRequest) returns (AclActions);
+
     // ----------------------------------------------
     // CRUD
     // ----------------------------------------------
@@ -38,7 +44,7 @@ service Com {
     rpc deleteObject(Object) returns (Response);
 
     // ----------------------------------------------
-    // Stream requests
+    // Misc
     // ----------------------------------------------
 }
 
@@ -50,9 +56,14 @@ enum ChangeType {
     INTERNAL = 4;
 }
 
+message AclRequest {
+    string role = 1;
+    string topic = 2;
+}
+
 message PropertyUpdate {
     string uid = 1;
-    string name = 2;
+    repeated string names = 2;
     Object object = 3;
 }
 

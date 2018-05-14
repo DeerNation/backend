@@ -457,11 +457,13 @@ qx.Class.define('app.ui.channel.AbstractChannel', {
           this._handleSubscribed(false)
         })
       } else {
-        // TODO: convert to gRPC
         // show subscription hint
-        // app.io.Rpc.getProxy().getAllowedActionsForRole('user', channel.getId()).then(userAcl => {
-        //   this._handleSubscriptionAcl(userAcl.actions.includes('e'))
-        // })
+        app.api.Service.getInstance().getAllowedActionsForRole(new proto.dn.AclRequest({
+          role: 'user',
+          topic: channel.getId()
+        })).then(userAcl => {
+          this._handleSubscriptionAcl(userAcl.actions.includes('e'))
+        })
       }
     },
 

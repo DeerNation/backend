@@ -41,7 +41,7 @@ qx.Class.define('app.ui.form.ActivityActor', {
     },
 
     author: {
-      check: 'app.model.Actor',
+      check: 'proto.dn.model.Actor',
       init: null,
       apply: '_applyAuthor'
     }

@@ -10,6 +10,16 @@ qx.Class.define('proto.dn.PropertyUpdate', {
 
   /*
   *****************************************************************************
+     CONSTRUCTOR
+  *****************************************************************************
+  */
+  construct: function (props) {
+    this.initNames(new app.api.Array())
+    this.base(arguments, props)
+  },
+
+  /*
+  *****************************************************************************
      STATICS
   *****************************************************************************
   */
@@ -29,9 +39,9 @@ qx.Class.define('proto.dn.PropertyUpdate', {
           f
         )
       }
-      f = message.getName()
+      f = message.getNames()
       if (f.length > 0) {
-        writer.writeString(
+        writer.writeRepeatedString(
           2,
           f
         )
@@ -80,7 +90,7 @@ qx.Class.define('proto.dn.PropertyUpdate', {
             break
           case 2:
             value = reader.readString()
-            msg.setName(value)
+            msg.getNames().push(value)
             break
           case 3:
             value = new proto.dn.Object()
@@ -111,11 +121,13 @@ qx.Class.define('proto.dn.PropertyUpdate', {
       event: 'changeUid'
     },
 
-    name: {
-      check: 'String',
-      init: '',
-      nullable: false,
-      event: 'changeName'
+    /**
+     * @type {app.api.Array} array of {@link String}
+     */
+    names: {
+      check: 'app.api.Array',
+      deferredInit: true,
+      event: 'changeNames'
     },
 
     object: {

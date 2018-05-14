@@ -475,13 +475,17 @@ class DgraphService {
       const updateChange = Object.assign({}, change)
       if (request.object) {
         const object = request.object[request.object.content]
-        change[request.name] = object[request.name]
-        updateChange[request.name] = object[request.name]
+        request.names.forEach(name => {
+          change[name] = object[name]
+          updateChange[name] = object[name]
+        })
         mu.setSetJson(change)
       } else {
         // delete property
-        change[request.name] = null
-        update.object.resetProperties = [request.name]
+        request.names.forEach(name => {
+          change[name] = null
+        })
+        update.object.resetProperties = request.names
         mu.setDeleteJson(change)
       }
       await txn.mutate(mu)
@@ -624,6 +628,10 @@ class DgraphService {
     } finally {
       await txn.discard()
     }
+  }
+
+  getAllowedActionsForRole (authToken, role, topic) {
+    return acl.getAllowedActionsForRole(authToken, role, topic)
   }
 }
 

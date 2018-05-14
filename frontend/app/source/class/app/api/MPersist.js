@@ -34,10 +34,10 @@ qx.Mixin.define('app.api.MPersist', {
       const value = ev.getData()
       const oldValue = ev.getOldData()
       if (value !== qx.util.PropertyUtil.getInitValue(this, name)) {
-        app.api.Service.updateProperty(this.getUid(), name, value, this.constructor)
+        app.api.Service.updateProperty(this.getUid(), [name], [value], this.constructor)
       } else if (oldValue !== undefined) {
         // reset property
-        app.api.Service.updateProperty(this.getUid(), name)
+        app.api.Service.updateProperty(this.getUid(), [name])
       }
     }
   }
