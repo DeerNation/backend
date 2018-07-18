@@ -21,7 +21,6 @@ qx.Class.define('proto.dn.model.Activity', {
      * format), writing to the given BinaryWriter.
      * @param message {proto.core.BaseMessage}
      * @param writer {jspb.BinaryWriter}
-     * @suppress {unusedLocalVariables} f is only used for nested messages
      */
     serializeBinaryToWriter: function (message, writer) {
       var f = message.getUid()
@@ -32,7 +31,6 @@ qx.Class.define('proto.dn.model.Activity', {
         )
       }
       f = message.getCreated()
-      f = f instanceof Date ? Math.round(f.getTime() / 1000) : ''
       if (f.length > 0) {
         writer.writeString(
           3,
@@ -98,7 +96,6 @@ qx.Class.define('proto.dn.model.Activity', {
      * @return {proto.dn.model.Activity}
      */
     deserializeBinaryFromReader: function (msg, reader) {
-      msg.$$deserializing = true
       msg.setDeserialized(true)
       while (reader.nextField()) {
         if (reader.isEndGroup()) {
@@ -136,14 +133,13 @@ qx.Class.define('proto.dn.model.Activity', {
           case 9:
             value = new proto.google.protobuf.Any()
             reader.readMessage(value, proto.google.protobuf.Any.deserializeBinaryFromReader)
-            msg.setContent(value.getValue())
+            msg.setContent(value)
             break
           default:
             reader.skipField()
             break
         }
       }
-      msg.$$deserializing = false
       return msg
     }
   },
@@ -163,11 +159,10 @@ qx.Class.define('proto.dn.model.Activity', {
     },
 
     created: {
-      check: 'Date',
-      init: null,
-      nullable: true,
-      event: 'changeCreated',
-      transform: '_toDate'
+      check: 'String',
+      init: '',
+      nullable: false,
+      event: 'changeCreated'
     },
 
     hash: {
@@ -199,6 +194,7 @@ qx.Class.define('proto.dn.model.Activity', {
     },
 
     content: {
+      check: 'proto.google.protobuf.Any',
       init: null,
       nullable: true,
       event: 'changeContent'

@@ -31,7 +31,7 @@ service Com {
     /**
      * Returns concatenated string with all allowed actions for the given role on the topic
      */
-    rpc getAllowedActionsForRole(AclRequest) returns (AclActions);
+    rpc getAllowedActionsForRole(AclRequest) returns (dn.model.AclActions);
 
     // ----------------------------------------------
     // CRUD
@@ -145,7 +145,7 @@ message ChannelRequest {
     string uid = 1;
     // channel name (as alternative to the uid)
     string channelId = 2;
-    string date = 3 [(qx.date) = true];
+    string date = 3 [(qx).date = true];
     int32 limit = 4;
 }
 

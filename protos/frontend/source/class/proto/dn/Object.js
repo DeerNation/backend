@@ -24,21 +24,20 @@ qx.Class.define('proto.dn.Object', {
   *****************************************************************************
   */
   statics: {
-    // array with oneOf property groups
+    // array with maps with oneOf referenced type as key and property name as value
     ONEOFS: [],
     /**
      * Returns the allowed type for the oneOf field 'content'.
      * @returns {Array} array of type names as string
      */
     getAllowedTypesOfContent: function () {
-      return this.ONEOFS[0]
+      return Object.values(this.ONEOFS[0])
     },
     /**
      * Serializes the given message to binary data (in protobuf wire
      * format), writing to the given BinaryWriter.
      * @param message {proto.core.BaseMessage}
      * @param writer {jspb.BinaryWriter}
-     * @suppress {unusedLocalVariables} f is only used for nested messages
      */
     serializeBinaryToWriter: function (message, writer) {
       var f = message.getType()
@@ -88,7 +87,7 @@ qx.Class.define('proto.dn.Object', {
           proto.dn.model.Publication.serializeBinaryToWriter
         )
       }
-      f = message.getResetProperties()
+      f = message.getResetProperties().toArray()
       if (f.length > 0) {
         writer.writeRepeatedString(
           7,
@@ -116,7 +115,6 @@ qx.Class.define('proto.dn.Object', {
      * @return {proto.dn.Object}
      */
     deserializeBinaryFromReader: function (msg, reader) {
-      msg.$$deserializing = true
       msg.setDeserialized(true)
       while (reader.nextField()) {
         if (reader.isEndGroup()) {
@@ -163,7 +161,6 @@ qx.Class.define('proto.dn.Object', {
             break
         }
       }
-      msg.$$deserializing = false
       return msg
     }
   },
@@ -250,28 +247,27 @@ qx.Class.define('proto.dn.Object', {
   *****************************************************************************
   */
   members: {
-    // oneOf property apply
-    _applyOneOf0: function (value, old, name) {
-      this.setContent(name)
-      
-      // reset all other values
-      proto.dn.Object.ONEOFS[0].forEach(function (prop) {
-        if (prop !== name) {
-          this.reset(prop)
-        }
-      }, this)
-    },
     /**
      * Set value for oneOf field 'content'. Tries to detect the object type and call the correct setter.
      * @param obj {var}
      */
     setOneOfContent: function (obj) {
-      var type = obj.basename.toLowerCase()
-      if (proto.dn.Object.ONEOFS[0].includes(type)) {
-        this.set(type, obj)
+      if (proto.dn.Object.ONEOFS[0].hasOwnProperty(obj.classname)) {
+        this.set(proto.dn.Object.ONEOFS[0][obj.classname], obj)
       } else {
-        throw new Error('type ' + type + ' is invalid for content, allowed types are: ' + proto.dn.Object.ONEOFS[0].join(', '))
+        throw new Error('type ' + obj.classname + ' is invalid for content, allowed types are: ' + Object.keys(proto.dn.Object.ONEOFS[0]).join(', '))
       }
+    },
+    // oneOf property apply
+    _applyOneOf0: function (value, old, name) {
+      this.setContent(name)
+      
+      // reset all other values
+      Object.values(proto.dn.Object.ONEOFS[0]).forEach(function (prop) {
+        if (prop !== name) {
+          this.reset(prop)
+        }
+      }, this)
     },
     /**
      * Get value for oneOf field 'content'.
@@ -286,6 +282,6 @@ qx.Class.define('proto.dn.Object', {
   },
 
   defer: function (statics) {
-    statics.ONEOFS[0] = ['activity', 'actor', 'channel', 'subscription', 'publication']
+    statics.ONEOFS[0] = {"proto.dn.model.Activity":"activity","proto.dn.model.Actor":"actor","proto.dn.model.Channel":"channel","proto.dn.model.Subscription":"subscription","proto.dn.model.Publication":"publication"}
   }
 })

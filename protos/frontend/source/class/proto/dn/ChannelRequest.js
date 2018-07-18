@@ -19,7 +19,6 @@ qx.Class.define('proto.dn.ChannelRequest', {
      * format), writing to the given BinaryWriter.
      * @param message {proto.core.BaseMessage}
      * @param writer {jspb.BinaryWriter}
-     * @suppress {unusedLocalVariables} f is only used for nested messages
      */
     serializeBinaryToWriter: function (message, writer) {
       var f = message.getUid()
@@ -37,7 +36,6 @@ qx.Class.define('proto.dn.ChannelRequest', {
         )
       }
       f = message.getDate()
-      f = f instanceof Date ? Math.round(f.getTime() / 1000) : ''
       if (f.length > 0) {
         writer.writeString(
           3,
@@ -72,7 +70,6 @@ qx.Class.define('proto.dn.ChannelRequest', {
      * @return {proto.dn.ChannelRequest}
      */
     deserializeBinaryFromReader: function (msg, reader) {
-      msg.$$deserializing = true
       msg.setDeserialized(true)
       while (reader.nextField()) {
         if (reader.isEndGroup()) {
@@ -102,7 +99,6 @@ qx.Class.define('proto.dn.ChannelRequest', {
             break
         }
       }
-      msg.$$deserializing = false
       return msg
     }
   },
@@ -129,11 +125,10 @@ qx.Class.define('proto.dn.ChannelRequest', {
     },
 
     date: {
-      check: 'Date',
-      init: null,
-      nullable: true,
-      event: 'changeDate',
-      transform: '_toDate'
+      check: 'String',
+      init: '',
+      nullable: false,
+      event: 'changeDate'
     },
 
     limit: {

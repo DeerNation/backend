@@ -30,7 +30,6 @@ qx.Class.define('proto.dn.model.Publications', {
      * format), writing to the given BinaryWriter.
      * @param message {proto.core.BaseMessage}
      * @param writer {jspb.BinaryWriter}
-     * @suppress {unusedLocalVariables} f is only used for nested messages
      */
     serializeBinaryToWriter: function (message, writer) {
       var f = message.getPublications().toArray()
@@ -62,7 +61,6 @@ qx.Class.define('proto.dn.model.Publications', {
      * @return {proto.dn.model.Publications}
      */
     deserializeBinaryFromReader: function (msg, reader) {
-      msg.$$deserializing = true
       msg.setDeserialized(true)
       while (reader.nextField()) {
         if (reader.isEndGroup()) {
@@ -81,7 +79,6 @@ qx.Class.define('proto.dn.model.Publications', {
             break
         }
       }
-      msg.$$deserializing = false
       return msg
     }
   },

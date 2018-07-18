@@ -16,7 +16,7 @@ qx.Class.define('proto.dn.ActivityChange', {
   *****************************************************************************
   */
   statics: {
-    // array with oneOf property groups
+    // array with maps with oneOf referenced type as key and property name as value
     ONEOFS: [],
     /**
      * @enum
@@ -32,14 +32,13 @@ qx.Class.define('proto.dn.ActivityChange', {
      * @returns {Array} array of type names as string
      */
     getAllowedTypesOfContent: function () {
-      return this.ONEOFS[0]
+      return Object.values(this.ONEOFS[0])
     },
     /**
      * Serializes the given message to binary data (in protobuf wire
      * format), writing to the given BinaryWriter.
      * @param message {proto.core.BaseMessage}
      * @param writer {jspb.BinaryWriter}
-     * @suppress {unusedLocalVariables} f is only used for nested messages
      */
     serializeBinaryToWriter: function (message, writer) {
       var f = message.getType()
@@ -86,7 +85,6 @@ qx.Class.define('proto.dn.ActivityChange', {
      * @return {proto.dn.ActivityChange}
      */
     deserializeBinaryFromReader: function (msg, reader) {
-      msg.$$deserializing = true
       msg.setDeserialized(true)
       while (reader.nextField()) {
         if (reader.isEndGroup()) {
@@ -114,7 +112,6 @@ qx.Class.define('proto.dn.ActivityChange', {
             break
         }
       }
-      msg.$$deserializing = false
       return msg
     }
   },
@@ -168,28 +165,27 @@ qx.Class.define('proto.dn.ActivityChange', {
   *****************************************************************************
   */
   members: {
-    // oneOf property apply
-    _applyOneOf0: function (value, old, name) {
-      this.setContent(name)
-      
-      // reset all other values
-      proto.dn.ActivityChange.ONEOFS[0].forEach(function (prop) {
-        if (prop !== name) {
-          this.reset(prop)
-        }
-      }, this)
-    },
     /**
      * Set value for oneOf field 'content'. Tries to detect the object type and call the correct setter.
      * @param obj {var}
      */
     setOneOfContent: function (obj) {
-      var type = obj.basename.toLowerCase()
-      if (proto.dn.ActivityChange.ONEOFS[0].includes(type)) {
-        this.set(type, obj)
+      if (proto.dn.ActivityChange.ONEOFS[0].hasOwnProperty(obj.classname)) {
+        this.set(proto.dn.ActivityChange.ONEOFS[0][obj.classname], obj)
       } else {
-        throw new Error('type ' + type + ' is invalid for content, allowed types are: ' + proto.dn.ActivityChange.ONEOFS[0].join(', '))
+        throw new Error('type ' + obj.classname + ' is invalid for content, allowed types are: ' + Object.keys(proto.dn.ActivityChange.ONEOFS[0]).join(', '))
       }
+    },
+    // oneOf property apply
+    _applyOneOf0: function (value, old, name) {
+      this.setContent(name)
+      
+      // reset all other values
+      Object.values(proto.dn.ActivityChange.ONEOFS[0]).forEach(function (prop) {
+        if (prop !== name) {
+          this.reset(prop)
+        }
+      }, this)
     },
     /**
      * Get value for oneOf field 'content'.
@@ -204,6 +200,6 @@ qx.Class.define('proto.dn.ActivityChange', {
   },
 
   defer: function (statics) {
-    statics.ONEOFS[0] = ['activity', 'writing']
+    statics.ONEOFS[0] = {"proto.dn.model.Activity":"activity","proto.dn.WritingUser":"writing"}
   }
 })

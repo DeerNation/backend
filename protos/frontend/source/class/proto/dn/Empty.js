@@ -19,7 +19,6 @@ qx.Class.define('proto.dn.Empty', {
      * format), writing to the given BinaryWriter.
      * @param message {proto.core.BaseMessage}
      * @param writer {jspb.BinaryWriter}
-     * @suppress {unusedLocalVariables} f is only used for nested messages
      */
     serializeBinaryToWriter: function (message, writer) {
     },
@@ -43,10 +42,7 @@ qx.Class.define('proto.dn.Empty', {
      * @return {proto.dn.Empty}
      */
     deserializeBinaryFromReader: function (msg, reader) {
-      msg.$$deserializing = true
 
-      msg.$$deserializing = false
-      return msg
     }
   }
 })

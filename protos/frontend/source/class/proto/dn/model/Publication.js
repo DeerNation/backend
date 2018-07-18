@@ -21,7 +21,6 @@ qx.Class.define('proto.dn.model.Publication', {
      * format), writing to the given BinaryWriter.
      * @param message {proto.core.BaseMessage}
      * @param writer {jspb.BinaryWriter}
-     * @suppress {unusedLocalVariables} f is only used for nested messages
      */
     serializeBinaryToWriter: function (message, writer) {
       var f = message.getUid()
@@ -56,7 +55,6 @@ qx.Class.define('proto.dn.model.Publication', {
         )
       }
       f = message.getPublished()
-      f = f instanceof Date ? Math.round(f.getTime() / 1000) : ''
       if (f.length > 0) {
         writer.writeString(
           5,
@@ -91,7 +89,6 @@ qx.Class.define('proto.dn.model.Publication', {
      * @return {proto.dn.model.Publication}
      */
     deserializeBinaryFromReader: function (msg, reader) {
-      msg.$$deserializing = true
       msg.setDeserialized(true)
       while (reader.nextField()) {
         if (reader.isEndGroup()) {
@@ -132,7 +129,6 @@ qx.Class.define('proto.dn.model.Publication', {
             break
         }
       }
-      msg.$$deserializing = false
       return msg
     }
   },
@@ -173,11 +169,10 @@ qx.Class.define('proto.dn.model.Publication', {
     },
 
     published: {
-      check: 'Date',
-      init: null,
-      nullable: true,
-      event: 'changePublished',
-      transform: '_toDate'
+      check: 'String',
+      init: '',
+      nullable: false,
+      event: 'changePublished'
     },
 
     master: {

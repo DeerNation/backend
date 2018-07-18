@@ -1,8 +1,7 @@
 syntax = "proto3";
-//import "google/protobuf/timestamp.proto";
+package dn.model;
 import "protos/google/protobuf/any.proto";
 import "node_modules/protoc-gen-qx/protos/extensions.proto";
-package dn.model;
 
 /**
  * A List of publications
@@ -29,7 +28,7 @@ message Subscription {
     string uid = 1;
     Channel channel = 2;
     Actor actor = 3;
-    bool favorite = 4 [(qx.annotations) = 'persist'];
+    bool favorite = 4 [(qx).annotations = 'persist'];
     // TODO add notification settings
 }
 
@@ -41,7 +40,7 @@ message Activity {
     // UUID od the entry
     string uid = 1;
     // time of creation
-    string created = 3 [(qx.date) = true];
+    string created = 3;// [(qx).date = true];
     // content hash
     string hash = 4;
     // creator of this activity
@@ -76,7 +75,7 @@ message Publication {
     // The activity content of this publication
     Activity activity = 4;
     // pubishing time
-    string published = 5 [(qx.date) = true];
+    string published = 5 [(qx).date = true];
     // true if this is the initial pubishing of the activity
     // false if it e.g. has been published by a share in another channel, probably by another actor
     bool master = 6;
@@ -118,7 +117,7 @@ message Actor {
     string locale = 8;
     repeated Subscription subscriptions = 9;
     bool online = 10;
-    string status = 11 [(qx.annotations) = 'persist'];
+    string status = 11 [(qx).annotations = 'persist'];
 }
 
 message AclActions {

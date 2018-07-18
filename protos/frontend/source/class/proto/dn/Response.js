@@ -37,7 +37,6 @@ qx.Class.define('proto.dn.Response', {
      * format), writing to the given BinaryWriter.
      * @param message {proto.core.BaseMessage}
      * @param writer {jspb.BinaryWriter}
-     * @suppress {unusedLocalVariables} f is only used for nested messages
      */
     serializeBinaryToWriter: function (message, writer) {
       var f = message.getCode()
@@ -83,7 +82,6 @@ qx.Class.define('proto.dn.Response', {
      * @return {proto.dn.Response}
      */
     deserializeBinaryFromReader: function (msg, reader) {
-      msg.$$deserializing = true
       msg.setDeserialized(true)
       while (reader.nextField()) {
         if (reader.isEndGroup()) {
@@ -110,7 +108,6 @@ qx.Class.define('proto.dn.Response', {
             break
         }
       }
-      msg.$$deserializing = false
       return msg
     }
   },
@@ -146,6 +143,25 @@ qx.Class.define('proto.dn.Response', {
       check: 'app.api.Array',
       deferredInit: true,
       event: 'changeUids'
+    }
+  },
+
+  /*
+  *****************************************************************************
+     MEMBERS
+  *****************************************************************************
+  */
+  members: {
+    /**
+     * Get uids map entry by key.
+     * 
+     * @param key {String} map key
+     * @returns {var|null} map value if the key exists in the map
+     */
+    getUidsByKey: function (key) {
+      return this.getUids().toArray().find(function (mapEntry) {
+        return mapEntry.getKey() === key
+      }, this)
     }
   }
 })

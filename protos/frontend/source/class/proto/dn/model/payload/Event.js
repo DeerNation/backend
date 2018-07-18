@@ -30,7 +30,6 @@ qx.Class.define('proto.dn.model.payload.Event', {
      * format), writing to the given BinaryWriter.
      * @param message {proto.core.BaseMessage}
      * @param writer {jspb.BinaryWriter}
-     * @suppress {unusedLocalVariables} f is only used for nested messages
      */
     serializeBinaryToWriter: function (message, writer) {
       var f = message.getUid()
@@ -55,7 +54,6 @@ qx.Class.define('proto.dn.model.payload.Event', {
         )
       }
       f = message.getStart()
-      f = f instanceof Date ? Math.round(f.getTime() / 1000) : ''
       if (f.length > 0) {
         writer.writeString(
           4,
@@ -63,14 +61,13 @@ qx.Class.define('proto.dn.model.payload.Event', {
         )
       }
       f = message.getEnd()
-      f = f instanceof Date ? Math.round(f.getTime() / 1000) : ''
       if (f.length > 0) {
         writer.writeString(
           5,
           f
         )
       }
-      f = message.getCategories()
+      f = message.getCategories().toArray()
       if (f.length > 0) {
         writer.writeRepeatedString(
           6,
@@ -112,7 +109,6 @@ qx.Class.define('proto.dn.model.payload.Event', {
      * @return {proto.dn.model.payload.Event}
      */
     deserializeBinaryFromReader: function (msg, reader) {
-      msg.$$deserializing = true
       msg.setDeserialized(true)
       while (reader.nextField()) {
         if (reader.isEndGroup()) {
@@ -158,7 +154,6 @@ qx.Class.define('proto.dn.model.payload.Event', {
             break
         }
       }
-      msg.$$deserializing = false
       return msg
     }
   },
@@ -192,19 +187,17 @@ qx.Class.define('proto.dn.model.payload.Event', {
     },
 
     start: {
-      check: 'Date',
-      init: null,
-      nullable: true,
-      event: 'changeStart',
-      transform: '_toDate'
+      check: 'String',
+      init: '',
+      nullable: false,
+      event: 'changeStart'
     },
 
     end: {
-      check: 'Date',
-      init: null,
-      nullable: true,
-      event: 'changeEnd',
-      transform: '_toDate'
+      check: 'String',
+      init: '',
+      nullable: false,
+      event: 'changeEnd'
     },
 
     /**

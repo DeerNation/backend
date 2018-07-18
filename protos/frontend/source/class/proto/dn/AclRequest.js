@@ -1,13 +1,12 @@
 
 /**
  *
- * ACLRole class generated from protobuf definition "protos/model.proto".
+ * AclRequest class generated from protobuf definition "protos/api.proto".
  * auto-generated code PLEASE DO NOT EDIT!
  * 
  */
-qx.Class.define('proto.dn.model.ACLRole', {
+qx.Class.define('proto.dn.AclRequest', {
   extend: proto.core.BaseMessage,
-  include: [app.api.MUpdate],
 
   /*
   *****************************************************************************
@@ -22,33 +21,18 @@ qx.Class.define('proto.dn.model.ACLRole', {
      * @param writer {jspb.BinaryWriter}
      */
     serializeBinaryToWriter: function (message, writer) {
-      var f = message.getUid()
+      var f = message.getRole()
       if (f.length > 0) {
         writer.writeString(
           1,
           f
         )
       }
-      f = message.getId()
+      f = message.getTopic()
       if (f.length > 0) {
         writer.writeString(
           2,
           f
-        )
-      }
-      f = message.getWeight()
-      if (f !== 0) {
-        writer.writeInt32(
-          3,
-          f
-        )
-      }
-      f = message.getParent()
-      if (f != null) {
-        writer.writeMessage(
-          4,
-          f,
-          proto.dn.model.ACLRole.serializeBinaryToWriter
         )
       }
     },
@@ -56,20 +40,20 @@ qx.Class.define('proto.dn.model.ACLRole', {
     /**
      * Deserializes binary data (in protobuf wire format).
      * @param bytes {jspb.ByteSource} The bytes to deserialize.
-     * @return {proto.dn.model.ACLRole}
+     * @return {proto.dn.AclRequest}
      */
     deserializeBinary: function (bytes) {
       var reader = new jspb.BinaryReader(bytes)
-      var msg = new proto.dn.model.ACLRole()
-      return proto.dn.model.ACLRole.deserializeBinaryFromReader(msg, reader)
+      var msg = new proto.dn.AclRequest()
+      return proto.dn.AclRequest.deserializeBinaryFromReader(msg, reader)
     },
 
     /**
      * Deserializes binary data (in protobuf wire format) from the
      * given reader into the given message object.
-     * @param msg {proto.dn.model.ACLRole} The message object to deserialize into.
+     * @param msg {proto.dn.AclRequest} The message object to deserialize into.
      * @param reader {jspb.BinaryReader} The BinaryReader to use.
-     * @return {proto.dn.model.ACLRole}
+     * @return {proto.dn.AclRequest}
      */
     deserializeBinaryFromReader: function (msg, reader) {
       msg.setDeserialized(true)
@@ -82,20 +66,11 @@ qx.Class.define('proto.dn.model.ACLRole', {
         switch (field) {
           case 1:
             value = reader.readString()
-            msg.setUid(value)
+            msg.setRole(value)
             break
           case 2:
             value = reader.readString()
-            msg.setId(value)
-            break
-          case 3:
-            value = reader.readInt32()
-            msg.setWeight(value)
-            break
-          case 4:
-            value = new proto.dn.model.ACLRole()
-            reader.readMessage(value, proto.dn.model.ACLRole.deserializeBinaryFromReader)
-            msg.setParent(value)
+            msg.setTopic(value)
             break
           default:
             reader.skipField()
@@ -113,32 +88,18 @@ qx.Class.define('proto.dn.model.ACLRole', {
   */
   properties: {
 
-    uid: {
+    role: {
       check: 'String',
       init: '',
       nullable: false,
-      event: 'changeUid'
+      event: 'changeRole'
     },
 
-    id: {
+    topic: {
       check: 'String',
       init: '',
       nullable: false,
-      event: 'changeId'
-    },
-
-    weight: {
-      check: 'Number',
-      init: 0,
-      nullable: false,
-      event: 'changeWeight'
-    },
-
-    parent: {
-      check: 'proto.dn.model.ACLRole',
-      init: null,
-      nullable: true,
-      event: 'changeParent'
+      event: 'changeTopic'
     }
   }
 })

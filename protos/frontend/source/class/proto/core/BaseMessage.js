@@ -28,7 +28,8 @@ qx.Class.define('proto.core.BaseMessage', {
      */
     deserialized: {
       check: 'Boolean',
-      init: false
+      init: false,
+      '@': ['immutable']
     }
   },
 

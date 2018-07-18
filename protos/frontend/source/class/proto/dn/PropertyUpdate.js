@@ -29,7 +29,6 @@ qx.Class.define('proto.dn.PropertyUpdate', {
      * format), writing to the given BinaryWriter.
      * @param message {proto.core.BaseMessage}
      * @param writer {jspb.BinaryWriter}
-     * @suppress {unusedLocalVariables} f is only used for nested messages
      */
     serializeBinaryToWriter: function (message, writer) {
       var f = message.getUid()
@@ -39,7 +38,7 @@ qx.Class.define('proto.dn.PropertyUpdate', {
           f
         )
       }
-      f = message.getNames()
+      f = message.getNames().toArray()
       if (f.length > 0) {
         writer.writeRepeatedString(
           2,
@@ -75,7 +74,6 @@ qx.Class.define('proto.dn.PropertyUpdate', {
      * @return {proto.dn.PropertyUpdate}
      */
     deserializeBinaryFromReader: function (msg, reader) {
-      msg.$$deserializing = true
       msg.setDeserialized(true)
       while (reader.nextField()) {
         if (reader.isEndGroup()) {
@@ -102,7 +100,6 @@ qx.Class.define('proto.dn.PropertyUpdate', {
             break
         }
       }
-      msg.$$deserializing = false
       return msg
     }
   },

@@ -58,14 +58,15 @@ qx.Class.define('proto.core.BaseService', {
         metadata: this.__metadata
         // debug: qx.core.Environment.get('qx.debug')
       }
+      var context = this
+      if (typeof args[args.length - 1] === 'object') {
+        context = args.pop()
+      }
       return new qx.Promise(function (resolve, reject) {
         if (serviceDefinition.responseStream === true) {
           // streaming response
-          var context = null
+          
           var callback
-          if (typeof args[args.length - 1] === 'object') {
-            context = args.pop()
-          }
           if (typeof args[args.length - 1] === 'function') {
             callback = args.pop()
           } else {
@@ -83,7 +84,8 @@ qx.Class.define('proto.core.BaseService', {
               else {
                 resolve(message)
               }
-            }
+            },
+            debug: false
           }))
         }
         else {
@@ -95,10 +97,11 @@ qx.Class.define('proto.core.BaseService', {
               else {
                 resolve(res.message)
               }
-            }
+            },
+            debug: false
           }))
         }
-      }, this)
+      }, context)
     }
   }
 })

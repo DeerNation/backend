@@ -19,7 +19,6 @@ qx.Class.define('proto.dn.response.UidsEntry', {
      * format), writing to the given BinaryWriter.
      * @param message {proto.core.BaseMessage}
      * @param writer {jspb.BinaryWriter}
-     * @suppress {unusedLocalVariables} f is only used for nested messages
      */
     serializeBinaryToWriter: function (message, writer) {
       var f = message.getKey()
@@ -57,7 +56,6 @@ qx.Class.define('proto.dn.response.UidsEntry', {
      * @return {proto.dn.response.UidsEntry}
      */
     deserializeBinaryFromReader: function (msg, reader) {
-      msg.$$deserializing = true
       msg.setDeserialized(true)
       while (reader.nextField()) {
         if (reader.isEndGroup()) {
@@ -79,7 +77,6 @@ qx.Class.define('proto.dn.response.UidsEntry', {
             break
         }
       }
-      msg.$$deserializing = false
       return msg
     }
   },

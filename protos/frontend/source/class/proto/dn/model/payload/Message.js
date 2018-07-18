@@ -21,7 +21,6 @@ qx.Class.define('proto.dn.model.payload.Message', {
      * format), writing to the given BinaryWriter.
      * @param message {proto.core.BaseMessage}
      * @param writer {jspb.BinaryWriter}
-     * @suppress {unusedLocalVariables} f is only used for nested messages
      */
     serializeBinaryToWriter: function (message, writer) {
       var f = message.getUid()
@@ -66,7 +65,6 @@ qx.Class.define('proto.dn.model.payload.Message', {
      * @return {proto.dn.model.payload.Message}
      */
     deserializeBinaryFromReader: function (msg, reader) {
-      msg.$$deserializing = true
       msg.setDeserialized(true)
       while (reader.nextField()) {
         if (reader.isEndGroup()) {
@@ -92,7 +90,6 @@ qx.Class.define('proto.dn.model.payload.Message', {
             break
         }
       }
-      msg.$$deserializing = false
       return msg
     }
   },
