@@ -29,7 +29,7 @@ const glob = require('glob')
 const fs = require('fs')
 const schemaHandler = require('./model/JsonSchemaHandler')
 // const graphQL = require('./model/graphql-thinky')
-const schema = require('./model/schema')
+// const schema = require('./model/schema')
 const channelHandler = require('./ChannelHandler')
 
 class PluginHandler {
@@ -67,7 +67,7 @@ class PluginHandler {
     }
     const id = manifest.provides.id
     // register content type for activity schema
-    schema.registerContentType(id, manifest.provides.hasOwnProperty('defaultType') && manifest.provides.defaultType === true)
+    // schema.registerContentType(id, manifest.provides.hasOwnProperty('defaultType') && manifest.provides.defaultType === true)
 
     // read JSON schemo for Activity content
     const schemaFile = path.join(pluginDir, manifest.provides.jsonSchema)

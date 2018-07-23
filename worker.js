@@ -4,7 +4,7 @@ const bodyParser = require('body-parser')
 const serveStatic = require('serve-static')
 const path = require('path')
 const healthChecker = require('sc-framework-health-check')
-const schema = require('./backend/model/schema')
+// const schema = require('./backend/model/schema')
 const auth = require('./backend/auth')
 const i18n = require('i18n')
 const ICal = require('./backend/crawler/iCal')
@@ -60,7 +60,7 @@ class Worker extends SCWorker {
     app.use(bodyParser.json())
 
     // Create/Update RethinkDB schema
-    schema.create(this)
+    // schema.create(this)
 
     // graphqlThinky.init(crud.thinky)
     // if (environment === 'dev') {

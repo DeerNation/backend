@@ -53,6 +53,7 @@ module.exports = {
   Webhook: [
     {
       uid: '0x4',
+      identifier: 'f225a69e-5064-49b0-9c3b-0b99be51781f',
       channel: {
         uid: '0x6'
       },
@@ -64,6 +65,7 @@ module.exports = {
     },
     {
       uid: '0x5',
+      identifier: '1f9635f5-7489-4cf3-9191-c32ff754ed4a',
       channel: {
         uid: '0x7'
       },

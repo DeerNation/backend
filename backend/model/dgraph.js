@@ -39,6 +39,7 @@ username: string @index(hash) @upsert .
 password: password .
 type: string @index(hash) .
 tokenId: string @index(hash) .
+identifier: string @index(hash) .
 created: datetime .
 published: datetime .
 `

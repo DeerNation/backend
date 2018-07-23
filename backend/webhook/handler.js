@@ -24,7 +24,7 @@
  * @since 2018
  */
 const logger = require('../logger')(__filename)
-const schema = require('../model/schema')
+const {dgraphClient, dgraph} = require('../model/dgraph')
 const channelHandler = require('../ChannelHandler')
 const acl = require('../acl')
 const fs = require('fs')
@@ -39,6 +39,38 @@ class WebhookHandler {
     app.post('/hooks/*', this._handlePost.bind(this))
     app.get('/hooks/*', this._handleGet.bind(this))
     this.scServer = scServer
+  }
+
+  async __getWebhook (identifier) {
+    const query = `query read($a: string) {
+        object(func: eq(identifier, $a)) @normalize {
+          uid: uid
+          secret: secret
+          type: type
+          actor {
+            actorId: uid
+          }
+          channel {
+            channel: uid
+          }
+        }
+    }`
+    const res = await dgraphClient.newTxn().queryWithVars(query, {$a: identifier})
+    return res.getJson().object
+  }
+
+  async __updateWebhook (uid, data) {
+    const txn = dgraphClient.newTxn()
+    try {
+      const mu = new dgraph.Mutation()
+      mu.setSetJson(Object.assign({
+        uid: uid
+      }, data))
+      await txn.mutate(mu)
+      await txn.commit()
+    } finally {
+      await txn.discard()
+    }
   }
 
   /**
@@ -60,11 +92,8 @@ class WebhookHandler {
     const id = parts.shift()
 
     logger.debug("incoming webhook GET request with id: '%s' received: %o", id, parts)
-    if (!this.models) {
-      this.models = schema.getModels()
-    }
     // get channel for webhook from DB
-    const result = await this.models.Webhook.filter({id: id}).run()
+    const result = await this.__getWebhook(id).run()
     try {
       if (result.length === 1) {
         const webhook = result[0]
@@ -75,19 +104,8 @@ class WebhookHandler {
           logger.debug('VALID verification request for webhook on channel: %s, message: %o', webhook.channel, req.query)
           res.status(200).send(req.query['hub.challenge'])
           if (webhook.type !== 'facebook') {
-            const crud = schema.getCrud()
-            let update = {
-              type: 'Webhook',
-              id: webhook.id,
-              field: 'type',
-              value: 'facebook'
-            }
-            crud.update(update, (err, res) => {
-              if (err) {
-                console.error(err)
-              } else {
-                console.log(res)
-              }
+            this.__updateWebhook(webhook.uid, {
+              type: 'facebook'
             })
           }
         } else {
@@ -114,12 +132,9 @@ class WebhookHandler {
     const id = parts.shift()
 
     logger.debug("incoming webhook with id: '%s' received: %o", id, parts)
-    if (!this.models) {
-      this.models = schema.getModels()
-    }
 
     // get channel for webhook from DB
-    const result = await this.models.Webhook.filter({id: id}).run()
+    const result = await this.__getWebhook(id).run()
     try {
       if (result.length === 1) {
         const webhook = result[0]

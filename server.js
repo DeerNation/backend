@@ -10,12 +10,12 @@
 const argv = require('minimist')(process.argv.slice(2))
 const scHotReboot = require('sc-hot-reboot')
 const fs = require('fs')
-const r = require('rethinkdbdash')({
-  servers: [{
-    host: process.env.DATABASE_HOST || '127.0.0.1',
-    port: process.env.DATABASE_PORT || 28015
-  }]
-})
+// const r = require('rethinkdbdash')({
+//   servers: [{
+//     host: process.env.DATABASE_HOST || '127.0.0.1',
+//     port: process.env.DATABASE_PORT || 28015
+//   }]
+// })
 const crypto = require('crypto')
 const fsUtil = require('socketcluster/fsutil')
 const waitForFile = fsUtil.waitForFile
@@ -125,21 +125,21 @@ let filesReadyPromises = [
   startWhenFileIsReady(workerClusterControllerPath)
 ]
 // try to read autKey
-filesReadyPromises.push(new Promise(function (resolve, reject) {
-  const system = r.table('System')
-  system.filter(r.row('key').eq('authKey')).run().then(function (result) {
-    if (result.length === 0) {
-      options.authKey = crypto.randomBytes(32).toString('hex')
-      system.insert({
-        key: 'authKey',
-        value: options.authKey
-      }).run()
-    } else {
-      options.authKey = result[0].value
-    }
-    resolve()
-  })
-}))
+// filesReadyPromises.push(new Promise(function (resolve, reject) {
+//   const system = r.table('System')
+//   system.filter(r.row('key').eq('authKey')).run().then(function (result) {
+//     if (result.length === 0) {
+//       options.authKey = crypto.randomBytes(32).toString('hex')
+//       system.insert({
+//         key: 'authKey',
+//         value: options.authKey
+//       }).run()
+//     } else {
+//       options.authKey = result[0].value
+//     }
+//     resolve()
+//   })
+// }))
 
 Promise.all(filesReadyPromises)
   .then(() => {
