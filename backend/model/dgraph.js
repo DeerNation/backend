@@ -16,8 +16,10 @@ const config = require('../config')
 const modelSubscriptions = require('./ModelSubscriptions')
 const createHook = require('./hooks/CreateObject')
 
+const dgraphHost = process.env.DEERNATION_DGRAPH_URL || 'localhost:9080'
+
 const clientStub = new dgraph.DgraphClientStub(
-  'localhost:9080',
+  dgraphHost,
   grpc.credentials.createInsecure()
 )
 
@@ -50,6 +52,19 @@ published: datetime .
 
 async function fillDb () {
   await setSchema()
+
+  // check if DB is empty
+  const query = `{
+    q(func: eq(baseName, "Actor")) {
+      uid
+    }
+  }`
+  const res = await dgraphClient.newTxn().query(query)
+  const model = res.getJson()
+  if (model.hasOwnProperty('q') && model.q.length > 0) {
+    logger.debug('basic model already exists, bailing out to avoid duplicates')
+    return
+  }
 
   const names = Object.keys(defaultData)
   for (let i = 0, l = names.length; i < l; i++) {

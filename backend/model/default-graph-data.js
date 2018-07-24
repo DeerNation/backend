@@ -21,29 +21,29 @@ const {botUUID} = require('../util')
 
 module.exports = {
   Actor: [{
-    uid: '0x1',
+    uid: '_:admin',
     type: 0,
     username: 'admin',
-    roles: [{uid: '0x13'}],
+    roles: [{uid: '_:admin'}],
     name: 'Tobias Bräutigam',
     email: 'tbraeutigam@gmail.com',
     password: 'tester',
     color: '#ACACAC',
     locale: 'de'
   }, {
-    uid: '0x2',
+    uid: '_:hirschberg',
     type: 2,
     username: 'hirschberg',
-    roles: [{uid: '0x14'}],
+    roles: [{uid: '_:botRole'}],
     name: 'Hirschberg',
     email: 'tbraeutigam@gmail.com',
     password: botUUID,
     color: '#085525'
   }, {
-    uid: '0x3',
+    uid: '_:max',
     type: 0,
     username: 'user',
-    roles: [{uid: '0x12'}],
+    roles: [{uid: '_:userRole'}],
     name: 'Max Mustermann',
     email: 'tbraeutigam@gmail.com',
     password: 'tester',
@@ -52,50 +52,48 @@ module.exports = {
   }],
   Webhook: [
     {
-      uid: '0x4',
       identifier: 'f225a69e-5064-49b0-9c3b-0b99be51781f',
       channel: {
-        uid: '0x6'
+        uid: '_:channelNews'
       },
       secret: 'e802f7b0-224e-4437-a2dd-ac27933bc9a7',
       name: 'News',
       actor: {
-        uid: '0x2'
+        uid: '_:hirschberg'
       }
     },
     {
-      uid: '0x5',
       identifier: '1f9635f5-7489-4cf3-9191-c32ff754ed4a',
       channel: {
-        uid: '0x7'
+        uid: '_:channelEvents'
       },
       secret: 'e802f7b0-224e-4437-a2dd-ac27933bc9a7',
       name: 'Termine',
       actor: {
-        uid: '0x2'
+        uid: '_:hirschberg'
       }
     }
   ],
   Channel: [
     {
-      uid: '0x6',
+      uid: '_:channelNews',
       id: 'hbg.channel.news.public',
       type: 'PUBLIC',
       title: 'News',
       description: 'Alle Neuigkeiten aus Hirschberg',
       owner: {
-        uid: '0x1'
+        uid: '_:admin'
       },
       color: '#085525'
     },
     {
-      uid: '0x7',
+      uid: '_:channelEvents',
       id: 'hbg.channel.events.public',
       type: 'PUBLIC',
       title: 'Termine',
       description: 'Termine & Veranstaltungen in Hirschberg',
       owner: {
-        uid: '0x1'
+        uid: '_:admin'
       },
       color: '#CC5525',
       typeIcon: 'event',
@@ -105,169 +103,145 @@ module.exports = {
   ],
   Subscription: [
     {
-      uid: '0x8',
       actor: {
-        uid: '0x1'
+        uid: '_:admin'
       },
       channel: {
-        uid: '0x6'
+        uid: '_:channelNews'
       },
       favorite: true,
       desktopNotification: {
-        uid: '0x26',
         type: 'all'
       },
       mobileNotification: {
-        uid: '0x27',
         type: 'mentioned'
       },
       emailNotification: {
-        uid: '0x28',
         type: 'none'
       }
     },
     {
-      uid: '0x9',
       actor: {
-        uid: '0x1'
+        uid: '_:admin'
       },
       channel: {
-        uid: '0x7'
+        uid: '_:channelEvents'
       },
       favorite: true,
       desktopNotification: {
-        uid: '0x29',
         type: 'all'
       },
       mobileNotification: {
-        uid: '0x30',
         type: 'mentioned'
       },
       emailNotification: {
-        uid: '0x31',
         type: 'none'
       }
     }, {
-      uid: '0x10',
       actor: {
-        uid: '0x3'
+        uid: '_:max'
       },
       channel: {
-        uid: '0x6'
+        uid: '_:channelNews'
       },
       favorite: true,
       desktopNotification: {
-        uid: '0x32',
         type: 'all'
       },
       mobileNotification: {
-        uid: '0x33',
         type: 'mentioned'
       },
       emailNotification: {
-        uid: '0x34',
         type: 'none'
       }
     }
   ],
   ACLRole: [
     {
-      uid: '0x11',
+      uid: '_:guestRole',
       id: 'guest',
       weight: 0
     }, {
-      uid: '0x12',
+      uid: '_:userRole',
       id: 'user',
-      parent: {uid: '0x11'},
+      parent: {uid: '_:guestRole'},
       weight: 100
     }, {
-      uid: '0x13',
+      uid: '_:adminRole',
       id: 'admin',
       weight: 1000
     }, {
-      uid: '0x14',
+      uid: '_:botRole',
       id: 'bot',
       weight: 100
     }
   ],
   ACLEntry: [
     {
-      uid: '0x14',
       topic: 'hbg\\.channel\\..+\\.public.*',
       actions: 'r',
-      roleTarget: {uid: '0x11'}
+      roleTarget: {uid: '_:guestRole'}
     },
     {
-      uid: '0x15',
       topic: 'hbg\\.channel\\..+\\.public',
       actions: 'e',
       memberActions: 'lp',
       ownerActions: 'du',
-      roleTarget: {uid: '0x12'}
+      roleTarget: {uid: '_:userRole'}
     },
     {
-      uid: '0x16',
       topic: 'hbg\\.channel\\..+\\.private',
       memberActions: 'rlp',
       ownerActions: 'e',
-      roleTarget: {uid: '0x12'}
+      roleTarget: {uid: '_:userRole'}
     },
     {
-      uid: '0x17',
       topic: 'hbg\\.object\\..*',
       ownerActions: 'rud',
-      roleTarget: {uid: '0x12'}
+      roleTarget: {uid: '_:userRole'}
     },
     {
-      uid: '0x18',
       topic: 'hbg\\.channel\\..+',
       actions: 'c',
       memberActions: 'rpl',
       ownerActions: 'ud',
-      roleTarget: {uid: '0x12'}
+      roleTarget: {uid: '_:userRole'}
     },
     {
-      uid: '0x19',
       topic: 'hbg\\.channel\\..+',
       memberActions: 'p',
-      roleTarget: {uid: '0x14'}
+      roleTarget: {uid: '_:botRole'}
     },
     {
-      uid: '0x20',
       topic: 'hbg\\.rpc\\.(login|getModel|check|getChannelModel)',
       actions: 'x',
-      roleTarget: {uid: '0x11'}
+      roleTarget: {uid: '_:guestRole'}
     },
     {
-      uid: '0x21',
       topic: 'hbg\\.object\\.Actor',
       actions: 'r',
-      roleTarget: {uid: '0x11'}
+      roleTarget: {uid: '_:guestRole'}
     },
     {
-      uid: '0x22',
       topic: 'hbg\\.rpc\\..*',
       actions: 'x',
-      roleTarget: {uid: '0x12'}
+      roleTarget: {uid: '_:userRole'}
     },
     {
-      uid: '0x23',
       topic: 'hbg\\.object\\..*',
       actions: '',
       ownerActions: 'du',
-      roleTarget: {uid: '0x12'}
+      roleTarget: {uid: '_:userRole'}
     },
     {
-      uid: '0x24',
       topic: '$INT\\.users',
       actions: 'el',
-      roleTarget: {uid: '0x12'}
+      roleTarget: {uid: '_:userRole'}
     },
     {
-      uid: '0x25',
       topic: 'crud>publicChannels.*',
       actions: 'rel',
-      roleTarget: {uid: '0x12'}
+      roleTarget: {uid: '_:userRole'}
     }
   ]
 }
