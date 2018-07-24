@@ -20,16 +20,18 @@
 const gcm = require('node-gcm')
 const {dgraphClient} = require('../model/dgraph')
 const logger = require('../logger')(__filename)
-const {fcmKey} = require('../credentials')
 const request = require('request-promise')
 
 class PushNotification {
   constructor () {
-    this.__apiKey = fcmKey
+    this.__apiKey = process.env.DEERNATION_FCM_KEY
+    if (!this.__apiKey) {
+      throw new Error("environment variable DEERNATION_FCM_KEY not set")
+    }
     this.__service = new gcm.Sender(this.__apiKey)
     this.__requestHeaders = {
       'Content-Type': 'application/json',
-      'Authorization': 'key=' + fcmKey
+      'Authorization': 'key=' + this.__apiKey
     }
     this.__serverTopicPrefix = null
   }

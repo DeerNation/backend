@@ -6,3 +6,4 @@ platforms
 */credentials.js
 coverage/
 .nyc_output
+.env

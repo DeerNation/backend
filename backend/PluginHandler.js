@@ -34,7 +34,15 @@ const channelHandler = require('./ChannelHandler')
 
 class PluginHandler {
   constructor () {
-    this._paths = [path.join(__dirname, '..', 'plugins', 'content')]
+    if (process.env.DEERNATION_PLUGINS_CONTENT_DIR) {
+      this._paths = process.env.DEERNATION_PLUGINS_CONTENT_DIR.startsWith('/')
+        ? [process.env.DEERNATION_PLUGINS_CONTENT_DIR]
+        : [path.join(__dirname, process.env.DEERNATION_PLUGINS_CONTENT_DIR)]
+    } else {
+      logger.warn('no plugin path defined. Using the DeerNation-backend without any plugin is not recommended!')
+      this._paths = []
+    }
+
     logger.debug('using plugin paths: %s', this._paths)
   }
 

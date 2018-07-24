@@ -16,6 +16,7 @@
     "connect": "^3.6.6",
     "debug": "^3.1.0",
     "dgraph-js": "^1.2.1",
+    "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "express-graphql": "^0.6.12",
     "glob": "^7.1.2",
@@ -59,16 +60,12 @@
     "start": "ENV=production node server.js",
     "predev": "cd frontend/app && qx compile --watch &",
     "dev": "ENV=dev node server.js",
-    "backend": "ENV=dev DATABASE_HOST=172.17.0.2 node --trace-warnings server.js",
-    "frontend": "ENV=dev cd frontend/app && qx serve",
+    "backend": "ENV=dev node --trace-warnings server.js",
     "postdev": "killall -9 qx",
     "start:docker": "node dockerwait.js && node ${SOCKETCLUSTER_MASTER_CONTROLLER:-server.js}",
     "lint": "standard --verbose | snazzy",
-    "compile-frontend-source": "cd frontend/app && qx compile && cd ../../",
-    "compile-frontend-build": "cd frontend/app && qx compile --target=build && cd ../../",
-    "compile-frontend-app": "cd frontend/app && CORDOVA=1 qx compile --target=build && cd ../../",
-    "test": "ENV=dev DATABASE_HOST=172.17.0.2 nyc --reporter=html --reporter=text-summary mocha --recursive",
-    "debug-test": "ENV=dev DATABASE_HOST=172.17.0.2 mocha --recursive",
+    "test": "ENV=dev nyc --reporter=html --reporter=text-summary mocha --recursive",
+    "debug-test": "ENV=dev mocha --recursive",
     "deploy-mobile": "npm run compile-frontend-app && cd app/ && cordova run android --device && cd ../"
   },
   "devDependencies": {
@@ -94,14 +91,8 @@
     },
     "ignore": [
       "app/**",
-      "frontend/qooxdoo/**",
       "gen/**",
-      "node_modules/**",
-      "frontend/app/build-output/**",
-      "frontend/app/source-output/**",
-      "frontend/app/contrib/**",
-      "frontend/app/source/resource/js/**",
-      "protos/**"
+      "node_modules/**"
     ],
     "globals": [
       "app",

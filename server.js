@@ -10,12 +10,6 @@
 const argv = require('minimist')(process.argv.slice(2))
 const scHotReboot = require('sc-hot-reboot')
 const fs = require('fs')
-// const r = require('rethinkdbdash')({
-//   servers: [{
-//     host: process.env.DATABASE_HOST || '127.0.0.1',
-//     port: process.env.DATABASE_PORT || 28015
-//   }]
-// })
 const crypto = require('crypto')
 const fsUtil = require('socketcluster/fsutil')
 const waitForFile = fsUtil.waitForFile

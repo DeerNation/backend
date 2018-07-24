@@ -246,6 +246,7 @@ class DgraphService {
         delete pub.activity.actor
         delete pub.activity.baseName
         pub.actor = pub.actor[0]
+        // TODO: use generic code here (no references to payload types)
         if (pub.activity.event) {
           pub.activity.content = {
             type_url: 'app.hirschberg-sauerland.de/protos/dn.model.payload.Event',
