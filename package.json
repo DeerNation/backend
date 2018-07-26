@@ -61,10 +61,11 @@
     "dev": "ENV=dev node server.js",
     "backend": "ENV=dev node --trace-warnings server.js",
     "postdev": "killall -9 qx",
-    "start:docker": "node dockerwait.js && node ${SOCKETCLUSTER_MASTER_CONTROLLER:-server.js}",
+    "start:docker": "node dockerwait.js && ENV=docker node ${SOCKETCLUSTER_MASTER_CONTROLLER:-server.js}",
     "lint": "standard --verbose | snazzy",
     "test": "ENV=dev nyc --reporter=html --reporter=text-summary mocha --recursive",
     "debug-test": "ENV=dev mocha --recursive",
+    "docker-build": "docker build -t deernation-backend:latest .",
     "deploy-mobile": "npm run compile-frontend-app && cd app/ && cordova run android --device && cd ../"
   },
   "devDependencies": {

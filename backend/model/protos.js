@@ -7,19 +7,40 @@
 const grpc = require('grpc')
 const path = require('path')
 const glob = require('glob')
-const rootDir = path.join(__dirname, '..', '..')
-const proto = grpc.loadPackageDefinition({root: rootDir, file: path.join('protos', 'api.proto')})
+const logger = require('../logger')(__filename)
+const protoLoader = require('@grpc/proto-loader');
 
-const pluginPath = path.join(rootDir, 'plugins', 'content')
+const protoRoot = process.env.DEERNATION_PROTOS_DIR.startsWith('/')
+        ? process.env.DEERNATION_PROTOS_DIR
+        : path.join(__dirname, process.env.DEERNATION_PROTOS_DIR)
+
+let packageDefinition = protoLoader.loadSync('api.proto',
+  {
+    includeDirs: [protoRoot]
+  });
+const proto = grpc.loadPackageDefinition(packageDefinition)
+const pluginPath = process.env.DEERNATION_PLUGINS_CONTENT_DIR.startsWith('/')
+        ? process.env.DEERNATION_PLUGINS_CONTENT_DIR
+        : path.join(__dirname, process.env.DEERNATION_PLUGINS_CONTENT_DIR)
 
 // load plugins
 const files = glob.sync(pluginPath + '/**/*.proto')
 files.forEach(protoPath => {
-  const pluginProto = grpc.loadPackageDefinition({root: rootDir, file: protoPath.substring(rootDir.length)})
-  if (!proto.dn.model.payload) {
-    proto.dn.model.payload = {}
+  if (protoPath.includes('/node_modules/')) {
+    return
   }
-  proto.dn.model.payload = Object.assign(proto.dn.model.payload, pluginProto.dn.model.payload)
+  const pluginRoot = protoPath.substring(0, protoPath.indexOf('/', pluginPath.length + 1))
+  packageDefinition = protoLoader.loadSync(protoPath.substring(pluginRoot.length + 1), {includeDirs: [protoRoot, pluginRoot]});
+
+  const pluginProto = grpc.loadPackageDefinition(packageDefinition)
+  if (!pluginProto.dn) {
+    logger.error('could not load package definition from ' + protoPath)
+    return
+  }
+  if (!proto.dn.model) {
+    proto.dn.model = {}
+  }
+  proto.dn.model.payload = Object.assign(proto.dn.model.payload || {}, pluginProto.dn.model.payload)
 
 })
 

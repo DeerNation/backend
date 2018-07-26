@@ -1,16 +1,22 @@
-FROM node:8-slim
+FROM node:8-alpine as builder
+
+RUN mkdir -p /usr/src/dnb
+WORKDIR /usr/src/dnb
+COPY . .
+
+RUN apk update && apk add python build-base
+
+RUN npm install .
+
+FROM node:8-alpine as runtime
 
 LABEL maintainer="Tobias Bräutigam"
 LABEL version="0.0.1"
-LABEL description="Docker file for DeerNation backend service."
+LABEL description="DeerNation backend service."
 
-RUN mkdir -p /usr/src/
-WORKDIR /usr/src/
-COPY . /usr/src/
-
-RUN apt-get update && apt-get install -y -q python build-essential
-
-RUN npm install .
+RUN mkdir -p /usr/src/dnb
+WORKDIR /usr/src/dnb
+COPY --from=builder /usr/src/dnb . 
 
 EXPOSE 8000
 

@@ -22,7 +22,7 @@ let brokerControllerPath = argv.bc || process.env.SOCKETCLUSTER_BROKER_CONTROLLE
 let workerClusterControllerPath = argv.wcc || process.env.SOCKETCLUSTER_WORKERCLUSTER_CONTROLLER
 let environment = process.env.ENV || 'dev'
 let serverId = process.env.SERVER_ID || environment
-let logLevel = environment === 'dev' ? 3 : 2
+let logLevel = environment === 'dev' || environment === 'docker' ? 3 : 2
 
 let options = {
   workers: Number(argv.w) || Number(process.env.SOCKETCLUSTER_WORKERS) || 1,
