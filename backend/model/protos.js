@@ -8,20 +8,21 @@ const grpc = require('grpc')
 const path = require('path')
 const glob = require('glob')
 const logger = require('../logger')(__filename)
-const protoLoader = require('@grpc/proto-loader');
+const protoLoader = require('@grpc/proto-loader')
+const config = require(process.env.DEERNATION_CONFIG || '/etc/deernation/config.json')
 
-const protoRoot = process.env.DEERNATION_PROTOS_DIR.startsWith('/')
-        ? process.env.DEERNATION_PROTOS_DIR
-        : path.join(__dirname, process.env.DEERNATION_PROTOS_DIR)
+const protoRoot = config.PROTOS_DIR.startsWith('/')
+        ? config.PROTOS_DIR
+        : path.join(__dirname, config.PROTOS_DIR)
 
 let packageDefinition = protoLoader.loadSync('api.proto',
   {
     includeDirs: [protoRoot]
   });
 const proto = grpc.loadPackageDefinition(packageDefinition)
-const pluginPath = process.env.DEERNATION_PLUGINS_CONTENT_DIR.startsWith('/')
-        ? process.env.DEERNATION_PLUGINS_CONTENT_DIR
-        : path.join(__dirname, process.env.DEERNATION_PLUGINS_CONTENT_DIR)
+const pluginPath = config.PLUGINS_CONTENT_DIR.startsWith('/')
+        ? config.PLUGINS_CONTENT_DIR
+        : path.join(__dirname, config.PLUGINS_CONTENT_DIR)
 
 // load plugins
 const files = glob.sync(pluginPath + '/**/*.proto')

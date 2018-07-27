@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
       - name: socketcluster
-        image: peuter/deer-nation-backend
+        image: peuter/deernation-backend:latest
         ports:
         - containerPort: 8000
         env:

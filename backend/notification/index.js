@@ -21,10 +21,11 @@ const gcm = require('node-gcm')
 const {dgraphClient} = require('../model/dgraph')
 const logger = require('../logger')(__filename)
 const request = require('request-promise')
+const config = require(process.env.DEERNATION_CONFIG || '/etc/deernation/config.json')
 
 class PushNotification {
   constructor () {
-    this.__apiKey = process.env.DEERNATION_FCM_KEY
+    this.__apiKey = config.FCM_KEY
     if (!this.__apiKey) {
       throw new Error("environment variable DEERNATION_FCM_KEY not set")
     }
