@@ -44,6 +44,7 @@ tokenId: string @index(hash) .
 identifier: string @index(hash) .
 created: datetime .
 published: datetime .
+allowedActivityTypes: [string] .
 `
   const op = new dgraph.Operation()
   op.setSchema(schema)
@@ -67,26 +68,32 @@ async function fillDb () {
   }
 
   const names = Object.keys(defaultData)
+  let jsonData = []
   for (let i = 0, l = names.length; i < l; i++) {
     let baseName = names[i]
     defaultData[baseName].map(x => {
       x.baseName = baseName
     })
+    jsonData = jsonData.concat(defaultData[baseName])
+  }
 
-    // fill some data
-    const txn = dgraphClient.newTxn()
-    try {
-      const mu = new dgraph.Mutation()
-      logger.debug('saving ' + baseName)
-      mu.setSetJson(defaultData[baseName])
-      await txn.mutate(mu)
-      await txn.commit()
-    } catch (e) {
-      console.log(e)
-      break
-    } finally {
-      await txn.discard()
-    }
+  if (jsonData.length === 0) {
+    logger.debug('no data to store')
+    return
+  }
+
+  // fill some data
+  const txn = dgraphClient.newTxn()
+  try {
+    const mu = new dgraph.Mutation()
+    logger.debug('saving default data')
+    mu.setSetJson(jsonData)
+    await txn.mutate(mu)
+    await txn.commit()
+  } catch (e) {
+    console.log(e)
+  } finally {
+    await txn.discard()
   }
 }
 
@@ -97,6 +104,7 @@ fillDb()
  */
 class DgraphService {
   async getModel (authToken, request, respond, options) {
+    logger.debug('getModel:', request)
     // TODO: remove listeners when the socket gets lost, the stream gets closed etc.
     let addQuery = ''
     if (authToken && authToken.user) {
@@ -191,6 +199,8 @@ class DgraphService {
       chan.owner = chan.owner[0]
     })
     model.type = proto.dn.ChangeType.REPLACE
+    console.log(proto.dn.ChangeType)
+    console.log(model)
     return model
   }
 

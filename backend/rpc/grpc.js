@@ -91,6 +91,7 @@ class GrpcServer {
         channel: streamChannel
       }
     )
+    logger.debug('RESULT: ', JSON.stringify(result, null, 2))
     this.socket.emit(streamChannel, service.responseSerialize(result))
   }
 

@@ -20,36 +20,38 @@
 const {botUUID} = require('../util')
 
 module.exports = {
-  Actor: [{
-    uid: '_:admin',
-    type: 0,
-    username: 'admin',
-    roles: [{uid: '_:admin'}],
-    name: 'Tobias Bräutigam',
-    email: 'tbraeutigam@gmail.com',
-    password: 'tester',
-    color: '#ACACAC',
-    locale: 'de'
-  }, {
-    uid: '_:hirschberg',
-    type: 2,
-    username: 'hirschberg',
-    roles: [{uid: '_:botRole'}],
-    name: 'Hirschberg',
-    email: 'tbraeutigam@gmail.com',
-    password: botUUID,
-    color: '#085525'
-  }, {
-    uid: '_:max',
-    type: 0,
-    username: 'user',
-    roles: [{uid: '_:userRole'}],
-    name: 'Max Mustermann',
-    email: 'tbraeutigam@gmail.com',
-    password: 'tester',
-    color: '#FFFF00',
-    locale: 'de'
-  }],
+  Actor: [
+    {
+      uid: '_:admin',
+      type: 0,
+      username: 'admin',
+      roles: [{uid: '_:admin'}],
+      name: 'Tobias Bräutigam',
+      email: 'tbraeutigam@gmail.com',
+      password: 'tester',
+      color: '#ACACAC',
+      locale: 'de'
+    }, {
+      uid: '_:hirschberg',
+      type: 2,
+      username: 'hirschberg',
+      roles: [{uid: '_:botRole'}],
+      name: 'Hirschberg',
+      email: 'tbraeutigam@gmail.com',
+      password: botUUID,
+      color: '#085525'
+    }, {
+      uid: '_:max',
+      type: 0,
+      username: 'user',
+      roles: [{uid: '_:userRole'}],
+      name: 'Max Mustermann',
+      email: 'tbraeutigam@gmail.com',
+      password: 'tester',
+      color: '#FFFF00',
+      locale: 'de'
+    }
+  ],
   Webhook: [
     {
       identifier: 'f225a69e-5064-49b0-9c3b-0b99be51781f',

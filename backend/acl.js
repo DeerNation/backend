@@ -145,7 +145,7 @@ module.exports = {
         this.__cache[cacheId] = acl
         return acl
       }
-
+      console.log(model)
       aclEntries = model.guestRole[0].entries.filter(entry => {
         return (new RegExp(entry.topic)).test(topic)
       })
