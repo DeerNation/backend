@@ -16,7 +16,7 @@ const config = require('../config')
 const modelSubscriptions = require('./ModelSubscriptions')
 const createHook = require('./hooks/CreateObject')
 
-const dgraphHost = process.env.DEERNATION_DGRAPH_URL || 'localhost:9080'
+const dgraphHost = config.DGRAPH_URL || 'localhost:9080'
 
 const clientStub = new dgraph.DgraphClientStub(
   dgraphHost,

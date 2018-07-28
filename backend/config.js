@@ -24,9 +24,10 @@
  * @since 2018
  */
 const uuidv4 = require('uuid/v4')
+const config = require(process.env.DEERNATION_CONFIG || '/etc/deernation/config.json')
 
-module.exports = {
+module.exports = Object.assign({
   domain: 'hbg',
   channelPrefix: 'hbg.channel.',
   UUID: uuidv4()
-}
+}, config)
