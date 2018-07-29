@@ -132,9 +132,10 @@ module.exports = {
       query = `query acl($a: string) {
           ${query}
         }` + fragment
+      logger.debug('Query: %s [$a: %s]', query, userId)
       const res = await this._getDgraphClient().newTxn().queryWithVars(query, {$a: userId})
       const model = res.getJson()
-      // console.log(JSON.stringify(model, null, 2))
+      logger.debug(JSON.stringify(model, null, 2))
       if (model.adminRole && model.adminRole.length > 0) {
         const all = Object.values(action).join('')
         acl = {
@@ -145,7 +146,7 @@ module.exports = {
         this.__cache[cacheId] = acl
         return acl
       }
-      console.log(model)
+
       aclEntries = model.guestRole[0].entries.filter(entry => {
         return (new RegExp(entry.topic)).test(topic)
       })
@@ -159,7 +160,7 @@ module.exports = {
         })
       }
     }
-    logger.debug('Topic: %s, found ACL entries: %o', topic, aclEntries)
+    logger.debug('UID: %s, Topic: %s, found ACL entries: %o', userId, topic, aclEntries)
 
     acl = {
       actions: '',
@@ -218,16 +219,16 @@ module.exports = {
    * Checks if the user can execute the action on that topic, otherwise an AclException is thrown
    *
    * @param authToken {Object?} auth token of the current user
-   * @param token {String} topic to check
+   * @param topic {String} topic to check
    * @param actions {String} a combination of acl.CREATE, acl.READ, ...
    * @param actionType {String} type of actions to check (null, member, owner)
    * @param exceptionText {String?} optional text if the check fails
    * @returns {boolean} true if the check succeeds
    * @throws {AclException} if the check fails
    */
-  check: async function (authToken, token, actions, actionType, exceptionText) {
-    logger.debug('check %s for %s', actions, token)
-    const allowed = await this.getAllowedActions(authToken, token)
+  check: async function (authToken, topic, actions, actionType, exceptionText) {
+    logger.debug('check %s for %s', actions, topic)
+    const allowed = await this.getAllowedActions(authToken, topic)
     if (!exceptionText) {
       exceptionText = i18n.__('You do not have the rights to do this.')
     }
@@ -251,7 +252,7 @@ module.exports = {
       if (!allowedActions) {
         throw new AclException(exceptionText)
       }
-      logger.debug('Allowed actions for %s: %s', token, allowedActions)
+      logger.debug('Allowed actions for %s: %s', topic, allowedActions)
 
       for (let i = 0, l = actions.length; i < l; i++) {
         if (!allowedActions.includes(actions.charAt(i))) {

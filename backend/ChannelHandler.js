@@ -51,7 +51,7 @@ class ChannelHandler {
 
   registerNotificationHandler (type, handler) {
     logger.debug('registering notification handler for content type: ' + type)
-    this._notificationHandlers[type.toLowerCase()] = handler
+    this._notificationHandlers[type] = handler
   }
 
   // _onActivityChange (modelChange) {
@@ -167,9 +167,9 @@ class ChannelHandler {
       })
     }
 
-    if (this._notificationHandlers.hasOwnProperty(publication.activity.content)) {
-      const handler = this._notificationHandlers[publication.activity.content]
-      const message = publication.activity[publication.activity.content]
+    if (this._notificationHandlers.hasOwnProperty(publication.activity.content.type_url)) {
+      const handler = this._notificationHandlers[publication.activity.content.type_url]
+      const message = publication.activity.content.value
       let {phrase, content} = handler(message)
 
       if (content) {

@@ -32,11 +32,12 @@ const schemaHandler = require('./model/JsonSchemaHandler')
 // const schema = require('./model/schema')
 const channelHandler = require('./ChannelHandler')
 const config = require('./config')
+const {TYPE_URL_TEMPLATE} = require('./model/any')
 
 class PluginHandler {
   constructor () {
     if (config.PLUGINS_CONTENT_DIR) {
-      this._paths = [process.env.DEERNATION_PLUGINS_CONTENT_DIR]
+      this._paths = [config.PLUGINS_CONTENT_DIR]
     } else {
       logger.warn('no plugin path defined. Using the DeerNation-backend without any plugin is not recommended!')
       this._paths = []
@@ -98,7 +99,7 @@ class PluginHandler {
 
     if (manifest.provides.hasOwnProperty('notification')) {
       const notificationFile = path.join(pluginDir, manifest.provides.notification)
-      channelHandler.registerNotificationHandler(id, require(notificationFile))
+      channelHandler.registerNotificationHandler(TYPE_URL_TEMPLATE.replace('$ID', id), require(notificationFile))
     }
   }
 }

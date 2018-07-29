@@ -36,7 +36,6 @@ module.exports = function (socket, scServer, callback) {
       await acl.check(null, config.domain + '.rpc.login', acl.action.EXECUTE)
 
       const uid = await dgraphService.authenticate(credentials.username, credentials.password)
-      console.log(uid)
       if (uid !== false) {
         // This will give the client a token so that they won't
         // have to login again if they lose their connection
@@ -68,7 +67,7 @@ module.exports = function (socket, scServer, callback) {
       next && next()
     } catch (e) {
       logger.error(e)
-      next(i18n.__('You are not authorized to subscribe to #%s', req.channel))
+      next && next(i18n.__('You are not authorized to subscribe to #%s', req.channel))
     }
   })
 
@@ -77,7 +76,7 @@ module.exports = function (socket, scServer, callback) {
       await acl.check(req.socket.authToken, req.channel, acl.action.PUBLISH)
       next && next()
     } catch (e) {
-      next(i18n.__('You are not authorized to publish in #%s', req.channel))
+      next && next(i18n.__('You are not authorized to publish in #%s', req.channel))
     }
   })
 }

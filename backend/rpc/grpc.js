@@ -36,8 +36,8 @@ class GrpcServer {
         this.socket.on(request.startStreamRpc, this._streamHandlers[request.startStreamRpc].handler)
         this._streamHandlers[request.startStreamRpc].handler(request.startStreamRpc, request.data)
       } else if (request.hasOwnProperty('stopStreamRpc')) {
-        this.socket.off(request.startStreamRpc, this._streamHandlers[request.startStreamRpc].handler)
-        delete this._streamHandlers[request.startStreamRpc]
+        this.socket.off(request.stopStreamRpc, this._streamHandlers[request.stopStreamRpc].handler)
+        delete this._streamHandlers[request.stopStreamRpc]
       }
     })
   }
@@ -70,7 +70,13 @@ class GrpcServer {
   async _onRequest (path, data, response) {
     const service = this._services[path]
     const bytes = Uint8Array.from(Object.values(data))
-    await acl.check(this.socket.getAuthToken(), config.domain + '.rpc.' + service.originalName, acl.action.EXECUTE)
+    try {
+      await acl.check(this.socket.getAuthToken(), config.domain + '.rpc.' + service.originalName, acl.action.EXECUTE)
+    } catch (e) {
+      logger.error(e)
+      response(e)
+      return
+    }
     logger.debug('executing ' + path)
     const result = await service.callback(this.socket.getAuthToken(), service.requestDeserialize(bytes))
     response(null, service.responseSerialize(result))
@@ -79,7 +85,12 @@ class GrpcServer {
   async _onStreamRequest (streamChannel, data) {
     const service = this._streamHandlers[streamChannel].service
     const bytes = Uint8Array.from(Object.values(data))
-    await acl.check(this.socket.getAuthToken(), config.domain + '.rpc.' + service.originalName, acl.action.EXECUTE)
+    try {
+      await acl.check(this.socket.getAuthToken(), config.domain + '.rpc.' + service.originalName, acl.action.EXECUTE)
+    } catch (e) {
+      logger.error(e)
+      return
+    }
     logger.debug('executing ' + streamChannel)
     const result = await service.callback(
       this.socket.getAuthToken(),
@@ -91,7 +102,6 @@ class GrpcServer {
         channel: streamChannel
       }
     )
-    logger.debug('RESULT: ', JSON.stringify(result, null, 2))
     this.socket.emit(streamChannel, service.responseSerialize(result))
   }
 

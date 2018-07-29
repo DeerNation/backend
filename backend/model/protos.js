@@ -57,7 +57,6 @@ function addIncludePathResolver (root, includePaths) {
         fs.accessSync(fullPath, fs.constants.R_OK)
         return fullPath
       } catch (err) {
-        logger.error(err.toString())
       }
     }
     return null

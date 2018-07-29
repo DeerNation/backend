@@ -9,6 +9,7 @@ const i18n = require('i18n')
 const {ResponseException} = require('../../exceptions')
 const {hash} = require('../../util')
 const channelHandler = require('../../ChannelHandler')
+const any = require('../any')
 
 function preCreateSubscription (authToken, object, uidMappers) {
   // if channel is new, we need to add some data to it
@@ -55,10 +56,11 @@ function postCreateSubscription (authToken, object, uidMappers) {
  * @param uidMappers [Map}
  */
 function preCreatePublication (authToken, publication, uidMappers) {
-  if (!publication.activity || !publication.activity.content) {
+  if (!publication.activity || !publication.activity.content || !publication.activity.content.value) {
     throw new ResponseException(1, i18n.__('Creating a publication without content is not possible!'))
   }
-  const payload = publication.activity[publication.activity.content]
+  any.convertToModel(publication.activity.content)
+  const payload = publication.activity.content.value
 
   if (!publication.activity.uid) {
     publication.activity.uid = '_:activity'

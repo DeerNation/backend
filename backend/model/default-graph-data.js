@@ -25,7 +25,7 @@ module.exports = {
       uid: '_:admin',
       type: 0,
       username: 'admin',
-      roles: [{uid: '_:admin'}],
+      roles: [{uid: '_:adminRole'}],
       name: 'Tobias Bräutigam',
       email: 'tbraeutigam@gmail.com',
       password: 'tester',

@@ -8,6 +8,7 @@ const dgraph = require('dgraph-js')
 const grpc = require('grpc')
 const acl = require('../acl')
 const proto = require('./protos')
+const any = require('./any')
 const i18n = require('i18n')
 const defaultData = require('./default-graph-data')
 const logger = require('../logger')(__filename)
@@ -45,6 +46,7 @@ identifier: string @index(hash) .
 created: datetime .
 published: datetime .
 allowedActivityTypes: [string] .
+type_url: string .
 `
   const op = new dgraph.Operation()
   op.setSchema(schema)
@@ -104,7 +106,6 @@ fillDb()
  */
 class DgraphService {
   async getModel (authToken, request, respond, options) {
-    logger.debug('getModel:', request)
     // TODO: remove listeners when the socket gets lost, the stream gets closed etc.
     let addQuery = ''
     if (authToken && authToken.user) {
@@ -199,8 +200,6 @@ class DgraphService {
       chan.owner = chan.owner[0]
     })
     model.type = proto.dn.ChangeType.REPLACE
-    console.log(proto.dn.ChangeType)
-    console.log(model)
     return model
   }
 
@@ -235,16 +234,8 @@ class DgraphService {
             hash
             created
             content {
-              uid
-              expand(_all_)
-            }
-            event {
-              uid
-              expand(_all_)
-            }
-            message {
-              uid
-              expand(_all_)
+              type_url
+              value
             }
           }
           actor {
@@ -262,36 +253,21 @@ class DgraphService {
         throw new Error('invalid request')
       }
       result.publications = res.getJson().channel[0].publications
-      if (reverse) {
+      if (reverse && result.publications) {
         result.publications = result.publications.reverse()
       }
       // normalize data
-      result.publications.forEach(pub => {
-        pub.activity = pub.activity[0]
-        delete pub.activity.actor
-        delete pub.activity.baseName
-        pub.actor = pub.actor[0]
-        // TODO: use generic code here (no references to payload types)
-        if (pub.activity.event) {
-          pub.activity.content = {
-            type_url: 'app.hirschberg-sauerland.de/protos/dn.model.payload.Event',
-            value: proto.dn.model.payload.Event.encode(pub.activity.event[0])
+      if (result.publications) {
+        result.publications.forEach(pub => {
+          pub.activity = pub.activity[0]
+          delete pub.activity.actor
+          delete pub.activity.baseName
+          pub.actor = pub.actor[0]
+          if (pub.activity.content) {
+            any.convertFromModel(pub.activity.content)
           }
-          delete pub.activity.event
-        } else if (pub.activity.message) {
-          pub.activity.content = {
-            type_url: 'app.hirschberg-sauerland.de/protos/dn.model.payload.Message',
-            value: proto.dn.model.payload.Message.encode(pub.activity.message[0])
-          }
-          delete pub.activity.message
-        } else if (pub.activity.content) {
-          pub.activity.content = {
-            type_url: 'app.hirschberg-sauerland.de/protos/dn.model.payload.' + pub.activity.content[0].baseName,
-            value: proto.dn.model.payload[pub.activity.content[0].baseName].encode(pub.activity.content[0])
-          }
-          delete pub.activity.content.value.baseName
-        }
-      })
+        })
+      }
     }
     return result
   }
@@ -324,6 +300,7 @@ class DgraphService {
         if (existing) {
           mu.setSetJson({
             uid: existing,
+            baseName: 'FirebaseToken',
             actor: {
               uid: authToken.user
             }
@@ -333,6 +310,7 @@ class DgraphService {
           mu.setSetJson({
             uid: existing,
             tokenId: request.newToken,
+            baseName: 'FirebaseToken',
             actor: {
               uid: authToken.user
             }
