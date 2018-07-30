@@ -47,6 +47,7 @@ created: datetime .
 published: datetime .
 allowedActivityTypes: [string] .
 type_url: string .
+value: string .
 `
   const op = new dgraph.Operation()
   op.setSchema(schema)
@@ -264,6 +265,7 @@ class DgraphService {
           delete pub.activity.baseName
           pub.actor = pub.actor[0]
           if (pub.activity.content) {
+            pub.activity.content = pub.activity.content[0]
             any.convertFromModel(pub.activity.content)
           }
         })

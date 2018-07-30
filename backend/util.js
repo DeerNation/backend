@@ -38,6 +38,6 @@ function normalizeActivity (activity) {
   return JSON.stringify(normalizedActivity)
 }
 
-module.exports.hash = function (activity) {
-  return XXHash.hash64(Buffer.from(normalizeActivity(activity), 'utf-8'), 0xCAFEBABE, 'hex')
+module.exports.hash = function (payloadValue) {
+  return XXHash.hash64(payloadValue, 0xCAFEBABE, 'hex')
 }

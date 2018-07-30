@@ -59,8 +59,8 @@ function preCreatePublication (authToken, publication, uidMappers) {
   if (!publication.activity || !publication.activity.content || !publication.activity.content.value) {
     throw new ResponseException(1, i18n.__('Creating a publication without content is not possible!'))
   }
-  any.convertToModel(publication.activity.content)
   const payload = publication.activity.content.value
+  any.convertToModel(publication.activity.content)
 
   if (!publication.activity.uid) {
     publication.activity.uid = '_:activity'
@@ -74,9 +74,7 @@ function preCreatePublication (authToken, publication, uidMappers) {
     throw new ResponseException(1, i18n.__('Creating a publication without content is not possible!'))
   }
   // calculate hash from content (without uid)
-  const hashPayload = Object.assign({}, payload)
-  delete hashPayload.uid
-  publication.activity.hash = hash(hashPayload)
+  publication.activity.hash = hash(payload)
   publication.actor = {uid: authToken.user}
   if (!publication.channel) {
     throw new ResponseException(1, i18n.__('Creating a publication without a channel reference is not possible!'))
