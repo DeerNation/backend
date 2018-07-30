@@ -6,7 +6,7 @@ metadata:
     app: socketcluster
 spec:
   ports:
-  - port: 8000
-    targetPort: 8000
+  - port: 6878
+    targetPort: 6878
   selector:
     app: socketcluster

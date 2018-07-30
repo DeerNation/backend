@@ -27,7 +27,7 @@ let logLevel = environment === 'dev' || environment === 'docker' ? 3 : 2
 let options = {
   workers: Number(argv.w) || Number(process.env.SOCKETCLUSTER_WORKERS) || 1,
   brokers: Number(argv.b) || Number(process.env.SOCKETCLUSTER_BROKERS) || 1,
-  port: Number(argv.p) || Number(process.env.SOCKETCLUSTER_PORT) || 8000,
+  port: Number(argv.p) || Number(process.env.SOCKETCLUSTER_PORT) || 6878,
   // If your system doesn't support 'uws', you can switch to 'ws' (which is slower but works on older systems).
   wsEngine: process.env.SOCKETCLUSTER_WS_ENGINE || 'sc-uws',
   appName: 'DeerNation',

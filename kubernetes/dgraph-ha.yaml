@@ -113,7 +113,7 @@ spec:
           if [[ $ordinal -eq 0 ]]; then
             dgraph zero --my=$(hostname -f):5080 --idx $idx --replicas 1
           else
-            dgraph zero --my=$(hostname -f):5080 --peer dgraph-zero-0.dgraph-zero.deernation.svc:5080 --idx $idx --replicas 1
+            dgraph zero --my=$(hostname -f):5080 --peer dgraph-zero-0.dgraph-zero.deernation.svc.cluster.local:5080 --idx $idx --replicas 1
           fi
       terminationGracePeriodSeconds: 60
   updateStrategy:
@@ -181,7 +181,7 @@ spec:
         - "-c"
         - |
           set -ex
-          dgraph server --my=$(hostname -f):7080 --lru_mb 1024 --zero dgraph-zero-0.dgraph-zero.deernation.svc:5080
+          dgraph server --my=$(hostname -f):7080 --lru_mb 1024 --zero dgraph-zero-0.dgraph-zero.deernation.svc.cluster.local:5080
       terminationGracePeriodSeconds: 60
       volumes:
       - name: datadir

@@ -35,7 +35,7 @@ class GrpcServer {
         }
         this.socket.on(request.startStreamRpc, this._streamHandlers[request.startStreamRpc].handler)
         this._streamHandlers[request.startStreamRpc].handler(request.startStreamRpc, request.data)
-      } else if (request.hasOwnProperty('stopStreamRpc')) {
+      } else if (request.hasOwnProperty('stopStreamRpc') && this._streamHandlers.hasOwnProperty(request.stopStreamRpc)) {
         this.socket.off(request.stopStreamRpc, this._streamHandlers[request.stopStreamRpc].handler)
         delete this._streamHandlers[request.stopStreamRpc]
       }

@@ -11,4 +11,4 @@ spec:
 #  - secretName: scc-tls-credentials
   backend:
     serviceName: socketcluster
-    servicePort: 8000
+    servicePort: 6878

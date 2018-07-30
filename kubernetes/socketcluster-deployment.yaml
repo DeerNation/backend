@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: socketcluster
 spec:
-  replicas: 1
+  replicas: 0
   template:
     metadata:
       labels:
@@ -13,7 +13,7 @@ spec:
       - name: socketcluster
         image: peuter/deernation-backend:latest
         ports:
-        - containerPort: 8000
+        - containerPort: 6878
         env:
         - name: SCC_STATE_SERVER_HOST
           value: scc-state
@@ -30,7 +30,7 @@ spec:
         livenessProbe:
           httpGet:
             path: /health-check
-            port: 8000
+            port: 6878
           initialDelaySeconds: 30
           timeoutSeconds: 5
       affinity:
