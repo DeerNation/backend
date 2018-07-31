@@ -3,21 +3,22 @@
 if [ -d ~/.minishift ]; then
     read -p "Installation is active. Remove it? [y/n]" -n 1 -s res
     echo
-    [ "$res" != "y" ] && exit 0
+    if [ "$res" == "y" ]; then
+        echo "Removing current installation..."
 
-    echo "Removing current installation..."
-
-    minishift stop || true
-    minishift delete || true
-    rm -rf ~/.minishift
+        minishift stop || true
+        minishift delete || true
+        rm -rf ~/.minishift
+    fi;
 fi
 
-
+SLEEP=1
 STATUS=`minishift status | grep Minishift | awk '{print $2}'`
 echo "Minishift status: $STATUS"
 if [[ "$STATUS" == "Stopped" ]] || [[ "$STATUS" == "" ]]; then
     echo "starting minishift"
     minishift start
+    SLEEP=15
 fi;
 
 echo "applying environments..."
@@ -32,11 +33,13 @@ if [[ $(oc get projects -o=name | grep deernation) == "" ]]; then
     oc new-project deernation --display-name=DeerNation
 fi;
 
-oc project deernation || exit 1
+oc project deernation || return 1
 
 # oc config use-context `oc config get-contexts --no-headers=true --output=name | grep deernation`
 
 oc apply -f kubernetes/.
+
+sleep $SLEEP
 
 # enable port-forwarding for dgraph (server + ratel)
 echo "enabling port-forwarding..."
