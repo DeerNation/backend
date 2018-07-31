@@ -60,7 +60,9 @@ function preCreatePublication (authToken, publication, uidMappers) {
     throw new ResponseException(1, i18n.__('Creating a publication without content is not possible!'))
   }
   const payload = publication.activity.content.value
+  console.log('RAW:', payload)
   any.convertToModel(publication.activity.content)
+  console.log('CONVERTED:', publication.activity.content)
 
   if (!publication.activity.uid) {
     publication.activity.uid = '_:activity'

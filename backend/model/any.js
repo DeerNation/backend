@@ -20,7 +20,7 @@ module.exports = {
    * (encodes the value)
    */
   convertFromModel: function (content) {
-    content.value = Buffer.from(content.value, 'base64')
+    content.value = Uint8Array.from(Object.values(JSON.parse(content.value)))
   },
 
   /**
@@ -28,7 +28,7 @@ module.exports = {
    * @param content
    */
   convertToModel: function (content) {
-    content.value = content.value.toString('base64')
+    content.value = JSON.stringify(content.value)
   },
 
   getType: getType
