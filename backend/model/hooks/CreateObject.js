@@ -10,6 +10,7 @@ const {ResponseException} = require('../../exceptions')
 const {hash} = require('../../util')
 const channelHandler = require('../../ChannelHandler')
 const any = require('../any')
+const logger = require('../../logger')(__filename)
 
 function preCreateSubscription (authToken, object, uidMappers) {
   // if channel is new, we need to add some data to it
@@ -27,7 +28,6 @@ function preCreateSubscription (authToken, object, uidMappers) {
     object.channel.owner = {uid: authToken.user}
     object.channel.uid = '_:channel'
     object.channel.baseName = 'Channel'
-    console.log(object.channel)
     uidMappers['channel'] = object.channel
   }
   if (!object.actor) {
@@ -59,10 +59,11 @@ function preCreatePublication (authToken, publication, uidMappers) {
   if (!publication.activity || !publication.activity.content || !publication.activity.content.value) {
     throw new ResponseException(1, i18n.__('Creating a publication without content is not possible!'))
   }
-  const payload = publication.activity.content.value
-  console.log('RAW:', payload)
-  any.convertToModel(publication.activity.content)
-  console.log('CONVERTED:', publication.activity.content)
+  const content = publication.activity.content
+  const raw = content.value
+  logger.debug('RAW:' + JSON.stringify(content.value, null, 2))
+  publication.activity.content.value = any.convertToModel(content)
+  logger.debug('CONVERTED:' + JSON.stringify(publication.activity.content, null, 2))
 
   if (!publication.activity.uid) {
     publication.activity.uid = '_:activity'
@@ -72,11 +73,9 @@ function preCreatePublication (authToken, publication, uidMappers) {
     publication.activity.actor = {uid: authToken.user}
   }
 
-  if (!payload) {
+  if (!content.value && !content.uid) {
     throw new ResponseException(1, i18n.__('Creating a publication without content is not possible!'))
   }
-  // calculate hash from content (without uid)
-  publication.activity.hash = hash(payload)
   publication.actor = {uid: authToken.user}
   if (!publication.channel) {
     throw new ResponseException(1, i18n.__('Creating a publication without a channel reference is not possible!'))
@@ -86,25 +85,34 @@ function preCreatePublication (authToken, publication, uidMappers) {
   }
 
   publication.published = new Date()
-  publication.master = !payload.uid
-  if (!payload.uid) {
-    payload.uid = '_:payload'
-    uidMappers['payload'] = payload
+  publication.master = !content.uid
+  if (!content.uid) {
+    content.uid = '_:payload'
+    uidMappers['payload'] = content
+    // calculate hash from content (without uid)
+    publication.activity.hash = hash(raw)
   }
 
   // remove empty strings from payload
-  Object.keys(payload).forEach(key => {
-    if (payload[key] === '') {
-      delete payload[key]
+  Object.keys(content).forEach(key => {
+    if (content[key] === '') {
+      delete content[key]
     }
   })
 }
 
 function postCreatePublication (authToken, publication, uidMappers) {
+  const content = Object.assign({}, publication.activity.content)
   publication.published = publication.published.toISOString()
   publication.activity.created = publication.activity.created.toISOString()
+  // parse JSON to let the notificationhandlers work with the content
+  publication.activity.content.value = JSON.parse(content.value)
+
   // remove all baseNames
   recursiveRemoveProperty(publication, 'baseName')
+
+  // encode again to be able to send it to the clients
+  publication.activity.content.value = any.convertFromModel(content)
   channelHandler.sendNotification(authToken, publication)
 }
 
@@ -115,7 +123,6 @@ function recursiveRemoveProperty (obj, prop) {
   Object.values(obj)
     .filter(val => !!val && typeof val === 'object')
     .forEach(child => {
-      console.log(child)
       recursiveRemoveProperty(child, prop)
     })
 }

@@ -77,7 +77,7 @@ class ChannelHandler {
       publication.actor = await this.__getObject(publication.actor.uid)
     }
     logger.debug('publishing on channel %s: %s', publication.channel.id, JSON.stringify(modelChange, null, 2))
-    const message = proto.dn.ChannelModel.encode(modelChange)
+    const message = proto.dn.ChannelModel.encode(proto.dn.ChannelModel.fromObject(modelChange)).finish()
     this.server.exchange.publish(publication.channel.id, message)
   }
 

@@ -266,7 +266,7 @@ class DgraphService {
           pub.actor = pub.actor[0]
           if (pub.activity.content) {
             pub.activity.content = pub.activity.content[0]
-            any.convertFromModel(pub.activity.content)
+            pub.activity.content.value = any.convertFromModel(pub.activity.content)
           }
         })
       }
@@ -525,7 +525,6 @@ class DgraphService {
       return checkResult
     }
     const object = request[request.content]
-    logger.debug(JSON.stringify(object, null, 2))
     object.baseName = request.content.substring(0, 1).toUpperCase() + request.content.substring(1)
     // mark it to find the uid in the response
     object.uid = '_:' + request.content
@@ -536,12 +535,13 @@ class DgraphService {
     try {
       createHook(true, authToken, request.content, object, uidMappers)
     } catch (e) {
+      logger.error('Error applying pre CreateObject hook: ' + e)
       return {
         code: e.code || 1,
         message: e.message
       }
     }
-    logger.debug(JSON.stringify(object, null, 2))
+    logger.debug('createObject: ' + JSON.stringify(object, null, 2))
     const txn = dgraphClient.newTxn()
     try {
       const mu = new dgraph.Mutation()
@@ -554,6 +554,7 @@ class DgraphService {
         createHook(false, authToken, request.content, object, uidMappers)
       } catch (e) {
         txn.discard()
+        logger.error('Error applying post CreateObject hook: ' + e)
         return {
           code: e.code || 1,
           message: e.message
@@ -563,6 +564,7 @@ class DgraphService {
       Object.keys(uidMappers).forEach(name => {
         uidMappers[name].uid = res.getUidsMap().get(name)
         const change = {
+          type: proto.dn.ChangeType.ADD,
           object: {
             type: proto.dn.ChangeType.ADD,
             content: name

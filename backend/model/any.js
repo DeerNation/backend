@@ -2,6 +2,8 @@
  * Helper functions to convert google.protobuf.Any.
  * Used for activity content payloads defined by plugins.
  */
+const proto = require('./protos')
+
 const typeRegex = /^app.hirschberg-sauerland.de\/protos\/app\.plugins\.([a-z]+)\.Payload/
 
 function getType (typeUrl) {
@@ -20,7 +22,12 @@ module.exports = {
    * (encodes the value)
    */
   convertFromModel: function (content) {
-    content.value = Uint8Array.from(Object.values(JSON.parse(content.value)))
+    const type = getType(content.type_url)
+    if (!type) {
+      throw new Error('no type found for type_url: ' + content.type_url)
+    }
+    const messageType = proto.plugins[type].Payload
+    return messageType.encode(messageType.fromObject(JSON.parse(content.value))).finish()
   },
 
   /**
@@ -28,8 +35,11 @@ module.exports = {
    * @param content
    */
   convertToModel: function (content) {
-    content.value = JSON.stringify(content.value)
-  },
-
-  getType: getType
+    const type = getType(content.type_url)
+    if (!type) {
+      throw new Error('no type found for type_url: ' + content.type_url)
+    }
+    const messageType = proto.plugins[type].Payload
+    return JSON.stringify(messageType.toObject(messageType.decode(content.value)))
+  }
 }
