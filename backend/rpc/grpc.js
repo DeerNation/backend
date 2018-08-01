@@ -69,7 +69,6 @@ class GrpcServer {
    */
   async _onRequest (path, data, response) {
     const service = this._services[path]
-    const bytes = Uint8Array.from(Object.values(data))
     try {
       await acl.check(this.socket.getAuthToken(), config.domain + '.rpc.' + service.originalName, acl.action.EXECUTE)
     } catch (e) {
@@ -77,6 +76,7 @@ class GrpcServer {
       response(e)
       return
     }
+    const bytes = Uint8Array.from(Object.values(data))
     logger.debug('executing ' + path)
     const result = await service.callback(this.socket.getAuthToken(), service.requestDeserialize(bytes))
     response(null, service.responseSerialize(result))
@@ -84,13 +84,13 @@ class GrpcServer {
 
   async _onStreamRequest (streamChannel, data) {
     const service = this._streamHandlers[streamChannel].service
-    const bytes = Uint8Array.from(Object.values(data))
     try {
       await acl.check(this.socket.getAuthToken(), config.domain + '.rpc.' + service.originalName, acl.action.EXECUTE)
     } catch (e) {
       logger.error(e)
       return
     }
+    const bytes = Uint8Array.from(Object.values(data))
     logger.debug('executing ' + streamChannel)
     const result = await service.callback(
       this.socket.getAuthToken(),
