@@ -12,5 +12,6 @@
 	"You do not have the rights to do this.": "You do not have the rights to do this.",
 	"You are not allowed to delete this activity.": "You are not allowed to delete this activity.",
 	"Object has been created": "Object has been created",
-	"Creating a publication without content is not possible!": "Creating a publication without content is not possible!"
+	"Creating a publication without content is not possible!": "Creating a publication without content is not possible!",
+	"There are %n% new messages": "There are %n% new messages"
 }

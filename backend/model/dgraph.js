@@ -520,9 +520,11 @@ class DgraphService {
    * @returns {Promise<*|boolean>}
    */
   async createObject (authToken, request) {
-    const checkResult = await this.__crudChecks(authToken, request, acl.action.CREATE, false)
-    if (checkResult !== true) {
-      return checkResult
+    if (authToken !== config.UUID) {
+      const checkResult = await this.__crudChecks(authToken, request, acl.action.CREATE, false)
+      if (checkResult !== true) {
+        return checkResult
+      }
     }
     const object = request[request.content]
     object.baseName = request.content.substring(0, 1).toUpperCase() + request.content.substring(1)

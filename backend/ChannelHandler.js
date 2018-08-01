@@ -31,6 +31,8 @@ const Ajv = require('ajv')
 const schemaHandler = require('./model/JsonSchemaHandler')
 const {UUID} = require('./config')
 const proto = require('./model/protos')
+const {dgraphClient} = require('./model/dgraph')
+const any = require('./model/any')
 
 class ChannelHandler {
   constructor () {
@@ -88,59 +90,81 @@ class ChannelHandler {
     return this.validateActivity(message)
   }
 
-  // async publish (authToken, channelId, message) {
-  //   if (!this.model) {
-  //     this.model = schema.getModel('Activity')
-  //   }
-  //
-  //   if (typeof message === 'string') {
-  //     // publish existing message in channel
-  //     message = await this.model.get(message).run()
-  //   } else {
-  //     message = Object.assign({
-  //       hash: hash(message.content),
-  //       actorId: authToken.user
-  //     }, message)
-  //
-  //     // only allow valid activities to be published
-  //     if (!this.validate(message)) {
-  //       logger.error('\nNo valid activity: \n  * %s\n-------\n  %o', this.validateActivity.errors.map(x => {
-  //         switch (x.keyword) {
-  //           case 'additionalProperties':
-  //             return `${x.message}: '${x.params.additionalProperty}' [${x.schemaPath}]`
-  //
-  //           default:
-  //             return `${x.message} [${x.schemaPath}]`
-  //         }
-  //       }).join('\n  * '), message)
-  //       return false
-  //     }
-  //   }
-  //   // if (!message.hasOwnProperty('published') || !message.published) {
-  //   //   message.published = new Date()
-  //   // }
-  //   const exists = !!message.id
-  //   const publication = {
-  //     channelId: channelId,
-  //     actorId: authToken.user,
-  //     published: new Date(),
-  //     master: !exists
-  //   }
-  //   const type = message.type.toLowerCase()
-  //
-  //   if (exists) {
-  //     // only add new publication of activity in channel
-  //     publication.activityId = message.id
-  //     await schema.getModel('Publication').save(publication)
-  //   } else {
-  //     await this.model.save(message)
-  //     publication.activityId = message.id
-  //     await schema.getModel('Publication').save(publication)
-  //   }
-  //   const channel = await schema.getModel('Channel').get(channelId).run()
-  //   const actor = await schema.getModel('Actor').get(authToken.user).run()
-  //
-  // }
+  async getPublication (uid) {
+    const query = `query read($a: string){
+        object(func: uid($a)) @filter(eq(baseName, "Publication")) {
+          uid
+          baseName
+          activity {
+            uid
+          }
+        }
+    }`
+    const res = await dgraphClient.newTxn().queryWithVars(query, {$a: uid})
+    return res.getJson().object[0]
+  }
+
+  async publish (authToken, channelUid, message) {
+    let actorId
+    if (authToken === UUID) {
+      actorId = message.actorId
+      delete message.actorId
+    } else {
+      actorId = authToken.user
+    }
+    if (typeof message === 'string') {
+      // publish existing message in channel
+      message = await this.getPublication(message)
+      if (!message) {
+        logger.error('invalid publication id given:', message)
+        return false
+      }
+      message = message.activity[0]
+    } else {
+      const type = message.type
+      delete message.type
+      // only allow valid activities to be published
+      if (!this.validate({content: message, type: type})) {
+        logger.error('\nNo valid activity: \n  * %s\n-------\n  %o', this.validateActivity.errors.map(x => {
+          switch (x.keyword) {
+            case 'additionalProperties':
+              return `${x.message}: '${x.params.additionalProperty}' [${x.schemaPath}]`
+
+            default:
+              return `${x.message} [${x.schemaPath}]`
+          }
+        }).join('\n  * '), message)
+        return false
+      }
+
+      // convert into content<Any> schema
+      const messageType = proto.plugins[type].Payload
+      message = {
+        content: {
+          type_url: any.TYPE_URL_TEMPLATE.replace('$ID', type),
+          value: messageType.encode(messageType.fromObject(message)).finish()
+        }
+      }
+    }
+
+    if (!this._dgraphService) {
+      this._dgraphService = require('./model/dgraph').dgraphService
+    }
+    const publication = {
+      content: 'publication',
+      publication: {
+        channel: {uid: channelUid},
+        activity: message,
+        actor: {uid: actorId}
+      }
+    }
+    const res = await this._dgraphService.createObject(authToken, publication)
+    if (res.code === 0) {
+      return true
+    } else {
+      logger.error('error publishing in channel ' + channelUid + ':' + res.message)
+    }
+  }
 
   async __getObject (uid) {
     if (!this._dgraphService) {

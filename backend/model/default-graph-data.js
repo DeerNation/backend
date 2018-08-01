@@ -203,6 +203,16 @@ module.exports = {
       roleTarget: {uid: '_:userRole'}
     },
     {
+      topic: 'hbg\\.object\\.Publication',
+      actions: 'crud',
+      roleTarget: {uid: '_:botRole'}
+    },
+    {
+      topic: 'hbg\\.object\\.Publication',
+      actions: 'crud',
+      roleTarget: {uid: '_:userRole'}
+    },
+    {
       topic: 'hbg\\.channel\\..+',
       actions: 'c',
       memberActions: 'rpl',

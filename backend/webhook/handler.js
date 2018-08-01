@@ -28,6 +28,7 @@ const {dgraphClient, dgraph} = require('../model/dgraph')
 const channelHandler = require('../ChannelHandler')
 const acl = require('../acl')
 const fs = require('fs')
+const config = require('../config')
 
 class WebhookHandler {
   constructor () {
@@ -51,7 +52,8 @@ class WebhookHandler {
             actorId: uid
           }
           channel {
-            channel: uid
+            channelId: id
+            channelUid: uid
           }
         }
     }`
@@ -93,7 +95,7 @@ class WebhookHandler {
 
     logger.debug("incoming webhook GET request with id: '%s' received: %o", id, parts)
     // get channel for webhook from DB
-    const result = await this.__getWebhook(id).run()
+    const result = await this.__getWebhook(id)
     try {
       if (result.length === 1) {
         const webhook = result[0]
@@ -134,23 +136,23 @@ class WebhookHandler {
     logger.debug("incoming webhook with id: '%s' received: %o", id, parts)
 
     // get channel for webhook from DB
-    const result = await this.__getWebhook(id).run()
+    const result = await this.__getWebhook(id)
     try {
       if (result.length === 1) {
         const webhook = result[0]
         // TODO: add encryption to incoming messages and verification with signature
-        const authToken = {user: webhook.actorId}
-        await acl.check(authToken, webhook.channel, acl.action.PUBLISH, 'member')
-        logger.debug('channel: %s, message: %o', webhook.channel, req.body)
+        let authToken = {user: webhook.actorId}
+        await acl.check(authToken, webhook.channelId, acl.action.PUBLISH, 'member')
+        logger.debug('channel: %s, message: %o', webhook.channelId, req.body)
         let message = req.body
         if (message.hasOwnProperty('entry') && message.hasOwnProperty('object') && webhook.type === 'facebook') {
           // currently only log facebooks hooks to collect some example data
           this._transformFacebookData(message).forEach(activity => {
-            channelHandler.publish(authToken, webhook.channel, activity)
+            channelHandler.publish(authToken, webhook.channelUid, activity)
           })
           res.sendStatus(200)
         } else {
-          const isPublished = await channelHandler.publish(authToken, webhook.channel, message)
+          const isPublished = await channelHandler.publish(authToken, webhook.channelUid, message)
           if (isPublished === false) {
             res.sendStatus(400)
           } else {

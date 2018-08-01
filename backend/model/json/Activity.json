@@ -1,63 +1,16 @@
 {
   "title": "Activity",
   "type": "object",
-  "required": ["type", "content", "actorId"],
+  "required": ["content", "type"],
   "additionalProperties": false,
   "properties": {
-    "id": {
-      "type": "string"
-    },
     "type": {
-      "enum": [
-        "Message",
-        "Event"
-      ]
+      "type": "string"
     },
     "content": {
       "type": "object",
       "oneOf": [
       ]
-    },
-    "title": {
-      "type": "string"
-    },
-    "actorId": {
-      "type": "string"
-    },
-    "titleUrl": {
-      "type": "string",
-      "format": "uri"
-    },
-    "created": {
-      "type": "string",
-      "format": "date-time"
-    },
-    "hash": {
-      "type": "string"
-    },
-    "ref": {
-      "type": "string"
-    },
-    "refType": {
-      "enum": [
-        "share",
-        "reply"
-      ]
-    },
-    "external": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "type": "string"
-        },
-        "id": {
-          "type": "string"
-        },
-        "original": {
-          "type": "object"
-        }
-      },
-      "additionalProperties": false
     }
   },
   "contentTypes": {
