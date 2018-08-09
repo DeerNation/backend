@@ -6,7 +6,7 @@ COPY . .
 
 RUN apk update && apk add python build-base
 
-RUN npm install .
+RUN npm install --loglevel=warn
 
 FROM node:8-alpine as runtime
 
