@@ -65,7 +65,9 @@
     "lint": "standard --verbose | snazzy",
     "test": "ENV=dev nyc --reporter=html --reporter=text-summary mocha --recursive",
     "debug-test": "ENV=dev mocha --recursive",
-    "docker-build": "docker build -t deernation-backend:latest .",
+    "docker-build": "docker build -t deernation/backend:latest .",
+    "docker-update": "npm run docker-build",
+    "postdocker-update": "docker push deernation/backend:latest",
     "deploy-mobile": "npm run compile-frontend-app && cd app/ && cordova run android --device && cd ../"
   },
   "devDependencies": {

@@ -7,3 +7,6 @@ platforms
 coverage/
 .nyc_output
 .env
+kubernetes/secrets.yaml
+plugins
+protos

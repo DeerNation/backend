@@ -1,17 +1,17 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: socketcluster
+  name: backend
 spec:
-  replicas: 0
+  replicas: 1
   template:
     metadata:
       labels:
-        app: socketcluster
+        app: backend
     spec:
       containers:
-      - name: socketcluster
-        image: peuter/deernation-backend:latest
+      - name: backend
+        image: deernation/backend:latest
         ports:
         - containerPort: 6878
         env:
@@ -27,6 +27,13 @@ spec:
               fieldPath: status.podIP
         - name: ENV
           value: prod
+        - name: DN_DGRAPH_HOST
+          value: dgraph-server
+        - name: DN_FCM_KEY
+          valueFrom:
+            secretKeyRef:
+              name: dn-secret
+              key: fcmkey
         livenessProbe:
           httpGet:
             path: /health-check
@@ -41,5 +48,5 @@ spec:
               - key: app
                 operator: In
                 values:
-                - socketcluster
+                - backend
             topologyKey: "kubernetes.io/hostname"

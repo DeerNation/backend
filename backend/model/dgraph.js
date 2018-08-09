@@ -17,7 +17,9 @@ const config = require('../config')
 const modelSubscriptions = require('./ModelSubscriptions')
 const createHook = require('./hooks/CreateObject')
 
-const dgraphHost = config.DGRAPH_URL || 'localhost:9080'
+const dgraphHost = (config.DGRAPH_HOST || 'localhost') + ':' + (config.DGRAPH_PORT || '9080')
+
+logger.info('connecting to ' + dgraphHost)
 
 const clientStub = new dgraph.DgraphClientStub(
   dgraphHost,
@@ -52,6 +54,7 @@ value: string .
   const op = new dgraph.Operation()
   op.setSchema(schema)
   await dgraphClient.alter(op)
+  logger.debug('DONE: applying schema')
 }
 
 async function fillDb () {
@@ -85,6 +88,7 @@ async function fillDb () {
     return
   }
 
+  dgraphClient.setDebugMode(true)
   // fill some data
   const txn = dgraphClient.newTxn()
   try {
@@ -97,6 +101,7 @@ async function fillDb () {
     console.log(e)
   } finally {
     await txn.discard()
+    dgraphClient.setDebugMode(false)
   }
 }
 

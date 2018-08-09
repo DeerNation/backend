@@ -26,6 +26,15 @@
 const uuidv4 = require('uuid/v4')
 const config = require(process.env.DEERNATION_CONFIG || '/etc/deernation/config.json')
 
+const allowedEnvs = ['DGRAPH_HOST', 'DGRAPH_PORT', 'FCM_KEY']
+
+// get some config from environment
+allowedEnvs.forEach(name => {
+  if (process.env.hasOwnProperty('DN_' + name) && process.env['DN_' + name]) {
+    config[name] = process.env['DN_' + name]
+  }
+})
+
 module.exports = Object.assign({
   domain: 'hbg',
   channelPrefix: 'hbg.channel.',

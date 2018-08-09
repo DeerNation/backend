@@ -16,8 +16,10 @@ LABEL description="DeerNation backend service."
 
 RUN mkdir -p /usr/src/dnb
 WORKDIR /usr/src/dnb
-COPY --from=builder /usr/src/dnb . 
+COPY --from=builder /usr/src/dnb .
+RUN mkdir -p /etc/deernation \
+    && echo '{"PLUGINS_CONTENT_DIR": "/usr/src/dnb/plugins", "PROTOS_DIR": "/usr/src/dnb/protos"}' > /etc/deernation/config.json
 
-EXPOSE 8000
+EXPOSE 6878
 
 CMD ["npm", "run", "start:docker"]

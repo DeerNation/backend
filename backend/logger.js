@@ -37,7 +37,7 @@ const defaultLoggerConfig = {
   exitOnError: false
 }
 
-if (process.env.ENV === 'dev') {
+if (['dev', 'docker'].includes(process.env.ENV)) {
   defaultLoggerConfig.transports.push(new transports.Console({
     level: 'debug',
     handleExceptions: true
@@ -51,7 +51,7 @@ if (process.env.ENV === 'dev') {
 }
 
 // create the logger
-if (process.env.ENV === 'dev') {
+if (['dev', 'docker'].includes(process.env.ENV)) {
   // console.log(module, config)
   defaultLoggerConfig.format = combine(
     colorize({message: true}),

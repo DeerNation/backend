@@ -22,7 +22,7 @@ let brokerControllerPath = argv.bc || process.env.SOCKETCLUSTER_BROKER_CONTROLLE
 let workerClusterControllerPath = argv.wcc || process.env.SOCKETCLUSTER_WORKERCLUSTER_CONTROLLER
 let environment = process.env.ENV || 'dev'
 let serverId = process.env.SERVER_ID || environment
-let logLevel = environment === 'dev' || environment === 'docker' ? 3 : 2
+let logLevel = (environment === 'dev' || environment === 'docker') ? 3 : 2
 
 let options = {
   workers: Number(argv.w) || Number(process.env.SOCKETCLUSTER_WORKERS) || 1,
@@ -49,8 +49,9 @@ let options = {
   killMasterOnSignal: false,
   environment: environment,
   logLevel: logLevel,
-  serverId: serverId
-  // host: process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
+  serverId: serverId,
+  host: '0.0.0.0',
+  pubSubBatchDuration: 5
 }
 if (environment === 'production' || process.env.USE_SSL) {
   options.protocol = 'https'
@@ -76,7 +77,7 @@ for (let i in SOCKETCLUSTER_OPTIONS) {
 
 let start = function () {
   const clusterLogger = require('./backend/logger')('backend/SocketCluster.js')
-  clusterLogger.info('starting SocketCluster')
+  clusterLogger.info('starting SocketCluster: env=' + options.environment)
   SocketCluster.prototype.log = function (message, time) {
     clusterLogger.info(message)
   }
