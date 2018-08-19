@@ -22,7 +22,6 @@ const dn = require('./backend/model/protos').dn
 class Worker extends SCWorker {
   run () {
     logger.info('   >> Worker PID: %d', process.pid)
-    let environment = this.options.environment
     const serverId = this.options.serverId
     console.log('ServerId:', serverId)
 

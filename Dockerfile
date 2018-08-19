@@ -20,6 +20,9 @@ COPY --from=builder /usr/src/dnb .
 RUN mkdir -p /etc/deernation \
     && echo '{"PLUGINS_CONTENT_DIR": "/usr/src/dnb/plugins", "PROTOS_DIR": "/usr/src/dnb/protos"}' > /etc/deernation/config.json
 
+# curl is useful for network debugging in the container
+RUN apk update && apk add curl
+
 EXPOSE 6878
 
 CMD ["npm", "run", "start:docker"]
