@@ -50,6 +50,7 @@ published: datetime .
 allowedActivityTypes: [string] .
 type_url: string .
 value: string .
+published: datetime @index(hour) .
 `
   const op = new dgraph.Operation()
   op.setSchema(schema)
