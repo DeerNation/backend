@@ -106,14 +106,14 @@ function postCreatePublication (authToken, publication, uidMappers) {
   const content = Object.assign({}, publication.activity.content)
   publication.published = publication.published.toISOString()
   publication.activity.created = publication.activity.created.toISOString()
-  // parse JSON to let the notificationhandlers work with the content
+  // parse JSON to let the notification handlers work with the content
   publication.activity.content.value = JSON.parse(content.value)
 
   // remove all baseNames
   recursiveRemoveProperty(publication, 'baseName')
 
   // encode again to be able to send it to the clients
-  publication.activity.content.value = any.convertFromModel(content)
+  // publication.activity.content.value = any.convertFromModel(content)
   channelHandler.sendNotification(authToken, publication)
 }
 
