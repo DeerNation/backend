@@ -219,8 +219,11 @@ class PushNotification {
         logger.debug('firebase subscription infos received for', firebase.tokenId, infos)
 
         const res = await dgraphService.updateObject(config.UUID, {
-          uid: firebase.uid,
-          infos: JSON.stringify(infos)
+          content: 'FirebaseToken',
+          FirebaseToken: {
+            uid: firebase.uid,
+            infos: JSON.stringify(infos)
+          }
         })
         if (res.code === 1) {
           logger.error('Error saving firebase info data:', res.message)
