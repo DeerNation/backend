@@ -61,6 +61,7 @@
     "predev": "cd frontend/app && qx compile --watch &",
     "dev": "ENV=dev node server.js",
     "backend": "ENV=dev node --trace-warnings server.js",
+    "debug-backend": "ENV=dev node $NODE_DEBUG_OPTION --trace-warnings server.js --inspect-workers",
     "postdev": "killall -9 qx",
     "start:docker": "node dockerwait.js && MODE=docker node ${SOCKETCLUSTER_MASTER_CONTROLLER:-server.js}",
     "lint": "standard --verbose | snazzy",
