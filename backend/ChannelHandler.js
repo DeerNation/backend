@@ -205,6 +205,8 @@ class ChannelHandler {
           phrase: phrase,
           locale: actor.locale || 'en'
         }, publication.channel.title), content, options)
+      } else {
+        logger.error('handler for ' + publication.activity.content.type_url + ' did not return valid content to send.')
       }
     } else {
       logger.error('no notification handler registered for content type:' + publication.activity.content.type_url)
