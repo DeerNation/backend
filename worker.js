@@ -12,11 +12,11 @@ const cron = require('node-cron')
 const logger = require('./backend/logger')(__filename)
 const WebhookHandler = require('./backend/webhook/handler')
 const channelHandler = require('./backend/ChannelHandler')
+const dgraphService = require('./backend/model/dgraph').dgraphService
 const pushNotifications = require('./backend/notification')
 const pluginHandler = require('./backend/PluginHandler')
 const MetadataScraper = require('./backend/MetadataScraper')
 const grpcServer = require('./backend/rpc/grpc')
-const dgraphService = require('./backend/model/dgraph').dgraphService
 const dn = require('./backend/model/protos').dn
 
 class Worker extends SCWorker {
@@ -69,17 +69,17 @@ class Worker extends SCWorker {
       In here we handle our incoming realtime connections and listen for events.
     */
     scServer.on('connection', function (socket) {
-      // activate authentification
-      if (socket.authToken) {
-        auth(socket, scServer)
-        pushNotifications.syncTopicSubscriptions(socket.authToken.user, serverId)
-      } else {
-        auth(socket, scServer, pushNotifications.syncTopicSubscriptions.bind(pushNotifications, serverId))
-      }
-
       logger.debug('initializing gRPC')
       grpcServer.upgradeToGrpc(socket)
       grpcServer.addService(dn.Com, dgraphService)
+
+      // activate authentification
+      if (socket.authToken) {
+        auth(socket, scServer)
+        pushNotifications.syncTopicSubscriptions(serverId, socket.authToken.user)
+      } else {
+        auth(socket, scServer, pushNotifications.syncTopicSubscriptions.bind(pushNotifications, serverId))
+      }
 
       // socket.on('disconnect', function () {
       //

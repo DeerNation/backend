@@ -204,9 +204,10 @@ class ChannelHandler {
           phrase: phrase,
           locale: actor.locale || 'en'
         }, publication.channel.title), content, options)
+        logger.debug('notification sent:', phrase, content)
       }
     } else {
-      logger.error('no notification handler registered for content type:' + publication.activity.content)
+      logger.error('no notification handler registered for content type:' + publication.activity.content.type_url)
     }
   }
 }

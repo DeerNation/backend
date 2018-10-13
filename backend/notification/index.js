@@ -18,16 +18,17 @@
  */
 
 const gcm = require('node-gcm')
-const {dgraphClient} = require('../model/dgraph')
 const logger = require('../logger')(__filename)
 const request = require('request-promise')
-const config = require(process.env.DEERNATION_CONFIG || '/etc/deernation/config.json')
+const serverConfig = require(process.env.DEERNATION_CONFIG || '/etc/deernation/config.json')
+const config = require('../config')
+let {dgraphClient, dgraphService} = require('../model/dgraph')
 
 class PushNotification {
   constructor () {
-    this.__apiKey = config.FCM_KEY
+    this.__apiKey = serverConfig.FCM_KEY
     if (!this.__apiKey) {
-      throw new Error("environment variable DEERNATION_FCM_KEY not set")
+      throw new Error('environment variable DEERNATION_FCM_KEY not set')
     }
     this.__service = new gcm.Sender(this.__apiKey)
     this.__requestHeaders = {
@@ -37,6 +38,12 @@ class PushNotification {
     this.__serverTopicPrefix = null
   }
 
+  /**
+   * Returns the firebase token IDs stored for this user.
+   * @param userId {String} uid
+   * @returns {Promise<Array>} array of token IDs
+   * @private
+   */
   async __getUserTokens (userId) {
     const query = `query read($a: string) {
         actor(func: uid($a)) @normalize {
@@ -47,6 +54,68 @@ class PushNotification {
     }`
     const res = await dgraphClient.newTxn().queryWithVars(query, {$a: Array.isArray(userId) ? userId.join(', ') : userId})
     return res.getJson().actor.map(x => x.tokenId)
+  }
+
+  /**
+   * Returns the "Firebase" entries in the DB for the given user ID
+   * @param userId {String} uid
+   * @returns {Promise<Array>} array of firebase entries
+   * @private
+   */
+  async __getFirebaseEntries (userId) {
+    const query = `query read($a: string) {
+        actor(func: uid($a)) @normalize {
+          ~actor @filter(has(tokenId)) {
+            uid: uid
+            tokenId: tokenId
+            info: info
+          }
+        }
+    }`
+    const res = await dgraphClient.newTxn().queryWithVars(query, {$a: Array.isArray(userId) ? userId.join(', ') : userId})
+    return res.getJson().actor
+  }
+
+  /**
+   * Returns the user subscriptions with channel ID, and the notification types for desktop and mobile:
+   *
+   * Result example:
+   * <code>
+   * "actor": [{
+   *    "channelId": "hbg.channel.news.public",
+   *    "desktopNotificationType": "all",
+   *    "mobileNotificationType": "mentioned",
+   *    "uid": "0xc"
+   *  }, {
+   *    "channelId": "hbg.channel.events.public",
+   *    "desktopNotificationType": "all",
+   *    "mobileNotificationType": "mentioned",
+   *    "uid": "0x14"
+   *  }
+   * ]}
+   * </code>
+   * @param userId {String} uid
+   * @returns {Promise<Array>}
+   * @private
+   */
+  async __getUserSubscriptions (userId) {
+    const query = `query read($a: string) {
+      actor(func: uid($a)) @normalize {
+        ~actor @filter(eq(baseName, "Subscription")) {
+          channel {
+            channelId: id
+          }
+          desktopNotification {
+            desktopNotificationType: type
+          }
+          mobileNotification {
+            mobileNotificationType: type
+          }
+        }
+      }
+    }`
+    const res = await dgraphClient.newTxn().queryWithVars(query, {$a: Array.isArray(userId) ? userId.join(', ') : userId})
+    return res.getJson().actor
   }
 
   /**
@@ -130,38 +199,52 @@ class PushNotification {
 
   /**
    * Synchronize FCM topic subscriptions and channel subscriptions
-   * @param userId {String} user id
    * @param serverId {String} server identifier used as topic prefix
+   * @param userId {String} uid
    */
-  async syncTopicSubscriptions (userId, serverId) {
-    // try {
-    //   this.__serverTopicPrefix = serverId ? serverId + '-' : ''
-    //   logger.debug('using %s as topic prefix', this.__serverTopicPrefix)
-    //   let firebases = await schema.getModel('Firebase').filter({actorId: userId}).run()
-    //   let subscriptions = await schema.getModel('Subscription').filter({actorId: userId}).run()
-    //   firebases.forEach(async (firebase) => {
-    //     let infos = await this.__getAppInstanceInfos(firebase.token)
-    //     firebase.infos = infos
-    //     firebase.save()
-    //     let subscribedTopics = []
-    //     if (infos.hasOwnProperty('rel') && infos.rel.hasOwnProperty('topics')) {
-    //       subscribedTopics = Object.keys(infos.rel.topics)
-    //     }
-    //
-    //     // check type and settings
-    //     let type = infos.platform === 'WEBPUSH' ? 'desktopNotification' : 'mobileNotification'
-    //     let clientSubscriptions = subscriptions.filter(x => x[type] && x[type].type !== 'none').map(x => this.__serverTopicPrefix + x.channelId)
-    //
-    //     logger.debug('user %s is subscribed to %s', userId, clientSubscriptions)
-    //     let add = clientSubscriptions.filter(x => !subscribedTopics.includes(x))
-    //     let remove = subscribedTopics.filter(x => !clientSubscriptions.includes(x))
-    //     logger.debug('add subscriptions: %s, remove subscriptions: %s', add, remove)
-    //     remove.forEach(this.deleteSubscription.bind(this, firebase.token))
-    //     add.forEach(this.addSubscription.bind(this, firebase.token))
-    //   })
-    // } catch (e) {
-    //   logger.debug('Sync error: %s', e)
-    // }
+  async syncTopicSubscriptions (serverId, userId) {
+    try {
+      if (!dgraphClient) {
+        dgraphClient = require('../model/dgraph').dgraphClient
+      }
+      if (!dgraphService) {
+        dgraphService = require('../model/dgraph').dgraphService
+      }
+      this.__serverTopicPrefix = serverId ? serverId + '-' : ''
+      logger.debug('using %s as topic prefix', this.__serverTopicPrefix)
+      let firebases = await this.__getFirebaseEntries(userId)
+      let subscriptions = await this.__getUserSubscriptions(userId)
+      firebases.forEach(async (firebase) => {
+        let infos = await this.__getAppInstanceInfos(firebase.tokenId)
+        logger.debug('firebase subscription infos received for', firebase.tokenId, infos)
+
+        const res = await dgraphService.updateObject(config.UUID, {
+          uid: firebase.uid,
+          infos: JSON.stringify(infos)
+        })
+        if (res.code === 1) {
+          logger.error('Error saving firebase info data:', res.message)
+        }
+        let subscribedTopics = []
+        if (infos.hasOwnProperty('rel') && infos.rel.hasOwnProperty('topics')) {
+          subscribedTopics = Object.keys(infos.rel.topics)
+        }
+
+        // check type and settings
+        let type = infos.platform === 'WEBPUSH' ? 'desktopNotificationType' : 'mobileNotificationType'
+        let clientSubscriptions = subscriptions.filter(x => x[type] !== 'none').map(x => this.__serverTopicPrefix + x.channelId)
+
+        logger.debug('user %s is subscribed to %s', userId, clientSubscriptions)
+        let add = clientSubscriptions.filter(x => !subscribedTopics.includes(x))
+        let remove = subscribedTopics.filter(x => !clientSubscriptions.includes(x))
+        logger.debug('add subscriptions: %s, remove subscriptions: %s', add, remove)
+        remove.forEach(this.deleteSubscription.bind(this, firebase.tokenId))
+        add.forEach(this.addSubscription.bind(this, firebase.tokenId))
+      })
+    } catch (e) {
+      logger.error('Sync error: %s', e)
+      throw e
+    }
   }
 
   /**

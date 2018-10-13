@@ -51,6 +51,7 @@ allowedActivityTypes: [string] .
 type_url: string .
 value: string .
 published: datetime @index(hour) .
+info: string .
 `
   const op = new dgraph.Operation()
   op.setSchema(schema)
@@ -430,9 +431,11 @@ class DgraphService {
   }
 
   async updateObject (authToken, request) {
-    const checkResult = this.__crudChecks(authToken, request, acl.action.UPDATE, true)
-    if (checkResult !== true) {
-      return checkResult
+    if (authToken !== config.UUID) {
+      const checkResult = this.__crudChecks(authToken, request, acl.action.UPDATE, true)
+      if (checkResult !== true) {
+        return checkResult
+      }
     }
     const txn = dgraphClient.newTxn()
     try {
@@ -458,18 +461,21 @@ class DgraphService {
   async updateProperty (authToken, request) {
     // get object type from DB to be able to check ACLs
     const existing = await this.getObject(authToken, {uid: request.uid})
-    if (!existing) {
-      return {
-        code: 1,
-        message: i18n.__('Object not found')
+
+    if (authToken !== config.UUID) {
+      if (!existing) {
+        return {
+          code: 1,
+          message: i18n.__('Object not found')
+        }
       }
-    }
-    try {
-      await acl.check(authToken, config.domain + '.object.' + existing.content.substring(0, 1).toUpperCase() + existing.content.substring(1), acl.action.UPDATE)
-    } catch (e) {
-      return {
-        code: 2,
-        message: e.toString()
+      try {
+        await acl.check(authToken, config.domain + '.object.' + existing.content.substring(0, 1).toUpperCase() + existing.content.substring(1), acl.action.UPDATE)
+      } catch (e) {
+        return {
+          code: 2,
+          message: e.toString()
+        }
       }
     }
     const txn = dgraphClient.newTxn()
