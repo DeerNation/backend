@@ -175,6 +175,7 @@ class ChannelHandler {
   }
 
   async sendNotification (authToken, publication) {
+    logger.debug('sendNotification for publication')
     // load whats missing
     if (!publication.channel.id || !publication.channel.title) {
       publication.channel = await this.__getObject(publication.channel.uid)
@@ -204,7 +205,6 @@ class ChannelHandler {
           phrase: phrase,
           locale: actor.locale || 'en'
         }, publication.channel.title), content, options)
-        logger.debug('notification sent:', phrase, content)
       }
     } else {
       logger.error('no notification handler registered for content type:' + publication.activity.content.type_url)

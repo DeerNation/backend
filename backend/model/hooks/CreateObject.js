@@ -102,6 +102,7 @@ function preCreatePublication (authToken, publication, uidMappers) {
 }
 
 function postCreatePublication (authToken, publication, uidMappers) {
+  logger.debug('running post create publication hook')
   const content = Object.assign({}, publication.activity.content)
   publication.published = publication.published.toISOString()
   publication.activity.created = publication.activity.created.toISOString()
