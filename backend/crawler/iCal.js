@@ -55,7 +55,7 @@ class ICal {
       let now = new Date()
 
       for (let k in data) {
-        if (this.__parsedData.hasOwnProperty(k)) {
+        if (data.hasOwnProperty(k)) {
           let ev = data[k]
           if (ev.type === 'VEVENT' && ev.start >= now) {
             let event = {
