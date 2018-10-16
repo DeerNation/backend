@@ -11,6 +11,21 @@
       "type": "object",
       "oneOf": [
       ]
+    },
+    "ref": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "original": {
+          "type": "string"
+        }
+      },
+      "required": ["id"],
+      "additionalProperties": false
     }
   },
   "contentTypes": {
