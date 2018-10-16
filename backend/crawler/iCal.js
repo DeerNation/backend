@@ -52,8 +52,12 @@ class ICal {
         let ev = this.__parsedData[k]
         if (ev.type === 'VEVENT' && ev.start >= now) {
           let event = {
-            id: ev.uid,
-            type: 'Event',
+            ref: {
+              id: ev.uid,
+              type: 'ics',
+              original: ev
+            },
+            type: 'event',
             content: {
               name: ev.summary,
               categories: ev.categories,

@@ -93,6 +93,11 @@ function preCreatePublication (authToken, publication, uidMappers) {
     publication.activity.hash = hash(raw)
   }
 
+  // dump ExternalRef
+  if (publication.activity.ref && publication.activity.ref.original) {
+    publication.activity.ref.original = JSON.stringify(publication.activity.ref.original)
+  }
+
   // remove empty strings from payload
   Object.keys(content).forEach(key => {
     if (content[key] === '') {
@@ -108,6 +113,11 @@ function postCreatePublication (authToken, publication, uidMappers) {
   publication.activity.created = publication.activity.created.toISOString()
   // parse JSON to let the notification handlers work with the content
   publication.activity.content.value = JSON.parse(content.value)
+
+  // parse ExternalRef
+  if (publication.activity.ref && publication.activity.ref.original) {
+    publication.activity.ref.original = JSON.parse(publication.activity.ref.original)
+  }
 
   // remove all baseNames
   recursiveRemoveProperty(publication, 'baseName')

@@ -194,9 +194,9 @@ class WebhookHandler {
                     }
                     if (Object.keys(content).length > 0) {
                       activities.push({
-                        type: 'Message',
+                        type: 'message',
                         content: content,
-                        external: {
+                        ref: {
                           type: 'facebook',
                           id: change.value.post_id,
                           original: change
