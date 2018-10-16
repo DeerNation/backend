@@ -195,11 +195,14 @@ class ChannelHandler {
     if (this._notificationHandlers.hasOwnProperty(publication.activity.content.type_url)) {
       const handler = this._notificationHandlers[publication.activity.content.type_url]
       const message = publication.activity.content.value
-      let {phrase, content} = handler(message)
+      let {phrase, content, image} = handler(message)
 
       if (content) {
         if (content.length > 40) {
           content = content.substring(0, 40) + '...'
+        }
+        if (image) {
+          options.image = image
         }
         pushNotifications.publish(publication.channel.id, i18n.__({
           phrase: phrase,
