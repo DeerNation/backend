@@ -29,8 +29,11 @@ const moment = require('moment')
 const logger = require('../logger')(__filename)
 
 class ICal {
-  constructor (file) {
+  constructor (file, username) {
     this.__uri = file
+    this.__uid = null
+    this.__username = username
+    this._dgraphService = null
   }
 
   parse () {
@@ -49,29 +52,41 @@ class ICal {
     }
   }
 
-  update () {
+  async update () {
+    if (!this._dgraphService) {
+      this._dgraphService = require('../model/dgraph').dgraphService
+    }
+    if (!this.__uid) {
+      this.__uid = await this._dgraphService.getActorUid(this.__username)
+    }
+    if (!this.__uid) {
+      logger.error('actor uid no found for user %s', this.__username)
+    }
     logger.info('update iCal events from %s', this.__uri)
     this.parse().then(data => {
       let now = new Date()
-
       for (let k in data) {
         if (data.hasOwnProperty(k)) {
           let ev = data[k]
           if (ev.type === 'VEVENT' && ev.start >= now) {
             let event = {
+              type: 'event',
+              content: {
+                name: ev.summary,
+                start: moment(ev.start).format(),
+                end: moment(ev.end).format()
+              },
               ref: {
                 id: ev.uid,
                 type: 'ics',
                 original: ev
-              },
-              type: 'event',
-              content: {
-                name: ev.summary,
-                categories: ev.categories,
-                description: ev.description,
-                start: moment(ev.start).format(),
-                end: moment(ev.end).format()
               }
+            }
+            if (ev.description) {
+              event.content.description = ev.description
+            }
+            if (ev.categories) {
+              event.content.categories = ev.categories
             }
             if (ev.location) {
               event.content.location = ev.location
@@ -87,7 +102,8 @@ class ICal {
               orga = orga.substring(1, orga.length - 1)
               event.content.organizer = orga
             }
-            channelHandler.publish({user: '135dd849-9cb6-466a-9a2b-688ae21b6cdf'}, 'hbg.channel.events.public', event)
+            // TODO this should no be hardcoded
+            channelHandler.publish({user: this.__uid}, 'hbg.channel.events.public', event)
           }
         }
       }

@@ -31,7 +31,7 @@ const Ajv = require('ajv')
 const schemaHandler = require('./model/JsonSchemaHandler')
 const {UUID} = require('./config')
 const proto = require('./model/protos')
-const {dgraphClient} = require('./model/dgraph')
+let {dgraphClient} = require('./model/dgraph')
 const any = require('./model/any')
 
 class ChannelHandler {
@@ -40,6 +40,7 @@ class ChannelHandler {
     this.ajv = new Ajv({allErrors: true})
     this._notificationHandlers = {}
     this._dgraphService = null
+    this.__channelUidCache = {}
   }
 
   init (scServer) {
@@ -75,7 +76,7 @@ class ChannelHandler {
     if (!publication.channel.id) {
       publication.channel = await this.__getObject(publication.channel.uid)
     }
-    if (!publication.actor.username || !publication.actor.name || !publication.actor.color) {
+    if (publication.actor && (!publication.actor.username || !publication.actor.name || !publication.actor.color)) {
       publication.actor = await this.__getObject(publication.actor.uid)
     }
     logger.debug('publishing on channel %s: %s', publication.channel.id, JSON.stringify(modelChange, null, 2))
@@ -90,18 +91,66 @@ class ChannelHandler {
     return this.validateActivity(message)
   }
 
-  async getPublication (uid) {
+  async getActivityByPublicationUid (publicationUid) {
     const query = `query read($a: string){
-        object(func: uid($a)) @filter(eq(baseName, "Publication")) {
-          uid
-          baseName
+        object(func: uid($a)) @filter(eq(baseName, "Publication")) @normalize {
+          publicationUid: uid
+          channel {
+            channelUid: uid
+          } 
           activity {
-            uid
+            activityUid: uid
+            hash: hash
+            content {
+              contentUid: uid
+            }
           }
         }
     }`
-    const res = await dgraphClient.newTxn().queryWithVars(query, {$a: uid})
+    const res = await dgraphClient.newTxn().queryWithVars(query, {$a: publicationUid})
     return res.getJson().object[0]
+  }
+
+  /**
+   * Get activity whith given ref.id that is published in the channel with given uid
+   * @param refId {String}
+   * @param channelUid {String} UID of a channel
+   * @returns {Promise<*>}
+   */
+  async getActivityByRefId (refId, channelUid) {
+    const query = `query read($a: string, $b: string) {
+      object(func: eq(id, $a), first: 1) @cascade @normalize {
+        ~ref @filter(eq(baseName, "Activity")) {
+          activityUid: uid
+          hash: hash
+          content {
+            contentUid: uid
+          }
+         ~activity {
+            publicationUid: uid
+            channel @filter(uid($b)) {
+              channelUid: uid
+            }
+          }
+        }
+      }
+    }`
+    const res = await dgraphClient.newTxn().queryWithVars(query, {$a: refId, $b: channelUid})
+    return res.getJson().object[0]
+  }
+
+  async getChannelUid (channelId) {
+    if (this.__channelUidCache[channelId]) {
+      return this.__channelUidCache[channelId]
+    }
+    const query = `query read($a: string) {
+        object(func: eq(id, $a)) @filter(eq(baseName, "Channel")) {
+          uid
+        }
+    }`
+    const res = await dgraphClient.newTxn().queryWithVars(query, {$a: channelId})
+    this.__channelUidCache[channelId] = res.getJson().object[0].uid
+    return this.__channelUidCache[channelId]
   }
 
   async publish (authToken, channelUid, message) {
@@ -112,19 +161,26 @@ class ChannelHandler {
     } else {
       actorId = authToken.user
     }
+    if (!dgraphClient) {
+      dgraphClient = require('./model/dgraph').dgraphClient
+    }
+    let activity = null
+    if (!channelUid.startsWith('0x')) {
+      // no UID but channel ID -> get it
+      channelUid = await this.getChannelUid(channelUid)
+    }
     if (typeof message === 'string') {
       // publish existing message in channel
-      message = await this.getPublication(message)
-      if (!message) {
+      activity = await this.getActivityByPublicationUid(message)
+      if (!activity) {
         logger.error('invalid publication id given:', message)
         return false
       }
-      message = message.activity[0]
+      activity = activity.activity[0]
     } else {
       const type = message.type
-      delete message.type
       // only allow valid activities to be published
-      if (!this.validate({content: message, type: type})) {
+      if (!this.validate(message)) {
         logger.error('\nNo valid activity: \n  * %s\n-------\n  %o', this.validateActivity.errors.map(x => {
           switch (x.keyword) {
             case 'additionalProperties':
@@ -139,30 +195,58 @@ class ChannelHandler {
 
       // convert into content<Any> schema
       const messageType = proto.plugins[type].Payload
+      const ref = message.hasOwnProperty('ref') ? message.ref : null
+
+      // check if we already have an publication with this ref id in this channel
+      activity = await this.getActivityByRefId(ref.id, channelUid)
+
       message = {
         content: {
           type_url: any.TYPE_URL_TEMPLATE.replace('$ID', type),
-          value: messageType.encode(messageType.fromObject(message)).finish()
+          value: messageType.encode(messageType.fromObject(message.content)).finish()
         }
+      }
+      if (ref) {
+        message.ref = ref
       }
     }
 
     if (!this._dgraphService) {
       this._dgraphService = require('./model/dgraph').dgraphService
     }
-    const publication = {
-      content: 'publication',
-      publication: {
-        channel: {uid: channelUid},
-        activity: message,
-        actor: {uid: actorId}
+    let res = {}
+    if (activity) {
+      message.content.uid = activity.contentUid
+      // update existing activity content
+      res = await this._dgraphService.updateObject(authToken, {
+        content: 'publication',
+        publication: {
+          uid: activity.publicationUid,
+          activity: {
+            uid: activity.activityUid,
+            content: message.content
+          },
+          channel: {
+            uid: activity.channelUid
+          }
+        }
+      })
+    } else {
+      // new publication
+      const publication = {
+        content: 'publication',
+        publication: {
+          channel: {uid: channelUid},
+          activity: message,
+          actor: {uid: actorId}
+        }
       }
+      res = await this._dgraphService.createObject(authToken, publication)
     }
-    const res = await this._dgraphService.createObject(authToken, publication)
     if (res.code === 0) {
       return true
     } else {
-      logger.error('error publishing in channel ' + channelUid + ':' + res.message)
+      logger.error('error publishing in channel ' + channelUid + ': ' + res.message + ' (' + res.code + ')')
     }
   }
 

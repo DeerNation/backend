@@ -16,6 +16,7 @@ const config = require('../config')
 
 const modelSubscriptions = require('./ModelSubscriptions')
 const createHook = require('./hooks/CreateObject')
+const updateHook = require('./hooks/UpdateObject')
 
 const dgraphHost = (config.DGRAPH_HOST || 'localhost') + ':' + (config.DGRAPH_PORT || '9080')
 
@@ -45,13 +46,15 @@ password: password .
 type: string @index(hash) .
 tokenId: string @index(hash) .
 identifier: string @index(hash) .
-created: datetime .
-published: datetime .
+created: datetime @index(month) .
+published: datetime @index(month) .
 allowedActivityTypes: [string] .
 type_url: string .
 value: string .
 published: datetime @index(hour) .
 info: string .
+ref: uid @reverse .
+publication: uid @reverse .
 `
   const op = new dgraph.Operation()
   op.setSchema(schema)
@@ -432,26 +435,51 @@ class DgraphService {
 
   async updateObject (authToken, request) {
     if (authToken !== config.UUID) {
-      const checkResult = this.__crudChecks(authToken, request, acl.action.UPDATE, true)
+      const checkResult = await this.__crudChecks(authToken, request, acl.action.UPDATE, true)
       if (checkResult !== true) {
         return checkResult
       }
     }
+    const object = request[request.content]
+    try {
+      updateHook(true, authToken, request.content, object)
+    } catch (e) {
+      logger.error('Error applying pre UpdateObject hook: ' + e)
+      return {
+        code: e.code || 1,
+        message: e.message
+      }
+    }
+    logger.debug('updateObject: ' + JSON.stringify(object, null, 2))
     const txn = dgraphClient.newTxn()
     try {
       const mu = new dgraph.Mutation()
       mu.setSetJson(request[request.content])
       await txn.mutate(mu)
       await txn.commit()
+
+      // apply post creation hooks
+      try {
+        updateHook(false, authToken, request.content, object)
+      } catch (e) {
+        txn.discard()
+        logger.error('Error applying post UpdateObject hook: ' + e)
+        return {
+          code: e.code || 1,
+          message: e.message
+        }
+      }
+
       modelSubscriptions.notifyListeners(this.__createChangeObject(request, proto.dn.ChangeType.UPDATE))
       return {
-        code: 0
+        code: 0,
+        message: i18n.__('Object has been updated')
       }
     } catch (e) {
       logger.error(e)
       return {
         code: 1,
-        message: '' + e
+        message: '' + e.toString()
       }
     } finally {
       await txn.discard()
@@ -655,6 +683,21 @@ class DgraphService {
 
   getAllowedActionsForRole (authToken, role, topic) {
     return acl.getAllowedActionsForRole(authToken, role, topic)
+  }
+
+  /**
+   * Get UID for given username
+   * @param username
+   * @returns {Promise<*>}
+   */
+  async getActorUid (username) {
+    const query = `query read($a: string) {
+        object(func: eq(username, $a)) @filter(eq(baseName, "Actor")) {
+          uid
+        }
+    }`
+    const res = await dgraphClient.newTxn().queryWithVars(query, {$a: username})
+    return res.getJson().object[0].uid
   }
 }
 

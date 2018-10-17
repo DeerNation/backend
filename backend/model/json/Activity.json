@@ -21,7 +21,8 @@
           "type": "string"
         },
         "original": {
-          "type": "string"
+          "type": "object",
+          "additionalProperties": true
         }
       },
       "required": ["id"],

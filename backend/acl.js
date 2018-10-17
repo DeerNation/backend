@@ -95,14 +95,13 @@ module.exports = {
       ${fragment}
       `
       const res = await this._getDgraphClient().newTxn().queryWithVars(query, {$a: role})
+      logger.debug('Query: %s [$a: %s]', query, role)
       const model = res.getJson()
       // console.log(JSON.stringify(model, null, 2))
       if (model.role.length > 0) {
         aclEntries = model.role[0].entries.filter(entry => {
           return (new RegExp(entry.topic)).test(topic)
         })
-      } else {
-        console.log(query, role)
       }
     } else {
       query = `
@@ -132,10 +131,10 @@ module.exports = {
       query = `query acl($a: string) {
           ${query}
         }` + fragment
-      logger.debug('Query: %s [$a: %s]', query, userId)
       const res = await this._getDgraphClient().newTxn().queryWithVars(query, {$a: userId})
+      logger.debug('Query: %s [$a: %s]', query, userId)
       const model = res.getJson()
-      logger.debug(JSON.stringify(model, null, 2))
+      logger.debug('Model dump: ' + JSON.stringify(model, null, 2))
       if (model.adminRole && model.adminRole.length > 0) {
         const all = Object.values(action).join('')
         acl = {

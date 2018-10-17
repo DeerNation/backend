@@ -152,6 +152,9 @@ class WebhookHandler {
           })
           res.sendStatus(200)
         } else {
+          if (message.ref && !message.ref.type) {
+            message.ref.type = 'web'
+          }
           const isPublished = await channelHandler.publish(authToken, webhook.channelUid, message)
           if (isPublished === false) {
             res.sendStatus(400)
