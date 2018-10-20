@@ -36,6 +36,7 @@ const {TYPE_URL_TEMPLATE} = require('./model/any')
 const {setSchema} = require('./model/dgraph')
 const proto = require('./model/protos')
 const {protoProcessor} = require('./model/ProtoProcessor')
+const {dgraphService} = require('./model/dgraph')
 
 class PluginHandler {
   constructor () {
@@ -109,6 +110,11 @@ class PluginHandler {
     const schema = protoProcessor.getSchemaDefinition(proto.plugins[id].Payload)
     if (schema) {
       setSchema(schema)
+    }
+
+    if (manifest.provides.hasOwnProperty('queryHandler')) {
+      const handlerFiler = path.join(pluginDir, manifest.provides.queryHandler)
+      dgraphService.registerPayloadQueryHandler(id, require(handlerFiler))
     }
   }
 }

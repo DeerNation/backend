@@ -9,7 +9,7 @@ channel: uid @reverse .
 ref: uid @reverse .
 publication: uid @reverse .
 activity: uid @reverse .
-payload: uid .`
+payload: uid @reverse .`
 
 // common edges
 schema += `

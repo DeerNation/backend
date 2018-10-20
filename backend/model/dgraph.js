@@ -97,6 +97,56 @@ fillDb()
  * dn.Com service implementation
  */
 class DgraphService {
+  constructor () {
+    this.__payloadQueryHandlers = {}
+  }
+
+  /**
+   * Register a handler function that returns information about query options, filters and a list of properties to query.
+   *
+   * handler function should look like this
+   * ```javascript
+   *
+   * function (channelRequest, protoProcessor) {
+   *   ...
+   *   return {
+   *     options: <query options>,
+   *     filter: <query filter>
+   *     properties: []
+   *   }
+   * }
+   *
+   * ```
+   *
+   * @param payloadId {String} payload id
+   * @param queryHandler {Function} handler that generates a query for the given payload
+   */
+  registerPayloadQueryHandler (payloadId, queryHandler) {
+    this.__payloadQueryHandlers[payloadId] = queryHandler
+  }
+
+  /**
+   * Unregister a query handler function for a payloadId.
+   * @param payloadId {String}
+   */
+  unregisterPayloadQueryHandler (payloadId) {
+    if (this.__payloadQueryHandlers.hasOwnProperty(payloadId)) {
+      delete this.__payloadQueryHandlers[payloadId]
+    }
+  }
+
+  getPayloadQueryOptions (channelRequest) {
+    let payloadQueryOptions
+    if (channelRequest.hasOwnProperty('payloadFilter') && channelRequest.payloadFilter &&
+      channelRequest.payloadFilter.type &&
+      this.__payloadQueryHandlers.hasOwnProperty(channelRequest.payloadFilter.type)
+    ) {
+      payloadQueryOptions = this.__payloadQueryHandlers[channelRequest.payloadFilter.type](channelRequest.payloadFilter, protoProcessor)
+    }
+
+    return payloadQueryOptions
+  }
+
   async getModel (authToken, request, respond, options) {
     // TODO: remove listeners when the socket gets lost, the stream gets closed etc.
     let addQuery = ''
@@ -195,6 +245,31 @@ class DgraphService {
     return model
   }
 
+  getPublicationQueryPart (payloadPart) {
+    if (!payloadPart) {
+      payloadPart = `uid
+        expand(_all_)`
+    }
+    return `uid
+      published
+      master
+      activity {
+        uid
+        hash
+        created
+        payload {
+          ${payloadPart}
+        }
+      }
+      actor {
+        uid
+        username
+        name
+        color
+      }      
+`
+  }
+
   async getChannelModel (authToken, request) {
     if (!request.channelId || !request.uid) {
       throw new Error('invalid request')
@@ -220,31 +295,49 @@ class DgraphService {
     }
 
     if (activityActions.actions.includes('r')) {
-      const query = `query channelModel($a: string) {
-       channel(func: uid($a)) {
-        id
-        publications : ~channel (${options}) @filter(${filter}) {
+      let query
+      const payloadQueryOptions = this.getPayloadQueryOptions(request)
+      if (payloadQueryOptions) {
+        let options = payloadQueryOptions.options ? ', ' + payloadQueryOptions.options : ''
+        let filter = payloadQueryOptions.filter ? ' @filter(' + payloadQueryOptions.filter + ')' : ''
+        let payloadPart = null
+        if (payloadQueryOptions.properties) {
+          if (!payloadQueryOptions.properties.includes('baseName')) {
+            payloadQueryOptions.properties.push('baseName')
+          }
+          payloadPart = payloadQueryOptions.properties.filter(name => /^[0-9a-z.-_]+$/i.test(name)).join('\n          ')
+        }
+        // TODO: sanitize options, filter
+
+        query = `
+query channelModel($a: string) {
+  var(func: eq(baseName, "payload.${request.payloadFilter.type}")${options})${filter} {
+    uid
+    activities: ~payload @filter(eq(baseName, "Activity")) {
+      uid
+      PUBS AS ~activity @filter(eq(baseName, "Publication")) {
+        channel @filter(uid($a)) {
           uid
-          published
-          master
-          activity {
-            uid
-            hash
-            created
-            payload {
-              uid
-              expand(_all_)
-            }
-          }
-          actor {
-            uid
-            username
-            name
-            color
-          }
         }
       }
-    }`
+    }
+  }
+  
+  publications(func: uid(PUBS)) {
+      ${this.getPublicationQueryPart(payloadPart)}
+  }
+}
+`
+      } else {
+        query = `
+query channelModel($a: string) {
+  channel(func: uid($a)) {
+    publications : ~channel (${options}) @filter(${filter}) {
+      ${this.getPublicationQueryPart()}
+    }
+  }
+}`
+      }
       logger.debug('channelModel query [channelUid: ' + request.uid + ']: ' + query)
       let res
       try {
@@ -253,10 +346,12 @@ class DgraphService {
         logger.error('error querying channel model: ' + e.toString())
         return result
       }
-      if (res.getJson().channel[0].id !== request.channelId) {
-        throw new Error('invalid request')
+      const data = res.getJson()
+      if (data.hasOwnProperty('channel')) {
+        result.publications = data.channel[0].publications
+      } else {
+        result.publications = data.publications
       }
-      result.publications = res.getJson().channel[0].publications
       if (reverse && result.publications) {
         result.publications = result.publications.reverse()
       }

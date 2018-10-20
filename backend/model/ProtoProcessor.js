@@ -120,6 +120,23 @@ class ProtoProcessor {
   }
 
   /**
+   * Returns a list of edge names used by the proto message.
+   * @param type {String}
+   * @returns {string[]}
+   */
+  getEdgeNames (type) {
+    const protoMessage = proto.plugins[type].Payload
+    const prefix = this.__getPrefix(protoMessage)
+    let names = ['uid']
+    protoMessage.fieldsArray.forEach(fieldDef => {
+      if (fieldDef.name !== 'uid') {
+        names.push(prefix + fieldDef.name)
+      }
+    })
+    return names
+  }
+
+  /**
    * Extracts schema definitions (including indices) for a field in the proto message definition
    * @param protoMessage {Object} proto definition
    * @param fieldName {String?} if set: return schema definition only for this field, otherwise: return for all fields
