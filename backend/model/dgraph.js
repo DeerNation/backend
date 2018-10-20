@@ -14,7 +14,7 @@ const defaultData = require('./default-graph-data')
 const logger = require('../logger')(__filename)
 const config = require('../config')
 const globalSchema = require('./globalSchema')
-
+const {protoProcessor} = require('./ProtoProcessor')
 const modelSubscriptions = require('./ModelSubscriptions')
 const createHook = require('./hooks/CreateObject')
 const updateHook = require('./hooks/UpdateObject')
@@ -200,8 +200,11 @@ class DgraphService {
       throw new Error('invalid request')
     }
     const result = {}
-    result.channelActions = await acl.getAllowedActions(authToken, request.channelId)
-    result.activityActions = await acl.getAllowedActions(authToken, request.channelId + '.activities')
+    const activityActions = await acl.getAllowedActions(authToken, request.channelId + '.activities')
+    if (!request.publicationsOnly) {
+      result.channelActions = await acl.getAllowedActions(authToken, request.channelId)
+      result.activityActions = activityActions
+    }
     let options = 'orderasc: published'
     let reverse = false
     if (request.limit) {
@@ -209,11 +212,14 @@ class DgraphService {
       reverse = true
     }
     let filter = 'has(published)'
-    if (request.date) {
-      filter += ` AND ge(published, "${request.date}")`
+    if (request.fromDate) {
+      filter += ` AND ge(published, "${request.fromDate}")`
+    }
+    if (request.toDate) {
+      filter += ` AND lt(published, "${request.toDate}")`
     }
 
-    if (result.activityActions.actions.includes('r')) {
+    if (activityActions.actions.includes('r')) {
       const query = `query channelModel($a: string) {
        channel(func: uid($a)) {
         id
@@ -226,6 +232,7 @@ class DgraphService {
             hash
             created
             payload {
+              uid
               expand(_all_)
             }
           }
@@ -238,7 +245,14 @@ class DgraphService {
         }
       }
     }`
-      const res = await dgraphClient.newTxn().queryWithVars(query, {$a: request.uid})
+      logger.debug('channelModel query [channelUid: ' + request.uid + ']: ' + query)
+      let res
+      try {
+        res = await dgraphClient.newTxn().queryWithVars(query, {$a: request.uid})
+      } catch (e) {
+        logger.error('error querying channel model: ' + e.toString())
+        return result
+      }
       if (res.getJson().channel[0].id !== request.channelId) {
         throw new Error('invalid request')
       }
@@ -253,9 +267,9 @@ class DgraphService {
           delete pub.activity.actor
           delete pub.activity.baseName
           pub.actor = pub.actor[0]
-          if (pub.activity.content) {
-            pub.activity.content = pub.activity.content[0]
-            pub.activity.content.value = any.convertFromModel(pub.activity.content)
+          if (pub.activity.payload) {
+            pub.activity.payload = protoProcessor.modelToAny(pub.activity.payload[0])
+            pub.activity.payload.value = any.convertFromModel(pub.activity.payload)
           }
         })
       }

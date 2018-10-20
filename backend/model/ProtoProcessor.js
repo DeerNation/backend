@@ -30,6 +30,9 @@ class ProtoProcessor {
       throw Error('no proto definition found for proto.plugins.' + type + '.Payload')
     }
     const payload = this.toDb(proto.plugins[type].Payload, value)
+    if (content.uid) {
+      payload.uid = content.uid
+    }
     payload.baseName = 'payload.' + type
     return payload
   }

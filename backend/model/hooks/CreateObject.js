@@ -62,7 +62,7 @@ function preCreatePublication (authToken, publication, uidMappers) {
   }
   const content = publication.activity.payload
   const raw = content.value
-  logger.debug('RAW:' + JSON.stringify(content.value, null, 2))
+  logger.debug('RAW:' + JSON.stringify(raw))
   publication.activity.payload.value = any.convertToModel(content)
   logger.debug('CONVERTED:' + JSON.stringify(publication.activity.payload, null, 2))
 

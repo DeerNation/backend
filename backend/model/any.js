@@ -3,7 +3,6 @@
  * Used for activity content payloads defined by plugins.
  */
 const proto = require('./protos')
-
 const typeRegex = /^app.hirschberg-sauerland.de\/protos\/app\.plugins\.([a-z]+)\.Payload/
 
 function getType (typeUrl) {
