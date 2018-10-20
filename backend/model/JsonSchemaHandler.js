@@ -44,12 +44,12 @@ class JsonSchemaHandler {
     return this.__schemes[name]
   }
 
-  registerActivityContent (content) {
-    Object.keys(content).forEach(name => {
-      const refs = this.__schemes.Activity.properties.content.oneOf
+  registerActivityContent (payload) {
+    Object.keys(payload).forEach(name => {
+      const refs = this.__schemes.Activity.properties.payload.oneOf
       let exists = false
       refs.some(ref => {
-        if (ref['$ref'] === '#/contentTypes/' + name) {
+        if (ref['$ref'] === '#/payloadTypes/' + name) {
           exists = true
           return true
         }
@@ -57,9 +57,9 @@ class JsonSchemaHandler {
       if (exists) {
         throw new Error('Content already registered')
       }
-      logger.debug('registering content schema for %s', name)
-      refs.push({'$ref': '#/contentTypes/' + name})
-      this.__schemes.Activity.contentTypes[name] = content[name]
+      logger.debug('registering payload schema for %s', name)
+      refs.push({'$ref': '#/payloadTypes/' + name})
+      this.__schemes.Activity.payloadTypes[name] = payload[name]
     })
   }
 }

@@ -95,7 +95,7 @@ module.exports = {
       ${fragment}
       `
       const res = await this._getDgraphClient().newTxn().queryWithVars(query, {$a: role})
-      logger.debug('Query: %s [$a: %s]', query, role)
+      // logger.debug('Query: %s [$a: %s]', query, role)
       const model = res.getJson()
       // console.log(JSON.stringify(model, null, 2))
       if (model.role.length > 0) {
@@ -132,9 +132,9 @@ module.exports = {
           ${query}
         }` + fragment
       const res = await this._getDgraphClient().newTxn().queryWithVars(query, {$a: userId})
-      logger.debug('Query: %s [$a: %s]', query, userId)
+      // logger.debug('Query: %s [$a: %s]', query, userId)
       const model = res.getJson()
-      logger.debug('Model dump: ' + JSON.stringify(model, null, 2))
+      // logger.debug('Model dump: ' + JSON.stringify(model, null, 2))
       if (model.adminRole && model.adminRole.length > 0) {
         const all = Object.values(action).join('')
         acl = {

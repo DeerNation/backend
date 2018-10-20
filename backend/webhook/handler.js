@@ -28,7 +28,6 @@ const {dgraphClient, dgraph} = require('../model/dgraph')
 const channelHandler = require('../ChannelHandler')
 const acl = require('../acl')
 const fs = require('fs')
-const config = require('../config')
 
 class WebhookHandler {
   constructor () {
@@ -198,7 +197,7 @@ class WebhookHandler {
                     if (Object.keys(content).length > 0) {
                       activities.push({
                         type: 'message',
-                        content: content,
+                        payload: content,
                         ref: {
                           type: 'facebook',
                           id: change.value.post_id,

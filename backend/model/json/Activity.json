@@ -1,13 +1,13 @@
 {
   "title": "Activity",
   "type": "object",
-  "required": ["content", "type"],
+  "required": ["payload", "type"],
   "additionalProperties": false,
   "properties": {
     "type": {
       "type": "string"
     },
-    "content": {
+    "payload": {
       "type": "object",
       "oneOf": [
       ]
@@ -29,6 +29,6 @@
       "additionalProperties": false
     }
   },
-  "contentTypes": {
+  "payloadTypes": {
   }
 }

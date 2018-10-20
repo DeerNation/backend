@@ -71,7 +71,7 @@ class ICal {
           if (ev.type === 'VEVENT' && ev.start >= now) {
             let event = {
               type: 'event',
-              content: {
+              payload: {
                 name: ev.summary,
                 start: moment(ev.start).format(),
                 end: moment(ev.end).format()
@@ -83,13 +83,13 @@ class ICal {
               }
             }
             if (ev.description) {
-              event.content.description = ev.description
+              event.payload.description = ev.description
             }
             if (ev.categories) {
-              event.content.categories = ev.categories
+              event.payload.categories = ev.categories
             }
             if (ev.location) {
-              event.content.location = ev.location
+              event.payload.location = ev.location
             }
             if (ev.hasOwnProperty('organizer')) {
               let orga = ev.organizer.params.CN.trim()
@@ -100,7 +100,7 @@ class ICal {
                 orga = orga.substring(0, orga.length - 1)
               }
               orga = orga.substring(1, orga.length - 1)
-              event.content.organizer = orga
+              event.payload.organizer = orga
             }
             // TODO this should no be hardcoded
             channelHandler.publish({user: this.__uid}, 'hbg.channel.events.public', event)
@@ -108,7 +108,7 @@ class ICal {
         }
       }
     }).catch(err => {
-      logger.error(err);
+      logger.error(err)
     })
   }
 }

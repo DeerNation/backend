@@ -61,78 +61,47 @@ package Authentication <<Frame>> {
     Subscription "n" *-- "1" Actor
     Webhook "1" *-- "n" Actor : post for
 
-    class Group {
-        owner: Actor
-        members: Actor[]
-        channels: Channel[]
-    }
-    Actor <|-- Group
-    Group "0..1" *-- "n" Channel : belongs to
-    Group "0..1" *-- "n" Actor : is member of
+'    class Group {
+'        owner: Actor
+'        members: Actor[]
+'        channels: Channel[]
+'    }
+'    Actor <|-- Group
+'    Group "0..1" *-- "n" Channel : belongs to
+'    Group "0..1" *-- "n" Actor : is member of
 
 }
 
 package Authorization <<Frame>> {
 
-    class Role {
+    class AclRole {
         id: String
-        name: String
-        acls: Acl[]
-        superuser: Boolean
+        weight: Integer
+        parent: AclRole
     }
 
-    class Acl {
-        id: String
-        role: Role
-        entityType: [Channel|ChannelMessage|Webhook|Actor|?]
-        entityId: String,
-        actions: Bitmask [crudo]
+    class AclEntry {
+        topic: String
+        actions: String
+        memberActions: String
+        ownerActions: String
+        roleTarget: Role
     }
-    note left of Acl
-     c=create channel/publish message
-     r=subscribe channel/read channel settings
-     u=update message/channel settings
-     d=delete message/channel
-     o=apply acl only to owner
-     g=apply acl on behalf of group
+
+    note left of AclEntry
+     c=create Object
+     r=read Object
+     u=update Object
+     d=delete Object
+     x=execute RPC
+     e=enter Channel
+     l=leave Channel
+     p=publish in Channel
     end note
 
-    Acl "n" *-- "1" Actor : associated to
-    Acl "n" *-- "1" Channel : associated to
+    AclEntry "n" *-- "1" AclRole : associated to
 }
 
-package Messages <<Frame>> {
-    class Activity {
-        id: String
-        title: String
-        content: String
-        created: Date
-        published: Date
-        channel: Channel
-        creator: Actor
-        hash: String
-    }
 
-    Activity "1" *-- "n" Channel : belongs to
-    Activity "1" *-- "n" Actor : created by
-
-    class Event {
-        start: Date
-        end: Date
-        location: String
-        categories: String[]
-        organizer: String
-    }
-
-    class Attachment {
-        id: String
-        type: String (Mime-type)
-        blob: Buffer
-    }
-
-    Activity "1..n" *-- "n" Attachment : has
-    Activity <|-- Event
-
-}
 
 @enduml

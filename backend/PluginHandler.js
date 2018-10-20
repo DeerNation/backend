@@ -33,6 +33,9 @@ const schemaHandler = require('./model/JsonSchemaHandler')
 const channelHandler = require('./ChannelHandler')
 const config = require('./config')
 const {TYPE_URL_TEMPLATE} = require('./model/any')
+const {setSchema} = require('./model/dgraph')
+const proto = require('./model/protos')
+const {protoProcessor} = require('./model/ProtoProcessor')
 
 class PluginHandler {
   constructor () {
@@ -100,6 +103,12 @@ class PluginHandler {
     if (manifest.provides.hasOwnProperty('notification')) {
       const notificationFile = path.join(pluginDir, manifest.provides.notification)
       channelHandler.registerNotificationHandler(TYPE_URL_TEMPLATE.replace('$ID', id), require(notificationFile))
+    }
+
+    // apply schema for plugin
+    const schema = protoProcessor.getSchemaDefinition(proto.plugins[id].Payload)
+    if (schema) {
+      setSchema(schema)
     }
   }
 }

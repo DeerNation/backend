@@ -101,8 +101,8 @@ class ChannelHandler {
           activity {
             activityUid: uid
             hash: hash
-            content {
-              contentUid: uid
+            payload {
+              payloadUid: uid
             }
           }
         }
@@ -123,8 +123,8 @@ class ChannelHandler {
         ~ref @filter(eq(baseName, "Activity")) {
           activityUid: uid
           hash: hash
-          content {
-            contentUid: uid
+          payload {
+            payloadUid: uid
           }
          ~activity {
             publicationUid: uid
@@ -201,9 +201,9 @@ class ChannelHandler {
       activity = await this.getActivityByRefId(ref.id, channelUid)
 
       message = {
-        content: {
+        payload: {
           type_url: any.TYPE_URL_TEMPLATE.replace('$ID', type),
-          value: messageType.encode(messageType.fromObject(message.content)).finish()
+          value: messageType.encode(messageType.fromObject(message.payload)).finish()
         }
       }
       if (ref) {
@@ -216,7 +216,7 @@ class ChannelHandler {
     }
     let res = {}
     if (activity) {
-      message.content.uid = activity.contentUid
+      message.payload.uid = activity.payloadUid
       // update existing activity content
       res = await this._dgraphService.updateObject(authToken, {
         content: 'publication',
@@ -224,7 +224,7 @@ class ChannelHandler {
           uid: activity.publicationUid,
           activity: {
             uid: activity.activityUid,
-            content: message.content
+            payload: message.payload
           },
           channel: {
             uid: activity.channelUid
@@ -276,9 +276,9 @@ class ChannelHandler {
       })
     }
 
-    if (this._notificationHandlers.hasOwnProperty(publication.activity.content.type_url)) {
-      const handler = this._notificationHandlers[publication.activity.content.type_url]
-      const message = publication.activity.content.value
+    if (this._notificationHandlers.hasOwnProperty(publication.activity.payload.type_url)) {
+      const handler = this._notificationHandlers[publication.activity.payload.type_url]
+      const message = publication.activity.payload.value
       let {phrase, content, image} = handler(message)
 
       if (content) {
@@ -293,10 +293,10 @@ class ChannelHandler {
           locale: actor.locale || 'en'
         }, publication.channel.title), content, options)
       } else {
-        logger.error('handler for ' + publication.activity.content.type_url + ' did not return valid content to send.')
+        logger.error('handler for ' + publication.activity.payload.type_url + ' did not return valid content to send.')
       }
     } else {
-      logger.error('no notification handler registered for content type:' + publication.activity.content.type_url)
+      logger.error('no notification handler registered for content type:' + publication.activity.payload.type_url)
     }
   }
 }

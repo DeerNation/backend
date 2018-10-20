@@ -27,7 +27,7 @@ module.exports = {
       throw new Error('no type found for type_url: ' + content.type_url)
     }
     const messageType = proto.plugins[type].Payload
-    return messageType.encode(messageType.fromObject(JSON.parse(content.value))).finish()
+    return messageType.encode(messageType.fromObject(content.value)).finish()
   },
 
   /**
@@ -41,5 +41,7 @@ module.exports = {
     }
     const messageType = proto.plugins[type].Payload
     return JSON.stringify(messageType.toObject(messageType.decode(content.value)))
-  }
+  },
+
+  getType: getType
 }

@@ -60,7 +60,7 @@ class Worker extends SCWorker {
     // TODO: do not do this hard-coded, make it confugurable via GUI instead
     let iCal = new ICal('https://www.hirschberg-sauerland.de/index.php?id=373&type=150&L=0&tx_cal_controller%5Bcalendar%5D=1&tx_cal_controller%5Bview%5D=ics&cHash=b1aa5a58b6552eaba4eae2551f8d6d75', 'hirschberg')
     logger.debug('Installing iCal importer cronjob')
-    cron.schedule('0 0 * * * *', iCal.update.bind(iCal), true)
+    cron.schedule('0 */2 * * * *', iCal.update.bind(iCal), true)
 
     // start listening on changes to Activities
     channelHandler.start()

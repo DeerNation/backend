@@ -1,0 +1,66 @@
+@startuml
+
+class Channel
+class Actor
+
+package Messages <<Frame>> {
+    class Publication {
+        uid: Uid
+        actor: Actor
+        channel: Channel
+        activity: Activity
+        published: Date
+        master: Boolean
+    }
+
+    Publication "n" *-- "1" Channel : published in
+    Publication "n" *-- "1" Actor : published by
+
+    class Activity {
+        uid: Uid
+        created: Date
+        hash: Integer
+        actor: Actor
+        ref: ExternalRef
+        master: Boolean
+        content: Any
+    }
+
+    class ExternalRef {
+        id: String,
+        type: String,
+        original: Object
+    }
+
+    Publication <|-- Activity
+    Publication <|-- ExternalRef
+
+    class Message {
+        content: string
+    }
+
+    Activity "1" *-- "n" Actor : created by
+
+    class Event {
+        name: String
+        location: String
+        start: Date
+        end: Date
+        categories: String[]
+        organizer: String
+        description: String
+    }
+
+'    class Attachment {
+'        id: String
+'        type: String (Mime-type)
+'        blob: Buffer
+'    }
+
+'    Activity "1..n" *-- "n" Attachment : has
+    Activity <|-- Event
+    Activity <|-- Message
+
+}
+
+@enduml

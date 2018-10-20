@@ -11,6 +11,7 @@ const {hash} = require('../../util')
 const channelHandler = require('../../ChannelHandler')
 const any = require('../any')
 const logger = require('../../logger')(__filename)
+const {protoProcessor} = require('../ProtoProcessor')
 
 function preCreateSubscription (authToken, object, uidMappers) {
   // if channel is new, we need to add some data to it
@@ -56,14 +57,14 @@ function postCreateSubscription (authToken, object, uidMappers) {
  * @param uidMappers [Map}
  */
 function preCreatePublication (authToken, publication, uidMappers) {
-  if (!publication.activity || !publication.activity.content || !publication.activity.content.value) {
+  if (!publication.activity || !publication.activity.payload || !publication.activity.payload.value) {
     throw new ResponseException(1, i18n.__('Creating a publication without content is not possible!'))
   }
-  const content = publication.activity.content
+  const content = publication.activity.payload
   const raw = content.value
   logger.debug('RAW:' + JSON.stringify(content.value, null, 2))
-  publication.activity.content.value = any.convertToModel(content)
-  logger.debug('CONVERTED:' + JSON.stringify(publication.activity.content, null, 2))
+  publication.activity.payload.value = any.convertToModel(content)
+  logger.debug('CONVERTED:' + JSON.stringify(publication.activity.payload, null, 2))
 
   if (!publication.activity.uid) {
     publication.activity.uid = '_:activity'
@@ -76,6 +77,10 @@ function preCreatePublication (authToken, publication, uidMappers) {
   if (!content.value && !content.uid) {
     throw new ResponseException(1, i18n.__('Creating a publication without content is not possible!'))
   }
+
+  // prepare content model to DB-model by mapping type_url to baseName and converting the model
+  publication.activity.payload = protoProcessor.anyToModel(publication.activity.payload)
+
   publication.actor = {uid: authToken.user}
   if (!publication.channel) {
     throw new ResponseException(1, i18n.__('Creating a publication without a channel reference is not possible!'))
@@ -108,11 +113,11 @@ function preCreatePublication (authToken, publication, uidMappers) {
 
 function postCreatePublication (authToken, publication, uidMappers) {
   logger.debug('running post create publication hook')
-  const content = Object.assign({}, publication.activity.content)
   publication.published = publication.published.toISOString()
   publication.activity.created = publication.activity.created.toISOString()
-  // parse JSON to let the notification handlers work with the content
-  publication.activity.content.value = JSON.parse(content.value)
+
+  // convert DB model content to one that can be processed by a proto message
+  publication.activity.payload = protoProcessor.modelToAny(publication.activity.payload)
 
   // parse ExternalRef
   if (publication.activity.ref && publication.activity.ref.original) {
@@ -123,7 +128,7 @@ function postCreatePublication (authToken, publication, uidMappers) {
   recursiveRemoveProperty(publication, 'baseName')
 
   // encode again to be able to send it to the clients
-  // publication.activity.content.value = any.convertFromModel(content)
+  // publication.activity.payload.value = any.convertFromModel(content)
   channelHandler.sendNotification(authToken, publication)
 }
 

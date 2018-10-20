@@ -13,6 +13,7 @@ const i18n = require('i18n')
 const defaultData = require('./default-graph-data')
 const logger = require('../logger')(__filename)
 const config = require('../config')
+const globalSchema = require('./globalSchema')
 
 const modelSubscriptions = require('./ModelSubscriptions')
 const createHook = require('./hooks/CreateObject')
@@ -34,28 +35,8 @@ const dgraphClient = new dgraph.DgraphClient(clientStub)
 //   dgraphClient.setDebugMode(true)
 // }
 
-async function setSchema () {
-  logger.debug('applying schema')
-  const schema = `id: string @index(hash) @upsert .
-baseName: string @index(exact) .  
-actor: uid @reverse .
-roleTarget: uid @reverse .
-channel: uid @reverse .
-username: string @index(hash) @upsert .
-password: password .
-type: string @index(hash) .
-tokenId: string @index(hash) .
-identifier: string @index(hash) .
-created: datetime @index(month) .
-published: datetime @index(month) .
-allowedActivityTypes: [string] .
-type_url: string .
-value: string .
-published: datetime @index(hour) .
-info: string .
-ref: uid @reverse .
-publication: uid @reverse .
-`
+async function setSchema (schema) {
+  logger.debug('applying schema: ' + schema)
   const op = new dgraph.Operation()
   op.setSchema(schema)
   await dgraphClient.alter(op)
@@ -63,7 +44,7 @@ publication: uid @reverse .
 }
 
 async function fillDb () {
-  await setSchema()
+  await setSchema(globalSchema)
 
   // check if DB is empty
   const query = `{
@@ -244,9 +225,8 @@ class DgraphService {
             uid
             hash
             created
-            content {
-              type_url
-              value
+            payload {
+              expand(_all_)
             }
           }
           actor {
@@ -258,7 +238,6 @@ class DgraphService {
         }
       }
     }`
-      console.log(request.uid, query)
       const res = await dgraphClient.newTxn().queryWithVars(query, {$a: request.uid})
       if (res.getJson().channel[0].id !== request.channelId) {
         throw new Error('invalid request')
@@ -706,5 +685,6 @@ const dgraphService = new DgraphService()
 module.exports = {
   dgraph: dgraph,
   dgraphClient: dgraphClient,
-  dgraphService: dgraphService
+  dgraphService: dgraphService,
+  setSchema: setSchema
 }
