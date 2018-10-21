@@ -16,6 +16,12 @@ class ProtoProcessor {
     this.__tagRegex = /([^=]+)="([^"]+)"/g
   }
 
+  /**
+   * Convert the (deserialized) content of an "any"-type message (consists of a type_url and a value, which can be either
+   * an object or an object as JSON string) into a model that can be saved into the database.
+   * @param content {{type_url: string, value: Map|String}}
+   * @returns {Map}
+   */
   anyToModel (content) {
     if (!content || !content.type_url) {
       logger.error('content format error: %o', content)
@@ -37,6 +43,11 @@ class ProtoProcessor {
     return payload
   }
 
+  /**
+   * Converts a model read from the datebase into an object that can be used as source for an "any" type message.
+   * @param model {Map} model read from database
+   * @returns {{type_url: string, value: Map}}
+   */
   modelToAny (model) {
     const type = model.baseName.replace(/^payload\./, '').toLowerCase()
     if (!proto.plugins[type] || !proto.plugins[type].Payload) {
@@ -137,6 +148,57 @@ class ProtoProcessor {
   }
 
   /**
+   * Generates a DGraph schema definition from a complete proto namespace
+   * @param protoNamespace
+   */
+  getNamespaceSchemaDefinition (protoNamespace) {
+    let schema = {}
+    Object.keys(protoNamespace)
+      .map(item => protoNamespace[item])
+      .filter(item => item && item.constructor.className === 'Type')
+      .forEach(protoMessage => {
+        const fields = Object.keys(protoMessage.fields).filter(name => name !== 'uid')
+        fields.forEach(fieldName => {
+          const fieldDefinition = protoMessage.fields[fieldName]
+          const tags = this.__getTags(fieldDefinition)
+          tags.$$source = protoMessage.fullName
+          const edgeName = tags.db ? tags.db : fieldName
+          if (tags.type === undefined) {
+            throw new SchemaMergeConflict('type required for edge: "' + edgeName + '", defined in ' + tags.$$source)
+          }
+          if (!schema.hasOwnProperty(edgeName)) {
+            schema[edgeName] = tags
+          } else {
+            // check
+            if (schema[edgeName].type !== tags.type) {
+              throw new SchemaMergeConflict(
+                'type mismatch for edge "' + edgeName + '". Defined in ' + schema[edgeName].$$source + ' as type "' + schema[edgeName].type + '" and in ' +
+                tags.$$source + ' as type "' + tags.type + '"'
+              )
+            }
+            if (schema[edgeName].index && schema[edgeName].index !== tags.index) {
+              throw new SchemaMergeConflict(
+                'index mismatch for edge "' + edgeName + '". Defined in ' + schema[edgeName].$$source + ' as "' + schema[edgeName].index + '" and in ' +
+                tags.$$source + ' as "' + tags.index + '"'
+              )
+            }
+            // merge (use true bool values to override)
+            if (tags.reverse) {
+              schema[edgeName].reverse = tags.reverse
+            }
+            if (tags.upsert) {
+              schema[edgeName].upsert = tags.upsert
+            }
+          }
+        })
+      })
+    let names = Object.keys(schema).sort()
+    return names.map(name => {
+      return `${name}: ${schema[name].type}${schema[name].index ? ' @index(' + schema[name].index + ')' : ''}${schema[name].reverse ? ' @reverse' : ''}${schema[name].upsert ? ' @upsert' : ''} .`
+    }).join('\n')
+  }
+
+  /**
    * Extracts schema definitions (including indices) for a field in the proto message definition
    * @param protoMessage {Object} proto definition
    * @param fieldName {String?} if set: return schema definition only for this field, otherwise: return for all fields
@@ -148,18 +210,22 @@ class ProtoProcessor {
     let schema = []
     fields.forEach(fieldName => {
       const fieldDefinition = protoMessage.fields[fieldName]
-      let type = this.__mapProtoTypesToDgraph(fieldDefinition.type)
       let indexDefinition = ''
-      if (fieldDefinition.options && fieldDefinition.options['(dn).tags']) {
-        const tags = this.__parseTags(fieldDefinition.options['(dn).tags'])
-        if (tags.hasOwnProperty('type') && tags.type) {
-          type = tags.type
-        }
-        if (tags.hasOwnProperty('index') && tags.index) {
-          indexDefinition = ` @index(${tags.index})`
-        }
+      const tags = this.__getTags(fieldDefinition)
+      if (tags.index) {
+        indexDefinition = ` @index(${tags.index})`
       }
-      let index = `${fieldName}: ${type}${indexDefinition} .`
+      if (tags.reverse) {
+        indexDefinition = ' @reverse'
+      }
+      if (tags.upsert) {
+        indexDefinition = ' @upsert'
+      }
+      if (tags.db) {
+        fieldName = tags.db
+      }
+      let type = tags.type
+      let index = `${fieldName}: ${tags.type}${indexDefinition} .`
       if (prefix) {
         index = prefix + index
       }
@@ -167,6 +233,30 @@ class ProtoProcessor {
     })
 
     return schema.join('\n')
+  }
+
+  __getTags (fieldDefinition) {
+    let result = {
+      type: this.__mapProtoTypesToDgraph(fieldDefinition.type)
+    }
+    if (fieldDefinition.options && fieldDefinition.options['(dn).tags']) {
+      const tags = this.__parseTags(fieldDefinition.options['(dn).tags'])
+      if (tags.hasOwnProperty('db') && tags.db) {
+        result.db = tags.db
+      }
+      if (tags.hasOwnProperty('type') && tags.type) {
+        result.type = tags.type
+      }
+      if (tags.hasOwnProperty('index') && tags.index) {
+        result.index = tags.index
+      }
+      result.reverse = tags.hasOwnProperty('reverse') && tags.reverse === 'true'
+      result.upsert = tags.hasOwnProperty('upsert') && tags.upsert === 'true'
+    }
+    if (fieldDefinition.repeated && result.type !== 'uid') {
+      result.type = `[${result.type}]`
+    }
+    return result
   }
 
   __getPrefix (protoMessage) {
@@ -212,7 +302,7 @@ class ProtoProcessor {
       case 'fixed64':
       case 'sfixed32':
       case 'sfixed64':
-        return 'int64'
+        return 'int'
 
       case 'bool':
         return 'bool'
@@ -222,6 +312,9 @@ class ProtoProcessor {
 
 const protoProcessor = new ProtoProcessor()
 
+class SchemaMergeConflict extends Error {}
+
 module.exports = {
-  protoProcessor: protoProcessor
+  protoProcessor: protoProcessor,
+  SchemaMergeConflict: SchemaMergeConflict
 }

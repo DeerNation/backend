@@ -14,40 +14,43 @@ const model = Object.assign({}, rawModel)
 const messageType = proto.plugins.message.Payload
 model.value = messageType.encode(messageType.fromObject(rawModel.value)).finish()
 
-const eventStartSchema = protoProcessor.getSchemaDefinition(proto.plugins.event.Payload)
-console.log('Schema definition for event->start: ', eventStartSchema)
+const modelSchema = protoProcessor.getNamespaceSchemaDefinition(proto.dn.model.Activity.parent)
+console.log('Schema definition for dn.model: ', modelSchema)
 
-const eventFragment = protoProcessor.getFragment(proto.plugins.event.Payload, 'Event', 'event')
-console.log('Event Fragment:')
-console.log(eventFragment)
-
-let sourceModel = {
-  uid: '0x1',
-  start: new Date(),
-  end: new Date(),
-  name: 'test',
-  description: 'small test'
-}
-
-let anyModel = protoProcessor.anyToModel(rawModel)
-console.log('Any model: ', anyModel)
-let modelAny = protoProcessor.modelToAny(anyModel)
-console.log('model any: ', modelAny)
-
-let dbModel = protoProcessor.toDb(proto.plugins.event.Payload, sourceModel)
-console.log('DB model: ', dbModel)
-let protoModel = protoProcessor.fromDb(proto.plugins.event.Payload, dbModel)
-console.log('Proto model: ', protoModel)
-
-sourceModel = {
-  uid: '0x1',
-  content: 'some message content',
-  link: 'http://link.de'
-}
-dbModel = protoProcessor.toDb(proto.plugins.message.Payload, sourceModel)
-console.log('DB model: ', dbModel)
-protoModel = protoProcessor.fromDb(proto.plugins.message.Payload, dbModel)
-console.log('Proto model: ', protoModel)
+// const eventStartSchema = protoProcessor.getSchemaDefinition(proto.plugins.event.Payload)
+// console.log('Schema definition for event->start: ', eventStartSchema)
+//
+// const eventFragment = protoProcessor.getFragment(proto.plugins.event.Payload, 'Event', 'event')
+// console.log('Event Fragment:')
+// console.log(eventFragment)
+//
+// let sourceModel = {
+//   uid: '0x1',
+//   start: new Date(),
+//   end: new Date(),
+//   name: 'test',
+//   description: 'small test'
+// }
+//
+// let anyModel = protoProcessor.anyToModel(rawModel)
+// console.log('Any model: ', anyModel)
+// let modelAny = protoProcessor.modelToAny(anyModel)
+// console.log('model any: ', modelAny)
+//
+// let dbModel = protoProcessor.toDb(proto.plugins.event.Payload, sourceModel)
+// console.log('DB model: ', dbModel)
+// let protoModel = protoProcessor.fromDb(proto.plugins.event.Payload, dbModel)
+// console.log('Proto model: ', protoModel)
+//
+// sourceModel = {
+//   uid: '0x1',
+//   content: 'some message content',
+//   link: 'http://link.de'
+// }
+// dbModel = protoProcessor.toDb(proto.plugins.message.Payload, sourceModel)
+// console.log('DB model: ', dbModel)
+// protoModel = protoProcessor.fromDb(proto.plugins.message.Payload, dbModel)
+// console.log('Proto model: ', protoModel)
 
 // any.convertToModel(model)
 // console.log('From Proto: ', model)

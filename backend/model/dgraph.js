@@ -46,6 +46,25 @@ async function setSchema (schema) {
 async function fillDb () {
   await setSchema(globalSchema)
 
+  // apply schema from proto model, for some reason using the namespace proto.dn.model here does not work
+  // because some message types are not correctly initialized there (e.g. Channel or Actor). Instead
+  // we have to use the parent of some message to get the real working namespace
+  const protoSchema = protoProcessor.getNamespaceSchemaDefinition(proto.dn.model.Activity.parent)
+  try {
+    await setSchema(protoSchema)
+  } catch (e) {
+    // something went wrong, as the dgraph error messages do not help here, we apply the schema line
+    // by line to find the error
+    protoSchema.split('\n').some(async (schema, index) => {
+      try {
+        await setSchema(schema)
+      } catch (e) {
+        logger.error('error applying schema "' + schema + '" in line ' + index + ': ' + e.toString())
+        return true
+      }
+    })
+  }
+
   // check if DB is empty
   const query = `{
     q(func: eq(baseName, "Actor")) {
