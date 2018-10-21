@@ -481,14 +481,33 @@ query channelModel($a: string) {
   //  CRUD operations
   // --------------------------------------------------------------
   async getObject (authToken, request) {
-    const query = `query read($a: string) {
+    let res, query
+    if (request.hasOwnProperty('uid')) {
+      query = `query read($a: string) {
         object(func: uid($a)) @recurse(depth: ${request.depth || 1}, loop: true) {
           uid
           expand(_all_)
         }
     }`
-    const res = await dgraphClient.newTxn().queryWithVars(query, {$a: request.uid})
-    const object = res.getJson().object[0]
+      res = await dgraphClient.newTxn().queryWithVars(query, {$a: request.uid})
+    } else if (request.hasOwnProperty('id')) {
+      query = `query read($a: string) {
+        object(func: eq(id, $a)) @recurse(depth: ${request.depth || 1}, loop: true) {
+          uid
+          expand(_all_)
+        }
+    }`
+      res = await dgraphClient.newTxn().queryWithVars(query, {$a: request.id})
+    }
+
+    const data = res.getJson()
+    if (data.object.length === 0) {
+      throw new Error('no object found for request: ' + JSON.stringify((request)))
+    } else if (data.object.length > 1) {
+      throw new Error('no unique result found for request: ' + JSON.stringify((request)))
+    }
+    const object = data.object[0]
+
     if (!object) {
       return {}
     }
@@ -713,6 +732,8 @@ query channelModel($a: string) {
       mu.setSetJson(object)
       const res = await txn.mutate(mu)
       await txn.commit()
+
+      protoProcessor.mapEdgesToProperties(object)
 
       // apply post creation hooks
       try {

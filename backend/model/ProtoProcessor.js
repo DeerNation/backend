@@ -137,7 +137,7 @@ class ProtoProcessor {
         let value = object[key]
         if (Array.isArray(value)) {
           logger.warn('array handling not implemented yet')
-        } else if (typeof value === 'object' && value.constructor.name === 'Object') {
+        } else if (value && typeof value === 'object' && value.constructor.name === 'Object') {
           if (value.baseName) {
             // dig deeper
             value = this.__mapEdgesToProperties(value)
@@ -178,7 +178,7 @@ class ProtoProcessor {
         let value = object[key]
         if (Array.isArray(value)) {
           logger.warn('array handling not implemented yet')
-        } else if (typeof value === 'object' && value.constructor.name === 'Object') {
+        } else if (value && typeof value === 'object' && value.constructor.name === 'Object') {
           if (!value.baseName) {
             // try to find baseName by field
             if (this._modelNamespace[object.baseName].fields.hasOwnProperty(key)) {

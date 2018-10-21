@@ -98,6 +98,7 @@ class ModelSubscriptions {
       }
 
       logger.debug(`notifying ${listener.listeners.length} listeners about change on type ${baseName} on ID ${listenerId}`)
+      logger.debug('change: ' + JSON.stringify(change, null, 2))
       listener.listeners.forEach(entry => {
         entry.callback.call(entry.context, change)
       })

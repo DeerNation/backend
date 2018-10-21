@@ -127,9 +127,11 @@ function postCreatePublication (authToken, publication, uidMappers) {
   // remove all baseNames
   recursiveRemoveProperty(publication, 'baseName')
 
-  // encode again to be able to send it to the clients
-  // publication.activity.payload.value = any.convertFromModel(content)
+  // send push notification
   channelHandler.sendNotification(authToken, publication)
+
+  // encode again to be able to send it to the clients
+  publication.activity.payload.value = any.convertFromModel(publication.activity.payload)
 }
 
 function recursiveRemoveProperty (obj, prop) {
