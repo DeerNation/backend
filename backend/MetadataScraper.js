@@ -26,8 +26,9 @@
 const logger = require('./logger')(__filename)
 const metascraper = require('metascraper')
 const got = require('got')
-const schema = require('./model/schema')
 const {hash} = require('./util')
+const {dgraphService} = require('./model/dgraph')
+const config = require('./config')
 
 class MetadataScraper {
   init (app) {
@@ -63,16 +64,20 @@ class MetadataScraper {
       }
       const urlHash = hash(targetUrl)
       try {
-        const cached = await schema.getModel('LinkMetadata').get(urlHash).run()
-        res.json(cached)
+        const cached = await dgraphService.getObject(config.UUID, {id: urlHash})
+        res.json(JSON.parse(cached.meta))
       } catch (e) {
         logger.debug('incoming scraper request for url: "%s"', targetUrl)
         const {body: html, url} = await got(targetUrl)
         const metadata = await metascraper({html, url})
-        schema.getModel('LinkMetadata').save(Object.assign(metadata, {
-          id: urlHash,
-          fetched: new Date()
-        }), {conflict: 'replace'})
+        dgraphService.createObject(config.UUID, {
+          content: 'linkMetadata',
+          linkMetaData: {
+            id: urlHash,
+            fetched: new Date(),
+            meta: JSON.stringify(metadata)
+          }
+        })
         res.json(metadata)
       }
     }
