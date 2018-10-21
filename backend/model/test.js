@@ -14,8 +14,42 @@ const model = Object.assign({}, rawModel)
 const messageType = proto.plugins.message.Payload
 model.value = messageType.encode(messageType.fromObject(rawModel.value)).finish()
 
-const modelSchema = protoProcessor.getNamespaceSchemaDefinition(proto.dn.model.Activity.parent)
-console.log('Schema definition for dn.model: ', modelSchema)
+let mapModel = {
+  baseName: 'Publication',
+  uid: '0x1',
+  actor: {
+    uid: '0x2',
+    baseName: 'Actor'
+  },
+  activity: {
+    uid: '0x3',
+    baseName: 'Activity',
+    ref: {
+      id: 'external'
+    },
+    payload: {
+      baseName: 'payload.message',
+      content: 'Message'
+    }
+  },
+  channel: {
+    uid: '0x4',
+    baseName: 'Channel',
+    type: 0,
+    publications: []
+  },
+  published: new Date(),
+  master: true
+}
+
+protoProcessor.mapPropertiesToEdges(mapModel)
+console.log('MappedModel ' + JSON.stringify(mapModel, null, 2))
+
+protoProcessor.mapEdgesToProperties(mapModel)
+console.log('UnmappedModel ' + JSON.stringify(mapModel, null, 2))
+
+// const modelSchema = protoProcessor.getNamespaceSchemaDefinition(proto.dn.model.Activity.parent)
+// console.log('Schema definition for dn.model: ', modelSchema)
 
 // const eventStartSchema = protoProcessor.getSchemaDefinition(proto.plugins.event.Payload)
 // console.log('Schema definition for event->start: ', eventStartSchema)

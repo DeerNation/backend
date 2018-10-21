@@ -14,6 +14,9 @@ const logger = require('../logger')(__filename)
 class ProtoProcessor {
   constructor () {
     this.__tagRegex = /([^=]+)="([^"]+)"/g
+    this.__propertyMappings = {}
+    this.__edgeMappings = {}
+    this._modelNamespace = proto.dn.model.Activity.parent
   }
 
   /**
@@ -104,6 +107,117 @@ class ProtoProcessor {
       }
     })
     return converted
+  }
+
+  /**
+   * Recursively map objects edge names to property names to prepare the
+   * object received from the database to be srielized in a proto message.
+   * @param object {Map}
+   * @returns {Map}
+   */
+  mapEdgesToProperties (object) {
+    if (Array.isArray(object)) {
+      return object.map(obj => {
+        return this.__mapEdgesToProperties(obj)
+      })
+    } else {
+      return this.__mapEdgesToProperties(object)
+    }
+  }
+
+  // TODO: convert single value arrays if UID types to the value itself
+  __mapEdgesToProperties (object) {
+    if (object.baseName && this._modelNamespace.hasOwnProperty(object.baseName)) {
+      if (!this.__propertyMappings.hasOwnProperty(object.baseName)) {
+        this.__readPropertyToEdgemappings(object.baseName)
+      }
+      const mapping = this.__edgeMappings[object.baseName]
+
+      Object.keys(object).map(key => {
+        let value = object[key]
+        if (Array.isArray(value)) {
+          logger.warn('array handling not implemented yet')
+        } else if (typeof value === 'object' && value.constructor.name === 'Object') {
+          if (value.baseName) {
+            // dig deeper
+            value = this.__mapEdgesToProperties(value)
+          }
+        }
+        if (mapping !== false && mapping.hasOwnProperty(key)) {
+          object[mapping[key]] = value
+          delete object[key]
+        }
+      })
+    }
+  }
+
+  /**
+   * Recursively map objects properties to edge names to prepare the
+   * object for being save in the database. It also adds missing ``baseName`` properties to the objects.
+   * @param object {Map}
+   * @returns {Map}
+   */
+  mapPropertiesToEdges (object) {
+    if (Array.isArray(object)) {
+      return object.map(obj => {
+        return this.__mapPropertiesToEdges(obj)
+      })
+    } else {
+      return this.__mapPropertiesToEdges(object)
+    }
+  }
+
+  __mapPropertiesToEdges (object) {
+    // only map model messages, payload plugins are mapped somwhere else)
+    if (object.baseName && this._modelNamespace.hasOwnProperty(object.baseName)) {
+      if (!this.__propertyMappings.hasOwnProperty(object.baseName)) {
+        this.__readPropertyToEdgemappings(object.baseName)
+      }
+      const mapping = this.__propertyMappings[object.baseName]
+      Object.keys(object).map(key => {
+        let value = object[key]
+        if (Array.isArray(value)) {
+          logger.warn('array handling not implemented yet')
+        } else if (typeof value === 'object' && value.constructor.name === 'Object') {
+          if (!value.baseName) {
+            // try to find baseName by field
+            if (this._modelNamespace[object.baseName].fields.hasOwnProperty(key)) {
+              const fieldDef = this._modelNamespace[object.baseName].fields[key]
+              value.baseName = fieldDef.type
+            }
+          }
+          if (value.baseName) {
+            // dig deeper
+            value = this.__mapPropertiesToEdges(value)
+          }
+        }
+        if (mapping !== false && mapping.hasOwnProperty(key)) {
+          object[mapping[key]] = value
+          delete object[key]
+        }
+      })
+    }
+  }
+
+  __readPropertyToEdgemappings (baseName) {
+    let mapping = {}
+    let edgeMapping = {}
+    this._modelNamespace[baseName].fieldsArray.forEach(fieldDefinition => {
+      if (fieldDefinition.options && fieldDefinition.options['(dn).tags']) {
+        const match = /db="([^"]+)"/.exec(fieldDefinition.options['(dn).tags'])
+        if (match) {
+          mapping[fieldDefinition.name] = match[1]
+          edgeMapping[match[1]] = fieldDefinition.name
+        }
+      }
+    })
+    if (Object.keys(mapping).length > 0) {
+      this.__propertyMappings[baseName] = mapping
+      this.__edgeMappings[baseName] = edgeMapping
+    } else {
+      this.__propertyMappings[baseName] = false
+      this.__edgeMappings[baseName] = false
+    }
   }
 
   /**
@@ -224,7 +338,6 @@ class ProtoProcessor {
       if (tags.db) {
         fieldName = tags.db
       }
-      let type = tags.type
       let index = `${fieldName}: ${tags.type}${indexDefinition} .`
       if (prefix) {
         index = prefix + index

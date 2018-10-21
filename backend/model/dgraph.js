@@ -53,14 +53,14 @@ async function fillDb () {
   try {
     await setSchema(protoSchema)
   } catch (e) {
+    logger.error(e.toString())
     // something went wrong, as the dgraph error messages do not help here, we apply the schema line
     // by line to find the error
-    protoSchema.split('\n').some(async (schema, index) => {
+    protoSchema.split('\n').forEach(async (schema, index) => {
       try {
         await setSchema(schema)
       } catch (e) {
         logger.error('error applying schema "' + schema + '" in line ' + index + ': ' + e.toString())
-        return true
       }
     })
   }
@@ -176,7 +176,7 @@ class DgraphService {
         uid
         name
         username
-        type
+        type : actor.type
         role
         online
         status
@@ -188,7 +188,7 @@ class DgraphService {
           channel {
             uid
             id
-            type
+            type : channel.type
             title
             description
             color
@@ -208,16 +208,16 @@ class DgraphService {
       uid
       name
       username
-      type
+      type : actor.type
       role
       online
       status
       color
     }
-    publicChannels(func: eq(baseName, "Channel")) @filter(eq(type, "PUBLIC")) {
+    publicChannels(func: eq(baseName, "Channel")) @filter(eq(channel.type, ${proto.dn.model.Channel.Type.PUBLIC})) {
       uid
       id
-      type
+      type : channel.type
       title
       description
       color
@@ -363,6 +363,7 @@ query channelModel($a: string) {
         res = await dgraphClient.newTxn().queryWithVars(query, {$a: request.uid})
       } catch (e) {
         logger.error('error querying channel model: ' + e.toString())
+        logger.debug('FAILED QUERY: ' + query)
         return result
       }
       const data = res.getJson()
@@ -374,13 +375,16 @@ query channelModel($a: string) {
       if (reverse && result.publications) {
         result.publications = result.publications.reverse()
       }
+
       // normalize data
       if (result.publications) {
         result.publications.forEach(pub => {
           pub.activity = pub.activity[0]
-          delete pub.activity.actor
-          delete pub.activity.baseName
           pub.actor = pub.actor[0]
+          delete pub.activity.actor
+          // process edge to property mapping (as defined in the protos db tag)
+          protoProcessor.mapEdgesToProperties(pub.activity)
+          delete pub.activity.baseName
           if (pub.activity.payload) {
             pub.activity.payload = protoProcessor.modelToAny(pub.activity.payload[0])
             pub.activity.payload.value = any.convertFromModel(pub.activity.payload)
@@ -504,6 +508,10 @@ query channelModel($a: string) {
         delete object[edge].baseName
       }
     })
+
+    // process edge to property mapping (as defined in the protos db tag)
+    protoProcessor.mapEdgesToProperties(object)
+
     response[object.baseName.toLowerCase()] = object
     delete object.baseName
     return response
@@ -557,6 +565,9 @@ query channelModel($a: string) {
         message: e.message
       }
     }
+    // process property to edge mapping (as defined in the protos db tag)
+    protoProcessor.mapPropertiesToEdges(object)
+
     logger.debug('updateObject: ' + JSON.stringify(object, null, 2))
     const txn = dgraphClient.newTxn()
     try {
@@ -593,6 +604,7 @@ query channelModel($a: string) {
     }
   }
 
+  // TODO: apply property -> edge mapping
   async updateProperty (authToken, request) {
     // get object type from DB to be able to check ACLs
     const existing = await this.getObject(authToken, {uid: request.uid})
@@ -690,6 +702,10 @@ query channelModel($a: string) {
         message: e.message
       }
     }
+
+    // process property to edge mapping (as defined in the protos db tag)
+    protoProcessor.mapPropertiesToEdges(object)
+
     logger.debug('createObject: ' + JSON.stringify(object, null, 2))
     const txn = dgraphClient.newTxn()
     try {

@@ -23,7 +23,7 @@ module.exports = {
   Actor: [
     {
       uid: '_:admin',
-      type: 0,
+      'actor.type': 0,
       username: 'admin',
       roles: [{uid: '_:adminRole'}],
       name: 'Tobias Bräutigam',
@@ -33,7 +33,7 @@ module.exports = {
       locale: 'de'
     }, {
       uid: '_:hirschberg',
-      type: 2,
+      'actor.type': 2,
       username: 'hirschberg',
       roles: [{uid: '_:botRole'}],
       name: 'Hirschberg',
@@ -42,7 +42,7 @@ module.exports = {
       color: '#085525'
     }, {
       uid: '_:max',
-      type: 0,
+      'actor.type': 0,
       username: 'user',
       roles: [{uid: '_:userRole'}],
       name: 'Max Mustermann',
@@ -80,7 +80,7 @@ module.exports = {
     {
       uid: '_:channelNews',
       id: 'hbg.channel.news.public',
-      type: 'PUBLIC',
+      'channel.type': 0,
       title: 'News',
       description: 'Alle Neuigkeiten aus Hirschberg',
       owner: {
@@ -91,7 +91,7 @@ module.exports = {
     {
       uid: '_:channelEvents',
       id: 'hbg.channel.events.public',
-      type: 'PUBLIC',
+      'channel.type': 0,
       title: 'Termine',
       description: 'Termine & Veranstaltungen in Hirschberg',
       owner: {
