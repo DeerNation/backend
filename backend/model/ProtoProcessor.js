@@ -179,8 +179,8 @@ class ProtoProcessor {
         if (Array.isArray(value)) {
           logger.warn('array handling not implemented yet')
         } else if (value && typeof value === 'object' && value.constructor.name === 'Object') {
-          if (!value.baseName) {
-            // try to find baseName by field
+          if (!value.baseName && Object.keys(value).filter(name => name !== 'uid').length > 1) {
+            // try to find baseName by field (if the object contains more than just an uid)
             if (this._modelNamespace[object.baseName].fields.hasOwnProperty(key)) {
               const fieldDef = this._modelNamespace[object.baseName].fields[key]
               value.baseName = fieldDef.type
