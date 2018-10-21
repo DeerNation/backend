@@ -127,8 +127,8 @@ function postCreatePublication (authToken, publication, uidMappers) {
   // remove all baseNames
   recursiveRemoveProperty(publication, 'baseName')
 
-  // send push notification
-  channelHandler.sendNotification(authToken, publication)
+  // send push notification (copy message, to keep the non-bytes version)
+  channelHandler.sendNotification(authToken, Object.assign({}, publication))
 
   // encode again to be able to send it to the clients
   publication.activity.payload.value = any.convertFromModel(publication.activity.payload)
