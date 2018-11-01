@@ -235,9 +235,14 @@ module.exports = {
       roleTarget: {uid: '_:guestRole'}
     },
     {
-      topic: 'hbg\\.rpc\\..*',
+      topic: 'hbg\\.rpc\\.(createObject|getObject|getObjects|updateObject|deleteObject|updateProperty)',
       actions: 'x',
       roleTarget: {uid: '_:userRole'}
+    },
+    {
+      topic: 'hbg\\.rpc\\..*',
+      actions: 'x',
+      roleTarget: {uid: '_:adminRole'}
     },
     {
       topic: 'hbg\\.object\\..*',

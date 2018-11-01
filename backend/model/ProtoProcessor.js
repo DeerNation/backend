@@ -203,8 +203,8 @@ class ProtoProcessor {
     let mapping = {}
     let edgeMapping = {}
     this._modelNamespace[baseName].fieldsArray.forEach(fieldDefinition => {
-      if (fieldDefinition.options && fieldDefinition.options['(dn).tags']) {
-        const match = /db="([^"]+)"/.exec(fieldDefinition.options['(dn).tags'])
+      if (fieldDefinition.options && fieldDefinition.options['(dno).tags']) {
+        const match = /db="([^"]+)"/.exec(fieldDefinition.options['(dno).tags'])
         if (match) {
           mapping[fieldDefinition.name] = match[1]
           edgeMapping[match[1]] = fieldDefinition.name
@@ -352,8 +352,8 @@ class ProtoProcessor {
     let result = {
       type: this.__mapProtoTypesToDgraph(fieldDefinition.type)
     }
-    if (fieldDefinition.options && fieldDefinition.options['(dn).tags']) {
-      const tags = this.__parseTags(fieldDefinition.options['(dn).tags'])
+    if (fieldDefinition.options && fieldDefinition.options['(dno).tags']) {
+      const tags = this.__parseTags(fieldDefinition.options['(dno).tags'])
       if (tags.hasOwnProperty('db') && tags.db) {
         result.db = tags.db
       }
@@ -381,7 +381,7 @@ class ProtoProcessor {
   }
 
   /**
-   * Parse '(dn).tags' field option from a proto definition.
+   * Parse '(dno).tags' field option from a proto definition.
    * @param rawTags {String} tags entry
    * @return {Map} map with tag names as key and tag values as value
    * @private

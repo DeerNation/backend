@@ -825,6 +825,74 @@ query channelModel($a: string) {
     }
   }
 
+  async clearChannel (authToken, request) {
+    // TODO: add acl checks
+    const query = `
+query channelContent {
+  q(func: eq(id, "${request.id}")) @normalize {
+    ~channel @filter(eq(baseName, "Publication")) {
+      publication.uid : uid
+      activity {
+        activity.uid : uid
+        ref {
+          ref.uid : uid
+        }
+      	payload {
+          payload.uid : uid
+        }
+      }
+    }
+  }
+}`
+    const res = await dgraphClient.newTxn().query(query)
+    let deleteMutation = []
+    const data = res.getJson()
+    data.q.forEach(entry => {
+      if (entry['publication.uid']) {
+        deleteMutation.push({uid: entry['publication.uid']})
+      }
+      if (entry['activity.uid']) {
+        deleteMutation.push({uid: entry['activity.uid']})
+      }
+      if (entry['ref.uid']) {
+        deleteMutation.push({uid: entry['ref.uid']})
+      }
+      if (entry['activity.uid']) {
+        deleteMutation.push({uid: entry['payload.uid']})
+      }
+    })
+    if (deleteMutation.length === 0) {
+      return {
+        code: 0
+      }
+    }
+    const txn = dgraphClient.newTxn()
+    try {
+      const mu = new dgraph.Mutation()
+      mu.setDeleteJson(deleteMutation)
+      await txn.mutate(mu)
+      await txn.commit()
+
+      // TODO: notify clients about the empty channel
+      // const change = this.__createChangeObject(request, proto.dn.ChangeType.DELETE)
+      // // replace with complete object
+      // change.object[change.object.content] = deletedObject[deletedObject.content]
+      // console.log(JSON.stringify(change, null, 2))
+      // modelSubscriptions.notifyListeners(change)
+      return {
+        code: 0
+      }
+    } catch (e) {
+      logger.error(e)
+      return {
+        code: 1,
+        message: '' + e
+      }
+    } finally {
+      await txn.discard()
+    }
+  }
+
   getAllowedActionsForRole (authToken, role, topic) {
     return acl.getAllowedActionsForRole(authToken, role, topic)
   }

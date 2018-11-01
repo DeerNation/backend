@@ -24,7 +24,6 @@
  * @since 2018
  */
 const modelSubscriptions = require('./model/ModelSubscriptions')
-const logger = require('./logger')(__filename)
 const pushNotifications = require('./notification')
 const i18n = require('i18n')
 const Ajv = require('ajv')
@@ -32,7 +31,10 @@ const schemaHandler = require('./model/JsonSchemaHandler')
 const {UUID} = require('./config')
 const proto = require('./model/protos')
 let {dgraphClient} = require('./model/dgraph')
-const any = require('./model/any')
+
+const registry = require('./Registry')
+const any = registry.resolve('any')
+const logger = registry.resolve('logger')(__filename)
 
 class ChannelHandler {
   constructor () {
@@ -119,7 +121,7 @@ class ChannelHandler {
    */
   async getActivityByRefId (refId, channelUid) {
     const query = `query read($a: string, $b: string) {
-      object(func: eq(id, $a), first: 1) @cascade @normalize {
+      object(func: eq(ref.id, $a), first: 1) @cascade @normalize {
         ~ref @filter(eq(baseName, "Activity")) {
           activityUid: uid
           hash: hash
@@ -279,7 +281,7 @@ class ChannelHandler {
     if (this._notificationHandlers.hasOwnProperty(publication.activity.payload.type_url)) {
       const handler = this._notificationHandlers[publication.activity.payload.type_url]
       const message = publication.activity.payload.value
-      let {phrase, content, image} = handler(message)
+      let {phrase, content, image} = handler(message, registry)
 
       if (content) {
         if (content.length > 40) {

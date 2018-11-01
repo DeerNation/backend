@@ -47,7 +47,7 @@ function preUpdatePublication (authToken, publication) {
 }
 
 function postUpdatePublication (authToken, publication) {
-  logger.debug('running post create publication hook')
+  logger.debug('running post update publication hook')
   if (publication.published) {
     publication.published = publication.published.toISOString()
   }
